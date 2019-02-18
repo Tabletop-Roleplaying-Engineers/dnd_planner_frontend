@@ -1,11 +1,11 @@
 import { createGlobalStyle } from 'styled-components'
 
 const GlobalStyle = createGlobalStyle`
-  @import url('https://fonts.googleapis.com/css?family=Roboto:300,300i,400,500,700');
+  @import url('https://fonts.googleapis.com/css?family=Exo+2:400,400i,700');
 
   * {
     box-sizing: border-box;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Exo 2', sans-serif;
     
     margin: 0;
     padding: 0;
