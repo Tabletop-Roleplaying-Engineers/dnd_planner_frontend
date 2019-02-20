@@ -5,6 +5,7 @@ import GlobalStyle from 'noui/GlobalStyle'
 import Header from 'layout/Header'
 import Home from 'containers/Home'
 import Players from 'containers/Players'
+import Profile from 'containers/Profile'
 import NotFound from 'containers/NotFound'
 
 class App extends Component {
@@ -20,6 +21,7 @@ class App extends Component {
             <Switch>
               <Route exact path='/' component={Home}/>
               <Route path='/players' component={Players}/>
+              <Route path='/profile' component={Profile}/>
   
               {/* 404*/}
               <Route component={NotFound}/>
