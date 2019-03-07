@@ -2,7 +2,7 @@ import React from 'react'
 import { Button, Upload, Icon, Input, Select, DatePicker, TimePicker, Slider } from 'antd'
 import { Box, Flex } from 'noui/Position'
 import Form, { Field } from 'noui/Form'
-import { Msg } from 'ui/Text'
+import { Msg, Header } from 'ui/Text'
 import styled from 'styled-components'
 import { playersInGame } from 'config'
 
@@ -21,13 +21,22 @@ class NewGameForm extends React.PureComponent {
     const { image } = this.state
     
     return (
-      <Form onSubmit={(data) => {
-        debugger
+      <Form onSubmit={({ date, time, ...data }) => {
+        const game = {
+          image: this.state.image,
+          startingDate: date.format('YYYY-MM-DD'),
+          startingTime: time.format('HH:mm'),
+          ...data
+        }
+        this.props.onSubmit(game)
       }}>
         {({ form }) =>
           <Box>
-            
             <Box mb={20}>
+              <Header>Add new Game</Header>
+            </Box>
+            
+            <Flex column mb={20}>
               <Upload.Dragger
                 beforeUpload={file => {
                   const fr = new FileReader()
@@ -48,7 +57,7 @@ class NewGameForm extends React.PureComponent {
                     </React.Fragment>
                 }
               </Upload.Dragger>
-            </Box>
+            </Flex>
             
             <Flex justifyContent="space-between">
               <Box width="55%">
@@ -81,7 +90,7 @@ class NewGameForm extends React.PureComponent {
               </Field>
               
               <Field name="time">
-                <TimePicker format="HH:mm"/>
+                <TimePicker format="HH:mm" minuteStep={10}/>
               </Field>
               
               <Box width="30%">

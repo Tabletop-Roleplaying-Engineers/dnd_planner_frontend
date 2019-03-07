@@ -2,6 +2,8 @@ import { Button, Layout } from 'antd'
 import React from 'react'
 import { Flex } from 'noui/Position'
 import Logo from 'components/Logo'
+import { Link } from 'react-router-dom'
+import { Box } from 'noui/Position'
 import styled from 'styled-components'
 
 const StyledHeader = styled(Layout.Header)`
@@ -22,6 +24,10 @@ class Header extends React.PureComponent {
         <Flex center justifyContent="space-between">
           <Logo />
           
+          <Box>
+            <Link to="/profile">Profile</Link>
+          </Box>
+  
           <Button type="primary">Sign In</Button>
         </Flex>
       </StyledHeader>
