@@ -1,25 +1,35 @@
+import { Layout } from 'antd'
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Route, Switch } from 'react-router-dom'
+import GlobalStyle from 'noui/GlobalStyle'
+import Header from 'layout/Header'
+import Home from 'containers/Home'
+import Players from 'containers/Players'
+import Profile from 'containers/Profile'
+import NotFound from 'containers/NotFound'
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div>
+        <GlobalStyle />
+  
+        <Layout>
+          <Header />
+          {/*TODO add routing here*/}
+          <Layout.Content>
+            <Switch>
+              <Route exact path='/' component={Home}/>
+              <Route path='/players' component={Players}/>
+              <Route path='/profile' component={Profile}/>
+  
+              {/* 404*/}
+              <Route component={NotFound}/>
+            </Switch>
+          </Layout.Content>
+  
+          {/*<Layout.Footer>footer</Layout.Footer>*/}
+        </Layout>
       </div>
     );
   }
