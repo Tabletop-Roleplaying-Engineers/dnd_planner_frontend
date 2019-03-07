@@ -1,8 +1,8 @@
-FROM node:carbon
+FROM node:8-jessie
 
-WORKDIR /usr/src/dnd-planner-api
+WORKDIR /usr/src/dnd-planner-web
 
-COPY package*.json ./
+COPY package.json ./
 RUN yarn install
 COPY . .
 

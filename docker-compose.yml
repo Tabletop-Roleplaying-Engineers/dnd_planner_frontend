@@ -1,7 +1,7 @@
 version: "2.4"
 
 services:
-  web-api:
+  web-ui:
     build:
       context: .
       dockerfile: Dockerfile
