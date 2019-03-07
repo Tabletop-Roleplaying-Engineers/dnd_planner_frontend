@@ -7,13 +7,17 @@ import Home from 'containers/Home'
 import Players from 'containers/Players'
 import Profile from 'containers/Profile'
 import NotFound from 'containers/NotFound'
+import {
+    BrowserRouter as Router
+} from 'react-router-dom'
 
 class App extends Component {
   render() {
     return (
-      <div>
+      <Router>
+      <React.Fragment>
         <GlobalStyle />
-  
+
         <Layout>
           <Header />
           {/*TODO add routing here*/}
@@ -22,15 +26,16 @@ class App extends Component {
               <Route exact path='/' component={Home}/>
               <Route path='/players' component={Players}/>
               <Route path='/profile' component={Profile}/>
-  
+
               {/* 404*/}
               <Route component={NotFound}/>
             </Switch>
           </Layout.Content>
-  
+
           {/*<Layout.Footer>footer</Layout.Footer>*/}
         </Layout>
-      </div>
+      </React.Fragment>
+      </Router>
     );
   }
 }
