@@ -12,22 +12,22 @@ const StyledHeader = styled(Layout.Header)`
   background: black;
   
   &.ant-layout-header{
-    padding-left: 0;
+    padding: 0 3vw 0 0;
   }
 `
 
 class Header extends React.PureComponent {
-  
   render () {
     return (
       <StyledHeader>
         <Flex center justifyContent="space-between">
           <Logo />
-          
+
           <Box>
             <Link to="/profile">Profile</Link>
+            <Link to="/help">Help</Link>
           </Box>
-  
+
           <Button type="primary">Sign In</Button>
         </Flex>
       </StyledHeader>

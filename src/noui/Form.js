@@ -1,8 +1,10 @@
 import React from 'react'
 import { Form } from 'antd'
+import validate from 'validate.js'
+import * as R from 'ramda'
 
 const FormContext = React.createContext('formContext')
-const _Form = ({ children, form, onSubmit, ...props }) =>
+const _Form = ({ children, form, validation = {}, onSubmit, ...props }) =>
   <Form
     onSubmit={e => {
       e.preventDefault()
@@ -15,17 +17,37 @@ const _Form = ({ children, form, onSubmit, ...props }) =>
     }}
     {...props}
   >
-    <FormContext.Provider value={form}>
-      {children({ form })}
+    <FormContext.Provider value={{ form, validation }}>
+      {children({
+        form: {
+          hasErrors: () => !R.pipe(
+            R.reject(R.isNil),
+            R.isEmpty
+          )(form.getFieldsError()),
+          ...form
+        }
+      })}
     </FormContext.Provider>
   </Form>
 
 export const Field = ({ children, name, initialValue, ...props }) =>
   <FormContext.Consumer>
-    {form => {
+    {({ form, validation }) => {
       return <Form.Item>
         {form.getFieldDecorator(name, {
-          initialValue
+          initialValue,
+          rules: [{
+            validator: (r, v, cb) => {
+              if(!r.field) return cb()
+
+              const data = validate({ [r.field]: v }, { [r.field]: validation[r.field] })
+              return R.pipe(
+                R.propOr([], r.field),
+                res => !R.isEmpty(res) ? R.join(', ', res): undefined,
+                cb,
+              )(data)
+            },
+          }],
         })(children)}
       </Form.Item>
     }

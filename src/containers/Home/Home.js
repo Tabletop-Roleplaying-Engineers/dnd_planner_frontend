@@ -5,8 +5,7 @@ import NewGameForm from 'forms/NewGameForm'
 import ParticipateForm from 'forms/ParticipateForm'
 import moment from 'moment'
 import { GameInfo } from 'components/GameInfo'
-import { Box } from 'noui/Position'
-import { factions } from 'config'
+import { factions, modalWidth } from 'config'
 
 const MockedData = [
   {
@@ -57,14 +56,14 @@ class Home extends React.PureComponent {
     participateGameVisibility: false,
     selectedGame:              null
   }
-  
+
   getEventByDate = date => R.filter(R.propEq('startingDate', date.format('YYYY-MM-DD')), MockedData)
-  
+
   render () {
     return (
       <React.Fragment>
         <Drawer
-          width={640}
+          width={modalWidth()}
           placement="right"
           closable={false}
           visible={this.state.newGameFormVisibility}
@@ -76,9 +75,9 @@ class Home extends React.PureComponent {
             }}
           />
         </Drawer>
-        
+
         <Drawer
-          width={640}
+          width={modalWidth()}
           placement="right"
           closable={false}
           visible={this.state.participateGameVisibility}
@@ -86,7 +85,7 @@ class Home extends React.PureComponent {
         >
           <ParticipateForm {...this.state.selectedGame} />
         </Drawer>
-        
+
         <Calendar
           onSelect={(...data) => this.setState({ newGameFormVisibility: true })}
           disabledDate={currentDate =>
@@ -104,7 +103,7 @@ class Home extends React.PureComponent {
                       mb={10}
                       onClick={e => {
                         e.stopPropagation()
-                        
+
                         this.setState({ participateGameVisibility: true, selectedGame: game })
                       }}
                       {...game}
