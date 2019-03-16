@@ -1,0 +1,28 @@
+import React from 'react'
+import { Route, Switch } from 'react-router-dom'
+import Home from 'containers/Home'
+import Players from 'containers/Players'
+import Calendar from 'containers/Calendar'
+import Profile from 'containers/Profile'
+import Dashboard from 'containers/Dashboard'
+import Help from 'containers/Help'
+import NotFound from 'containers/NotFound'
+import _history from './history'
+
+export const history = _history
+
+export default function Routing() {
+  return (
+    <Switch>
+      <Route exact path='/' component={Home}/>
+      <Route path='/calendar' component={Calendar}/>
+      <Route path='/players' component={Players}/>
+      <Route path='/profile' component={Profile}/>
+      <Route path='/dashboard' component={Dashboard}/>
+      <Route path='/help' component={Help}/>
+
+      {/* 404*/}
+      <Route component={NotFound}/>
+    </Switch>
+  )
+}

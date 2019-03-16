@@ -1,42 +1,45 @@
 import { Layout } from 'antd'
-import React, { Component } from 'react';
-import { Route, Switch, BrowserRouter as Router } from 'react-router-dom'
+import React, { Component } from 'react'
+import { Router } from 'react-router-dom'
 import GlobalStyle from 'noui/GlobalStyle'
 import Header from 'layout/Header'
-import Home from 'containers/Home'
-import Players from 'containers/Players'
-import Profile from 'containers/Profile'
-import Help from 'containers/Help'
-import NotFound from 'containers/NotFound'
+import Routing, { history } from 'routing'
+import { ApolloProvider } from 'react-apollo'
+import { ApolloClient } from 'apollo-client'
+import { createHttpLink } from 'apollo-link-http'
+import { InMemoryCache } from 'apollo-cache-inmemory'
+
+const httpLink = createHttpLink({
+  uri: 'http://localhost:4000'
+})
+
+const client = new ApolloClient({
+  link: httpLink,
+  cache: new InMemoryCache()
+})
 
 class App extends Component {
   render() {
     return (
-      <Router>
-      <React.Fragment>
-        <GlobalStyle />
+      <ApolloProvider client={client}>
+        <Router history={history}>
+          <React.Fragment>
+            <GlobalStyle/>
 
-        <Layout>
-          <Header />
-          {/*TODO add routing here*/}
-          <Layout.Content>
-            <Switch>
-              <Route exact path='/' component={Home}/>
-              <Route path='/players' component={Players}/>
-              <Route path='/profile' component={Profile}/>
-              <Route path='/help' component={Help}/>
+            <Layout>
+              <Header/>
+              {/*TODO add routing here*/}
+              <Layout.Content>
+                <Routing/>
+              </Layout.Content>
 
-              {/* 404*/}
-              <Route component={NotFound}/>
-            </Switch>
-          </Layout.Content>
-
-          {/*<Layout.Footer>footer</Layout.Footer>*/}
-        </Layout>
-      </React.Fragment>
-      </Router>
-    );
+              {/*<Layout.Footer>footer</Layout.Footer>*/}
+            </Layout>
+          </React.Fragment>
+        </Router>
+      </ApolloProvider>
+    )
   }
 }
 
-export default App;
+export default App

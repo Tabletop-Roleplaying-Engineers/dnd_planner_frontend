@@ -13,7 +13,6 @@ const StyledImage = styled.img`
   height: 300px;
 `
 
-
 const validationSchema = {
   title: {
     presence: true,

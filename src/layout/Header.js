@@ -24,7 +24,12 @@ class Header extends React.PureComponent {
           <Logo />
 
           <Box>
-            <Link to="/profile">Profile</Link>
+            <Box inline mr={10}>
+              <Link to="/dashboard">Dashboard</Link>
+            </Box>
+            <Box inline mr={10}>
+              <Link to="/profile">Profile</Link>
+            </Box>
             <Link to="/help">Help</Link>
           </Box>
 
