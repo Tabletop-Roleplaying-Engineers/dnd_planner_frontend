@@ -4,31 +4,34 @@ import validate from 'validate.js'
 import * as R from 'ramda'
 
 const FormContext = React.createContext('formContext')
-const _Form = ({ children, form, validation = {}, onSubmit, ...props }) =>
-  <Form
-    onSubmit={e => {
-      e.preventDefault()
-      form.validateFields((err, values) => {
-        if (!err) {
-          console.log('Received values of form: ', values)
-          onSubmit(values)
-        }
-      })
-    }}
-    {...props}
-  >
-    <FormContext.Provider value={{ form, validation }}>
-      {children({
-        form: {
-          hasErrors: () => !R.pipe(
-            R.reject(R.isNil),
-            R.isEmpty
-          )(form.getFieldsError()),
-          ...form
-        }
-      })}
-    </FormContext.Provider>
-  </Form>
+const _Form = ({ children, form, validation = {}, onSubmit, ...props }) => {
+  return (
+    <Form
+      onSubmit={e => {
+        e.preventDefault()
+        form.validateFields(async (err, values) => {
+          if (!err) {
+            console.log('Received values of form: ', values)
+            await onSubmit(values, form)
+          }
+        })
+      }}
+      {...props}
+    >
+      <FormContext.Provider value={{ form, validation }}>
+        {children({
+          form: {
+            hasErrors: () => !R.pipe(
+              R.reject(R.isNil),
+              R.isEmpty
+            )(form.getFieldsError()),
+            ...form
+          }
+        })}
+      </FormContext.Provider>
+    </Form>
+  )
+}
 
 export const Field = ({ children, name, initialValue, ...props }) =>
   <FormContext.Consumer>

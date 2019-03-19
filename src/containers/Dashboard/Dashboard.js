@@ -23,7 +23,7 @@ function Dashboard(props) {
 
         <ZoomCard
           title="Calendar"
-          image="https://geekandsundry.com/wp-content/uploads/2017/01/MonsterManualFeatured.jpg"
+          image="http://dnd.wizards.com/sites/default/files/media/styles/news_banner/public/images/news/Article_Header1.jpg"
           width={[ '90vw', '31vw' ]}
           my={[ 10, 0 ]}
           onClick={() => props.history.push('/calendar')}
@@ -31,7 +31,7 @@ function Dashboard(props) {
 
         <ZoomCard
           title="Map"
-          image="https://cdna.artstation.com/p/assets/images/images/006/129/000/large/thomas-russell-01.jpg?1496243491"
+          image="https://cdna.artstation.com/p/assets/images/images/006/129/000/large/thomas-russell-01.jpg"
           width={[ '90vw', '31vw' ]}
           my={[ 10, 0 ]}
           onClick={() => alert('We are working on it!')}

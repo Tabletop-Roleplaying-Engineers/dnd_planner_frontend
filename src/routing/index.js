@@ -8,18 +8,21 @@ import Dashboard from 'containers/Dashboard'
 import Help from 'containers/Help'
 import NotFound from 'containers/NotFound'
 import _history from './history'
+import { Box } from '../noui/Position'
 
 export const history = _history
 
 export default function Routing() {
   return (
     <Switch>
-      <Route exact path='/' component={Home}/>
-      <Route path='/calendar' component={Calendar}/>
-      <Route path='/players' component={Players}/>
-      <Route path='/profile' component={Profile}/>
-      <Route path='/dashboard' component={Dashboard}/>
-      <Route path='/help' component={Help}/>
+      <Box mx={10}>
+        <Route exact path='/' component={Home}/>
+        <Route path='/calendar' component={Calendar}/>
+        <Route path='/players' component={Players}/>
+        <Route path='/profile' component={Profile}/>
+        <Route path='/dashboard' component={Dashboard}/>
+        <Route path='/help' component={Help}/>
+      </Box>
 
       {/* 404*/}
       <Route component={NotFound}/>

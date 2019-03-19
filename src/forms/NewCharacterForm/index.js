@@ -1,10 +1,11 @@
 import React from 'react'
-import { Button, Input, Select } from 'antd'
+import { Button, Input, Select, Spin } from 'antd'
 import { Box } from 'noui/Position'
 import Form, { Field } from 'noui/Form'
-import { factions } from 'config'
 import { Msg } from 'ui/Text'
 import styled from 'styled-components'
+import { Query } from 'react-apollo'
+import { FETCH_FACTIONS_QUERY } from 'api'
 
 const StyledFactionLogo = styled.img`
   width: 20px;
@@ -16,14 +17,17 @@ const validationSchema = {
   name: {
     presence: true,
     length: {
-      minimum: 6,
-    },
+      minimum: 3
+    }
   },
+  faction: {
+    presence: { allowEmpty: false }
+  }
 }
 
 class NewCharacterForm extends React.PureComponent {
   state = {
-    image: null,
+    image: null
   }
 
   render() {
@@ -41,22 +45,29 @@ class NewCharacterForm extends React.PureComponent {
                 <Input placeholder="Name"/>
               </Field>
 
-              <Field name="faction">
-                <Select placeholder="Faction">
-                  {
-                    factions.map(f =>
-                      <Select.Option key={f.name} value={f.name}>
-                        <Box inline mr={15}>
-                          <StyledFactionLogo src={f.logo} alt="faction_logo"/>
-                        </Box>
+              <Query query={FETCH_FACTIONS_QUERY}>
+                {({ loading, error, data }) => {
+                  if (loading) return <Spin/>
+                  if (error) return <div>Error</div>
 
-                        <Msg>{f.name}</Msg>
-                      </Select.Option>,
-                    )
-                  }
-                </Select>
-              </Field>
+                  return (
+                    <Field name="faction">
+                      <Select placeholder="Faction">
+                        {
+                          data.factions.map(f =>
+                            <Select.Option key={f.name} value={f.id}>
+                              <Box inline mr={15}>
+                                <StyledFactionLogo src={f.logo} alt="faction_logo"/>
+                              </Box>
 
+                              <Msg>{f.name}</Msg>
+                            </Select.Option>
+                          )
+                        }
+                      </Select>
+                    </Field>
+                  )
+                }}</Query>
 
               <Button
                 disabled={form.hasErrors()}

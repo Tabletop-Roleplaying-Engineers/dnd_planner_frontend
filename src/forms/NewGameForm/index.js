@@ -42,20 +42,24 @@ class NewGameForm extends React.PureComponent {
     image: null,
   }
 
+  componentWillUnmount() {
+    this.setState({ image: null })
+  }
+
   render() {
     const { image } = this.state
 
     return (
       <Form
         validation={validationSchema}
-        onSubmit={({ date, time, ...data }) => {
+        onSubmit={({ date, time, ...data }, form) => {
           const game = {
             image: this.state.image,
             startingDate: date.format('YYYY-MM-DD'),
             startingTime: time.format('HH:mm'),
             ...data,
           }
-          this.props.onSubmit(game)
+          this.props.onSubmit(game, form)
         }}>
         {({ form }) =>
           <Box>
