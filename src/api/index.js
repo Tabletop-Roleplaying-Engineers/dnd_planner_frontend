@@ -112,3 +112,37 @@ export const CREATE_CHARACTER_MUTATION = gql`
     }
   }
 `
+
+export const DELETE_CHARACTER_MUTATION = gql`
+  mutation DeleteCharacter($id: ID!){
+    deleteCharacter(id: $id) {
+      id
+    }
+  }
+`
+
+export const NEW_GAME_SUBSCRIPTION = gql`
+  subscription {
+    newGame {
+      id
+      title
+      image
+      description
+      startingDate
+      startingTime
+      range
+      players
+      characters {
+        id
+        name
+        experience
+        renown
+        faction {
+          id
+          name
+          logo
+        }
+      }
+    }
+  }
+`

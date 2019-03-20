@@ -6,6 +6,10 @@ import {
   maxWidth,
   minWidth,
   position,
+  top,
+  bottom,
+  left,
+  right,
   flex,
   alignItems,
   justifyContent,
@@ -28,7 +32,10 @@ export const Box = styled.div.attrs(props => ({
   ${maxWidth}
   ${minWidth}
   ${maxHeight}
-  ${minHeight}
+  ${top}
+  ${bottom}
+  ${left}
+  ${right}
 `
 
 export const Flex = styled(Box).attrs(props => ({

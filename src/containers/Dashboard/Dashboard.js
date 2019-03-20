@@ -15,7 +15,7 @@ function Dashboard(props) {
       >
         <ZoomCard
           title="Rules"
-          image="http://dnd.wizards.com/sites/default/files/media/styles/news_banner/public/images/news/Article_Header1.jpg"
+          image="https://cs8.pikabu.ru/post_img/big/2018/05/07/12/1525725815177424991.jpg"
           width={[ '90vw', '31vw' ]}
           my={[ 10, 0 ]}
           onClick={() => props.history.push('/help#the_rules')}

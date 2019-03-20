@@ -7,22 +7,45 @@ import moment from 'moment'
 import { GameInfo } from 'components/GameInfo'
 import { modalWidth } from 'config'
 import { Mutation, Query } from 'react-apollo'
-import { FETCH_GAMES_QUERY, CREATE_GAME_QUERY } from 'api'
+import {
+  FETCH_GAMES_QUERY,
+  CREATE_GAME_QUERY,
+  NEW_GAME_SUBSCRIPTION
+} from 'api'
 
 class Calendar extends React.PureComponent {
   state = {
-    newGameFormVisibility:     false,
+    newGameFormVisibility: false,
     participateGameVisibility: false,
-    selectedGame:              null
+    selectedGame: null
   }
 
-  render () {
+  subscribeToNewGame = async subscribeToMore => {
+    subscribeToMore({
+      document: NEW_GAME_SUBSCRIPTION,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev
+        const newGame = subscriptionData.data.newGame
+        const exists = prev.games.find(({ id }) => id === newGame.id)
+
+        if (exists) return prev
+
+        return Object.assign({}, prev, {
+          games: [newGame, ...prev.games]
+        })
+      }
+    })
+  }
+
+  render() {
     return (
       <React.Fragment>
         <Query query={FETCH_GAMES_QUERY}>
-          {({ loading, error, data }) => {
-            if (loading) return <Spin />
+          {({ loading, error, data, subscribeToMore }) => {
+            if (loading) return <Spin/>
             if (error) return <div>Error</div>
+
+            this.subscribeToNewGame(subscribeToMore)
 
             const fetchedGames = R.groupBy(
               R.prop('startingDate'),
@@ -37,7 +60,7 @@ class Calendar extends React.PureComponent {
                   currentDate.isAfter(moment().endOf('month'))
                 }
                 dateCellRender={date => {
-                  const games = fetchedGames[date.format('YYYY-MM-DD')] || []
+                  const games = fetchedGames[ date.format('YYYY-MM-DD') ] || []
 
                   return (
                     <React.Fragment>
@@ -71,19 +94,19 @@ class Calendar extends React.PureComponent {
         >
           <Mutation
             mutation={CREATE_GAME_QUERY}
-            update={(cache, { data: { createGame } }) => {
-              const { games } = cache.readQuery({ query: FETCH_GAMES_QUERY });
-              cache.writeQuery({
-                query: FETCH_GAMES_QUERY,
-                data: { games: games.concat([createGame]) },
-              });
-            }}
+            // update={(cache, { data: { createGame } }) => {
+            //   const { games } = cache.readQuery({ query: FETCH_GAMES_QUERY })
+            //   cache.writeQuery({
+            //     query: FETCH_GAMES_QUERY,
+            //     data: { games: games.concat([ createGame ]) }
+            //   })
+            // }}
           >
             {(createGame, { loading }) => (
               <Spin spinning={loading}>
                 <NewGameForm
-                  onSubmit={(game, form) => {
-                    createGame({ variables: game })
+                  onSubmit={async (game, form) => {
+                    await createGame({ variables: game })
                     notification.success({
                       message: 'New game added!'
                     })

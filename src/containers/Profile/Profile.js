@@ -1,4 +1,4 @@
-import { Button, Drawer, Spin } from 'antd'
+import { Button, Drawer, Dropdown, Icon, Spin } from 'antd'
 import React from 'react'
 import { Flex, Box } from 'noui/Position'
 import Card from 'ui/Card'
@@ -7,10 +7,12 @@ import Character from 'components/Character'
 import NewCharacterForm from 'forms/NewCharacterForm'
 import { Mutation, Query } from 'react-apollo'
 import { FETCH_CHARACTERS_QUERY, CREATE_CHARACTER_MUTATION } from 'api'
+import { createMenu } from 'ui/shared'
+import { DELETE_CHARACTER_MUTATION } from '../../api'
 
 class Profile extends React.PureComponent {
   state = {
-    characters: []
+    newCharacterVisibility: false
   }
 
   render() {
@@ -41,6 +43,45 @@ class Profile extends React.PureComponent {
                   return data.characters.map(char =>
                     <Card key={char.id} py={10} px={20} my={10} inline>
                       <Character {...char} />
+
+                      <Mutation
+                        mutation={DELETE_CHARACTER_MUTATION}
+                        update={(cache, { data: { deleteCharacter } }) => {
+                          const { characters } = cache.readQuery({ query: FETCH_CHARACTERS_QUERY })
+
+                          cache.writeQuery({
+                            query: FETCH_CHARACTERS_QUERY,
+                            data: { characters: characters.filter(c => c.id !== deleteCharacter.id) }
+                          })
+                        }}
+                      >
+                        {(deleteCharacter, { loading }) => (
+                          <Box
+                            position="absolute"
+                            top={0}
+                            right={10}
+                          >
+                            <Dropdown
+                              overlay={createMenu([
+                                {
+                                  label: 'Edit',
+                                  icon: 'edit',
+                                  onClick: () => alert('edit')
+                                },
+                                {
+                                  label: 'Delete',
+                                  icon: 'delete',
+                                  onClick: async () => {
+                                    await deleteCharacter({ variables: { id: char.id }})
+                                  }
+                                }
+                              ])}
+                              trigger={[ 'click' ]}
+                            >
+                              <Icon type="ellipsis"/>
+                            </Dropdown>
+                          </Box>
+                        )}</Mutation>
                     </Card>
                   )
                 }}</Query>
@@ -63,7 +104,6 @@ class Profile extends React.PureComponent {
 
           </Box>
         </Flex>
-
 
         <Drawer
           width={640}
