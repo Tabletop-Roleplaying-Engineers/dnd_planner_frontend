@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom'
 class Home extends PureComponent {
   componentDidMount() {
     const pagePath = localStorage.getItem('FIRST_PAGE')
-    history.push(pagePath || '/dashboard')
+    history.replace(pagePath || '/dashboard')
   }
 
   render() {

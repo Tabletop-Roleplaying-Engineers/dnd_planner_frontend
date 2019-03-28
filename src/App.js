@@ -11,13 +11,25 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import { split } from 'apollo-link'
 import { WebSocketLink } from 'apollo-link-ws'
 import { getMainDefinition } from 'apollo-utilities'
+import { setContext } from 'apollo-link-context'
 
 const httpLink = createHttpLink({
-  uri: 'https://dnd-planner.herokuapp.com/'
+  uri: 'http://localhost:4000'
+})
+
+const authLink = setContext((_, { headers }) => {
+  const userData = localStorage.getItem('AUTH_DATA')
+
+  return {
+    headers: {
+      ...headers,
+      authorization: userData || ''
+    }
+  }
 })
 
 const wsLink = new WebSocketLink({
-  uri: `ws://dnd-planner.herokuapp.com/`,
+  uri: `ws://localhost:4000`,
   options: {
     reconnect: true,
   }
@@ -29,7 +41,7 @@ const link = split(
     return kind === 'OperationDefinition' && operation === 'subscription'
   },
   wsLink,
-  httpLink
+  authLink.concat(httpLink)
 )
 
 const client = new ApolloClient({

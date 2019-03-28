@@ -11,6 +11,17 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
   }
 
+  #telegram-login-DnD_Lviv_bot {
+    position: absolute;
+    top: 18px;
+    right: 20px;
+    
+    display: ${() => localStorage.getItem('AUTH_DATA') ? 'none' : 'block'};
+    
+    .btn {
+      background-color: #E40712;
+    }
+  }
 `
 
 export default GlobalStyle

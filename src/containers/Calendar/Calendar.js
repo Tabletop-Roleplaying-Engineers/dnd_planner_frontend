@@ -6,7 +6,7 @@ import ParticipateForm from 'forms/ParticipateForm'
 import moment from 'moment'
 import { GameInfo } from 'components/GameInfo'
 import { modalWidth } from 'config'
-import { Mutation, Query } from 'react-apollo'
+import { Mutation, Query, withApollo } from 'react-apollo'
 import {
   FETCH_GAMES_QUERY,
   CREATE_GAME_QUERY,
@@ -37,7 +37,9 @@ class Calendar extends React.PureComponent {
     })
   }
 
-  render() {
+  async render() {
+    const { client } = this.props
+
     return (
       <React.Fragment>
         <Query query={FETCH_GAMES_QUERY}>
@@ -92,16 +94,7 @@ class Calendar extends React.PureComponent {
           visible={this.state.newGameFormVisibility}
           onClose={() => this.setState({ newGameFormVisibility: false })}
         >
-          <Mutation
-            mutation={CREATE_GAME_QUERY}
-            // update={(cache, { data: { createGame } }) => {
-            //   const { games } = cache.readQuery({ query: FETCH_GAMES_QUERY })
-            //   cache.writeQuery({
-            //     query: FETCH_GAMES_QUERY,
-            //     data: { games: games.concat([ createGame ]) }
-            //   })
-            // }}
-          >
+          <Mutation mutation={CREATE_GAME_QUERY}>
             {(createGame, { loading }) => (
               <Spin spinning={loading}>
                 <NewGameForm
@@ -134,4 +127,4 @@ class Calendar extends React.PureComponent {
   }
 }
 
-export default Calendar
+export default withApollo(Calendar)

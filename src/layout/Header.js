@@ -1,4 +1,4 @@
-import { Button, Layout } from 'antd'
+import { Layout } from 'antd'
 import React from 'react'
 import { Flex } from 'noui/Position'
 import Logo from 'components/Logo'
@@ -32,8 +32,6 @@ class Header extends React.PureComponent {
             </Box>
             <Link to="/help">Help</Link>
           </Box>
-
-          <Button type="primary">Sign In</Button>
         </Flex>
       </StyledHeader>
     )

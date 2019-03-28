@@ -28,13 +28,13 @@ export const FETCH_GAMES_QUERY = gql`
 
 export const CREATE_GAME_QUERY = gql`
   mutation CreateGame(
-    $title: String!
-    $image: String!
-    $description: String!
-    $startingDate: String!
-    $startingTime: String!
-    $range: [Int!]!,
-    $players: Int!,
+  $title: String!
+  $image: String!
+  $description: String!
+  $startingDate: String!
+  $startingTime: String!
+  $range: [Int!]!,
+  $players: Int!,
   ){
     createGame(
       title: $title
@@ -96,8 +96,8 @@ export const FETCH_FACTIONS_QUERY = gql`
 
 export const CREATE_CHARACTER_MUTATION = gql`
   mutation CreateCharacter(
-    $name: String!
-    $faction: ID!
+  $name: String!
+  $faction: ID!
   ) {
     createCharacter(name: $name, faction: $faction) {
       id
@@ -143,6 +143,36 @@ export const NEW_GAME_SUBSCRIPTION = gql`
           logo
         }
       }
+    }
+  }
+`
+
+export const SIGN_IN_MUTATION = gql`
+  mutation SignIn($id: ID!) {
+    signIn(id: $id) {
+      id
+      firstName
+      lastName
+      username
+      avatar
+    }
+  }
+`
+
+export const SIGN_UP_MUTATION = gql`
+  mutation SignUp(
+    $id: ID!
+    $firstName: String!
+    $lastName: String!
+    $username: String!
+    $avatar: String!
+  ) {
+    signUp(id: $id, firstName: $firstName, lastName: $lastName, username: $username, avatar: $avatar) {
+      id
+      firstName
+      lastName
+      username
+      avatar
     }
   }
 `

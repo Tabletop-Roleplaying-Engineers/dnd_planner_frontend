@@ -1,6 +1,7 @@
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 import Home from 'containers/Home'
+import Login from 'containers/Login'
 import Players from 'containers/Players'
 import Calendar from 'containers/Calendar'
 import Profile from 'containers/Profile'
@@ -17,6 +18,7 @@ export default function Routing() {
     <Switch>
       <Box mx={10}>
         <Route exact path='/' component={Home}/>
+        <Route path='/login' component={Login}/>
         <Route path='/calendar' component={Calendar}/>
         <Route path='/players' component={Players}/>
         <Route path='/profile' component={Profile}/>

@@ -36,6 +36,7 @@ export const Box = styled.div.attrs(props => ({
   ${bottom}
   ${left}
   ${right}
+  ${minHeight}
 `
 
 export const Flex = styled(Box).attrs(props => ({

@@ -28,7 +28,7 @@ class Profile extends React.PureComponent {
 
             <Msg>phone number</Msg>
 
-            <Button>Sign out</Button>
+            <Button onClick={() => localStorage.removeItem('AUTH_DATA')}>Sign out</Button>
           </Flex>
 
           <Box column width={[ '100%', '30%' ]} mr={[ 0, '15%' ]}>
