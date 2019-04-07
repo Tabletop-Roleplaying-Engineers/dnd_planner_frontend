@@ -1,4 +1,4 @@
-import { Button, Drawer, Dropdown, Icon, Spin } from 'antd'
+import { Button, Drawer, Dropdown, Icon, Spin, notification } from 'antd'
 import React from 'react'
 import { Flex, Box } from 'noui/Position'
 import Card from 'ui/Card'
@@ -109,6 +109,7 @@ class Profile extends React.PureComponent {
           width={640}
           placement="left"
           closable={false}
+          destroyOnClose={true}
           visible={this.state.newCharacterVisibility}
           onClose={() => this.setState({ newCharacterVisibility: false })}
         >
@@ -125,8 +126,19 @@ class Profile extends React.PureComponent {
             {(createCharacter, { loading }) => (
               <Spin spinning={loading}>
                 <NewCharacterForm
-                  onSubmit={data => {
-                    createCharacter({ variables: data })
+                  onSubmit={async data => {
+                    try {
+                      await createCharacter({ variables: data })
+                      notification.success({
+                        message: 'Character successfully added'
+                      })
+                      this.setState({ newCharacterVisibility: false })
+                    } catch (error) {
+                      notification.error({
+                        message: `Error while saving data: ${error.message}`
+                      })
+                    }
+                    
                   }}
                 />
               </Spin>

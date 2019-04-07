@@ -37,7 +37,7 @@ class Calendar extends React.PureComponent {
     })
   }
 
-  async render() {
+  render() {
     const { client } = this.props
 
     return (
@@ -91,6 +91,7 @@ class Calendar extends React.PureComponent {
           width={modalWidth()}
           placement="right"
           closable={false}
+          destroyOnClose={true}
           visible={this.state.newGameFormVisibility}
           onClose={() => this.setState({ newGameFormVisibility: false })}
         >
@@ -99,12 +100,17 @@ class Calendar extends React.PureComponent {
               <Spin spinning={loading}>
                 <NewGameForm
                   onSubmit={async (game, form) => {
-                    await createGame({ variables: game })
-                    notification.success({
-                      message: 'New game added!'
-                    })
-                    form.resetFields()
-                    this.setState({ newGameFormVisibility: false })
+                    try {
+                      await createGame({ variables: game })
+                      notification.success({
+                        message: 'New game added!'
+                      })
+                      this.setState({ newGameFormVisibility: false })
+                    } catch (error) {
+                      notification.error({
+                        message: `Error while saving data: ${error.message}`
+                      })
+                    }
                   }}
                 />
               </Spin>
