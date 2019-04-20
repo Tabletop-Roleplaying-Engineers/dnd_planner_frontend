@@ -148,8 +148,24 @@ export const NEW_GAME_SUBSCRIPTION = gql`
 `
 
 export const SIGN_IN_MUTATION = gql`
-  mutation SignIn($id: ID!) {
-    signIn(id: $id) {
+  mutation SignIn(
+    $id: ID!
+    $firstName: String!
+    $lastName: String
+    $username: String!
+    $hash: String!
+    $avatar: String
+    $authDate: String!
+  ) {
+    signIn(
+      id: $id,
+      firstName: $firstName,
+      lastName: $lastName,
+      username: $username,
+      hash: $hash,
+      avatar: $avatar
+      authDate: $authDate
+    ) {
       id
       firstName
       lastName
