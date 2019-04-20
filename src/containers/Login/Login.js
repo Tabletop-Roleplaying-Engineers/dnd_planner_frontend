@@ -9,26 +9,29 @@ class Login extends React.Component {
   async componentDidMount() {
     const { location, history, client } = this.props
 
-    // const BOT_TOKEN = '823583949:AAFs88dhB3LZdENQqVyKUFIfVYnu7TTuQno'
-    const { first_name, last_name, photo_url, id, username } = qs.parse(location.search)
-    // const data_check_string = `auth_date=${auth_date}\nfirst_name=${first_name}\nid=${id}\nusername=${username}`
-    // const secret_key = sha.sha256(BOT_TOKEN)
-    // const hmac = sha.sha256.hmac.create(secret_key)
-    // hmac.update(data_check_string)
-    // const hex = hmac.hex()
-    // console.log(hex === hash)
+    const {
+      first_name,
+      last_name,
+      photo_url,
+      id,
+      username,
+      auth_date,
+      hash,
+    } = qs.parse(location.search)
 
     const userData = {
       id,
       username,
+      hash,
       avatar: photo_url,
       firstName: first_name,
-      lastName: last_name
+      lastName: last_name,
+      authDate: auth_date,
     }
 
     let { data: { signIn: user } } = await client.mutate({
       mutation: SIGN_IN_MUTATION,
-      variables: { id }
+      variables: userData,
     })
 
     if (!user) {

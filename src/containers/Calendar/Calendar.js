@@ -38,8 +38,6 @@ class Calendar extends React.PureComponent {
   }
 
   render() {
-    const { client } = this.props
-
     return (
       <React.Fragment>
         <Query query={FETCH_GAMES_QUERY}>
