@@ -32,14 +32,14 @@ class ParticipateForm extends React.PureComponent {
   }
   
   render () {
-    const { image, title, range, description, characters = [], players } = this.props
+    const { image, title, lvlFrom, lvlTo, description, characters = [], players } = this.props
     
     return (
       <Box>
         <Flex mb={20} center justifyContent="space-between">
           <Header>{title}</Header>
           
-          [{range.join(' - ')}]
+          {lvlFrom} - {lvlTo}
         </Flex>
         
         <StyledImage src={image}/>

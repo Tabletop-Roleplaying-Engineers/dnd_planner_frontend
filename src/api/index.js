@@ -8,8 +8,8 @@ export const FETCH_GAMES_QUERY = gql`
       image
       description
       startingDate
-      startingTime
-      range
+      lvlFrom
+      lvlTo
       players
       characters {
         id
@@ -32,8 +32,8 @@ export const CREATE_GAME_QUERY = gql`
   $image: String!
   $description: String!
   $startingDate: String!
-  $startingTime: String!
-  $range: [Int!]!,
+  $lvlFrom: Int!,
+  $lvlTo: Int!,
   $players: Int!,
   ){
     createGame(
@@ -41,8 +41,8 @@ export const CREATE_GAME_QUERY = gql`
       image: $image
       description: $description
       startingDate: $startingDate
-      startingTime: $startingTime
-      range: $range
+      lvlFrom: $lvlFrom
+      lvlTo: $lvlTo
       players: $players,
     ) {
       id
@@ -50,8 +50,8 @@ export const CREATE_GAME_QUERY = gql`
       image
       description
       startingDate
-      startingTime
-      range
+      lvlFrom
+      lvlTo
       players,
       characters {
         id,
@@ -129,8 +129,8 @@ export const NEW_GAME_SUBSCRIPTION = gql`
       image
       description
       startingDate
-      startingTime
-      range
+      lvlFrom
+      lvlTo
       players
       characters {
         id

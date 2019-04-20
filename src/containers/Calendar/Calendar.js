@@ -47,10 +47,15 @@ class Calendar extends React.PureComponent {
 
             this.subscribeToNewGame(subscribeToMore)
 
-            const fetchedGames = R.groupBy(
-              R.prop('startingDate'),
-              data.games
-            )
+            const fetchedGames = R.pipe(
+              R.map(d => ({
+                ...d,
+                startingDate: moment(parseInt(d.startingDate, 10)).format('YYYY-MM-DD')
+              })),
+              R.groupBy(
+                R.prop('startingDate'),
+              )
+            )(data.games)
 
             return (
               <Planner
