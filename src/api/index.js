@@ -165,30 +165,6 @@ export const SIGN_IN_MUTATION = gql`
       hash: $hash,
       avatar: $avatar
       authDate: $authDate
-    ) {
-      id
-      firstName
-      lastName
-      username
-      avatar
-    }
-  }
-`
-
-export const SIGN_UP_MUTATION = gql`
-  mutation SignUp(
-    $id: ID!
-    $firstName: String!
-    $lastName: String!
-    $username: String!
-    $avatar: String!
-  ) {
-    signUp(id: $id, firstName: $firstName, lastName: $lastName, username: $username, avatar: $avatar) {
-      id
-      firstName
-      lastName
-      username
-      avatar
-    }
+    )
   }
 `

@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom'
 import qs from 'query-string'
 import { withApollo } from 'react-apollo'
 import * as R from 'ramda'
-import { SIGN_IN_MUTATION, SIGN_UP_MUTATION } from 'api'
+import { SIGN_IN_MUTATION } from 'api'
 
 class Login extends React.Component {
   async componentDidMount() {
@@ -29,21 +29,12 @@ class Login extends React.Component {
       authDate: auth_date,
     }
 
-    let { data: { signIn: user } } = await client.mutate({
+    let { data: { signIn: token } } = await client.mutate({
       mutation: SIGN_IN_MUTATION,
       variables: userData,
     })
 
-    if (!user) {
-      const { data: { signUp } } = await client.mutate({
-        mutation: SIGN_UP_MUTATION,
-        variables: userData
-      })
-
-      user = signUp
-    }
-
-    localStorage.setItem('AUTH_DATA', user.id)
+    localStorage.setItem('AUTH_DATA', token)
 
     history.replace('/')
   }
