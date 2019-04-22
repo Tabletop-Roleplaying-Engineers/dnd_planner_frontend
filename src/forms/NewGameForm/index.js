@@ -55,9 +55,10 @@ class NewGameForm extends React.PureComponent {
         onSubmit={({ date, time, ...data }, form) => {
           const game = {
             image: this.state.image,
-            startingDate: date.format('YYYY-MM-DD'),
-            startingTime: time.format('HH:mm'),
+            startingDate: new Date(`${date.format('YYYY-MM-DD')} ${time.format('HH:mm')}`),
             ...data,
+            lvlFrom: data.range[0],
+            lvlTo: data.range[1]
           }
           this.props.onSubmit(game, form)
         }}>
