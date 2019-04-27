@@ -11,7 +11,7 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
   }
 
-  #telegram-login-DnD_Lviv_bot {
+  iframe[id*=telegram-login-]{
     position: absolute;
     top: 18px;
     right: 20px;

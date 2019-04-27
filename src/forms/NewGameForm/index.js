@@ -21,19 +21,19 @@ const validationSchema = {
     },
   },
   range: {
-    presence: { allowEmpty: false },
+    presence: {allowEmpty: false},
   },
   date: {
-    presence: { allowEmpty: false },
+    presence: {allowEmpty: false},
   },
   time: {
-    presence: { allowEmpty: false },
+    presence: {allowEmpty: false},
   },
   players: {
-    presence: { allowEmpty: false },
+    presence: {allowEmpty: false},
   },
   description: {
-    presence: { allowEmpty: false },
+    presence: {allowEmpty: false},
   },
 }
 
@@ -41,40 +41,40 @@ class NewGameForm extends React.PureComponent {
   state = {
     image: null,
   }
-
-  componentWillUnmount() {
-    this.setState({ image: null })
+  
+  componentWillUnmount () {
+    this.setState({image: null})
   }
-
-  render() {
-    const { image } = this.state
-
+  
+  render () {
+    const {image} = this.state
+    
     return (
       <Form
         validation={validationSchema}
-        onSubmit={({ date, time, ...data }, form) => {
+        onSubmit={({date, time, range, ...data}, form) => {
           const game = {
             image: this.state.image,
             startingDate: new Date(`${date.format('YYYY-MM-DD')} ${time.format('HH:mm')}`),
+            lvlFrom: range[0],
+            lvlTo: range[1],
             ...data,
-            lvlFrom: data.range[0],
-            lvlTo: data.range[1]
           }
           this.props.onSubmit(game, form)
         }}>
-        {({ form }) =>
+        {({form}) =>
           <Box>
             <Box mb={20}>
               <Header>Add new Game</Header>
             </Box>
-
+            
             <Flex column mb={20}>
               <Upload.Dragger
                 beforeUpload={file => {
                   const fr = new FileReader()
-                  fr.onload = () => this.setState({ image: fr.result })
+                  fr.onload = () => this.setState({image: fr.result})
                   fr.readAsDataURL(file)
-
+                  
                   return false
                 }}
               >
@@ -90,14 +90,14 @@ class NewGameForm extends React.PureComponent {
                 }
               </Upload.Dragger>
             </Flex>
-
+            
             <Flex justifyContent="space-between">
               <Box width="55%">
                 <Field name="title">
                   <Input placeholder="Title"/>
                 </Field>
               </Box>
-
+              
               <Box width="40%">
                 <Field initialValue={[1, 4]} name="range">
                   <Slider
@@ -117,16 +117,16 @@ class NewGameForm extends React.PureComponent {
                 </Field>
               </Box>
             </Flex>
-
+            
             <Flex justifyContent="space-between">
               <Field name="date">
                 <DatePicker/>
               </Field>
-
+              
               <Field name="time">
                 <TimePicker format="HH:mm" minuteStep={10}/>
               </Field>
-
+              
               <Box width="30%">
                 <Field name="players">
                   <Select placeholder="Players count">
@@ -137,11 +137,11 @@ class NewGameForm extends React.PureComponent {
                 </Field>
               </Box>
             </Flex>
-
+            
             <Field name="description">
               <Input.TextArea rows={6} placeholder="Description"/>
             </Field>
-
+            
             <Button
               disabled={form.hasErrors()}
               htmlType="submit"
