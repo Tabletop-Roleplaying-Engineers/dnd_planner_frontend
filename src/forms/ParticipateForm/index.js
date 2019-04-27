@@ -1,4 +1,4 @@
-import { Button, Select } from 'antd'
+import { Button, Select, Spin } from 'antd'
 import * as R from 'ramda'
 import React from 'react'
 import { Flex, Box } from 'noui/Position'
@@ -28,18 +28,30 @@ const StyledSelect = styled(Select)`
 
 class ParticipateForm extends React.PureComponent {
   state = {
-    selectedCharacter: null
+    selectedCharacter: null,
+    participating: false,
   }
   
   render () {
-    const { image, title, lvlFrom, lvlTo, description, characters = [], players } = this.props
+    const {
+      image,
+      title,
+      lvlFrom,
+      lvlTo,
+      description,
+      characters = [],
+      availableCharacters = [],
+      players,
+      status,
+      onParticipate
+    } = this.props
     
     return (
       <Box>
         <Flex mb={20} center justifyContent="space-between">
           <Header>{title}</Header>
           
-          {lvlFrom} - {lvlTo}
+          {lvlFrom} - {lvlTo} [{status}]
         </Flex>
         
         <StyledImage src={image}/>
@@ -65,33 +77,42 @@ class ParticipateForm extends React.PureComponent {
             }
           </Flex>
           
-          <StyledSelect
-            placeholder="Select hero"
-            selected={this.state.selectedCharacter}
-            onSelect={data => {
-              const char = JSON.parse(data)
-              this.setState({ selectedCharacter: char })
-            }}
-          >
-            {
-              characters.map(char =>
-                <StyledSelect.Option key={char.id} value={JSON.stringify(char)}>
-                  <Character {...char} />
-                </StyledSelect.Option>
-              )
-            }
-          </StyledSelect>
-          
-          <Box mt={20}>
-            <Button
-              type="primary"
-              size="large"
-              disabled={R.isNil(this.state.selectedCharacter)}
-              onClick={() => this.setState({ newCharacterVisibility: true })}
-            >
-              Participate
-            </Button>
-          </Box>
+          {
+            status === 'CAN_PARTICIPATE' &&
+             <Spin spinning={this.state.participating}>
+               <StyledSelect
+                 placeholder="Select hero"
+                 selected={this.state.selectedCharacter}
+                 onSelect={data => {
+                   const char = JSON.parse(data)
+                   this.setState({selectedCharacter: char})
+                 }}
+               >
+                 {
+                   availableCharacters.map(char =>
+                     <StyledSelect.Option key={char.id} value={JSON.stringify(char)}>
+                       <Character {...char} />
+                     </StyledSelect.Option>
+                   )
+                 }
+               </StyledSelect>
+  
+               <Box mt={20}>
+                 <Button
+                   type="primary"
+                   size="large"
+                   disabled={R.isNil(this.state.selectedCharacter)}
+                   onClick={async () => {
+                     this.setState({ participating: true})
+                     await onParticipate(this.state.selectedCharacter)
+                     this.setState({ participating: false})
+                   }}
+                 >
+                   Participate
+                 </Button>
+               </Box>
+             </Spin>
+          }
         
         </Box>
       

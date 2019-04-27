@@ -70,10 +70,14 @@ class NewCharacterForm extends React.PureComponent {
                 }}</Query>
 
               <Button
-                disabled={form.hasErrors()}
                 htmlType="submit"
+                type="primary"
+                shape="round"
+                icon="plus"
+                size="large"
+                disabled={form.hasErrors()}
               >
-                Create
+                Add new Character
               </Button>
             </Box>
           )

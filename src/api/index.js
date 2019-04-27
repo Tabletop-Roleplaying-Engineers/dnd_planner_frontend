@@ -11,6 +11,7 @@ export const FETCH_GAMES_QUERY = gql`
       lvlFrom
       lvlTo
       players
+      status
       characters {
         id
         name
@@ -21,7 +22,13 @@ export const FETCH_GAMES_QUERY = gql`
           name
           logo
         }
-      },
+        user {
+          id
+          firstName
+          lastName
+          avatar
+        }
+      }
     }
   }
 `
@@ -168,3 +175,52 @@ export const SIGN_IN_MUTATION = gql`
     )
   }
 `
+
+export const AVAILABLE_CHARACTERS = gql`
+  query AvailableCharacters($gameId: ID!) {
+    validCharactersForGame(gameId: $gameId){
+      id
+      name
+      experience
+      renown
+      faction {
+        id
+        name
+        logo
+      }
+    }
+  }
+`
+
+export const PARTICIPATE_GAME = gql`
+  mutation SignIn(
+    $gameId: ID!
+    $characterId: ID!
+  ) {
+    participateGame(
+      gameId: $gameId
+      characterId: $characterId
+    ) {
+      id
+      players
+      status
+      characters {
+        id
+        name
+        experience
+        renown
+        faction {
+          id
+          name
+          logo
+        }
+        user {
+          id
+          firstName
+          lastName
+          avatar
+          username
+        }
+      }
+    }
+  }`
