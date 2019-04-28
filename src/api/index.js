@@ -27,7 +27,14 @@ export const FETCH_GAMES_QUERY = gql`
           firstName
           lastName
           avatar
+          username
         }
+      }
+      user {
+        firstName
+        lastName
+        avatar
+        username
       }
     }
   }
@@ -224,3 +231,41 @@ export const PARTICIPATE_GAME = gql`
       }
     }
   }`
+
+export const CHARACTERS_IN_GAME = gql`
+  {
+    getCharactersInGame {
+      id
+      name
+      experience
+      renown
+      faction{
+        id
+        name
+        logo
+      }
+      game {
+        id
+        title
+        image
+        description
+        startingDate
+        lvlFrom
+        lvlTo
+      }
+    }
+  }
+`
+
+export const LEAVE_GAME = gql`
+  mutation LeaveGame(
+    $characterId: ID!
+  ){
+    leaveGame(characterId: $characterId){
+      id,
+      game {
+        id
+      }
+    }
+  }
+`

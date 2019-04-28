@@ -5,6 +5,7 @@ import { Flex, Box } from 'noui/Position'
 import Character from 'components/Character'
 import { Header, Msg } from 'ui/Text'
 import styled from 'styled-components'
+import UserInfo from '../../components/UserInfo'
 
 const StyledImage = styled.img`
   object-fit: cover;
@@ -39,6 +40,7 @@ class ParticipateForm extends React.PureComponent {
       lvlFrom,
       lvlTo,
       description,
+      user,
       characters = [],
       availableCharacters = [],
       players,
@@ -49,9 +51,15 @@ class ParticipateForm extends React.PureComponent {
     return (
       <Box>
         <Flex mb={20} center justifyContent="space-between">
-          <Header>{title}</Header>
-          
-          {lvlFrom} - {lvlTo} [{status}]
+          <Header>{title}
+            <Msg>{lvlFrom} - {lvlTo}</Msg>
+          </Header>
+        
+          <Flex column>
+            <Msg>Dungeon Master</Msg>
+            
+            <UserInfo {...user} position="left"/>
+          </Flex>
         </Flex>
         
         <StyledImage src={image}/>
@@ -69,49 +77,53 @@ class ParticipateForm extends React.PureComponent {
           
           <Flex flexWrap="wrap" justifiContent="space-between">
             {
-              characters.map(char =>
-                <Box key={char.id} my={10}>
+              characters.map(({user, ...char}) =>
+                <Flex key={char.id} my={10} center>
                   <Character {...char} />
-                </Box>
+                  
+                  <Box ml={20}>
+                    <UserInfo {...user} />
+                  </Box>
+                </Flex>
               )
             }
           </Flex>
           
           {
             status === 'CAN_PARTICIPATE' &&
-             <Spin spinning={this.state.participating}>
-               <StyledSelect
-                 placeholder="Select hero"
-                 selected={this.state.selectedCharacter}
-                 onSelect={data => {
-                   const char = JSON.parse(data)
-                   this.setState({selectedCharacter: char})
-                 }}
-               >
-                 {
-                   availableCharacters.map(char =>
-                     <StyledSelect.Option key={char.id} value={JSON.stringify(char)}>
-                       <Character {...char} />
-                     </StyledSelect.Option>
-                   )
-                 }
-               </StyledSelect>
-  
-               <Box mt={20}>
-                 <Button
-                   type="primary"
-                   size="large"
-                   disabled={R.isNil(this.state.selectedCharacter)}
-                   onClick={async () => {
-                     this.setState({ participating: true})
-                     await onParticipate(this.state.selectedCharacter)
-                     this.setState({ participating: false})
-                   }}
-                 >
-                   Participate
-                 </Button>
-               </Box>
-             </Spin>
+            <Spin spinning={this.state.participating}>
+              <StyledSelect
+                placeholder="Select hero"
+                selected={this.state.selectedCharacter}
+                onSelect={data => {
+                  const char = JSON.parse(data)
+                  this.setState({selectedCharacter: char})
+                }}
+              >
+                {
+                  availableCharacters.map(char =>
+                    <StyledSelect.Option key={char.id} value={JSON.stringify(char)}>
+                      <Character {...char} />
+                    </StyledSelect.Option>
+                  )
+                }
+              </StyledSelect>
+              
+              <Box mt={20}>
+                <Button
+                  type="primary"
+                  size="large"
+                  disabled={R.isNil(this.state.selectedCharacter)}
+                  onClick={async () => {
+                    this.setState({participating: true})
+                    await onParticipate(this.state.selectedCharacter)
+                    this.setState({participating: false})
+                  }}
+                >
+                  Participate
+                </Button>
+              </Box>
+            </Spin>
           }
         
         </Box>
