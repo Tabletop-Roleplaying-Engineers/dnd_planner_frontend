@@ -1,6 +1,6 @@
-import { Button, Dropdown, Icon, Spin, notification, Tabs, Drawer } from 'antd'
+import { Button, Dropdown, Icon, Spin, notification, Tabs } from 'antd'
 import * as R from 'ramda'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Flex, Box } from 'noui/Position'
 import Card from 'ui/Card'
 import { Msg, Header, Label } from 'ui/Text'
@@ -12,26 +12,11 @@ import {
   FETCH_CHARACTERS_QUERY,
   CREATE_CHARACTER_MUTATION,
   DELETE_CHARACTER_MUTATION,
-  CHARACTERS_IN_GAME,
   LEAVE_GAME
 } from 'api'
 import GameView from 'components/GameView'
 
-const Profile = ({client}) => {
-  const [charactersInGame, set] = useState([])
-  
-  useEffect(() => {
-    const fetch = async () => {
-      const {data: {getCharactersInGame}} = await client.query({
-        query: CHARACTERS_IN_GAME,
-      })
-      
-      set(getCharactersInGame)
-    }
-    
-    fetch()
-  }, [])
-  
+const Profile = props => {
   return (
     <Box height="90vh">
       <Box mb={40}>
@@ -40,14 +25,16 @@ const Profile = ({client}) => {
       
       <Tabs defaultActiveKey="games" type="card">
         <Tabs.TabPane tab="Games" key="games">
-          <Query query={CHARACTERS_IN_GAME} pollInterval={1000}>
-            {({loading, error, data: { getCharactersInGame = [] } }) => {
+          <Query query={FETCH_CHARACTERS_QUERY} pollInterval={1000}>
+            {({loading, error, data: { characters = [] } }) => {
               if (error) return <div>Error</div>
               
               return (
                 <Spin spinning={loading}>
                 {
-                  getCharactersInGame.map(character =>
+                  characters
+                  .filter(c => c.game)
+                  .map(character =>
                     <Card key={character.id} py={10} px={20} my={10}>
                       <Flex column>
                         <GameView {...character.game} />
@@ -59,17 +46,12 @@ const Profile = ({client}) => {
                             mutation={LEAVE_GAME}
                             variables={{characterId: character.id}}
                             update={(cache, {data: {leaveGame}}) => {
-                              const {getCharactersInGame} = cache.readQuery({query: CHARACTERS_IN_GAME})
-                              const newGames = R.reject(R.propEq('id', leaveGame.id), getCharactersInGame)
-                              
+                              const {characters} = cache.readQuery({query: FETCH_CHARACTERS_QUERY})
+  
                               cache.writeQuery({
-                                query: CHARACTERS_IN_GAME,
-                                data: {
-                                  getCharactersInGame: newGames
-                                }
+                                query: FETCH_CHARACTERS_QUERY,
+                                data: {characters: R.reject(R.propEq('id', leaveGame.id), characters)}
                               })
-                              
-                              set(newGames)
                             }}
                           >
                             {(leaveGame, {loading}) => (
@@ -103,11 +85,11 @@ const Profile = ({client}) => {
               
               <Flex column>
                 <Query query={FETCH_CHARACTERS_QUERY}>
-                  {({loading, error, data}) => {
+                  {({loading, error, data: { characters = [] }}) => {
                     if (loading) return <Spin/>
                     if (error) return <div>Error</div>
                     
-                    return data.characters.map(char =>
+                    return characters.map(char =>
                       <Card key={char.id} py={10} px={20} my={10} inline>
                         <Character {...char} />
                         
@@ -175,7 +157,6 @@ const Profile = ({client}) => {
                           notification.success({
                             message: 'Character successfully added'
                           })
-                          this.setState({newCharacterVisibility: false})
                         } catch (error) {
                           notification.error({
                             message: `Error while saving data: ${error.message}`

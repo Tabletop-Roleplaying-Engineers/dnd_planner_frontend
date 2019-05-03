@@ -28,6 +28,7 @@ class Calendar extends React.PureComponent {
       document: NEW_GAME_SUBSCRIPTION,
       updateQuery: (prev, {subscriptionData}) => {
         if (!subscriptionData.data) return prev
+        
         const newGame = subscriptionData.data.newGame
         const exists = prev.games.find(({id}) => id === newGame.id)
         
