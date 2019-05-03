@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import moment from 'moment'
-import { Box, Flex } from 'noui/Position'
+import { Flex } from 'noui/Position'
 import { Msg } from 'ui/Text'
 
 const StyledImage = styled.img`

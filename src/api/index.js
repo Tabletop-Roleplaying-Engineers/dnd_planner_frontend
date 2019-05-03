@@ -94,6 +94,15 @@ export const FETCH_CHARACTERS_QUERY = gql`
         name
         logo
       }
+      game {
+        id
+        title
+        image
+        description
+        startingDate
+        lvlFrom
+        lvlTo
+      }
     }
   }
 `
@@ -228,30 +237,6 @@ export const PARTICIPATE_GAME = gql`
           avatar
           username
         }
-      }
-    }
-  }`
-
-export const CHARACTERS_IN_GAME = gql`
-  {
-    getCharactersInGame {
-      id
-      name
-      experience
-      renown
-      faction{
-        id
-        name
-        logo
-      }
-      game {
-        id
-        title
-        image
-        description
-        startingDate
-        lvlFrom
-        lvlTo
       }
     }
   }
