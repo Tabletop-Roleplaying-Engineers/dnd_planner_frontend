@@ -31,7 +31,7 @@ const authLink = setContext((_, { headers }) => {
 })
 
 const wsLink = new WebSocketLink({
-  uri: `ws://dnd-planner.herokuapp.com/`,
+  uri: `wss://dnd-planner.herokuapp.com/`,
   // TODO: add to the env variables
   // uri: `ws://localhost:4000/`,
   options: {
