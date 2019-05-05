@@ -66,7 +66,14 @@ export const CREATE_GAME_QUERY = gql`
       startingDate
       lvlFrom
       lvlTo
-      players,
+      players
+      status
+      user {
+        firstName
+        lastName
+        avatar
+        username
+      }
       characters {
         id,
         name,

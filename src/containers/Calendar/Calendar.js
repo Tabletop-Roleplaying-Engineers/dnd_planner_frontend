@@ -15,53 +15,75 @@ import {
   PARTICIPATE_GAME
 } from 'api'
 
+const parseGames = R.pipe(
+  R.map(game => ({
+    ...game,
+    startingDate: moment(parseInt(game.startingDate, 10)).format('YYYY-MM-DD')
+  })),
+  R.groupBy(
+    R.prop('startingDate'),
+  )
+)
+
 class Calendar extends React.PureComponent {
   state = {
     newGameFormVisibility: false,
     participateGameVisibility: false,
     selectedGame: null,
-    availableCharacters: []
+    availableCharacters: [],
+    unsubscribeFromGames: null,
   }
-  
+
   subscribeToNewGame = async subscribeToMore => {
-    subscribeToMore({
-      document: NEW_GAME_SUBSCRIPTION,
-      updateQuery: (prev, {subscriptionData}) => {
-        if (!subscriptionData.data) return prev
-        
-        const newGame = subscriptionData.data.newGame
-        const exists = prev.games.find(({id}) => id === newGame.id)
-        
-        if (exists) return prev
-        
-        return Object.assign({}, prev, {
-          games: [newGame, ...prev.games]
-        })
-      }
+    if (this.state.unsubscribeFromGames) {
+      // We don't need to subscribe several times
+      return
+    }
+
+    this.setState({
+      unsubscribeFromGames: subscribeToMore({
+        document: NEW_GAME_SUBSCRIPTION,
+        updateQuery: (prev, { subscriptionData }) => {
+          if (!subscriptionData.data) return prev
+
+          const newGame = subscriptionData.data.newGame
+          const exists = prev.games.find(({ id }) => id === newGame.id)
+
+          if (exists) return prev
+
+          return {
+            ...prev,
+            games: [
+              ...prev.games,
+              newGame,
+            ],
+          }
+        }
+      })
     })
   }
-  
+
   onGameInfo = game => async e => {
     e.stopPropagation()
-    
+
     const {client} = this.props
-    
+
     const {data: {validCharactersForGame}} = await client.query({
       query: AVAILABLE_CHARACTERS,
       variables: {gameId: game.id},
     })
-    
+
     this.setState({
       participateGameVisibility: true,
       selectedGame: game,
       availableCharacters: validCharactersForGame
     })
   }
-  
+
   onParticipate = async character => {
     const {client} = this.props
     const {selectedGame} = this.state
-    
+
     await client.mutate({
       mutation: PARTICIPATE_GAME,
       variables: {
@@ -70,42 +92,34 @@ class Calendar extends React.PureComponent {
       },
       update: (cache, {data: {participateGame}}) => {
         const { games } = cache.readQuery({query: FETCH_GAMES_QUERY})
-        
+
         const idx = R.findIndex(R.propEq('id', participateGame.id))(games)
         const updatedGame = { ...games[idx], ...participateGame }
-        
+
         cache.writeQuery({
           query: FETCH_GAMES_QUERY,
           data: {games: [...R.remove(idx, 1, games), updatedGame]},
         })
-        
+
         this.setState({ selectedGame: updatedGame })
       }
     })
   }
-  
+
   render () {
     const {selectedGame, availableCharacters} = this.state
-    
+
     return (
       <React.Fragment>
         <Query query={FETCH_GAMES_QUERY}>
           {({loading, error, data, subscribeToMore}) => {
             if (loading) return <Spin/>
-            if (error) return <div>Error</div>
-            
+            if (error) return <div>Error: {error}</div>
+
             this.subscribeToNewGame(subscribeToMore)
-            
-            const fetchedGames = R.pipe(
-              R.map(game => ({
-                ...game,
-                startingDate: moment(parseInt(game.startingDate, 10)).format('YYYY-MM-DD')
-              })),
-              R.groupBy(
-                R.prop('startingDate'),
-              )
-            )(data.games)
-            
+
+            const fetchedGames = parseGames(data.games)
+
             return (
               <Planner
                 onSelect={(...data) => this.setState({newGameFormVisibility: true})}
@@ -115,7 +129,7 @@ class Calendar extends React.PureComponent {
                 }
                 dateCellRender={date => {
                   const games = fetchedGames[date.format('YYYY-MM-DD')] || []
-                  
+
                   return (
                     <React.Fragment>
                       {
@@ -135,7 +149,7 @@ class Calendar extends React.PureComponent {
             )
           }}
         </Query>
-        
+
         <Drawer
           width={modalWidth()}
           placement="right"
@@ -166,7 +180,7 @@ class Calendar extends React.PureComponent {
             )}
           </Mutation>
         </Drawer>
-        
+
         <Drawer
           destroyOnClose={true}
           width={modalWidth()}
