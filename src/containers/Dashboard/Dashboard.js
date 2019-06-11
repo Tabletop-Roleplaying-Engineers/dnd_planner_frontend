@@ -4,6 +4,7 @@ import ZoomCard from 'components/ZoomCard'
 import { Header, Msg } from '../../ui/Text'
 import { Button } from 'antd'
 import { withRouter } from 'react-router-dom'
+import LoreLogo from 'containers/Lore/shared/lore.jpg'
 
 function Dashboard(props) {
   return (
@@ -22,11 +23,11 @@ function Dashboard(props) {
         />
 
         <ZoomCard
-          title="Calendar"
-          image="http://dnd.wizards.com/sites/default/files/media/styles/news_banner/public/images/news/Article_Header1.jpg"
+          title="Lore"
+          image={LoreLogo}
           width={[ '90vw', '31vw' ]}
           my={[ 10, 0 ]}
-          onClick={() => props.history.push('/calendar')}
+          onClick={() => props.history.push('/lore')}
         />
 
         <ZoomCard
