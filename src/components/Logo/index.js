@@ -1,4 +1,4 @@
-import React, { Fragment, memo } from 'react'
+import React, { Fragment } from 'react'
 import { withRouter } from 'react-router-dom'
 import styled from 'styled-components'
 import { TabletAndDesktop, Mobile } from 'noui/MediaQuery'
@@ -17,17 +17,17 @@ const Logo = props => {
   return (
     <Fragment>
       <TabletAndDesktop>
-        <Image 
+        <Image
           onClick={navigate}
-          src={bigLogo} 
+          src={bigLogo}
           alt="logo"
          />
       </TabletAndDesktop>
 
       <Mobile>
-        <Image 
+        <Image
           onClick={navigate}
-          src={miniLogo} 
+          src={miniLogo}
           alt="logo"
          />
       </Mobile>

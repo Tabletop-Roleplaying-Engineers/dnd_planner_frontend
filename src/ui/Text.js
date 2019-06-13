@@ -1,7 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import { color, fontFamily, fontSize, opacity, textAlign, display, fontWeight, lineHeight, fontStyle } from 'styled-system'
-import { Flex, Box } from 'noui/Position'
+import Lorem from 'react-lorem-component'
+import { Flex } from 'noui/Position'
+import { Box } from '../noui/Position'
 
 const Text = type => styled[type].attrs(props => ({
   display: props.noinline ? 'block' : 'inline-block'
@@ -30,15 +32,44 @@ export const Paragraph = styled(Text('p')).attrs(props => ({
   text-align: justify;
 `
 
-export const Header = styled(Text('h1'))``
+export const Header = styled(Text('h1'))`
+  text-align: center;
+`
 
-export const Label = styled(Text('h2'))``
+export const Label = styled(Text('h2'))`
+  text-align: center;
+`
+
+const Q = styled(Paragraph)`
+  position: relative;
+  
+  &:before,
+  &:after {
+  position: absolute;
+  color: #f1efe6;
+  font-size: 8rem;
+  width: 4rem;
+  height: 4rem;
+  }
+  
+  &:before {
+  content: '“';
+  left: -5rem;
+  top: -2rem;
+  }
+  
+  &:after {
+  content: '”';
+  right: -5rem;
+  bottom: 1rem;
+  }
+`
 
 export const Quote = ({ children, author }) =>
   <Flex column>
-    <Paragraph fontStyle="italic">
+    <Q fontStyle="italic">
       {children}
-    </Paragraph>
+    </Q>
     
     <Flex justifyContent="flex-end">
       <Msg
@@ -50,4 +81,31 @@ export const Quote = ({ children, author }) =>
       </Msg>
     </Flex>
   </Flex>
+
+const Blur = styled(Box)`
+  filter: blur(5px);
+  position: relative;
+`
+
+const StyledBlurText = styled(Header)`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  
+  font-weight: bold;
+  font-size: 24px;
+`
+
+export const SecretText = ({ children }) =>
+  <Box position="relative">
+    <Blur>
+      <Lorem count={(Math.random() * 4) + 1} />
+    </Blur>
+    
+    <StyledBlurText>
+      {children}
+    </StyledBlurText>
+  </Box>
+
 

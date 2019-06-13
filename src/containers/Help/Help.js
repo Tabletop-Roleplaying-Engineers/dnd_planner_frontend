@@ -3,6 +3,7 @@ import { Tabs, List, Alert } from 'antd'
 import { Box } from 'noui/Position'
 import { Header, Msg } from 'ui/Text'
 import { withRouter } from 'react-router-dom'
+import { isMobile } from 'noui/MediaQuery'
 
 const RULES = [
   'Якщо це ваша перша гра Ліги Авантюристів - ви починаєте персонажем першого рівня!',
@@ -43,7 +44,7 @@ const Help = ({ history, location }) => {
         activeKey={tab}
         onChange={setTab}
         type="card"
-        tabPosition="left"
+        tabPosition={isMobile() ? 'top' : 'left'}
       >
         <Tabs.TabPane tab="The Rules" key="the_rules">
           <Box my={10}>
