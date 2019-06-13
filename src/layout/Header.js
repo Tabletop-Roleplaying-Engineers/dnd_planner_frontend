@@ -20,7 +20,7 @@ class Header extends React.PureComponent {
   render () {
     return (
       <StyledHeader>
-        <Flex center justifyContent="space-between">
+        <Flex center justifyContent="space-between" height="100%">
           <Logo />
 
           <Box>

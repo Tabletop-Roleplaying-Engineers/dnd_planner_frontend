@@ -4,7 +4,10 @@ import ZoomCard from 'components/ZoomCard'
 import { Header, Msg } from '../../ui/Text'
 import { Button } from 'antd'
 import { withRouter } from 'react-router-dom'
-import LoreLogo from 'containers/Lore/shared/lore.jpg'
+import loreCover from './shared/lore.jpg'
+import rulesCover from './shared/rules.jpg'
+import mapCover from './shared/map.jpg'
+
 
 function Dashboard(props) {
   return (
@@ -16,7 +19,7 @@ function Dashboard(props) {
       >
         <ZoomCard
           title="Rules"
-          image="https://cs8.pikabu.ru/post_img/big/2018/05/07/12/1525725815177424991.jpg"
+          image={rulesCover}
           width={[ '90vw', '31vw' ]}
           my={[ 10, 0 ]}
           onClick={() => props.history.push('/help#the_rules')}
@@ -24,7 +27,7 @@ function Dashboard(props) {
 
         <ZoomCard
           title="Lore"
-          image={LoreLogo}
+          image={loreCover}
           width={[ '90vw', '31vw' ]}
           my={[ 10, 0 ]}
           onClick={() => props.history.push('/lore')}
@@ -32,7 +35,7 @@ function Dashboard(props) {
 
         <ZoomCard
           title="Map"
-          image="https://cdna.artstation.com/p/assets/images/images/006/129/000/large/thomas-russell-01.jpg"
+          image={mapCover}
           width={[ '90vw', '31vw' ]}
           my={[ 10, 0 ]}
           onClick={() => alert('We are working on it!')}

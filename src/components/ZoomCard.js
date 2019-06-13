@@ -3,8 +3,6 @@ import { Flex, Box } from 'noui/Position'
 import styled from 'styled-components'
 import { Header } from 'ui/Text'
 
-
-
 const Text = styled(Header)`
   text-shadow: -1px 0 #333, 0 1px #333, 1px 0 #333, 0 -1px #333;
   font-weight: bold;
@@ -28,6 +26,12 @@ const Image = styled(Box)`
   background-position: center;
   
   transition: all .5s;
+  -moz-transition: all .5s;
+  -ms-transition: all .5s;
+  -o-transition: all .5s;
+  -webkit-transition: all .5s;
+  backface-visibility: hidden;
+
   
   &::before {
     content: '';
@@ -40,6 +44,14 @@ const Image = styled(Box)`
     
     background: rgba(20, 20, 20, .7);
   }
+ 
+  &:hover{
+    transform: scale(1.2);
+  }  
+
+  &:hover::before {
+    display: none;
+  }  
 `
 
 const Card = styled(Flex)`
@@ -50,15 +62,17 @@ const Card = styled(Flex)`
   position: relative;
   cursor: pointer;
   overflow: hidden;
-    
-  &:hover ${Image}{
-    transform: scale(1.2);
-  }  
-  
-  &:hover ${Image}::before {
-    display: none;
-  }  
+
 `
+
+    
+// &:hover ${Image}{
+//   background-size: 120%;
+// }  
+
+// &:hover ${Image}::before {
+//   display: none;
+// }  
 
 export default function ZoomCard({ image, title, ...props }) {
   return (

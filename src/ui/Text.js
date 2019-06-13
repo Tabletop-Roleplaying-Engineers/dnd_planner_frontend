@@ -27,6 +27,7 @@ export const Msg = styled(Text('span')).attrs(props => ({
 export const Paragraph = styled(Text('p')).attrs(props => ({
   fontSize: props.fontSize || '14px'
 }))`
+  text-align: justify;
 `
 
 export const Header = styled(Text('h1'))``
