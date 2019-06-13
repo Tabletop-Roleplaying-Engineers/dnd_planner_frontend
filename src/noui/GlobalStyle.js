@@ -10,11 +10,16 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
   }
+  
+  .ant-layout {
+    background: white;
+  }
 
   iframe[id*=telegram-login-]{
     position: absolute;
     top: 18px;
-    right: 20px;
+    right: 50%;
+    transform: translateX(50%);
     
     display: ${() => localStorage.getItem('AUTH_DATA') ? 'none' : 'block'};
     

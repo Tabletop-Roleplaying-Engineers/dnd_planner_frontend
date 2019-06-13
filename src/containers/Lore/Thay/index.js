@@ -1,25 +1,29 @@
 import React, { useEffect, useState } from 'react'
-import { Tabs } from 'antd'
+import { Tabs, Divider } from 'antd'
 import { Box, Flex } from 'noui/Position'
-import { Header, Quote, Paragraph } from 'ui/Text'
+import { Header, Quote, Paragraph, Msg, SecretText } from 'ui/Text'
+import { isMobile } from 'noui/MediaQuery'
+import thayParty from './shared/party.jpeg'
+import rathPortrait from './shared/rath.jpeg'
+import zarladaPortrait from './shared/zarlada.jpg'
 
 const Thay = ({history, location}) => {
   const [tab, setTab] = useState(location.hash.substring(1) || 'main')
   
   useEffect(() => {
-    history.push({
+    history.replace({
       path: location.path,
       hash: tab
     })
   }, [tab])
   
   return (
-    <Box mt={10} mr={20}>
+    <Box mt={10} mr={[0, 20]}>
       <Tabs
         activeKey={tab}
         onChange={setTab}
         type="card"
-        tabPosition="left"
+        tabPosition={isMobile() ? 'top' : 'left'}
       >
         <Tabs.TabPane
           tab="Головна"
@@ -51,6 +55,13 @@ const Thay = ({history, location}) => {
               ремісники або кваліфіковані робітники - лише на крок вище простих рабів.
             </Paragraph>
           </Box>
+  
+          <Flex column center my={30}>
+            <img src={thayParty} alt="Thay party"/>
+            
+            <Msg>"Кожен теєць знає - майбутнє існує лише в  стражданні ворогів"</Msg>
+          </Flex>
+          
           <Box my={10}>
             <Paragraph fontSize="16px">
               Тей - нація, керована жорстокими та надзвичайно могутніми чарівниками - зулкірами, які покладаються на
@@ -98,7 +109,11 @@ const Thay = ({history, location}) => {
           <Box my={10}>
             <Quote author="Звіт Мірлани, Тейського лицаря, вірного воїна Рат Модара"/>
           </Box>
-          
+  
+          <Box my={20} px={20}>
+            <Divider />
+          </Box>
+  
           <Box my={10}>
             <Paragraph fontSize="16px">
               Тей - віддалена держава на сході Фаеруну, відома своєю непростою історією і погонею за магічними знаннями.
@@ -129,7 +144,7 @@ const Thay = ({history, location}) => {
           <Box my={10}>
             <Quote author="з архівів Гахала Іммертума, Намісника фракції Альянс Лордів у Флані"/>
           </Box>
-        
+
         </Tabs.TabPane>
         
         <Tabs.TabPane
@@ -138,6 +153,12 @@ const Thay = ({history, location}) => {
         >
           <Flex center>
             <Header fontSize={24} fontWeight="bold">Рат Модар</Header>
+          </Flex>
+  
+          <Flex column center my={30}>
+            <img src={rathPortrait} alt="Rath Modar"/>
+    
+            <Msg>“Ми маємо керувати мертвими, а не вони нами”</Msg>
           </Flex>
           
           <Box my={10}>
@@ -184,6 +205,12 @@ const Thay = ({history, location}) => {
           <Flex center>
             <Header fontSize={30} fontWeight="bold">Зарлада</Header>
           </Flex>
+  
+          <Flex column center my={30}>
+            <img src={zarladaPortrait} alt="Zarlada"/>
+    
+            <Msg>Червона Чарівниця із власними мотивами</Msg>
+          </Flex>
           
           <Box my={10}>
             <Paragraph fontSize="16px">
@@ -213,8 +240,11 @@ const Thay = ({history, location}) => {
           </Box>
           
           <Box my={10}>
-            <Quote author="більше інформації після проходження завдання “Повернення Червоної Королеви”"/>
+            <SecretText>
+              Більше інформації після проходження завдання “Повернення Червоної Королеви”
+            </SecretText>
           </Box>
+  
         </Tabs.TabPane>
       </Tabs>
     </Box>
