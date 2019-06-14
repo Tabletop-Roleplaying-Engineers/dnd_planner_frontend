@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { Tabs } from 'antd'
 import { Box, Flex } from 'noui/Position'
-import { Header, Quote, Paragraph, SecretText, Msg } from 'ui/Text'
+import { Header, Quote, Paragraph, SecretText } from 'ui/Text'
 import { isMobile } from 'noui/MediaQuery'
+import Portrait from 'ui/Portrait'
 import rathPortrait from './shared/rath.jpg'
 import zarladaPortrait from './shared/zarlada.jpg'
 import chesterPortrait from './shared/chester.jpg'
 import severynPortrait from './shared/severyn.jpg'
 import johnPortrait from './shared/john.jpg'
 import ectorPortrait from './shared/ector.jpg'
+import cronPortrait from './shared/cron.jpg'
+import dragonPortrait from './shared/dragon.jpg'
 
 const CultOfTheDragon = ({history, location}) => {
   const [tab, setTab] = useState(location.hash.substring(1) || 'main')
@@ -37,11 +40,12 @@ const CultOfTheDragon = ({history, location}) => {
             <Header fontSize={24} fontWeight="bold">Рат Модар</Header>
           </Flex>
           
-          <Flex column center my={30}>
-            <img src={rathPortrait} alt="Rath Modar"/>
-            
-            <Msg>“Ми маємо керувати мертвими, а не вони нами”</Msg>
-          </Flex>
+          <Portrait
+            src={rathPortrait}
+            alt="Rath Modar"
+            label="Ми маємо керувати мертвими, а не вони нами"
+            my={30}
+          />
           
           <Box my={10}>
             <Paragraph fontSize="16px">
@@ -88,11 +92,12 @@ const CultOfTheDragon = ({history, location}) => {
             <Header fontSize={30} fontWeight="bold">Зарлада</Header>
           </Flex>
           
-          <Flex column center my={30}>
-            <img src={zarladaPortrait} alt="Zarlada"/>
-            
-            <Msg>Червона Чарівниця із власними мотивами</Msg>
-          </Flex>
+          <Portrait
+            src={zarladaPortrait}
+            alt="Zarlada"
+            label="Червона Чарівниця із власними мотивами"
+            my={30}
+          />
           
           <Box my={10}>
             <Paragraph fontSize="16px">
@@ -136,12 +141,13 @@ const CultOfTheDragon = ({history, location}) => {
           <Flex center>
             <Header fontSize={30} fontWeight="bold">Честер Ламб</Header>
           </Flex>
-  
-          <Flex column center my={30}>
-            <img src={chesterPortrait} alt="Chester"/>
-    
-            <Msg>"Нічого особистого. Лише робота"</Msg>
-          </Flex>
+          
+          <Portrait
+            src={chesterPortrait}
+            alt="Chester"
+            label="Нічого особистого. Лише робота"
+            my={30}
+          />
           
           <Box my={10}>
             <Paragraph fontSize="16px">
@@ -173,12 +179,13 @@ const CultOfTheDragon = ({history, location}) => {
             <Header fontSize={30} fontWeight="bold">Северин</Header>
           </Flex>
           
-          <Flex column center my={30}>
-            <img src={severynPortrait} alt="Severyn"/>
-    
-            <Msg>"Ми усі - лише пилюка під ногами богині Тіамат"</Msg>
-          </Flex>
-  
+          <Portrait
+            src={severynPortrait}
+            alt="Severyn"
+            label="Ми усі - лише пилюка під ногами богині Тіамат"
+            my={30}
+          />
+          
           <Box my={10}>
             <Paragraph fontSize="16px">
               Лідер “нового” Культу Дракона.
@@ -199,12 +206,13 @@ const CultOfTheDragon = ({history, location}) => {
           <Flex center>
             <Header fontSize={30} fontWeight="bold">Джей Джона Джеймсон</Header>
           </Flex>
-  
-          <Flex column center my={30}>
-            <img src={johnPortrait} alt="John"/>
-    
-            <Msg>"Вбийте когось чи пограбуйте - мені потрібні сенсації! НЕГАЙНО!"</Msg>
-          </Flex>
+          
+          <Portrait
+            src={johnPortrait}
+            alt="John"
+            label="Вбийте когось чи пограбуйте - мені потрібні сенсації! НЕГАЙНО!"
+            my={30}
+          />
           
           <Box my={10}>
             <Paragraph fontSize="16px">
@@ -228,12 +236,13 @@ const CultOfTheDragon = ({history, location}) => {
           <Flex center>
             <Header fontSize={30} fontWeight="bold">Ектор Брамс</Header>
           </Flex>
-  
-          <Flex column center my={30}>
-            <img src={ectorPortrait} alt="Ector"/>
-    
-            <Msg>"Порядок має підтримуватись сталевою рукою!"</Msg>
-          </Flex>
+          
+          <Portrait
+            src={ectorPortrait}
+            alt="Ector"
+            label="Порядок має підтримуватись сталевою рукою!"
+            my={30}
+          />
           
           <Box my={10}>
             <Paragraph fontSize="16px">
@@ -242,7 +251,7 @@ const CultOfTheDragon = ({history, location}) => {
               офіційною регалії його нинішній посаді -
               зачарованого чорно-емалевого латного обладунку і довгого багряного плаща, що символізують те, що він
               Лорд-Регент Флану. Він жорстоко розбирається з донесеннями про хабарі, і рідкісний гвардієць переживав
-              більше одного підтвердженого обвинувачення.
+              Більше одного підтвердженого обвинувачення.
             </Paragraph>
           </Box>
         </Tabs.TabPane>
@@ -254,6 +263,13 @@ const CultOfTheDragon = ({history, location}) => {
           <Flex center>
             <Header fontSize={30} fontWeight="bold">Крон Болвер</Header>
           </Flex>
+          
+          <Portrait
+            src={cronPortrait}
+            alt="Cron Bolver"
+            label="Я приведу Флан до порядку!"
+            my={30}
+          />
           
           <Box my={10}>
             <Paragraph fontSize="16px">
@@ -284,6 +300,13 @@ const CultOfTheDragon = ({history, location}) => {
             <Header fontSize={30} fontWeight="bold">Ворганшакс</Header>
           </Flex>
           
+          <Portrait
+            src={dragonPortrait}
+            alt="Dragon"
+            label="Мене звати Ворганшакс, Понівечена Злоба. Вам краще запам'ятати це ім'я"
+            my={30}
+          />
+          
           <Box my={10}>
             <Paragraph fontSize="16px">
               Ворганшакс - це дорослий зелений дракон, майже що древній, чий величезний розмір перевершує лише ще більш
@@ -309,7 +332,7 @@ const CultOfTheDragon = ({history, location}) => {
               йому, багато з них володіють знаннями потужної магії.
             </Paragraph>
           </Box>
-  
+          
           <Box my={10}>
             <SecretText>
               Більше інформації після проходження завдання “Відродження Сяючого Озера”

@@ -14,7 +14,8 @@ const Scene = ({ match }) => {
       <Route exact path={`${match.path}/famous_persons`} component={FamousPersons}/>
       <Route exact path={`${match.path}/storyline`} component={Storyline}/>
       <Route exact path={`${match.path}/phlan`} component={Phlan}/>
-    </Switch>  )
+    </Switch>
+  )
 }
 
 export default Scene
