@@ -2,31 +2,45 @@ import React from 'react'
 import { Flex } from 'noui/Position'
 import ZoomCard from 'components/ZoomCard'
 import { withRouter } from 'react-router-dom'
-import thayCover from './shared/thay.jpg'
-import cultCover from './shared/cult.jpg'
+
+import storylineCover from './shared/storyline.jpg'
+import cultCover from './shared/thay.jpg'
+import factionsCover from './shared/factions.jpg'
 import phlanCover from './shared/phlan.jpg'
-import spoilersCover from './shared/cult.jpg'
+import famousCover from './shared/famous.jpg'
+import tiamatCover from './shared/tiamat.jpg'
+
 
 const ITEMS = [
   {
-    label: 'Teй',
-    link: '/thay',
-    image: thayCover,
+    label: 'Основна сюжетна лінія',
+    link: '/storyline',
+    image: storylineCover,
   },
   {
-    label: 'Культ Дракона',
+    label: 'Культ Дракона та їх союзники',
     link: '/cult_of_the_dragon',
     image: cultCover,
   },
   {
-    label: 'Флан',
+    label: 'Фракції Флану та Фаєруну',
+    link: '/factions',
+    image: factionsCover,
+  },
+  {
+    label: 'Флан та околиці',
     link: '/phlan',
     image: phlanCover,
   },
   {
-    label: 'Основна сюжетна лінія',
-    link: '/spoilers',
-    image: spoilersCover,
+    label: 'Визначні особистості',
+    link: '/famous_persons',
+    image: famousCover,
+  },
+  {
+    label: 'Воскресіння Тіамат',
+    link: '/resurrection_of_tiamat',
+    image: tiamatCover,
   },
 ]
 
@@ -42,9 +56,10 @@ const Lore = props => {
             key={label}
             title={label}
             image={image}
-            width={[ '90vw', '40%' ]}
-            maxHeight={[100, 250]}
-            my={[ 5, 10 ]}
+            width={[ '90vw', '30vw' ]}
+            height={['50vw', '25vw']}
+            maxHeight={['40vh', '40vh']}
+            my={[ '5px', 10 ]}
             mx={[ 20, 10 ]}
             onClick={() => props.history.push(`/lore${link}`)}
           />

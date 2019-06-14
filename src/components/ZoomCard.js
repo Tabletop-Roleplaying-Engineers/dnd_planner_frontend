@@ -14,6 +14,11 @@ const Text = styled(Header)`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  
+  -webkit-user-select: none;  /* Chrome all / Safari all */
+  -moz-user-select: none;     /* Firefox all */
+  -ms-user-select: none;      /* IE 10+ */
+  user-select: none;          /* Likely future */
 `
 
 const Image = styled(Box)`
@@ -37,42 +42,32 @@ const Image = styled(Box)`
     content: '';
     width: 100%;
     height: 100%;
-       
+    
     position: absolute;
     top: 0;
     left: 0;
     
     background: rgba(20, 20, 20, .7);
   }
- 
-  &:hover{
-    transform: scale(1.2);
-  }  
-
-  &:hover::before {
-    display: none;
-  }  
 `
 
 const Card = styled(Flex)`
   justify-content: center;
   align-items: center;
   border-radius: 6px;
-  height: 25vw;
   position: relative;
   cursor: pointer;
   overflow: hidden;
 
+  &:hover ${Image}{
+    transform: scale(1.2);
+  }
+  
+  &:hover ${Image}::before {
+    display: none;
+  }
 `
 
-    
-// &:hover ${Image}{
-//   background-size: 120%;
-// }  
-
-// &:hover ${Image}::before {
-//   display: none;
-// }  
 
 export default function ZoomCard({ image, title, ...props }) {
   return (
