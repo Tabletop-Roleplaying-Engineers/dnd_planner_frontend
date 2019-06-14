@@ -18,9 +18,10 @@ const GlobalStyle = createGlobalStyle`
   iframe[id*=telegram-login-]{
     position: absolute;
     top: 18px;
-    right: 50%;
-    transform: translateX(50%);
-    
+    right: 0;
+    //right: 50%;
+    //transform: translateX(50%);
+
     display: ${() => localStorage.getItem('AUTH_DATA') ? 'none' : 'block'};
     
     .btn {
