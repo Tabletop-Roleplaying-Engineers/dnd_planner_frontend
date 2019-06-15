@@ -1,9 +1,11 @@
-FROM node:8-jessie
 
-WORKDIR /usr/src/dnd-planner-web
-
-COPY package.json ./
-RUN yarn install
+FROM mhart/alpine-node:11 AS builder
+WORKDIR /app
 COPY . .
+RUN yarn run build
 
-CMD yarn start:dev
+FROM mhart/alpine-node
+RUN yarn global add serve
+WORKDIR /app
+COPY --from=builder /app/build .
+CMD ["serve", "-p", "80", "-s", "."]
