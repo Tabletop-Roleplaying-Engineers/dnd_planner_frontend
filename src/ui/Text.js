@@ -43,35 +43,41 @@ export const Label = styled(Text('h2'))`
 const Q = styled(Paragraph)`
   position: relative;
   
+  padding-left: 4rem;
+  padding-top: 1rem;
+  padding-right: 4rem;
+  
   &:before,
   &:after {
-  position: absolute;
-  color: #f1efe6;
-  font-size: 8rem;
-  width: 4rem;
-  height: 4rem;
+    position: absolute;
+    color: #f1efe6;
+    font-size: 8rem;
+    width: 4rem;
+    height: 4rem;
   }
   
   &:before {
-  content: '“';
-  left: -5rem;
-  top: -2rem;
+    content: '“';
+    left: 0;
+    bottom: 100%;
   }
   
   &:after {
-  content: '”';
-  right: -5rem;
-  bottom: 1rem;
+    content: '”';
+    bottom: 0;
   }
 `
 
 export const Quote = ({ children, author }) =>
   <Flex column>
-    <Q fontStyle="italic">
-      {children}
-    </Q>
-    
-    <Flex justifyContent="flex-end">
+    {
+      children &&
+      <Q fontStyle="italic">
+        {children}
+      </Q>
+    }
+
+    <Flex justifyContent="flex-end" mt="2rem">
       <Msg
         fontStyle="italic"
         fontWeight="bold"
