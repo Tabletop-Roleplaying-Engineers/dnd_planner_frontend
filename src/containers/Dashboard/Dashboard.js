@@ -18,7 +18,7 @@ function Dashboard (props) {
         <ZoomCard
           title="Правила"
           image={rulesCover}
-          width={['90vw', '32vw']}
+          width={['90vw', '31vw']}
           my={[10, 0]}
           height={['50vw', '25vw']}
           onClick={() => props.history.push('/help#the_rules')}
@@ -27,7 +27,7 @@ function Dashboard (props) {
         <ZoomCard
           title="Ліга Авантюристів"
           image={loreCover}
-          width={['90vw', '32vw']}
+          width={['90vw', '31vw']}
           my={[10, 0]}
           height={['50vw', '25vw']}
           onClick={() => props.history.push('/lore')}
@@ -36,7 +36,7 @@ function Dashboard (props) {
         <ZoomCard
           title="Карта"
           image={mapCover}
-          width={['90vw', '32vw']}
+          width={['90vw', '31vw']}
           my={[10, 0]}
           height={['50vw', '25vw']}
           onClick={() => alert('We are working on it!')}
@@ -64,7 +64,7 @@ function Dashboard (props) {
           </Paragraph>
         </Box>
         
-        <Box my={10}>
+        <Box my2={10}>
           <Paragraph>
             Протягом гри кожен гравець задає дії для свого персонажа, а результати дій визначаються Майстром відповідно
             до правил. Випадкові події моделюються киданням грального кубика (англ. dice). Іноді рішення майстра можуть
