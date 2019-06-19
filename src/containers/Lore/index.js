@@ -1,5 +1,6 @@
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
+import Enemies from './FamousPersons/Enemies'
 import Lore from './Lore'
 import CultOfTheDragon from './CultOfTheDragon'
 import FamousPersons from './FamousPersons'
@@ -11,9 +12,10 @@ const Scene = ({ match }) => {
     <Switch>
       <Route exact path={match.path} component={Lore}/>
       <Route exact path={`${match.path}/cult_of_the_dragon`} component={CultOfTheDragon}/>
-      <Route exact path={`${match.path}/famous_persons`} component={FamousPersons}/>
+      <Route exact path={`${match.path}/famous`} component={FamousPersons}/>
       <Route exact path={`${match.path}/storyline`} component={Storyline}/>
       <Route exact path={`${match.path}/phlan`} component={Phlan}/>
+      <Route exact path={`${match.path}/famous/enemy`} component={Enemies}/>
     </Switch>
   )
 }

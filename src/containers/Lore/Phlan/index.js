@@ -3,6 +3,14 @@ import { Tabs } from 'antd'
 import { Box, Flex } from 'noui/Position'
 import { Header, Quote, Paragraph, SecretText } from 'ui/Text'
 import { isMobile } from 'noui/MediaQuery'
+import Portrait from 'ui/Portrait'
+import castleCover from './shared/castle.jpg'
+import cemeteryCover from './shared/cemetery.jpg'
+import gateCover from './shared/gate.jpg'
+import lyceumCover from './shared/lyceum.jpg'
+import stationCover from './shared/station.jpg'
+import tavernCover from './shared/tavern.jpg'
+import towerCover from './shared/tower.jpg'
 
 const Phlan = ({history, location}) => {
   const [tab, setTab] = useState(location.hash.substring(1) || 'main')
@@ -65,7 +73,7 @@ const Phlan = ({history, location}) => {
               раніше.
             </Paragraph>
           </Box>
-  
+          
           <Box my={10}>
             <SecretText>
               Більше інформації після проходження завдання “Кошенята маєтку Ковель”
@@ -73,6 +81,235 @@ const Phlan = ({history, location}) => {
           </Box>
         </Tabs.TabPane>
         
+        <Tabs.TabPane
+          tab="Замок Вальєво"
+          key="castle"
+        >
+          <Flex center>
+            <Header fontSize={30} fontWeight="bold">Замок Вальєво</Header>
+          </Flex>
+          
+          <Box my={10}>
+            <Paragraph fontSize="16px">
+              Найбільша будівля у Флані. Являється зосередженням місцевої влади та місцем, де проживає Лорд-Регент Ектор
+              Брамс. Сам замок величезний, його величні стіни із граніту та мармуру витримували не одну облогу.
+            </Paragraph>
+          </Box>
+          
+          <Box my={10}>
+            <Paragraph fontSize="16px">
+              Після приходу до влади дракона Ворганшаракса, замок Вальєво став його резиденцією. Саме сюди привозили
+              полонених, аби вони копали в древніх руїнах під замком, до забутого Сяючого Озера.
+            </Paragraph>
+          </Box>
+          
+          <Portrait
+            src={castleCover}
+            alt="Castle"
+            my={30}
+          />
+        </Tabs.TabPane>
+        
+        <Tabs.TabPane
+          tab="Ворота Стоянов"
+          key="gate"
+        >
+          <Flex center>
+            <Header fontSize={30} fontWeight="bold">
+              Ворота Стоянов
+            </Header>
+          </Flex>
+          
+          <Box my={10}>
+            <Paragraph fontSize="16px">
+              Колосальна будівля, по слухам, побудована вогняними гігантами, представляє собою штаб-квартиру лицарів
+              Чорного Кулака та є єдиним входом в замок Вальєво. Величезні стіни висотою 60 футів та шириною 30 футів
+              тягнуться по обидві сторони від масивних кованих залізом дверей, які зачиняються лише під час війни.
+              Злочинців, арештованих у Флані, ув’язнюють у Воротах Стоянов, і рано чи пізно більшість з них будуть
+              повішані тут же.
+            </Paragraph>
+          </Box>
+          
+          <Portrait
+            src={gateCover}
+            alt="Gate"
+            my={30}
+          />
+        </Tabs.TabPane>
+        
+        <Tabs.TabPane
+          tab="Валінгенське кладовище"
+          key="cemetery"
+        >
+          <Flex center>
+            <Header fontSize={30} fontWeight="bold">
+              Валінгенське кладовище
+            </Header>
+          </Flex>
+          
+          <Box my={10}>
+            <Paragraph fontSize="16px">
+              На протилежній стороні річки Стоянов знаходиться міський цвинтар Флану - величний сад, повний дерев та
+              квітів. Орден Келемвора десятиліттями опікується цим місцем, надаючи поминальні та поховальні послуги. З
+              моменту переходу під опіку ордену, на Валінгенському кладовищі зникла нежить. І келемворити стараються з
+              усіх сил, аби мертві залишались мертвими, а їхні душі - упокоєними.
+            </Paragraph>
+          </Box>
+          
+          <Portrait
+            src={cemeteryCover}
+            alt="cemetery"
+            my={30}
+          />
+        </Tabs.TabPane>
+        
+        <Tabs.TabPane
+          tab="Проклятий Ліцей Бейна"
+          key="lyceum"
+        >
+          <Flex center>
+            <Header fontSize={30} fontWeight="bold">
+              Проклятий Ліцей Бейна
+            </Header>
+          </Flex>
+          
+          <Box my={10}>
+            <Paragraph fontSize="16px">
+              Покинутий храм Бейна, про який ходять багато поганих чуток.
+            </Paragraph>
+          </Box>
+          
+          <Box my={10}>
+            <SecretText>
+              більше інформації після проходження завдання “Проблеми Флану”
+            </SecretText>
+          </Box>
+          
+          <Box my={10}>
+            <Paragraph fontSize="16px">
+              Червона Чарівниця Зарлада використовувала це місце як штаб-квартиру для своїх операцій у Флані.
+            </Paragraph>
+          </Box>
+          
+          <Box my={10}>
+            <SecretText>
+              більше інформації після проходження завдання “Острів десяти”
+            </SecretText>
+          </Box>
+          
+          <Portrait
+            src={lyceumCover}
+            alt="lyceum"
+            my={30}
+          />
+        </Tabs.TabPane>
+        
+        <Tabs.TabPane
+          tab="Вежа Денлора"
+          key="tower"
+        >
+          <Flex center>
+            <Header fontSize={30} fontWeight="bold">
+              Вежа Денлора
+            </Header>
+          </Flex>
+          
+          <Box my={10}>
+            <Paragraph fontSize="16px">
+              Більше сотні років тому ця вежа належала могутньому чарівнику на ім’я Денлор. Але з часу його зникнення
+              вежа стоїть запечатаною і порожньою.
+            </Paragraph>
+          </Box>
+          
+          <Box my={10}>
+            <SecretText>
+              більше інформації після проходження завдання “Вежа Денлора”
+            </SecretText>
+          </Box>
+          
+          <Portrait
+            src={towerCover}
+            alt="tower"
+            my={30}
+          />
+        </Tabs.TabPane>
+        
+        <Tabs.TabPane
+          tab="Таверна “Гоблін, Що Сміється”"
+          key="tavern"
+        >
+          <Flex center>
+            <Header fontSize={30} fontWeight="bold">
+              Таверна “Гоблін, Що Сміється”
+            </Header>
+          </Flex>
+          
+          <Box my={10}>
+            <Paragraph fontSize="16px">
+              “Гоблін, Що Сміється” - це стара відома таверна Флану, яка знавала кращі часи. Меблі зношені та мають
+              шрами від різних потасовок. Штукатурка пожовтіла та осипалась, а люсти і лампи поржавіли. Однак це одне з
+              найпопулярніших місць у Флані. Тут завжди є робота для авантюриста, пікантні слухи та, звісно ж,
+              знаменитий капустяний суп.
+            </Paragraph>
+          </Box>
+          
+          <Portrait
+            src={tavernCover}
+            alt="tower"
+            my={30}
+          />
+        </Tabs.TabPane>
+        
+        <Tabs.TabPane
+          tab="Сортувальна Станція (СС)"
+          key="station"
+        >
+          <Flex center>
+            <Header fontSize={30} fontWeight="bold">
+              Вежа Денлора
+            </Header>
+          </Flex>
+          
+          <Box my={10}>
+            <Paragraph fontSize="16px">
+              Після приходу до влади дракона Ворганшаракса, колишні пожежні депо були переобладнані в “поліцейські”
+              відділки, де квартируються Сльози Злоби. Сюди привозять полонених, допитують їх та, якщо вони виживають,
+              перевозять у Ворота Стоянов.
+            </Paragraph>
+          </Box>
+          
+          <Box my={10}>
+            <Paragraph fontSize="16px">
+              СС знаходяться в кожному районі Флану, що дозволяє Сльозам Злоби ефективно контролювати населення та
+              швидко реагувати на прояви непокори.
+            </Paragraph>
+          </Box>
+          
+          <Portrait
+            src={stationCover}
+            alt="tower"
+            my={30}
+          />
+        </Tabs.TabPane>
+  
+        <Tabs.TabPane
+          tab="Сяюче озеро"
+          key="pool"
+        >
+          <Flex center>
+            <Header fontSize={30} fontWeight="bold">
+              Сяюче озеро
+            </Header>
+          </Flex>
+    
+          <Box my={10}>
+            <SecretText>
+              більше інформації після проходження завдання “Відродження Сяючого Озера”
+            </SecretText>
+          </Box>
+
+        </Tabs.TabPane>
+        {/*rest*/}
         <Tabs.TabPane
           tab="Чорні Кулаки"
           key="black_fists"

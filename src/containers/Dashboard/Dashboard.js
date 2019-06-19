@@ -18,7 +18,7 @@ function Dashboard (props) {
         <ZoomCard
           title="Правила"
           image={rulesCover}
-          width={['90vw', '32vw']}
+          width={['90vw', '33%']}
           my={[10, 0]}
           height={['50vw', '25vw']}
           onClick={() => props.history.push('/help#the_rules')}
@@ -27,7 +27,7 @@ function Dashboard (props) {
         <ZoomCard
           title="Ліга Авантюристів"
           image={loreCover}
-          width={['90vw', '32vw']}
+          width={['90vw', '33%']}
           my={[10, 0]}
           height={['50vw', '25vw']}
           onClick={() => props.history.push('/lore')}
@@ -36,7 +36,7 @@ function Dashboard (props) {
         <ZoomCard
           title="Карта"
           image={mapCover}
-          width={['90vw', '32vw']}
+          width={['90vw', '33%']}
           my={[10, 0]}
           height={['50vw', '25vw']}
           onClick={() => alert('We are working on it!')}

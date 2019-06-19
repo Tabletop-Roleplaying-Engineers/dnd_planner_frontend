@@ -3,7 +3,9 @@ import { Divider, Tabs } from 'antd'
 import { Box, Flex } from 'noui/Position'
 import { Header, Quote, Paragraph, SecretText, Msg } from 'ui/Text'
 import { isMobile } from 'noui/MediaQuery'
+import Portrait from 'ui/Portrait'
 import thayParty from './shared/party.jpeg'
+import cultCover from './shared/cult_cover.jpg'
 
 const CultOfTheDragon = ({history, location}) => {
   const [tab, setTab] = useState(location.hash.substring(1) || 'main')
@@ -49,6 +51,13 @@ const CultOfTheDragon = ({history, location}) => {
               Саммастер почав втілювати цю ідею в життя.
             </Paragraph>
           </Box>
+  
+          <Portrait
+            src={cultCover}
+            alt="cult"
+            label="Символ Культу - вогонь з очима, що горять над кігтями дракона."
+            my={30}
+          />
           
           <Box my={10}>
             <Paragraph fontSize="16px">
