@@ -11,9 +11,9 @@ const Scene = ({ match }) => {
   return (
     <Switch>
       <Route exact path={match.path} component={Famous}/>
-      
-      <Route exact path={`${match.path}/ally`} component={Allies}/>
-      <Route exact path={`${match.path}/adventurer`} component={Adventures}/>
+      <Route path={`${match.path}/enemy`} component={Enemies}/>
+      <Route path={`${match.path}/ally`} component={Allies}/>
+      <Route path={`${match.path}/adventurer`} component={Adventures}/>
     </Switch>
   )
 }

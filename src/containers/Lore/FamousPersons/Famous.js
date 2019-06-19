@@ -37,8 +37,8 @@ const Famous = props => {
             title={label}
             image={image}
             width={[ '90vw', '30vw' ]}
-            height={['50vw', '25vw']}
-            maxHeight={['40vh', '40vh']}
+            height={['50vw', '80vh']}
+            maxHeight={['40vh', 'none']}
             my={[ '5px', 10 ]}
             mx={[ 20, 10 ]}
             onClick={() => props.history.push(`/lore${link}`)}
