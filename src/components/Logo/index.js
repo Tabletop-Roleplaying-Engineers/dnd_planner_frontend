@@ -4,11 +4,13 @@ import styled from 'styled-components'
 import { TabletAndDesktop, Mobile } from 'noui/MediaQuery'
 import bigLogo from './shared/logoBig.png'
 import miniLogo from './shared/logoMini.svg'
+import { space } from 'styled-system'
 
 const Image = styled.img`
   height: 100%;
   object-fit: contain;
   cursor: pointer;
+  ${space}
 `
 
 const Logo = props => {
@@ -26,10 +28,11 @@ const Logo = props => {
 
       <Mobile>
         <Image
+          ml="5px"
           onClick={navigate}
           src={miniLogo}
           alt="logo"
-         />
+        />
       </Mobile>
     </Fragment>
   )

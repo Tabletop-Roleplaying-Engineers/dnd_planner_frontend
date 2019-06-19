@@ -12,7 +12,7 @@ const Portrait = ({ src, alt, label, ...props }) => {
   return (
     <Flex {...props} column center>
       <Image src={src} alt={alt}/>
-      <Msg>“{label}”</Msg>
+      {label && <Msg>“{label}”</Msg>}
     </Flex>
   )
 }

@@ -34,7 +34,7 @@ const ITEMS = [
   },
   {
     label: 'Визначні особистості',
-    link: '/famous_persons',
+    link: '/famous',
     image: famousCover,
   },
   {
@@ -65,7 +65,6 @@ const Lore = props => {
           />
         )
       }
-
     </Flex>
   )
 }
