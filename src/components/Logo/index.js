@@ -29,6 +29,7 @@ const Logo = props => {
       <Mobile>
         <Image
           ml="5px"
+          py="5px"
           onClick={navigate}
           src={miniLogo}
           alt="logo"

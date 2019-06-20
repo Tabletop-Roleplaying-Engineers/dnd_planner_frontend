@@ -1,11 +1,12 @@
 import React from 'react'
 import { Box, Flex } from 'noui/Position'
 import ZoomCard from 'components/ZoomCard'
-import { Header, Paragraph } from '../../ui/Text'
+import { Header, Paragraph } from 'ui/Text'
 import { withRouter } from 'react-router-dom'
+import { weAreWorking } from 'noui/Info'
 import loreCover from './shared/lore.jpg'
 import rulesCover from './shared/rules.jpg'
-import mapCover from './shared/map.jpg'
+import calendarCover from './shared/calendar.png'
 
 function Dashboard (props) {
   return (
@@ -25,21 +26,21 @@ function Dashboard (props) {
         />
         
         <ZoomCard
+          title="Календар"
+          image={calendarCover}
+          width={['90vw', '33%']}
+          my={[10, 0]}
+          height={['50vw', '25vw']}
+          onClick={weAreWorking}
+        />
+        
+        <ZoomCard
           title="Ліга Авантюристів"
           image={loreCover}
           width={['90vw', '33%']}
           my={[10, 0]}
           height={['50vw', '25vw']}
           onClick={() => props.history.push('/lore')}
-        />
-        
-        <ZoomCard
-          title="Карта"
-          image={mapCover}
-          width={['90vw', '33%']}
-          my={[10, 0]}
-          height={['50vw', '25vw']}
-          onClick={() => alert('We are working on it!')}
         />
       </Flex>
       

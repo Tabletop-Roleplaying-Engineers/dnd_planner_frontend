@@ -14,6 +14,10 @@ const GlobalStyle = createGlobalStyle`
   .ant-layout {
     background: white;
   }
+  
+  .ant-layout-content {
+    min-height: calc(100vh - 64px);
+  }
 
   iframe[id*=telegram-login-]{
     position: absolute;
