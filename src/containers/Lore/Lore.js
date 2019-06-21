@@ -56,6 +56,7 @@ const Lore = props => {
       justifyContent="space-between"
       flexWrap="wrap"
       my={10}
+      mx={30}
     >
       {
         ITEMS.map(({ label, onClick, image }) =>

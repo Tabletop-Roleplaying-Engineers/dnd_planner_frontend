@@ -33,11 +33,11 @@ export const Paragraph = styled(Text('p')).attrs(props => ({
 `
 
 export const Header = styled(Text('h1'))`
-  text-align: center;
+  text-align: ${props => props.textAlign || 'center'};
 `
 
 export const Label = styled(Text('h2'))`
-  text-align: center;
+  text-align: ${props => props.textAlign || 'center'};
 `
 
 const Q = styled(Paragraph)`

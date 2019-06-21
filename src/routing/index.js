@@ -17,7 +17,7 @@ export const history = _history
 export default function Routing() {
   return (
     <Switch>
-      <Box mx={10}>
+      <Box mx={[10]}>
         <Route exact path='/' component={Home}/>
         <Route path='/login' component={Login}/>
         <Route path='/calendar' component={Calendar}/>

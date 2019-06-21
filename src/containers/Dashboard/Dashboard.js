@@ -10,7 +10,7 @@ import calendarCover from './shared/calendar.png'
 
 function Dashboard (props) {
   return (
-    <Box p={10}>
+    <Box mt={10} mx={30}>
       <Flex
         flexDirection={['column', 'row']}
         justifyContent={['center', 'space-between']}
