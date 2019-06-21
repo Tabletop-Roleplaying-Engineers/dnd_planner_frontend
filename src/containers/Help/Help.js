@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { Tabs, List, Alert } from 'antd'
 import { Box } from 'noui/Position'
-import { textAlign } from 'styled-system'
 import { Header, Msg } from 'ui/Text'
 import { withRouter } from 'react-router-dom'
 import { isMobile } from 'noui/MediaQuery'
-import { Flex } from '../../noui/Position'
-import { Label, Paragraph } from '../../ui/Text'
+import { Flex } from 'noui/Position'
+import { Label, Paragraph } from 'ui/Text'
 
 const RULES = [
   'Якщо це ваша перша гра Ліги Авантюристів - ви починаєте персонажем першого рівня!',

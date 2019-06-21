@@ -1,6 +1,16 @@
 import React from 'react'
 import styled from 'styled-components'
-import { color, fontFamily, fontSize, opacity, textAlign, display, fontWeight, lineHeight, fontStyle } from 'styled-system'
+import {
+  color,
+  fontFamily,
+  fontSize,
+  opacity,
+  textAlign,
+  display,
+  fontWeight,
+  lineHeight,
+  fontStyle
+} from 'styled-system'
 import Lorem from 'react-lorem-component'
 import { Flex } from 'noui/Position'
 import { Box } from '../noui/Position'
@@ -68,7 +78,7 @@ const Q = styled(Paragraph)`
   }
 `
 
-export const Quote = ({ children, author }) =>
+export const Quote = ({children, author}) =>
   <Flex column>
     {
       children &&
@@ -76,7 +86,7 @@ export const Quote = ({ children, author }) =>
         {children}
       </Q>
     }
-
+    
     <Flex justifyContent="flex-end" mt="2rem">
       <Msg
         fontStyle="italic"
@@ -103,10 +113,17 @@ const StyledBlurText = styled(Header)`
   font-size: 24px;
 `
 
-export const SecretText = ({ children }) =>
+export const SecretText = ({children}) =>
   <Box position="relative">
     <Blur>
-      <Lorem count={(Math.random() * 4) + 1} />
+      <Lorem count={(Math.random() * 2) + 1}/>
+      
+      <Paragraph>
+        Вітер куйовдить твоє волосся, коли ти виходиш за рамки дозволеного. Зараз тобі відкриються усі секрети, сховані
+        від постороннього ока. Натомість ти бачиш огра в шапочці із фольги та одягненого як барбі. Він сидить на пеньку
+        та їсть торт руками. Побачивши тебе, огр закочує очі і з набити ротом питає:
+        - А шо ти очікував тут побачити?
+      </Paragraph>
     </Blur>
     
     <StyledBlurText>

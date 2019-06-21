@@ -55,8 +55,7 @@ const Lore = props => {
     <Flex
       justifyContent="space-between"
       flexWrap="wrap"
-      my={10}
-      mx={30}
+      mx={[0, 30]}
     >
       {
         ITEMS.map(({ label, onClick, image }) =>
@@ -67,7 +66,7 @@ const Lore = props => {
             width={[ '100%', '33%' ]}
             height={['45vw', '40vh']}
             maxHeight="none"
-            my="5px"
+            mt="10px"
             onClick={() => onClick(props)}
           />
         )
