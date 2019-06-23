@@ -1,9 +1,7 @@
-version: "2.4"
+version: "3"
 
 services:
-  web-ui:
-    build:
-      context: .
-      dockerfile: Dockerfile
+  front:
+    image: dnd-planner
     ports:
       - 80:80
