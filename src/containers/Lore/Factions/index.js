@@ -1,35 +1,24 @@
-import React, { useEffect, useState } from 'react'
-import { Tabs } from 'antd'
-import { Box, Flex } from 'noui/Position'
-import { Header, Quote, Paragraph, SecretText } from 'ui/Text'
-import { isMobile } from 'noui/MediaQuery'
+import React from 'react'
+import { Route, Switch } from 'react-router-dom'
+import Factions from './Factions'
+import Harpers from './Harpers'
+import OrderOfGauntlet from './OrderOfGauntlet'
+import EmeraldEnclave from './EmeraldEnclave'
+import LordsAlliance from './LordsAlliance'
+import Zhentarim from './Zhentarim'
 
-const Phlan = ({history, location}) => {
-  const [tab, setTab] = useState(location.hash.substring(1) || 'main')
-  
-  useEffect(() => {
-    history.replace({
-      path: location.path,
-      hash: tab
-    })
-  }, [tab])
-  
+const Scene = ({ match }) => {
   return (
-    <Box mt={10} mr={[0, 20]}>
-      <Tabs
-        activeKey={tab}
-        onChange={setTab}
-        type="card"
-        tabPosition={isMobile() ? 'top' : 'left'}
-      >
-        <Tabs.TabPane
-          tab="Головна"
-          key="main"
-        >
-        </Tabs.TabPane>
-      </Tabs>
-    </Box>
+    <Switch>
+      <Route exact path={match.path} component={Factions}/>
+      <Route path={`${match.path}/the_harpers`} component={Harpers}/>
+      <Route path={`${match.path}/the_order_of_the_gauntlet`} component={OrderOfGauntlet}/>
+      <Route path={`${match.path}/the_emerald_enclave`} component={EmeraldEnclave}/>
+      <Route path={`${match.path}/the_lords_alliance`} component={LordsAlliance}/>
+      <Route path={`${match.path}/the_zhentarim`} component={Zhentarim}/>
+    </Switch>
   )
 }
 
-export default Phlan
+export default Scene
+

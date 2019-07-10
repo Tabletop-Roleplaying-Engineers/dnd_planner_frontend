@@ -3,7 +3,7 @@ import { Flex, Box } from 'noui/Position'
 import styled from 'styled-components'
 import { Header } from 'ui/Text'
 
-const Text = styled(Header)`
+export const Text = styled(Header)`
   text-shadow: -1px 0 #333, 0 1px #333, 1px 0 #333, 0 -1px #333;
   font-weight: bold;
   color: white;
@@ -21,7 +21,7 @@ const Text = styled(Header)`
   user-select: none;          /* Likely future */
 `
 
-const Image = styled(Box)`
+export const Image = styled(Box)`
   width: 100%;
   height: 100%;
   
@@ -51,7 +51,7 @@ const Image = styled(Box)`
   }
 `
 
-const Card = styled(Flex)`
+export const Card = styled(Flex)`
   justify-content: center;
   align-items: center;
   border-radius: 6px;

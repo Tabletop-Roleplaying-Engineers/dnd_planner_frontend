@@ -28,19 +28,19 @@ const ITEMS = [
     label: 'Фракції Флану та Фаєруну',
     link: '/factions',
     image: factionsCover,
-    onClick: weAreWorking,
+    onClick: props => props.history.push(`/lore/factions`),
   },
   {
     label: 'Флан та околиці',
     link: '/phlan',
     image: phlanCover,
-    onClick: weAreWorking,
+    onClick: props => props.history.push(`/lore/phlan`),
   },
   {
     label: 'Визначні особистості',
     link: '/famous',
     image: famousCover,
-    onClick: weAreWorking,
+    onClick: props => props.history.push(`/lore/famous`),
   },
   {
     label: 'Воскресіння Тіамат',
