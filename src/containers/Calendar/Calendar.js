@@ -108,15 +108,14 @@ class Calendar extends React.PureComponent {
 
   render () {
     const {selectedGame, availableCharacters} = this.state
-    debugger
+    
     return (
       <React.Fragment>
         <Query query={FETCH_GAMES_QUERY}>
           {({loading, error, data, subscribeToMore}) => {
-            debugger
             if (loading) return <Spin/>
             if (error) return <div>Error: {error.message}</div>
-            debugger
+            
             this.subscribeToNewGame(subscribeToMore)
 
             const fetchedGames = parseGames(data.games)
@@ -130,7 +129,7 @@ class Calendar extends React.PureComponent {
                 }
                 dateCellRender={date => {
                   const games = fetchedGames[date.format('YYYY-MM-DD')] || []
-                  debugger
+                  
                   return (
                     <React.Fragment>
                       {

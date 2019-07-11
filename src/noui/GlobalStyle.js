@@ -32,6 +32,19 @@ const GlobalStyle = createGlobalStyle`
       background-color: #E40712;
     }
   }
+  
+  .slick-list{
+    padding-top: 50px !important;
+    height: 450px;
+  }
+  
+  .slick-center {
+    transform: scale(1.4);
+  }
+  
+  .slick-prev:before, .slick-next:before {
+     color: black;
+  }
 `
 
 export default GlobalStyle

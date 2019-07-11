@@ -19,7 +19,8 @@ import {
   minHeight,
   display,
   flexWrap,
-  zIndex
+  zIndex,
+  background,
 } from 'styled-system'
 
 export const Box = styled.div.attrs(props => ({
@@ -40,6 +41,7 @@ export const Box = styled.div.attrs(props => ({
   ${right}
   ${minHeight}
   ${zIndex}
+  ${background}
 `
 
 export const Flex = styled(Box).attrs(props => ({
