@@ -9,6 +9,7 @@ const Back = styled(Flex)`
   
   min-height: 250px;
   
+  background-size: cover;
   background-image: url("${props => props.src}");
   background-repeat: no-repeat;
   background-position: center;
@@ -36,8 +37,8 @@ const TextWithImage = ({ image, text, ...props}) => {
       src={image}
       alignItems="center"
     >
-      <Box {...props}>
-        <Text>
+      <Box pl={10} {...props}>
+        <Text textAlign="left">
           {text}
         </Text>
       </Box>

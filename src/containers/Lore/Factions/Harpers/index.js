@@ -3,8 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Flex, Box } from 'noui/Position'
 import { isMobile } from 'noui/MediaQuery'
 import { Paragraph, Header, Msg } from 'ui/Text'
-import Portrait from '../../../../ui/Portrait'
-import swamp1Cover from '../../Storyline/shared/swamp1.jpg'
+import Portrait from 'ui/Portrait'
 import TextWithImage from '../shared/components/TextWithImage'
 
 import cover from '../shared/images/02_LATEST-STORY_Factions_Harpers_InlineR_140702_0.jpg'
@@ -49,8 +48,6 @@ const Harpers = ({history, location}) => {
           <TextWithImage
             image={cover}
             text="Арфісти"
-            ml={100}
-            mb={40}
           />
           
           <Box my={30}>
@@ -127,10 +124,7 @@ const Harpers = ({history, location}) => {
           
           <Box my={10}>
             <Paragraph fontSize="16px">
-              Збирати інформацію на Фаеруні, розрізняти політичну динаміку в кожному регіоні або області, а також
-              сприяти справедливості та рівності через приховані засоби. Діяти відкрито в крайньому випадку. Перешкодити
-              тиранам і будь-якому лідеру, уряду або групі, яка стає занадто сильною, і допомогти слабким, бідним і
-              пригнобленим.
+              ви можете наповнити цей блок своєю інформацією
             </Paragraph>
           </Box>
         

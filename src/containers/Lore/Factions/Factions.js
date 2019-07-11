@@ -35,11 +35,11 @@ const MainFactions = [
     link: `/the_zhentarim`,
     image: theZhentarimCover,
   },
-  {
-    label: 'Інші Фракції',
-    link: `/others`,
-    image: othersCover,
-  },
+  // {
+  //   label: 'Фракції Флану',
+  //   link: `/others`,
+  //   image: othersCover,
+  // },
 ]
 
 const Factions = props => {
