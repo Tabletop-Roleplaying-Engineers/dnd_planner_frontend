@@ -12,6 +12,8 @@ import johnPortrait from './shared/john.jpg'
 import cronPortrait from './shared/cron.jpg'
 import dragonPortrait from './shared/dragon.jpg'
 import tiamatPortrait from './shared/tiamat.png'
+import gorlPortrait from './shared/gorl.png'
+import tyrantraxysPortrait from './shared/tyrantraxys.jpg'
 
 const Enemies = ({history, location}) => {
   const [tab, setTab] = useState(location.hash.substring(1) || 'tiamat')
@@ -47,8 +49,8 @@ const Enemies = ({history, location}) => {
               безсмертна.
             </Paragraph>
           </Box>
-  
-  
+          
+          
           <Portrait
             src={tiamatPortrait}
             alt="Dragon"
@@ -225,7 +227,7 @@ const Enemies = ({history, location}) => {
           
           <Portrait
             src={chesterPortrait}
-            alt="Chester"
+            alt="Kethavel"
             label="Нічого особистого. Лише робота"
             my={30}
           />
@@ -248,6 +250,32 @@ const Enemies = ({history, location}) => {
             <SecretText>
               Більше інформації після проходження завдання “Час знімати маски”
             </SecretText>
+          </Box>
+        
+        </Tabs.TabPane>
+        {/*Gorl*/}
+        <Tabs.TabPane
+          tab="Шрейлін Горл"
+          key="shreylin_gorl"
+        >
+          <Flex center>
+            <Header fontSize={30} fontWeight="bold">Шрейлін Горл</Header>
+          </Flex>
+          
+          <Portrait
+            src={gorlPortrait}
+            alt="Gorl"
+            label="Шрейлін Горл"
+            my={30}
+          />
+          
+          <Box my={10}>
+            <Paragraph fontSize="16px">
+              Після приходу до влади дракона Ворганшаракса, Вітаючі з бандитів перетворились на народних героїв. Але не
+              усім сподобався такий “ребрендинг”. Будучи досвідченим злодієм із великим амбіціями, Шрейлін
+              Горл вважає, що краще грабувати бідних, аніж допомагати їм. Окупувавши маєток Ковель, Шрейлін пішов на
+              угоду з Культом Дракона та надав їм плани підземних комунікацій під Фланом.
+            </Paragraph>
           </Box>
         
         </Tabs.TabPane>
@@ -343,6 +371,33 @@ const Enemies = ({history, location}) => {
           
           <Box my={10}>
             <Quote author="з доповіді мисливця Гастона"/>
+          </Box>
+        </Tabs.TabPane>
+        {/*Тирантраксус*/}
+        <Tabs.TabPane
+          tab="Тирантраксус"
+          key="tyrantraxys"
+        >
+          <Flex center>
+            <Header fontSize={30} fontWeight="bold">Тирантраксус</Header>
+          </Flex>
+          
+          <Portrait
+            src={tyrantraxysPortrait}
+            alt="Tyrantraxys"
+            label="Тирантраксус"
+            my={30}
+          />
+          
+          <Box my={10}>
+            <Paragraph fontSize="16px">
+              Ніхто не знає, хто чи що таке Тирантраксус. Все що про нього відомо - що це сутність не з Торілу, яка
+              використовує розриви в Плетінні як двері. Вона поширює легенди про те, що Сяюче Озеро дарує неймовірну
+              силу. Пропонує скупатись чи випити води з Озера, аби вселитись в тіло та захопити над ним контроль.
+              Тирантраксус уже фігурував в історії Флану - 140 років тому він захопив бронзового дракона Сроссара та
+              використав його силу, аби підкорити регіон. Цього разу він вибрав своєю ціллю зеленого дракона
+              Ворганшаракса, а своїми новими послідовниками - Культ Дракона.
+            </Paragraph>
           </Box>
         </Tabs.TabPane>
       </Tabs>
