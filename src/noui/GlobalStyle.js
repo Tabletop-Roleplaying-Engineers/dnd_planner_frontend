@@ -34,8 +34,8 @@ const GlobalStyle = createGlobalStyle`
   }
   
   .slick-list{
-    padding-top: 50px !important;
-    height: 450px;
+    padding-top: 25vh !important;
+    height: 80vh;
   }
   
   .slick-center {

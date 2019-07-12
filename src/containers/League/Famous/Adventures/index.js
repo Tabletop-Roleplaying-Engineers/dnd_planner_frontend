@@ -71,7 +71,7 @@ const Adventures = () => {
     slidesToScroll: 1,
     autoplay: true,
     speed: 1000,
-    autoplaySpeed: 2000,
+    autoplaySpeed: 4000,
     swipeToSlide: true,
     centerMode: true,
     initialSlide: getRandomInt(0, ADVENTURERS.length - 1)
@@ -87,14 +87,15 @@ const Adventures = () => {
       <Flex mt={30} center>
         <Box width="80vw">
           
-          <Slider {...settings} style={{paddingTop: '50px'}}>
+          <Slider {...settings}>
             {
               ADVENTURERS.map(({name, portrait}) =>
-                <HeroBox width={400} height={400} px={10}>
+                <HeroBox px={10}>
                   <Portrait
+                    height="30vh"
                     label={name}
                     src={portrait}
-                    alt="гул 1"
+                    alt={name}
                   />
                 </HeroBox>
               )
