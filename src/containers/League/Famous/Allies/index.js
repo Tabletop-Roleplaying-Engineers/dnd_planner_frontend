@@ -8,6 +8,8 @@ import ectorPortrait from './shared/ector.jpg'
 import alaidPortrait from './shared/alaid.jpg'
 import marcotPortrait from './shared/marcot.jpg'
 import mirlanaPortrait from './shared/mirlana.jpg'
+import connradPortrait from './shared/connrad.jpg'
+import connrad1Portrait from './shared/connrad1.jpg'
 
 const CultOfTheDragon = ({history, location}) => {
   const [tab, setTab] = useState(location.hash.substring(1) || 'ector_brahms')
@@ -27,6 +29,48 @@ const CultOfTheDragon = ({history, location}) => {
         type="card"
         tabPosition={isMobile() ? 'top' : 'left'}
       >
+        {/*Ектор Брамс*/}
+        <Tabs.TabPane
+          tab="Коннрад Броненвіл"
+          key="Connrad_bronenvil"
+        >
+          <Flex center>
+            <Header fontSize={30} fontWeight="bold">Коннрад Броненвіл</Header>
+          </Flex>
+          
+          <Box my={10}>
+            <Paragraph fontSize="16px">
+              Коннрад Броненвіл був 12 королем Міфрільного Залу та лідером клану Бетлхамерів. Прямолінійний та
+              справедливий, він покладався на силу своїх товаришів і хороше стратегічне планування. Коли Культ Дракона
+              почав набирати сили та загрожувати усьому Фаеруну, Коннрада вибрали представником дварфів Альянсу Лордів
+              на Раді Вотердіпу. Однак він так до неї і не доїхав.
+            </Paragraph>
+          </Box>
+  
+          <Portrait
+            src={connradPortrait}
+            alt="Connrad_bronenvil"
+            my={30}
+          />
+          
+          <Box my={10}>
+            <Paragraph fontSize="16px">
+              В околицях Флану на його кортеж напали орки. Зрозумівши цінність полоненого, вони продали його Культу
+              Дракона, а ті відправили короля Міфрільного Залу до свого лідера - Северина. Але туди Коннрад теж не
+              доїхав.
+            </Paragraph>
+          </Box>
+          
+          <Box my={10}>
+            <Paragraph fontSize="16px">
+              Коннрад Броненвіл був 12 королем Міфрільного Залу та лідером клану Бетлхамерів. Прямолінійний та
+              справедливий, він покладався на силу своїх товаришів і хороше стратегічне планування. Коли Культ Дракона
+              почав набирати сили та загрожувати усьому Фаеруну, Коннрада вибрали представником дварфів Альянсу Лордів
+              на Раді Вотердіпу. Однак він так до неї і не доїхав.
+            </Paragraph>
+          </Box>
+        </Tabs.TabPane>
+        
         {/*Ектор Брамс*/}
         <Tabs.TabPane
           tab="Ектор Брамс"
@@ -175,7 +219,7 @@ const CultOfTheDragon = ({history, location}) => {
               пастку і пішла на вимушену співпрацю із фракціями Флану.
             </Paragraph>
           </Box>
-  
+          
           <Box my={10}>
             <Quote author="Мірлана на допиті голів фракцій">
               “Просто щоб ви знали - мені не подобається наш союз так само як і вам. Але Зарладу потрібно зупинити!
