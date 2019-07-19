@@ -14,9 +14,7 @@ import { getMainDefinition } from 'apollo-utilities'
 import { setContext } from 'apollo-link-context'
 
 const httpLink = createHttpLink({
-  // uri: 'https://dnd-planner.herokuapp.com/'
-  // TODO: add to the env variables
-  uri: 'http://localhost:4000/'
+  uri: process.env.API_HTTP_URL || 'http://localhost:4000/'
 })
 
 const authLink = setContext((_, { headers }) => {
@@ -31,9 +29,7 @@ const authLink = setContext((_, { headers }) => {
 })
 
 const wsLink = new WebSocketLink({
-  // uri: `wss://dnd-planner.herokuapp.com/`,
-  // TODO: add to the env variables
-  uri: `ws://localhost:4000/`,
+  uri: process.env.API_WS_URL || 'ws://localhost:4000/',
   options: {
     reconnect: true,
   }
