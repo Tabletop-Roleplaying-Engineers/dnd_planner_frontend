@@ -1,9 +1,9 @@
 {
-  "main.js": "/static/js/main.c53c50b5.chunk.js",
-  "main.js.map": "/static/js/main.c53c50b5.chunk.js.map",
+  "main.js": "/static/js/main.38fe8ed8.chunk.js",
+  "main.js.map": "/static/js/main.38fe8ed8.chunk.js.map",
   "static/css/1.83fba8d3.chunk.css": "/static/css/1.83fba8d3.chunk.css",
-  "static/js/1.6963b7bf.chunk.js": "/static/js/1.6963b7bf.chunk.js",
-  "static/js/1.6963b7bf.chunk.js.map": "/static/js/1.6963b7bf.chunk.js.map",
+  "static/js/1.ff6853da.chunk.js": "/static/js/1.ff6853da.chunk.js",
+  "static/js/1.ff6853da.chunk.js.map": "/static/js/1.ff6853da.chunk.js.map",
   "runtime~main.js": "/static/js/runtime~main.229c360f.js",
   "runtime~main.js.map": "/static/js/runtime~main.229c360f.js.map",
   "static/media/tyranny2.jpg": "/static/media/tyranny2.d79f07b1.jpg",
@@ -92,6 +92,6 @@
   "static/media/other_factions.jpg": "/static/media/other_factions.33749a38.jpg",
   "static/css/1.83fba8d3.chunk.css.map": "/static/css/1.83fba8d3.chunk.css.map",
   "index.html": "/index.html",
-  "precache-manifest.5f3d4de2fcc20220e72564645fb07d4d.js": "/precache-manifest.5f3d4de2fcc20220e72564645fb07d4d.js",
+  "precache-manifest.646838da1a5b1378025af9a42fd5af13.js": "/precache-manifest.646838da1a5b1378025af9a42fd5af13.js",
   "service-worker.js": "/service-worker.js"
 }
