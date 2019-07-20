@@ -31,7 +31,7 @@ function Dashboard (props) {
           width={['90vw', '33%']}
           my={[10, 0]}
           height={['50vw', '25vw']}
-          onClick={weAreWorking}
+          onClick={() => props.history.push('/calendar')}
         />
         
         <ZoomCard

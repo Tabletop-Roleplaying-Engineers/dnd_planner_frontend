@@ -1,7 +1,8 @@
-import { Layout } from 'antd'
+import { Button, Dropdown, Icon, Layout, Menu } from 'antd'
 import React from 'react'
 import { Flex } from 'noui/Position'
 import Logo from 'components/Logo'
+import { Link } from 'react-router-dom'
 // import { Link } from 'react-router-dom'
 // import { Box } from 'noui/Position'
 import styled from 'styled-components'
@@ -15,6 +16,12 @@ const StyledHeader = styled(Layout.Header)`
     padding: 0 3vw 0 0;
   }
 `
+
+const menu = (
+  <Menu>
+    <Menu.Item key="1"><Link to="/profile">Profile</Link></Menu.Item>
+  </Menu>
+)
 
 class Header extends React.PureComponent {
   render () {
@@ -32,6 +39,13 @@ class Header extends React.PureComponent {
           {/*  </Box>*/}
           {/*  <Link to="/help">Help</Link>*/}
           {/*</Box>*/}
+  
+          <Dropdown overlay={menu}>
+            <Button style={{ padding: '0 10px'}} type="primary">
+              <Icon style={{fontSize: '20px', color: 'black'}} type="menu" />
+            </Button>
+          </Dropdown>
+          
         </Flex>
       </StyledHeader>
     )

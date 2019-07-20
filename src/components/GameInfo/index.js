@@ -12,7 +12,7 @@ const Wrapper = styled(Flex)`
   flex-direction: column;
 `
 
-export const GameInfo = ({ startingTime, title, tags = [], ...props }) =>
+export const GameInfo = ({ startingDate, title, tags = [], ...props }) =>
   <Wrapper {...props}>
     <Box mb={10}>
       <Header
@@ -32,6 +32,6 @@ export const GameInfo = ({ startingTime, title, tags = [], ...props }) =>
         }
       </Flex>
       
-      <Msg>at {startingTime}</Msg>
+      <Msg>at {startingDate}</Msg>
     </Flex>
   </Wrapper>
