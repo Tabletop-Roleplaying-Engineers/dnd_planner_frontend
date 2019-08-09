@@ -7,7 +7,6 @@ import theOrderOfTheGauntletCover from './shared/images/LATESTSTORY_Factions_Fac
 import theEmeraldEnclaveCover from './shared/images/LATESTSTORY_Factions_Factions_Mosaic_Emerald-Enclave_140611.jpg'
 import theLordsAllianceCover from './shared/images/LATESTSTORY_Factions_Factions_Mosaic_Lords-Alliance_140611_0.jpg'
 import theZhentarimCover from './shared/images/LATESTSTORY_Factions_Factions_Mosaic_Zhentarim_140611_0.jpg'
-import othersCover from './shared/images/other_factions.jpg'
 
 const MainFactions = [
   {
@@ -34,12 +33,7 @@ const MainFactions = [
     label: 'Жентарім',
     link: `/the_zhentarim`,
     image: theZhentarimCover,
-  },
-  // {
-  //   label: 'Фракції Флану',
-  //   link: `/others`,
-  //   image: othersCover,
-  // },
+  }
 ]
 
 const Factions = props => {

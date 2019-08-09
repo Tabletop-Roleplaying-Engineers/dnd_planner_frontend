@@ -9,7 +9,6 @@ import alaidPortrait from './shared/alaid.jpg'
 import marcotPortrait from './shared/marcot.jpg'
 import mirlanaPortrait from './shared/mirlana.jpg'
 import connradPortrait from './shared/connrad.jpg'
-import connrad1Portrait from './shared/connrad1.jpg'
 
 const CultOfTheDragon = ({history, location}) => {
   const [tab, setTab] = useState(location.hash.substring(1) || 'ector_brahms')

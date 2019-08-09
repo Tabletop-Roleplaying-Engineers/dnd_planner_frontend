@@ -1,11 +1,9 @@
-import { Tabs } from 'antd'
-import * as R from 'ramda'
 import React from 'react'
 import Slider from 'react-slick'
 import { Box, Flex } from 'noui/Position'
 import styled from 'styled-components'
-import Portrait from '../../../../ui/Portrait'
-import { Header, Paragraph, Quote } from '../../../../ui/Text'
+import Portrait from 'ui/Portrait'
+import { Header, Paragraph } from 'ui/Text'
 
 import frankPortrait from './Frank/shared/9ZaRE7f.png'
 import joelPortrait from './JoEl/shared/1502374341114.png'

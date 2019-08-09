@@ -91,22 +91,24 @@ class NewGameForm extends React.PureComponent {
               </Upload.Dragger>
             </Flex>
             
-            <Flex justifyContent="space-between">
-              <Box width="55%">
+            <Flex column>
+              <Box>
                 <Field name="title">
                   <Input placeholder="Title"/>
                 </Field>
               </Box>
               
-              <Box width="40%">
+              <Box>
+                <Msg>Select min-max levels</Msg>
+                
                 <Field initialValue={[1, 4]} name="range">
                   <Slider
                     range
                     step={1}
                     min={1}
-                    max={8}
+                    max={20}
                     marks={R.pipe(
-                      R.repeat(R.__, 8),
+                      R.repeat(R.__, 20),
                       R.addIndex(R.map)((v, idx) => ++idx),
                       R.chain(n => [n, n]),
                       R.groupWith(R.equals),

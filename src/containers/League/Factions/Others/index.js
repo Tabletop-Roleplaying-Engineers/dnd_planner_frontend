@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { Divider, Tabs } from 'antd'
+import { Tabs } from 'antd'
 import { Box, Flex } from 'noui/Position'
-import { Header, Quote, Paragraph, SecretText, Msg } from 'ui/Text'
+import { Header, Quote, Paragraph } from 'ui/Text'
 import { isMobile } from 'noui/MediaQuery'
-import Portrait from 'ui/Portrait'
 
 const OtherFactions = ({history, location}) => {
   const [tab, setTab] = useState(location.hash.substring(1) || 'main')

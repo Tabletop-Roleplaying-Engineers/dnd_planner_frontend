@@ -163,6 +163,7 @@ class Calendar extends React.PureComponent {
               <Spin spinning={loading}>
                 <NewGameForm
                   onSubmit={async (game, form) => {
+                    debugger
                     try {
                       await createGame({variables: game})
                       notification.success({
