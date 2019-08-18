@@ -12,6 +12,9 @@ const Image = styled('img')`
 const LvlSlider = styled(Box)`
   width: 100%;
 `
+const GameContainer = styled(Box)`
+  cursor: pointer;
+`
 
 const ItemHeader = ({ game }) => {
   return (
@@ -86,11 +89,11 @@ export const GamesList = ({ games, date, onJoinClick }) =>
     {/* 3 empty slots */}
     {games.map(game => (
       <span key={game.id}>
-        <Box mt={10} mb={10}>
+        <GameContainer mt={10} mb={10}>
           <CollapsiblePanel key={game.id} renderHeader={() => <ItemHeader game={game} />}>
             <ItemBody game={game} onJoinClick={onJoinClick} />
           </CollapsiblePanel>
-        </Box>
+        </GameContainer>
       </span>
     ))}
   </Flex>
