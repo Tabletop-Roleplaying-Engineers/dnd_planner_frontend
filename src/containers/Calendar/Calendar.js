@@ -108,14 +108,14 @@ class Calendar extends React.PureComponent {
 
   render () {
     const {selectedGame, availableCharacters} = this.state
-    
+
     return (
-      <React.Fragment>
+      <>
         <Query query={FETCH_GAMES_QUERY}>
           {({loading, error, data, subscribeToMore}) => {
             if (loading) return <Spin/>
             if (error) return <div>Error: {error.message}</div>
-            
+
             this.subscribeToNewGame(subscribeToMore)
 
             const fetchedGames = parseGames(data.games)
@@ -129,11 +129,11 @@ class Calendar extends React.PureComponent {
                 }
                 dateCellRender={date => {
                   const games = fetchedGames[date.format('YYYY-MM-DD')] || []
-                  
+
                   return (
-                    <React.Fragment>
+                    <>
                       {
-                        games.map((game, idx) =>
+                        R.take(1, games).map((game, idx) =>
                           <GameInfo
                             key={idx}
                             mb={10}
@@ -142,7 +142,7 @@ class Calendar extends React.PureComponent {
                           />
                         )
                       }
-                    </React.Fragment>
+                    </>
                   )
                 }}
               />
@@ -163,7 +163,6 @@ class Calendar extends React.PureComponent {
               <Spin spinning={loading}>
                 <NewGameForm
                   onSubmit={async (game, form) => {
-                    debugger
                     try {
                       await createGame({variables: game})
                       notification.success({
@@ -196,7 +195,7 @@ class Calendar extends React.PureComponent {
             onParticipate={this.onParticipate}
           />
         </Drawer>
-      </React.Fragment>
+      </>
     )
   }
 }
