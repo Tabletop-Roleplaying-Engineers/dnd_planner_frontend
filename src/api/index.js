@@ -94,6 +94,8 @@ export const FETCH_CHARACTERS_QUERY = gql`
     characters{
       id
       name
+      class
+      avatar
       experience
       renown
       faction {
@@ -128,10 +130,14 @@ export const CREATE_CHARACTER_MUTATION = gql`
   mutation CreateCharacter(
   $name: String!
   $faction: ID!
+  $class: String!
+  $avatar: String!
   ) {
-    createCharacter(name: $name, faction: $faction) {
+    createCharacter(name: $name, faction: $faction, class: $class, avatar: $avatar) {
       id
       name
+      class
+      avatar
       experience
       renown
       faction {
@@ -204,6 +210,8 @@ export const AVAILABLE_CHARACTERS = gql`
     validCharactersForGame(gameId: $gameId){
       id
       name
+      class
+      avatar
       experience
       renown
       faction {
@@ -230,6 +238,8 @@ export const PARTICIPATE_GAME = gql`
       characters {
         id
         name
+        class
+        avatar
         experience
         renown
         faction {

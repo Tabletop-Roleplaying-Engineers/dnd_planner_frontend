@@ -7,6 +7,7 @@ import Calendar from 'containers/Calendar'
 import Profile from 'containers/Profile'
 import Dashboard from 'containers/Dashboard'
 import Help from 'containers/Help'
+import Lore from 'containers/League'
 import NotFound from 'containers/NotFound'
 import _history from './history'
 import { Box } from '../noui/Position'
@@ -16,7 +17,7 @@ export const history = _history
 export default function Routing() {
   return (
     <Switch>
-      <Box mx={10}>
+      <Box mx={[10]}>
         <Route exact path='/' component={Home}/>
         <Route path='/login' component={Login}/>
         <Route path='/calendar' component={Calendar}/>
@@ -24,6 +25,7 @@ export default function Routing() {
         <Route path='/profile' component={Profile}/>
         <Route path='/dashboard' component={Dashboard}/>
         <Route path='/help' component={Help}/>
+        <Route path='/lore' component={Lore}/>
       </Box>
 
       {/* 404*/}

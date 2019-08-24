@@ -1,20 +1,43 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { Fragment } from 'react'
+import { withRouter } from 'react-router-dom'
 import styled from 'styled-components'
 import { TabletAndDesktop, Mobile } from 'noui/MediaQuery'
+import bigLogo from './shared/logoBig.png'
+import miniLogo from './shared/logoMini.svg'
+import { space } from 'styled-system'
 
-const StyledLogo = styled.img`
-  height: 60px;
+const Image = styled.img`
+  height: 100%;
+  object-fit: contain;
+  cursor: pointer;
+  ${space}
 `
 
-const Logo = () =>
-  <Link to="/">
-    <TabletAndDesktop>
-      <StyledLogo src="http://www.enworld.org/forum/attachment.php?attachmentid=62507&d=1404384551" alt="logo"/>
-    </TabletAndDesktop>
-    <Mobile>
-      <StyledLogo src=" http://www.enworld.org/forum/attachment.php?attachmentid=62059&d=1402069840&stc=1" alt="logo"/>
-    </Mobile>
-  </Link>
+const Logo = props => {
+  const navigate = () => props.history.push('/')
+  
+  return (
+    <Fragment>
+      <TabletAndDesktop>
+        <Image
+          onClick={navigate}
+          src={bigLogo}
+          alt="logo"
+        />
+      </TabletAndDesktop>
 
-export default Logo
+      <Mobile>
+        <Image
+          ml="5px"
+          py="5px"
+          onClick={navigate}
+          src={miniLogo}
+          alt="logo"
+        />
+      </Mobile>
+    </Fragment>
+  )
+}
+
+
+export default withRouter(Logo)

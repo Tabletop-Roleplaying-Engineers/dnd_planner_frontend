@@ -5,6 +5,7 @@ import NewGameForm from 'forms/NewGameForm'
 import ParticipateForm from 'forms/ParticipateForm'
 import moment from 'moment'
 import { GameInfo } from 'components/GameInfo'
+import { GamesList } from 'components/GamesList'
 import { modalWidth } from 'config'
 import { Mutation, Query, withApollo } from 'react-apollo'
 import {
@@ -25,13 +26,19 @@ const parseGames = R.pipe(
   )
 )
 
+const DRAWERS = {
+  NEW_GAME: 'NEW_GAME',
+  GAMES_LIST: 'GAMES_LIST',
+  PARTICIPATE_GAME: 'PARTICIPATE_GAME',
+}
+
 class Calendar extends React.PureComponent {
   state = {
-    newGameFormVisibility: false,
-    participateGameVisibility: false,
     selectedGame: null,
     availableCharacters: [],
     unsubscribeFromGames: null,
+    visibleDrawer: null,
+    gamesList: [],
   }
 
   subscribeToNewGame = async subscribeToMore => {
@@ -63,20 +70,13 @@ class Calendar extends React.PureComponent {
     })
   }
 
-  onGameInfo = game => async e => {
+  onGameClick = (games, date) => async e => {
     e.stopPropagation()
 
-    const {client} = this.props
-
-    const {data: {validCharactersForGame}} = await client.query({
-      query: AVAILABLE_CHARACTERS,
-      variables: {gameId: game.id},
-    })
-
     this.setState({
-      participateGameVisibility: true,
-      selectedGame: game,
-      availableCharacters: validCharactersForGame
+      visibleDrawer: DRAWERS.GAMES_LIST,
+      gamesList: games,
+      date,
     })
   }
 
@@ -106,15 +106,30 @@ class Calendar extends React.PureComponent {
     })
   }
 
+  onGameSelect = async game => {
+    const { client } = this.props
+
+    const { data: { validCharactersForGame } } = await client.query({
+      query: AVAILABLE_CHARACTERS,
+      variables: { gameId: game.id },
+    })
+
+    this.setState({
+      visibleDrawer: DRAWERS.PARTICIPATE_GAME,
+      selectedGame: game,
+      availableCharacters: validCharactersForGame
+    })
+  }
+
   render () {
     const {selectedGame, availableCharacters} = this.state
 
     return (
-      <React.Fragment>
+      <>
         <Query query={FETCH_GAMES_QUERY}>
           {({loading, error, data, subscribeToMore}) => {
             if (loading) return <Spin/>
-            if (error) return <div>Error: {error}</div>
+            if (error) return <div>Error: {error.message}</div>
 
             this.subscribeToNewGame(subscribeToMore)
 
@@ -122,7 +137,7 @@ class Calendar extends React.PureComponent {
 
             return (
               <Planner
-                onSelect={(...data) => this.setState({newGameFormVisibility: true})}
+                onSelect={(...data) => this.setState({ visibleDrawer: DRAWERS.NEW_GAME })}
                 disabledDate={currentDate =>
                   currentDate.isBefore(moment().startOf('month')) ||
                   currentDate.isAfter(moment().endOf('month'))
@@ -131,18 +146,18 @@ class Calendar extends React.PureComponent {
                   const games = fetchedGames[date.format('YYYY-MM-DD')] || []
 
                   return (
-                    <React.Fragment>
+                    <>
                       {
-                        games.map((game, idx) =>
+                        R.take(1, games).map((game, idx) =>
                           <GameInfo
                             key={idx}
                             mb={10}
-                            onClick={this.onGameInfo(game)}
+                            onClick={this.onGameClick(games, date)}
                             {...game}
                           />
                         )
                       }
-                    </React.Fragment>
+                    </>
                   )
                 }}
               />
@@ -155,8 +170,8 @@ class Calendar extends React.PureComponent {
           placement="right"
           closable={false}
           destroyOnClose={true}
-          visible={this.state.newGameFormVisibility}
-          onClose={() => this.setState({newGameFormVisibility: false})}
+          visible={this.state.visibleDrawer === DRAWERS.NEW_GAME}
+          onClose={() => this.setState({ visibleDrawer: null })}
         >
           <Mutation mutation={CREATE_GAME_QUERY}>
             {(createGame, {loading}) => (
@@ -168,7 +183,7 @@ class Calendar extends React.PureComponent {
                       notification.success({
                         message: 'New game added!'
                       })
-                      this.setState({newGameFormVisibility: false})
+                      this.setState({ visibleDrawer: null })
                     } catch (error) {
                       notification.error({
                         message: `Error while saving data: ${error.message}`
@@ -186,8 +201,8 @@ class Calendar extends React.PureComponent {
           width={modalWidth()}
           placement="right"
           closable={false}
-          visible={this.state.participateGameVisibility}
-          onClose={() => this.setState({participateGameVisibility: false})}
+          visible={this.state.visibleDrawer === DRAWERS.PARTICIPATE_GAME}
+          onClose={() => this.setState({ visibleDrawer: null })}
         >
           <ParticipateForm
             {...selectedGame}
@@ -195,7 +210,18 @@ class Calendar extends React.PureComponent {
             onParticipate={this.onParticipate}
           />
         </Drawer>
-      </React.Fragment>
+
+        <Drawer
+          destroyOnClose={true}
+          width={modalWidth()}
+          placement="right"
+          closable={false}
+          visible={this.state.visibleDrawer === DRAWERS.GAMES_LIST}
+          onClose={() => this.setState({ visibleDrawer: null })}
+        >
+          <GamesList games={this.state.gamesList} date={this.state.date} onJoinClick={game => this.onGameSelect(game)} />
+        </Drawer>
+      </>
     )
   }
 }

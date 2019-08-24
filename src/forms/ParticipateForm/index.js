@@ -3,7 +3,7 @@ import * as R from 'ramda'
 import React from 'react'
 import { Flex, Box } from 'noui/Position'
 import Character from 'components/Character'
-import { Header, Msg } from 'ui/Text'
+import { Header, Msg, Paragraph } from 'ui/Text'
 import styled from 'styled-components'
 import UserInfo from '../../components/UserInfo'
 
@@ -13,7 +13,7 @@ const StyledImage = styled.img`
   height: 300px;
 `
 
-const Description = styled(Box)`
+const Description = styled(Flex)`
   max-height: 200px;
   overflow-y: auto;
 `
@@ -51,11 +51,15 @@ class ParticipateForm extends React.PureComponent {
     return (
       <Box>
         <Flex mb={20} center justifyContent="space-between">
-          <Header>{title}
-            <Msg>{lvlFrom} - {lvlTo}</Msg>
-          </Header>
-        
           <Flex column>
+            <Header>
+              {title}
+            </Header>
+  
+            <Msg>{lvlFrom} - {lvlTo}</Msg>
+          </Flex>
+        
+          <Flex column alignItems="flex-end">
             <Msg>Dungeon Master</Msg>
             
             <UserInfo {...user} position="left"/>
@@ -64,8 +68,12 @@ class ParticipateForm extends React.PureComponent {
         
         <StyledImage src={image}/>
         
-        <Description my={20}>
-          <Msg>{description}</Msg>
+        <Description column my={20}>
+          {
+            description
+              .split('\n')
+              .map(msg => <Paragraph>{msg}</Paragraph>)
+          }
         </Description>
         
         <Box>

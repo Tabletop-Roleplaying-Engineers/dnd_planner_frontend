@@ -53,8 +53,7 @@ export const Field = ({ children, name, initialValue, ...props }) =>
           }],
         })(children)}
       </Form.Item>
-    }
-    }
+    }}
   </FormContext.Consumer>
 
 export default Form.create()(_Form)

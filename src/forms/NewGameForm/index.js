@@ -41,14 +41,14 @@ class NewGameForm extends React.PureComponent {
   state = {
     image: null,
   }
-  
+
   componentWillUnmount () {
     this.setState({image: null})
   }
-  
+
   render () {
     const {image} = this.state
-    
+
     return (
       <Form
         validation={validationSchema}
@@ -67,14 +67,14 @@ class NewGameForm extends React.PureComponent {
             <Box mb={20}>
               <Header>Add new Game</Header>
             </Box>
-            
+
             <Flex column mb={20}>
               <Upload.Dragger
                 beforeUpload={file => {
                   const fr = new FileReader()
                   fr.onload = () => this.setState({image: fr.result})
                   fr.readAsDataURL(file)
-                  
+
                   return false
                 }}
               >
@@ -90,26 +90,27 @@ class NewGameForm extends React.PureComponent {
                 }
               </Upload.Dragger>
             </Flex>
-            
-            <Flex justifyContent="space-between">
-              <Box width="55%">
+
+            <Flex column>
+              <Box>
                 <Field name="title">
                   <Input placeholder="Title"/>
                 </Field>
               </Box>
-              
-              <Box width="40%">
+
+              <Box>
+                <Msg>Select min-max levels</Msg>
+
                 <Field initialValue={[1, 4]} name="range">
                   <Slider
                     range
                     step={1}
                     min={1}
-                    max={8}
+                    max={20}
                     marks={R.pipe(
-                      R.repeat(R.__, 8),
+                      R.repeat(R.__, 20),
                       R.addIndex(R.map)((v, idx) => ++idx),
-                      R.chain(n => [n, n]),
-                      R.groupWith(R.equals),
+                      R.map(n => [n, n]),
                       R.fromPairs,
                     )(null)
                     }
@@ -117,16 +118,16 @@ class NewGameForm extends React.PureComponent {
                 </Field>
               </Box>
             </Flex>
-            
+
             <Flex justifyContent="space-between">
               <Field name="date">
                 <DatePicker/>
               </Field>
-              
+
               <Field name="time">
                 <TimePicker format="HH:mm" minuteStep={10}/>
               </Field>
-              
+
               <Box width="30%">
                 <Field name="players">
                   <Select placeholder="Players count">
@@ -137,11 +138,11 @@ class NewGameForm extends React.PureComponent {
                 </Field>
               </Box>
             </Flex>
-            
+
             <Field name="description">
               <Input.TextArea rows={6} placeholder="Description"/>
             </Field>
-            
+
             <Button
               disabled={form.hasErrors()}
               htmlType="submit"

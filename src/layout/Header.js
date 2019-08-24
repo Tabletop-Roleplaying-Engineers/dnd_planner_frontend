@@ -1,10 +1,12 @@
-import { Layout } from 'antd'
+import { Button, Dropdown, Icon, Layout, Menu } from 'antd'
 import React from 'react'
 import { Flex } from 'noui/Position'
 import Logo from 'components/Logo'
 import { Link } from 'react-router-dom'
-import { Box } from 'noui/Position'
+// import { Link } from 'react-router-dom'
+// import { Box } from 'noui/Position'
 import styled from 'styled-components'
+import { Box } from '../noui/Position'
 
 const StyledHeader = styled(Layout.Header)`
   max-height: 64px;
@@ -16,22 +18,53 @@ const StyledHeader = styled(Layout.Header)`
   }
 `
 
+const menu = (
+  <Menu>
+    <Menu.Item key="calendar">
+      <Link to="/calendar">
+        <Box inline mr="5px">
+          <Icon type="calendar" />
+        </Box>
+        Calendar
+      </Link>
+    </Menu.Item>
+  
+  
+    <Menu.Item key="dashboard">
+      <Link to="/dashboard">
+        <Box inline mr="5px">
+          <Icon type="home" />
+        </Box>
+        Dashboard
+      </Link>
+    </Menu.Item>
+    
+    <Menu.Item key="profile">
+      <Link to="/profile">
+        <Box inline mr="5px">
+          <Icon type="user" />
+        </Box>
+        Profile
+      </Link>
+    </Menu.Item>
+  
+  </Menu>
+)
+
 class Header extends React.PureComponent {
   render () {
     return (
       <StyledHeader>
-        <Flex center justifyContent="space-between">
+        <Flex center justifyContent="space-between" height="100%">
           <Logo />
-
-          <Box>
-            <Box inline mr={10}>
-              <Link to="/dashboard">Dashboard</Link>
-            </Box>
-            <Box inline mr={10}>
-              <Link to="/profile">Profile</Link>
-            </Box>
-            <Link to="/help">Help</Link>
-          </Box>
+  
+          <Dropdown placement="bottomRight" overlay={menu}>
+            <Button style={{ padding: '0 10px'}} type="primary">
+              Roll for...
+              {/*<Icon style={{fontSize: '20px', color: 'black'}} type="menu" />*/}
+            </Button>
+          </Dropdown>
+          
         </Flex>
       </StyledHeader>
     )
