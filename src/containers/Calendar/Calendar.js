@@ -219,7 +219,12 @@ class Calendar extends React.PureComponent {
           visible={this.state.visibleDrawer === DRAWERS.GAMES_LIST}
           onClose={() => this.setState({ visibleDrawer: null })}
         >
-          <GamesList games={this.state.gamesList} date={this.state.date} onJoinClick={game => this.onGameSelect(game)} />
+          <GamesList
+            games={this.state.gamesList}
+            date={this.state.date}
+            onJoinClick={game => this.onGameSelect(game)}
+            onNewGameClick={() => this.setState({ visibleDrawer: DRAWERS.NEW_GAME })}
+          />
         </Drawer>
       </>
     )
