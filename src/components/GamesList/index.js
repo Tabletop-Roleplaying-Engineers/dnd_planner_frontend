@@ -15,6 +15,10 @@ const LvlSlider = styled(Box)`
 const GameContainer = styled(Box)`
   cursor: pointer;
 `
+const DateContainer = styled(Box)`
+  font-size: 18px;
+  margin-top: 10px;
+`
 
 const ItemHeader = ({ game }) => {
   return (
@@ -83,9 +87,12 @@ const ItemBody = ({ game, onJoinClick }) => (
   </Row>
 )
 
-export const GamesList = ({ games, date, onJoinClick }) =>
+export const GamesList = ({ games, date, onJoinClick, onNewGameClick }) =>
   <Flex column>
-    {date.format('DD MMMM')}
+    <Button type="primary" onClick={onNewGameClick} block>Create game</Button>
+    <DateContainer>
+      {date.format('DD MMMM')}
+    </DateContainer>
     {/* 3 empty slots */}
     {games.map(game => (
       <span key={game.id}>
