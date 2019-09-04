@@ -1,9 +1,13 @@
-import { Slider, Row, Col, Card, Avatar, Button } from 'antd'
-import React from 'react'
+import React, { useContext } from 'react'
+import { Slider, Row, Col, Card, Avatar, Button, Spin } from 'antd'
+import styled from 'styled-components'
+import { Mutation } from 'react-apollo'
 import { Box, Flex } from 'noui/Position'
 import { Header } from 'ui/Text'
 import CollapsiblePanel from 'components/CollapsiblePanel'
-import styled from 'styled-components'
+import { ACTIONS } from '../../constants'
+import { UserContext } from '../../context/userContext'
+import { END_GAME } from 'api'
 const { Meta } = Card
 
 const Image = styled('img')`
@@ -64,7 +68,11 @@ const ItemHeader = ({ game }) => {
   )
 }
 
-const ItemBody = ({ game, onJoinClick }) => (
+const shouldRenderEndBtn = (user, game) => {
+  return !!user && ((user.actions.indexOf(ACTIONS.MANAGE_GAMES) >= 0) || (user.id === game.user.id))
+}
+
+const ItemBody = ({ game, onJoinClick, user }) => (
   <Row>
     {game.characters.map(character => (
       <span key={character.id}>
@@ -81,26 +89,60 @@ const ItemBody = ({ game, onJoinClick }) => (
     ))}
     <Col span={24}>
       <Box m={10}>
-        <Button type="primary" onClick={() => onJoinClick(game)} block>Join</Button>
+        {user && (
+          <Button
+            type="primary"
+            onClick={() => onJoinClick(game)}
+            disabled={user.id === game.user.id}
+            title={user.id === game.user.id ? 'You can\'t join your game' : ''}
+            block
+          >
+            Join
+          </Button>
+        )}
       </Box>
+      {shouldRenderEndBtn(user, game) && (
+        <Box m={10}>
+          <Mutation
+            mutation={END_GAME}
+            variables={{ gameId: game.id }}
+          >
+            {(endGame, { loading }) => (
+              <Spin spinning={loading}>
+                <Button
+                  type="primary"
+                  onClick={endGame}
+                  block
+                >
+                  End game
+                </Button>
+              </Spin>
+            )}
+          </Mutation>
+        </Box>
+      )}
     </Col>
   </Row>
 )
 
-export const GamesList = ({ games, date, onJoinClick, onNewGameClick }) =>
-  <Flex column>
-    <Button type="primary" onClick={onNewGameClick} block>Create game</Button>
-    <DateContainer>
-      {date.format('DD MMMM')}
-    </DateContainer>
-    {/* 3 empty slots */}
-    {games.map(game => (
-      <span key={game.id}>
-        <GameContainer mt={10} mb={10}>
-          <CollapsiblePanel key={game.id} renderHeader={() => <ItemHeader game={game} />}>
-            <ItemBody game={game} onJoinClick={onJoinClick} />
-          </CollapsiblePanel>
-        </GameContainer>
-      </span>
-    ))}
-  </Flex>
+export const GamesList = ({ games, date, onJoinClick, onNewGameClick }) => {
+  const { user } = useContext(UserContext)
+
+  return (
+    <Flex column>
+      <Button type="primary" onClick={onNewGameClick} block>Create game</Button>
+      <DateContainer>
+        {date.format('DD MMMM')}
+      </DateContainer>
+      {games.map(game => (
+        <span key={game.id}>
+          <GameContainer mt={10} mb={10}>
+            <CollapsiblePanel key={game.id} renderHeader={() => <ItemHeader game={game} />}>
+              <ItemBody game={game} onJoinClick={onJoinClick} user={user} />
+            </CollapsiblePanel>
+          </GameContainer>
+        </span>
+      ))}
+    </Flex>
+  )
+}

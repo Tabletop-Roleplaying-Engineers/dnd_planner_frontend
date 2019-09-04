@@ -31,6 +31,7 @@ export const FETCH_GAMES_QUERY = gql`
         }
       }
       user {
+        id
         firstName
         lastName
         avatar
@@ -269,5 +270,13 @@ export const LEAVE_GAME = gql`
         id
       }
     }
+  }
+`
+
+export const END_GAME = gql`
+  mutation EndGame(
+    $gameId: ID!
+  ){
+    endGame(gameId: $gameId)
   }
 `
