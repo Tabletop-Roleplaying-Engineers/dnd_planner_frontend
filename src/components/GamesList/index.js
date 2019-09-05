@@ -125,12 +125,16 @@ const ItemBody = ({ game, onJoinClick, user }) => (
   </Row>
 )
 
+const canCreateGame = user => user.actions.indexOf(ACTIONS.MANAGE_GAMES) >= 0
+
 export const GamesList = ({ games, date, onJoinClick, onNewGameClick }) => {
   const { user } = useContext(UserContext)
 
   return (
     <Flex column>
-      <Button type="primary" onClick={onNewGameClick} block>Create game</Button>
+      {canCreateGame(user) && (
+        <Button type="primary" onClick={onNewGameClick} block>Create game</Button>
+      )}
       <DateContainer>
         {date.format('DD MMMM')}
       </DateContainer>
