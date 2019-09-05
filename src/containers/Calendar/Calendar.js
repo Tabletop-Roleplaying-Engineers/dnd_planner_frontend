@@ -16,6 +16,7 @@ import {
   PARTICIPATE_GAME
 } from 'api'
 import { UserContext } from '../../context/userContext'
+import { ACTIONS } from '../../constants'
 
 const parseGames = R.pipe(
   R.map(game => ({
@@ -71,6 +72,14 @@ class Calendar extends React.PureComponent {
         }
       })
     })
+  }
+
+  onCellClick = () => {
+    const { user } = this.context
+
+    if (user.actions.indexOf(ACTIONS.MANAGE_GAMES) >= 0) {
+      this.setState({ visibleDrawer: DRAWERS.NEW_GAME })
+    }
   }
 
   onGameClick = (games, date) => async e => {
@@ -140,7 +149,7 @@ class Calendar extends React.PureComponent {
 
             return (
               <Planner
-                onSelect={(...data) => this.setState({ visibleDrawer: DRAWERS.NEW_GAME })}
+                onSelect={() => this.onCellClick()}
                 disabledDate={currentDate =>
                   currentDate.isBefore(moment().startOf('month')) ||
                   currentDate.isAfter(moment().endOf('month'))
