@@ -15,6 +15,7 @@ import {
   AVAILABLE_CHARACTERS,
   PARTICIPATE_GAME
 } from 'api'
+import { UserContext } from '../../context/userContext'
 
 const parseGames = R.pipe(
   R.map(game => ({
@@ -33,6 +34,8 @@ const DRAWERS = {
 }
 
 class Calendar extends React.PureComponent {
+  static contextType = UserContext
+
   state = {
     selectedGame: null,
     availableCharacters: [],
@@ -122,7 +125,7 @@ class Calendar extends React.PureComponent {
   }
 
   render () {
-    const {selectedGame, availableCharacters} = this.state
+    const { selectedGame, availableCharacters, gamesList, date } = this.state
 
     return (
       <>
@@ -220,8 +223,8 @@ class Calendar extends React.PureComponent {
           onClose={() => this.setState({ visibleDrawer: null })}
         >
           <GamesList
-            games={this.state.gamesList}
-            date={this.state.date}
+            games={gamesList}
+            date={date}
             onJoinClick={game => this.onGameSelect(game)}
             onNewGameClick={() => this.setState({ visibleDrawer: DRAWERS.NEW_GAME })}
           />
