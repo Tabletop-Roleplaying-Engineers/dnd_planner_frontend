@@ -1,5 +1,17 @@
 import React from 'react'
-import { Button, Upload, Icon, Input, Select, DatePicker, TimePicker, Slider } from 'antd'
+import {
+  Button,
+  Upload,
+  Icon,
+  Input,
+  Select,
+  DatePicker,
+  TimePicker,
+  Slider,
+  Checkbox,
+  Row,
+  Col,
+} from 'antd'
 import { Box, Flex } from 'noui/Position'
 import Form, { Field } from 'noui/Form'
 import { Msg, Header } from 'ui/Text'
@@ -142,6 +154,31 @@ class NewGameForm extends React.PureComponent {
             <Field name="description">
               <Input.TextArea rows={6} placeholder="Description"/>
             </Field>
+
+            <Row>
+              <Col span={12}>
+                <Field name="telegramPost" initialValue={false}>
+                  <Checkbox >Post in Telegram</Checkbox>
+                </Field>
+              </Col>
+              <Col span={12}>
+                <Field name="facebookPost" initialValue={false}>
+                  <Checkbox >Post in Facebook</Checkbox>
+                </Field>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={12}>
+                <Field name="gameForNewbies" initialValue={false}>
+                  <Checkbox >Game for newbies</Checkbox>
+                </Field>
+              </Col>
+              <Col span={12}>
+                <Field name="isAl" initialValue={false}>
+                  <Checkbox >AL?</Checkbox>
+                </Field>
+              </Col>
+            </Row>
 
             <Button
               disabled={form.hasErrors()}
