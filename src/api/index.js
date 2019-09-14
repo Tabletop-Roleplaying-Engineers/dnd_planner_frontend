@@ -50,6 +50,10 @@ export const CREATE_GAME_QUERY = gql`
   $lvlFrom: Int!,
   $lvlTo: Int!,
   $players: Int!,
+  $telegramPost: Boolean!,
+  $facebookPost: Boolean!,
+  $gameForNewbies: Boolean!,
+  $isAl: Boolean!,
   ){
     createGame(
       title: $title
@@ -59,6 +63,10 @@ export const CREATE_GAME_QUERY = gql`
       lvlFrom: $lvlFrom
       lvlTo: $lvlTo
       players: $players,
+      telegramPost: $telegramPost,
+      facebookPost: $facebookPost,
+      gameForNewbies: $gameForNewbies,
+      isAl: $isAl,
     ) {
       id
       title
