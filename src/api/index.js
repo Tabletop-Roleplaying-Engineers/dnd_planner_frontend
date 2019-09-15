@@ -125,6 +125,18 @@ export const FETCH_CHARACTERS_QUERY = gql`
   }
 `
 
+export const FETCH_USERS_QUERY = gql`
+  query Users($username: String!) {
+    users(username: $username){
+      id
+      firstName
+      lastName
+      username
+      avatar
+    }
+  }
+`
+
 export const FETCH_FACTIONS_QUERY = gql`
   {
     factions {
