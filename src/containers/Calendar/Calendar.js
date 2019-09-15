@@ -57,7 +57,7 @@ class Calendar extends React.PureComponent {
         updateQuery: (prev, { subscriptionData }) => {
           if (!subscriptionData.data) return prev
 
-          const newGame = subscriptionData.data.newGame
+          const { newGame } = subscriptionData.data
           const exists = prev.games.find(({ id }) => id === newGame.id)
 
           if (exists) return prev
@@ -77,6 +77,7 @@ class Calendar extends React.PureComponent {
   onCellClick = () => {
     const { user } = this.context
 
+    // TODO: fix this f*cking thing
     if (user.actions.indexOf(ACTIONS.MANAGE_GAMES) >= 0) {
       this.setState({ visibleDrawer: DRAWERS.NEW_GAME })
     }
@@ -200,6 +201,7 @@ class Calendar extends React.PureComponent {
                       notification.error({
                         message: `Error while saving data: ${error.message}`
                       })
+                      throw error
                     }
                   }}
                 />
