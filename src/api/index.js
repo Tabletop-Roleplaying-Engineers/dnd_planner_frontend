@@ -118,6 +118,31 @@ export const FETCH_CHARACTERS_QUERY = gql`
   }
 `
 
+export const FETCH_USERS_QUERY = gql`
+  query Users($username: String!) {
+    users(username: $username){
+      id
+      firstName
+      lastName
+      username
+      avatar
+      roles {
+        name
+        id
+      }
+    }
+  }
+`
+
+export const FETCH_ROLES_QUERY = gql`
+  {
+    roles {
+      id
+      name
+    }
+  }
+`
+
 export const FETCH_FACTIONS_QUERY = gql`
   {
     factions {
@@ -125,6 +150,12 @@ export const FETCH_FACTIONS_QUERY = gql`
       name
       logo
     }
+  }
+`
+
+export const HEALTH_CHECK_QUERY = gql`
+  {
+    healthCheck
   }
 `
 
@@ -155,6 +186,17 @@ export const DELETE_CHARACTER_MUTATION = gql`
   mutation DeleteCharacter($id: ID!){
     deleteCharacter(id: $id) {
       id
+    }
+  }
+`
+
+export const UPDATE_USER_ROLES = gql`
+  mutation UpdateUserRoles($userId: ID!, $roles: [String]!){
+    updateUserRoles(userId: $userId, roles: $roles) {
+      roles {
+        id
+        name
+      }
     }
   }
 `

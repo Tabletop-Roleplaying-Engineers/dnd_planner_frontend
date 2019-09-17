@@ -5,6 +5,7 @@ import GlobalStyle from 'noui/GlobalStyle'
 import Header from 'layout/Header'
 import Routing, { history } from 'routing'
 import { ApolloProvider } from 'react-apollo'
+import { ApolloProvider as ApolloHooksProvider } from '@apollo/react-hooks'
 import { ApolloClient } from 'apollo-client'
 import { createHttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
@@ -68,21 +69,23 @@ const App = () => {
   return (
     <UserContext.Provider value={contextValue}>
       <ApolloProvider client={client}>
-        <Router history={history}>
-          <React.Fragment>
-            <GlobalStyle />
+        <ApolloHooksProvider client={client}>
+          <Router history={history}>
+            <React.Fragment>
+              <GlobalStyle />
 
-            <Layout>
-              <Header />
-              {/*TODO add routing here*/}
-              <Layout.Content>
-                <Routing />
-              </Layout.Content>
+              <Layout>
+                <Header />
+                {/*TODO add routing here*/}
+                <Layout.Content>
+                  <Routing />
+                </Layout.Content>
 
-              {/*<Layout.Footer>footer</Layout.Footer>*/}
-            </Layout>
-          </React.Fragment>
-        </Router>
+                {/*<Layout.Footer>footer</Layout.Footer>*/}
+              </Layout>
+            </React.Fragment>
+          </Router>
+        </ApolloHooksProvider>
       </ApolloProvider>
     </UserContext.Provider>
   )
