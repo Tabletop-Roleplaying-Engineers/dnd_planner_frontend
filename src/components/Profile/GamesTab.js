@@ -12,7 +12,6 @@ import {
 import GameView from 'components/GameView'
 
 export const GamesTab = () => {
-  console.log('=-= render GamesTab')
   return (
     <Query query={FETCH_CHARACTERS_QUERY}>
       {({loading, error, data: { characters = [] } }) => {
