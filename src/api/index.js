@@ -76,13 +76,6 @@ export const CREATE_GAME_QUERY = gql`
       lvlFrom
       lvlTo
       players
-      status
-      user {
-        firstName
-        lastName
-        avatar
-        username
-      }
       characters {
         id,
         name,
@@ -187,6 +180,14 @@ export const NEW_GAME_SUBSCRIPTION = gql`
           name
           logo
         }
+      }
+      status
+      user {
+        id
+        firstName
+        lastName
+        avatar
+        username
       }
     }
   }
