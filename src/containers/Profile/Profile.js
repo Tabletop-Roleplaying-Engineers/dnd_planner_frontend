@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { Tabs, Drawer } from 'antd'
+import { u } from 'history'
 import { Box } from 'noui/Position'
 import { Header } from 'ui/Text'
 import NewCharacterForm from 'forms/NewCharacterForm'
@@ -8,9 +9,13 @@ import { GamesTab, CharactersTab, SettingsTab, UsersTab } from 'components/Profi
 import { UserContext } from '../../context/userContext'
 import { ACTIONS } from '../../constants'
 
-const Profile = () => {
+const Profile = ({ history }) => {
   const [newCharacterVisibility, setNewCharacterVisibility] = useState(false)
   const { user, setUser } = useContext(UserContext)
+  if (!user) {
+    history.replace('/')
+    return null
+  }
   const canManageRoles = user.actions.indexOf(ACTIONS.MANAGE_ROLES) >= 0
 
   if (!user) {

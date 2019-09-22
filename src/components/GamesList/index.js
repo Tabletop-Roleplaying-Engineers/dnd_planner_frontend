@@ -23,7 +23,12 @@ const DateContainer = styled(Box)`
   font-size: 18px;
   margin-top: 10px;
 `
-
+const EllipsisHeader = styled(Header)`
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 100%;
+`
 const ItemHeader = ({ game }) => {
   return (
     <span>
@@ -33,14 +38,14 @@ const ItemHeader = ({ game }) => {
         </Col>
         <Col span={8}>
           <Box mb={10} ml={10}>
-            <Header
+            <EllipsisHeader
               fontSize={16}
               fontWeight="bold"
               textAlign="center"
               lineHeight={1}
-            >
+          >
               {game.title}
-            </Header>
+            </EllipsisHeader>
           </Box>
           <Box mb={10} ml={10}>
             Available slots: {Math.max(game.players - game.characters.length, 0)}
@@ -125,7 +130,7 @@ const ItemBody = ({ game, onJoinClick, user }) => (
   </Row>
 )
 
-const canCreateGame = user => user.actions.indexOf(ACTIONS.MANAGE_GAMES) >= 0
+const canCreateGame = user => user && user.actions.indexOf(ACTIONS.MANAGE_GAMES) >= 0
 
 export const GamesList = ({ games, date, onJoinClick, onNewGameClick }) => {
   const { user } = useContext(UserContext)
