@@ -1,15 +1,13 @@
-import React, { useState, useContext } from 'react'
-import { Tabs, Drawer } from 'antd'
+import React, { useContext } from 'react'
+import { Tabs } from 'antd'
 import { Box } from 'noui/Position'
 import { Header } from 'ui/Text'
-import NewCharacterForm from 'forms/NewCharacterForm'
 import { withApollo } from 'react-apollo'
 import { GamesTab, CharactersTab, SettingsTab, UsersTab } from 'components/Profile'
 import { UserContext } from '../../context/userContext'
 import { ACTIONS } from '../../constants'
 
 const Profile = () => {
-  const [newCharacterVisibility, setNewCharacterVisibility] = useState(false)
   const { user, setUser } = useContext(UserContext)
   const canManageRoles = user.actions.indexOf(ACTIONS.MANAGE_ROLES) >= 0
 
@@ -29,7 +27,7 @@ const Profile = () => {
         </Tabs.TabPane>
 
         <Tabs.TabPane tab="Characters" key="characters">
-          <CharactersTab onEditClick={setNewCharacterVisibility} />
+          <CharactersTab />
         </Tabs.TabPane>
 
         <Tabs.TabPane tab="User and Settings" key="settings">
@@ -45,22 +43,6 @@ const Profile = () => {
           </Tabs.TabPane>
         )}
       </Tabs>
-
-      <Drawer
-        width={640}
-        placement="left"
-        closable={false}
-        visible={newCharacterVisibility}
-        onClose={() => setNewCharacterVisibility(false)}
-      >
-        <NewCharacterForm
-          onSubmit={data => {
-            console.log(data)
-
-            debugger
-          }}
-        />
-      </Drawer>
     </Box>
   )
 }
