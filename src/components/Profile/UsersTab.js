@@ -4,6 +4,7 @@ import { Table, Spin, Alert, Input, Avatar, Tag, Modal, Icon, Select } from 'ant
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { Flex } from 'noui/Position'
 import { useDebounce } from 'utils/hooks'
+import { getAvatarLetters } from 'utils/common'
 import {
   FETCH_USERS_QUERY,
   UPDATE_USER_ROLES,
@@ -14,20 +15,6 @@ const { Option } = Select;
 const InputWrapper = styled.div`
   padding: 12px 0;
 `
-
-const getAvatarLetters = (user) => {
-  let name = ''
-  if (user.firstName) {
-    name += user.firstName.slice(0, 1)
-  }
-  if (user.lastName) {
-    name += user.lastName.slice(0, 1)
-  }
-  if (name.length === 0) {
-    name = user.username.slice(0, 1)
-  }
-  return name
-}
 
 const RolesList = ({ userRoles, roles = [], user, onChange }) => {
   const [roleForDelete, setRoleForDelete] = useState(false)
