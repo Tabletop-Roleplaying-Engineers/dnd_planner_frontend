@@ -21,6 +21,10 @@ const StyledFactionLogo = styled.img`
   object-fit: contain;
 `
 
+const CharacterName = styled(Msg)`
+  padding-bottom: 20px;
+`
+
 const validationSchema = {
   name: {
     presence: true,
@@ -39,6 +43,7 @@ const validationSchema = {
 const EditCharacterForm = ({ data, onSubmit }) => {
   const [avatar, setAvatar] = useState()
   const { loading, error, data: factionsQueryResult } = useQuery(FETCH_FACTIONS_QUERY);
+  const isCreating = !data
   if (loading) {
     return <Spin />
   }
@@ -55,9 +60,14 @@ const EditCharacterForm = ({ data, onSubmit }) => {
       {({form}) => {
         return (
           <Box>
-            <Field name="name" initialValue={data && data.name}>
-              <Input placeholder="Name"/>
-            </Field>
+            {isCreating && (
+              <Field name="name" initialValue={data && data.name}>
+                <Input placeholder="Name"/>
+              </Field>
+            )}
+            {!isCreating && (
+              <CharacterName fontSize="18px">{data && data.name}</CharacterName>
+            )}
 
             <Field name="faction" initialValue={data && data.faction.id}>
               <Select placeholder="Faction">

@@ -79,14 +79,12 @@ export const DELETE_CHARACTER_MUTATION = gql`
 export const UPDATE_CHARACTER_MUTATION = gql`
   mutation UpdateCharacter(
     $id: ID!
-    $name: String!
     $faction: ID!
     $class: String!
     $avatar: String!
   ){
-    updateCharacter(id: $id, name: $name, faction: $faction, class: $class, avatar: $avatar) {
+    updateCharacter(id: $id, faction: $faction, class: $class, avatar: $avatar) {
       id
-      name
       class
       avatar
       experience

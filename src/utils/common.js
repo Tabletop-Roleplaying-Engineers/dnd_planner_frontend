@@ -31,3 +31,9 @@ export const getAvatarLetters = (user) => {
   }
   return name
 }
+
+export const omit = (props, obj) => {
+  const objToOmit = { ...obj }
+  props.forEach(prop => delete objToOmit[prop])
+  return objToOmit
+}

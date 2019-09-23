@@ -8,6 +8,7 @@ import Character from 'components/Character'
 import EditCharacterForm from 'forms/EditCharacterForm'
 import { Mutation } from 'react-apollo'
 import { createMenu } from 'ui/shared'
+import { omit } from 'utils/common'
 import {
   FETCH_CHARACTERS_QUERY,
   CREATE_CHARACTER_MUTATION,
@@ -138,7 +139,7 @@ export const CharactersTab = () => {
             onSubmit={async data => {
               try {
                 if (data.id) {
-                  await updateCharacter({ variables: data })
+                  await updateCharacter({ variables: omit(['name'], data) })
                 } else {
                   await createCharacter({ variables: data })
                 }
