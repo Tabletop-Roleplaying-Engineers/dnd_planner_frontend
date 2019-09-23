@@ -77,7 +77,10 @@ class Calendar extends React.PureComponent {
   onCellClick = () => {
     const { user } = this.context
 
-    // TODO: fix this f*cking thing
+    if (!user) {
+      return
+    }
+
     if (user.actions.indexOf(ACTIONS.MANAGE_GAMES) >= 0) {
       this.setState({ visibleDrawer: DRAWERS.NEW_GAME })
     }
