@@ -31,7 +31,7 @@ const Profile = () => {
         </Tabs.TabPane>
 
         <Tabs.TabPane tab="User and Settings" key="settings">
-          <SettingsTab onLogOutClick={() => {
+          <SettingsTab user={user} onLogOutClick={() => {
             localStorage.removeItem('AUTH_DATA')
             setUser(null)
           }} />
