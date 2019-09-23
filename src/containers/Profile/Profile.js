@@ -1,16 +1,13 @@
 import React, { useState, useContext } from 'react'
 import { Tabs, Drawer } from 'antd'
-import { u } from 'history'
 import { Box } from 'noui/Position'
 import { Header } from 'ui/Text'
-import NewCharacterForm from 'forms/NewCharacterForm'
 import { withApollo } from 'react-apollo'
 import { GamesTab, CharactersTab, SettingsTab, UsersTab } from 'components/Profile'
 import { UserContext } from '../../context/userContext'
 import { ACTIONS } from '../../constants'
 
-const Profile = ({ history }) => {
-  const [newCharacterVisibility, setNewCharacterVisibility] = useState(false)
+const Profile = () => {
   const { user, setUser } = useContext(UserContext)
   if (!user) {
     history.replace('/')
@@ -34,11 +31,11 @@ const Profile = ({ history }) => {
         </Tabs.TabPane>
 
         <Tabs.TabPane tab="Characters" key="characters">
-          <CharactersTab onEditClick={setNewCharacterVisibility} />
+          <CharactersTab />
         </Tabs.TabPane>
 
         <Tabs.TabPane tab="User and Settings" key="settings">
-          <SettingsTab onLogOutClick={() => {
+          <SettingsTab user={user} onLogOutClick={() => {
             localStorage.removeItem('AUTH_DATA')
             setUser(null)
           }} />
@@ -50,22 +47,6 @@ const Profile = ({ history }) => {
           </Tabs.TabPane>
         )}
       </Tabs>
-
-      <Drawer
-        width={640}
-        placement="left"
-        closable={false}
-        visible={newCharacterVisibility}
-        onClose={() => setNewCharacterVisibility(false)}
-      >
-        <NewCharacterForm
-          onSubmit={data => {
-            console.log(data)
-
-            debugger
-          }}
-        />
-      </Drawer>
     </Box>
   )
 }
