@@ -1,5 +1,5 @@
-import React, { useState, useContext } from 'react'
-import { Tabs, Drawer } from 'antd'
+import React, { useContext } from 'react'
+import { Tabs } from 'antd'
 import { Box } from 'noui/Position'
 import { Header } from 'ui/Text'
 import { withApollo } from 'react-apollo'
@@ -7,7 +7,7 @@ import { GamesTab, CharactersTab, SettingsTab, UsersTab } from 'components/Profi
 import { UserContext } from '../../context/userContext'
 import { ACTIONS } from '../../constants'
 
-const Profile = () => {
+const Profile = ({ history }) => {
   const { user, setUser } = useContext(UserContext)
   if (!user) {
     history.replace('/')
