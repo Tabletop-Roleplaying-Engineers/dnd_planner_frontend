@@ -1,5 +1,5 @@
-import React, { useContext } from 'react'
-import { Tabs } from 'antd'
+import React, { useState, useContext } from 'react'
+import { Tabs, Drawer } from 'antd'
 import { Box } from 'noui/Position'
 import { Header } from 'ui/Text'
 import { withApollo } from 'react-apollo'
@@ -9,6 +9,10 @@ import { ACTIONS } from '../../constants'
 
 const Profile = () => {
   const { user, setUser } = useContext(UserContext)
+  if (!user) {
+    history.replace('/')
+    return null
+  }
   const canManageRoles = user.actions.indexOf(ACTIONS.MANAGE_ROLES) >= 0
 
   if (!user) {
