@@ -9,14 +9,20 @@ const StyledImage = styled.img`
   object-fit: contain;
 `
 
-const Character = ({ name, experience, faction: { name: fname, logo }, renown, ...props }) =>
-  <Flex {...props} inline>
-    {logo && <StyledImage src={logo}/>}
-  
-    <Flex ml={10} py="5px" column justifyContent="space-between">
-      <Msg>{name} [{experience}]</Msg>
-      <Msg>from {fname} ({renown})</Msg>
+const Character = ({ name, experience, faction: { name: fname, logo }, renown, ...props }) => {
+  // temporary deleted due to arguing of React and JS
+  delete props.class
+
+  return (
+    <Flex {...props} inline>
+      {logo && <StyledImage src={logo} />}
+
+      <Flex ml={10} py="5px" column justifyContent="space-between">
+        <Msg>{name} [{experience}]</Msg>
+        <Msg>from {fname} ({renown})</Msg>
+      </Flex>
     </Flex>
-  </Flex>
+  )
+}
 
 export default Character

@@ -70,32 +70,48 @@ class ClassesSelector extends React.PureComponent {
     selectedClasses: [],
     value: {}
   }
-  
+
+  componentDidMount() {
+    const { onSelect } = this.props
+    this.setState(
+      {
+        value: this.props.initialValue || {},
+        selectedClasses: R.keys(this.props.initialValue),
+      },
+      () => onSelect({ state: this.state })
+    )
+  }
+
   render () {
-    const {selectedClasses} = this.state
-    
+    const { onSelect } = this.props
+    const { selectedClasses } = this.state
+    const onAddValue = value => {
+      this.setState(
+        state => ({
+          selectedClasses: R.append(value, state.selectedClasses),
+          value: R.assoc(value, 1, state.value)
+        }),
+        () => { onSelect({ value, level: 1, state: this.state }) }
+      )
+    }
+    const onRemoveValue = value => {
+      this.setState(
+        state => ({
+          selectedClasses: R.reject(R.identical(value), state.selectedClasses),
+          value: R.dissoc(value, state.value)
+        }),
+        () => { onSelect({ value, level: 1, state: this.state }) }
+      )
+    }
+
     return (
       <Flex column>
         <Select
           mode="multiple"
           placeholder="Class"
-          onSelect={value => {
-            this.setState(state =>
-                ({
-                  selectedClasses: R.append(value, state.selectedClasses),
-                  value: R.assoc(value, 1, state.value)
-                }),
-              () => { this.props.onSelect({ value, level: 1, state: this.state })}
-            )
-          }}
-          onDeselect={value => {
-            this.setState(state =>
-                ({
-                  selectedClasses: R.reject(R.identical(value), state.selectedClasses),
-                  value: R.dissoc(value, state.value)
-                }),
-              () => { this.props.onSelect({ value, level: 1, state: this.state })})
-          }}
+          onSelect={onAddValue}
+          onDeselect={onRemoveValue}
+          defaultValue={R.keys(this.props.initialValue)}
         >
           {
             CLASSES.map(c =>
@@ -108,15 +124,15 @@ class ClassesSelector extends React.PureComponent {
             )
           }
         </Select>
-  
+
         <Field name={this.props.name}>
           <Input style={{display: 'none'}}/>
         </Field>
-        
+
         {
           selectedClasses.map(c => {
             const source = R.find(R.propEq('name', c), CLASSES)
-            
+
             return (
               <Flex key={source.name}>
                 <Image
@@ -124,7 +140,7 @@ class ClassesSelector extends React.PureComponent {
                   src={source.icon}
                   alt={source.name}
                 />
-                
+
                 <InputNumber
                   min={1}
                   max={20}
@@ -138,7 +154,7 @@ class ClassesSelector extends React.PureComponent {
                     }
                   }}
                 />
-                
+
                 <Label>{source.name}</Label>
               </Flex>
             )
