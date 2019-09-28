@@ -149,9 +149,8 @@ export const CharactersTab = () => {
                 refetch()
                 setEditCharacterVisibility(false)
               } catch (error) {
-                notification.error({
-                  message: `Error while saving data: ${error.message}`
-                })
+                const message = error.graphQLErrors.map(err => err.message).join(' ,')
+                notification.error({ message })
               }
 
             }}

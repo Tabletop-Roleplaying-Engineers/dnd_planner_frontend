@@ -2,8 +2,10 @@ import * as R from 'ramda'
 
 const stringToClassesPairs = R.split('&') // 'Bard=2&Bard=2' -> ['Bard=2', 'Bard=2']
 const stringToClassLvlPair = R.split('=') // 'Bard=2' -> ['Bard', '2']
+const filterEmpty = str => !!str.length
 const toClassLvlPairs = R.pipe(
   stringToClassesPairs,
+  R.filter(filterEmpty),
   R.map(stringToClassLvlPair),
 )
 

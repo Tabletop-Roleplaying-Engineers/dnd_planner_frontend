@@ -35,6 +35,9 @@ const validationSchema = {
   faction: {
     presence: {allowEmpty: false}
   },
+  class: {
+    presence: {allowEmpty: false}
+  },
   avatar: {
     presence: true,
   },
@@ -60,6 +63,7 @@ const EditCharacterForm = ({ data, onSubmit }) => {
       {({form}) => {
         return (
           <Box>
+            {/* Name */}
             {isCreating && (
               <Field name="name" initialValue={data && data.name}>
                 <Input placeholder="Name"/>
@@ -69,6 +73,7 @@ const EditCharacterForm = ({ data, onSubmit }) => {
               <CharacterName fontSize="18px">{data && data.name}</CharacterName>
             )}
 
+            {/* Faction */}
             <Field name="faction" initialValue={data && data.faction.id}>
               <Select placeholder="Faction">
                 {
@@ -85,6 +90,7 @@ const EditCharacterForm = ({ data, onSubmit }) => {
               </Select>
             </Field>
 
+            {/* Class */}
             <ClassesSelector
               name="class"
               value={
@@ -102,6 +108,7 @@ const EditCharacterForm = ({ data, onSubmit }) => {
               initialValue={data && convertClassesStringToObj(data.class)}
             />
 
+            {/* Avatar */}
             <Box>
               <Field name="avatar" initialValue={data && data.avatar}>
                 <Input placeholder="Avatar URL" onChange={e => setAvatar(e.target.value.trim())}/>
@@ -110,6 +117,7 @@ const EditCharacterForm = ({ data, onSubmit }) => {
               {avatar && <Image src={avatar} />}
             </Box>
 
+            {/* Submit */}
             <Box mt={20}>
               <Button
                 style={{width: '100%'}}
