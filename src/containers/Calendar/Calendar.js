@@ -43,6 +43,7 @@ class Calendar extends React.PureComponent {
     unsubscribeFromGames: null,
     visibleDrawer: null,
     gamesList: [],
+    lastSelectedDate: null,
   }
 
   subscribeToNewGame = async subscribeToMore => {
@@ -74,7 +75,7 @@ class Calendar extends React.PureComponent {
     })
   }
 
-  onCellClick = () => {
+  onCellClick = (date) => {
     const { user } = this.context
 
     if (!user) {
@@ -82,7 +83,10 @@ class Calendar extends React.PureComponent {
     }
 
     if (user.actions.indexOf(ACTIONS.MANAGE_GAMES) >= 0) {
-      this.setState({ visibleDrawer: DRAWERS.NEW_GAME })
+      this.setState({
+        visibleDrawer: DRAWERS.NEW_GAME,
+        lastSelectedDate: date,
+      })
     }
   }
 
@@ -153,7 +157,7 @@ class Calendar extends React.PureComponent {
 
             return (
               <Planner
-                onSelect={() => this.onCellClick()}
+                onSelect={this.onCellClick.bind(this)}
                 disabledDate={currentDate =>
                   currentDate.isBefore(moment().startOf('month')) ||
                   currentDate.isAfter(moment().endOf('month'))
@@ -187,12 +191,15 @@ class Calendar extends React.PureComponent {
           closable={false}
           destroyOnClose={true}
           visible={this.state.visibleDrawer === DRAWERS.NEW_GAME}
-          onClose={() => this.setState({ visibleDrawer: null })}
+          onClose={() => this.setState({ visibleDrawer: null, lastSelectedDate: null })}
         >
           <Mutation mutation={CREATE_GAME_QUERY}>
             {(createGame, {loading}) => (
               <Spin spinning={loading}>
                 <NewGameForm
+                  initialValue={{
+                    date: this.state.lastSelectedDate,
+                  }}
                   onSubmit={async (game, form) => {
                     try {
                       await createGame({variables: game})
