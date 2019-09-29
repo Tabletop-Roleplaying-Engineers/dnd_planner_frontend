@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   Button,
   Upload,
@@ -49,148 +49,146 @@ const validationSchema = {
   },
 }
 
-class NewGameForm extends React.PureComponent {
-  state = {
-    image: null,
-  }
+const NewGameForm = (props) => {
+  const { onSubmit, initialValue } = props
+  const [image, setImage] = useState(null)
 
-  componentWillUnmount () {
-    this.setState({image: null})
-  }
+  return (
+    <Form
+      validation={validationSchema}
+      onSubmit={({date, time, range, ...data}, form) => {
+        const game = {
+          image: image,
+          startingDate: new Date(`${date.format('YYYY-MM-DD')} ${time.format('HH:mm')}`),
+          lvlFrom: range[0],
+          lvlTo: range[1],
+          ...data,
+        }
+        onSubmit(game, form)
+      }}>
+      {({form}) =>
+        <Box>
+          <Box mb={20}>
+            <Header>Add new Game</Header>
+          </Box>
 
-  render () {
-    const {image} = this.state
+          {/* Image */}
+          <Flex column mb={20}>
+            <Upload.Dragger
+              beforeUpload={file => {
+                const fr = new FileReader()
+                fr.onload = () => setImage(fr.result)
+                fr.readAsDataURL(file)
 
-    return (
-      <Form
-        validation={validationSchema}
-        onSubmit={({date, time, range, ...data}, form) => {
-          const game = {
-            image: this.state.image,
-            startingDate: new Date(`${date.format('YYYY-MM-DD')} ${time.format('HH:mm')}`),
-            lvlFrom: range[0],
-            lvlTo: range[1],
-            ...data,
-          }
-          this.props.onSubmit(game, form)
-        }}>
-        {({form}) =>
-          <Box>
-            <Box mb={20}>
-              <Header>Add new Game</Header>
+                return false
+              }}
+            >
+              {
+                image
+                  ? <StyledImage src={image}/>
+                  : <React.Fragment>
+                    <Msg className="ant-upload-drag-icon">
+                      <Icon type="inbox"/>
+                    </Msg>
+                    <Msg className="ant-upload-text">Click or drag file to this area to upload</Msg>
+                  </React.Fragment>
+              }
+            </Upload.Dragger>
+          </Flex>
+
+          {/* Title */}
+          <Flex column>
+            <Box>
+              <Field name="title">
+                <Input placeholder="Title"/>
+              </Field>
             </Box>
 
-            <Flex column mb={20}>
-              <Upload.Dragger
-                beforeUpload={file => {
-                  const fr = new FileReader()
-                  fr.onload = () => this.setState({image: fr.result})
-                  fr.readAsDataURL(file)
+            {/* Levels */}
+            <Box>
+              <Msg>Select min-max levels</Msg>
 
-                  return false
-                }}
-              >
-                {
-                  image
-                    ? <StyledImage src={image}/>
-                    : <React.Fragment>
-                      <Msg className="ant-upload-drag-icon">
-                        <Icon type="inbox"/>
-                      </Msg>
-                      <Msg className="ant-upload-text">Click or drag file to this area to upload</Msg>
-                    </React.Fragment>
-                }
-              </Upload.Dragger>
-            </Flex>
-
-            <Flex column>
-              <Box>
-                <Field name="title">
-                  <Input placeholder="Title"/>
-                </Field>
-              </Box>
-
-              <Box>
-                <Msg>Select min-max levels</Msg>
-
-                <Field initialValue={[1, 4]} name="range">
-                  <Slider
-                    range
-                    step={1}
-                    min={1}
-                    max={20}
-                    marks={R.pipe(
-                      R.repeat(R.__, 20),
-                      R.addIndex(R.map)((v, idx) => ++idx),
-                      R.map(n => [n, n]),
-                      R.fromPairs,
-                    )(null)
-                    }
-                  />
-                </Field>
-              </Box>
-            </Flex>
-
-            <Flex justifyContent="space-between">
-              <Field name="date">
-                <DatePicker/>
+              <Field initialValue={[1, 4]} name="range">
+                <Slider
+                  range
+                  step={1}
+                  min={1}
+                  max={20}
+                  marks={R.pipe(
+                    R.repeat(R.__, 20),
+                    R.addIndex(R.map)((v, idx) => ++idx),
+                    R.map(n => [n, n]),
+                    R.fromPairs,
+                  )(null)
+                  }
+                />
               </Field>
+            </Box>
+          </Flex>
 
-              <Field name="time">
-                <TimePicker format="HH:mm" minuteStep={10}/>
-              </Field>
-
-              <Box width="30%">
-                <Field name="players">
-                  <Select placeholder="Players count">
-                    {
-                      playersInGame.map(p => <Select.Option key={p} value={p}>{p}</Select.Option>)
-                    }
-                  </Select>
-                </Field>
-              </Box>
-            </Flex>
-
-            <Field name="description">
-              <Input.TextArea rows={6} placeholder="Description"/>
+          <Flex justifyContent="space-between">
+            {/* Date */}
+            <Field name="date" initialValue={initialValue && initialValue.date}>
+              <DatePicker/>
             </Field>
 
-            <Row>
-              <Col span={12}>
-                <Field name="telegramPost" initialValue={false}>
-                  <Checkbox >Post in Telegram</Checkbox>
-                </Field>
-              </Col>
-              <Col span={12}>
-                <Field name="facebookPost" initialValue={false}>
-                  <Checkbox >Post in Facebook</Checkbox>
-                </Field>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={12}>
-                <Field name="gameForNewbies" initialValue={false}>
-                  <Checkbox >Game for newbies</Checkbox>
-                </Field>
-              </Col>
-              <Col span={12}>
-                <Field name="isAl" initialValue={false}>
-                  <Checkbox >AL?</Checkbox>
-                </Field>
-              </Col>
-            </Row>
+            {/* Time */}
+            <Field name="time">
+              <TimePicker format="HH:mm" minuteStep={10}/>
+            </Field>
 
-            <Button
-              disabled={form.hasErrors()}
-              htmlType="submit"
-            >
-              Submit
-            </Button>
-          </Box>
-        }
-      </Form>
-    )
-  }
+            {/* Players */}
+            <Box width="30%">
+              <Field name="players">
+                <Select placeholder="Players count">
+                  {
+                    playersInGame.map(p => <Select.Option key={p} value={p}>{p}</Select.Option>)
+                  }
+                </Select>
+              </Field>
+            </Box>
+          </Flex>
+
+          {/* Description */}
+          <Field name="description">
+            <Input.TextArea rows={6} placeholder="Description"/>
+          </Field>
+
+          <Row>
+            <Col span={12}>
+              <Field name="telegramPost" initialValue={false}>
+                <Checkbox >Post in Telegram</Checkbox>
+              </Field>
+            </Col>
+            <Col span={12}>
+              <Field name="facebookPost" initialValue={false}>
+                <Checkbox >Post in Facebook</Checkbox>
+              </Field>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={12}>
+              <Field name="gameForNewbies" initialValue={false}>
+                <Checkbox >Game for newbies</Checkbox>
+              </Field>
+            </Col>
+            <Col span={12}>
+              <Field name="isAl" initialValue={false}>
+                <Checkbox >AL?</Checkbox>
+              </Field>
+            </Col>
+          </Row>
+
+          <Button
+            disabled={form.hasErrors()}
+            htmlType="submit"
+          >
+            Submit
+          </Button>
+        </Box>
+      }
+    </Form>
+  )
 }
 
 export default NewGameForm
