@@ -26,6 +26,9 @@ const StyledImage = styled.img`
 `
 
 const validationSchema = {
+  image: {
+    presence: true,
+  },
   title: {
     presence: true,
     length: {
@@ -52,17 +55,18 @@ const validationSchema = {
 const NewGameForm = (props) => {
   const { onSubmit, initialValue } = props
   const [image, setImage] = useState(null)
+  const [fileList, setFileList] = useState([])
 
   return (
     <Form
       validation={validationSchema}
       onSubmit={({date, time, range, ...data}, form) => {
         const game = {
+          ...data,
           image: image,
           startingDate: new Date(`${date.format('YYYY-MM-DD')} ${time.format('HH:mm')}`),
           lvlFrom: range[0],
           lvlTo: range[1],
-          ...data,
         }
         onSubmit(game, form)
       }}>
@@ -74,26 +78,40 @@ const NewGameForm = (props) => {
 
           {/* Image */}
           <Flex column mb={20}>
-            <Upload.Dragger
-              beforeUpload={file => {
-                const fr = new FileReader()
-                fr.onload = () => setImage(fr.result)
-                fr.readAsDataURL(file)
+            <Field name="image">
+              <Upload.Dragger
+                accept="image/*"
+                beforeUpload={file => {
+                  const fr = new FileReader()
+                  fr.onload = () => setImage(fr.result)
+                  fr.readAsDataURL(file)
+                  setFileList([file])
 
-                return false
-              }}
-            >
-              {
-                image
-                  ? <StyledImage src={image}/>
-                  : <React.Fragment>
-                    <Msg className="ant-upload-drag-icon">
-                      <Icon type="inbox"/>
-                    </Msg>
-                    <Msg className="ant-upload-text">Click or drag file to this area to upload</Msg>
-                  </React.Fragment>
-              }
-            </Upload.Dragger>
+                  return false
+                }}
+                onRemove={(e) => {
+                  setFileList([])
+                  setImage(null)
+                  form.setFieldsValue({
+                    image: null
+                  })
+                }}
+                fileList={fileList}
+              >
+                {
+                  image
+                    ? <StyledImage src={image}/>
+                    : (
+                      <>
+                        <Msg className="ant-upload-drag-icon">
+                          <Icon type="inbox"/>
+                        </Msg>
+                        <Msg className="ant-upload-text">Click or drag file to this area to upload</Msg>
+                      </>
+                    )
+                }
+              </Upload.Dragger>
+            </Field>
           </Flex>
 
           {/* Title */}
