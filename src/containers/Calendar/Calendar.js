@@ -4,16 +4,18 @@ import React from 'react'
 import NewGameForm from 'forms/NewGameForm'
 import ParticipateForm from 'forms/ParticipateForm'
 import moment from 'moment'
-import { GameInfo } from 'components/GameInfo'
-import { GamesList } from 'components/GamesList'
-import { modalWidth } from 'config'
 import { Mutation, Query, withApollo } from 'react-apollo'
+import { GamePreview } from 'components/GamePreview'
+import { GamesList } from 'components/GamesList'
+import { GameInfo, ParticipantsList, GameActions } from 'components/Game'
+import { modalWidth } from 'config'
 import {
   FETCH_GAMES_QUERY,
   CREATE_GAME_QUERY,
   NEW_GAME_SUBSCRIPTION,
   AVAILABLE_CHARACTERS,
-  PARTICIPATE_GAME
+  PARTICIPATE_GAME,
+  FETCH_GAME_QUERY
 } from 'api'
 import { UserContext } from '../../context/userContext'
 import { ACTIONS } from '../../constants'
@@ -31,6 +33,7 @@ const parseGames = R.pipe(
 const DRAWERS = {
   NEW_GAME: 'NEW_GAME',
   GAMES_LIST: 'GAMES_LIST',
+  GAME: 'GAME',
   PARTICIPATE_GAME: 'PARTICIPATE_GAME',
 }
 
@@ -44,6 +47,8 @@ class Calendar extends React.PureComponent {
     visibleDrawer: null,
     gamesList: [],
     lastSelectedDate: null,
+    currentGame: null,
+    fetchingCurrentGame: false,
   }
 
   subscribeToNewGame = async subscribeToMore => {
@@ -141,8 +146,50 @@ class Calendar extends React.PureComponent {
     })
   }
 
+  componentDidMount(prevProps) {
+    const { match: { params: { gameId } } } = this.props
+
+    if (gameId) {
+      this.fetchCurrentGame(gameId)
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    const { match: { params: { gameId } } } = this.props
+
+    if (prevProps.match.params.gameId !== gameId && gameId) {
+      this.fetchCurrentGame(gameId)
+    }
+  }
+
+  async fetchCurrentGame(id) {
+    const { client: { query } } = this.props
+
+    this.setState({
+      fetchingCurrentGame: true,
+    })
+    const res = await query({
+      query: FETCH_GAME_QUERY,
+      variables: { id }
+    })
+    this.setState({
+      currentGame: res.data.game,
+      fetchingCurrentGame: false,
+      visibleDrawer: DRAWERS.GAME,
+    })
+  }
+
+  onGameDrawerClose() {
+    const { history } = this.props
+
+    this.setState({ visibleDrawer: null })
+    history.push('/calendar')
+  }
+
   render () {
-    const { selectedGame, availableCharacters, gamesList, date } = this.state
+    const { selectedGame, availableCharacters, gamesList, date, currentGame } = this.state
+    const { match: { params: { gameId } } } = this.props
+    const { user } = this.context
 
     return (
       <>
@@ -169,7 +216,7 @@ class Calendar extends React.PureComponent {
                     <>
                       {
                         R.take(1, games).map((game, idx) =>
-                          <GameInfo
+                          <GamePreview
                             key={idx}
                             mb={10}
                             onClick={this.onGameClick(games, date)}
@@ -220,6 +267,7 @@ class Calendar extends React.PureComponent {
           </Mutation>
         </Drawer>
 
+        {/* Participate form */}
         <Drawer
           destroyOnClose={true}
           width={modalWidth()}
@@ -235,6 +283,7 @@ class Calendar extends React.PureComponent {
           />
         </Drawer>
 
+        {/* Games list */}
         <Drawer
           destroyOnClose={true}
           width={modalWidth()}
@@ -249,6 +298,24 @@ class Calendar extends React.PureComponent {
             onJoinClick={game => this.onGameSelect(game)}
             onNewGameClick={() => this.setState({ visibleDrawer: DRAWERS.NEW_GAME })}
           />
+        </Drawer>
+
+        {/* Game */}
+        <Drawer
+          destroyOnClose={true}
+          width={modalWidth()}
+          placement="right"
+          closable={false}
+          visible={this.state.visibleDrawer === DRAWERS.GAME}
+          onClose={() => this.onGameDrawerClose()}
+        >
+          {currentGame && (
+            <>
+              <GameInfo game={currentGame} />
+              <ParticipantsList characters={currentGame.characters} />
+              <GameActions game={currentGame} onJoinClick={game => this.onGameSelect(game)} user={user} />
+            </>
+          )}
         </Drawer>
       </>
     )

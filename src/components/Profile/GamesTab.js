@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Spin } from 'antd'
+import { Button, Spin, Alert } from 'antd'
 import * as R from 'ramda'
 import { Flex } from 'noui/Position'
 import Card from 'ui/Card'
@@ -15,7 +15,9 @@ export const GamesTab = () => {
   return (
     <Query query={FETCH_CHARACTERS_QUERY}>
       {({loading, error, data: { characters = [] } }) => {
-        if (error) return <div>Error</div>
+        if (error) {
+          return <Alert message="You have to login to enter this page" type="error" />
+        }
 
         return (
           <Spin spinning={loading}>
