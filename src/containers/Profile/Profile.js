@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Tabs } from 'antd'
+import { Tabs, Alert } from 'antd'
 import { Box } from 'noui/Position'
 import { Header } from 'ui/Text'
 import { withApollo } from 'react-apollo'
@@ -16,7 +16,7 @@ const Profile = ({ history }) => {
   const canManageRoles = user.actions.indexOf(ACTIONS.MANAGE_ROLES) >= 0
 
   if (!user) {
-    return <div>You have to login to enter this page</div>
+    return <Alert message="You have to login to enter this page" type="warning" />
   }
 
   return (

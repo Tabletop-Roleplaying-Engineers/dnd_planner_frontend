@@ -20,7 +20,7 @@ const Title = styled(Box)`
   top: 0;
 `
 
-export const GameInfo = ({ startingDate, title, tags = [], ...props }) =>
+export const GamePreview = ({ startingDate, title, tags = [], ...props }) =>
   <Wrapper {...props}>
     <Image src={props.image} alt="Game" />
     <Title mb={10}>
