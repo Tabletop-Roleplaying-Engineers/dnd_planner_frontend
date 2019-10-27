@@ -40,19 +40,24 @@ const CharacterMenu = ({ onEditClick, character }) => {
               {
                 label: 'Edit',
                 icon: 'edit',
-                onClick: () => onEditClick(character)
+                onClick: () => onEditClick(character),
+                'data-testid': "character-menu-edit",
               },
               {
                 label: 'Delete',
                 icon: 'delete',
                 onClick: async () => {
                   await deleteCharacter({ variables: { id: character.id } })
-                }
+                },
+                'data-testid': "character-menu-delete",
               }
             ])}
             trigger={['click']}
           >
-            <Icon type="ellipsis" />
+            <Icon
+              type="ellipsis"
+              data-testid="character-menu"
+            />
           </Dropdown>
         </Box>
       )}
@@ -69,7 +74,7 @@ const CharactersList = ({ data, onEditClick, loading, error }) => {
   }
 
   return data.characters.map(character =>
-    <Card key={character.id} py={10} px={20} my={10} inline>
+    <Card key={character.id} py={10} px={20} my={10} inline data-testid={`character-${character.name}`}>
       <Character {...character} />
 
       <CharacterMenu onEditClick={onEditClick} character={character} />
@@ -113,6 +118,7 @@ export const CharactersTab = () => {
             icon="plus"
             size="large"
             onClick={() => setEditCharacterVisibility(true)}
+            data-testid="add-character-btn"
           >
             Add new Character
           </Button>

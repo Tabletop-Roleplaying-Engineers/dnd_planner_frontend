@@ -188,7 +188,6 @@ class Calendar extends React.PureComponent {
 
   render () {
     const { selectedGame, availableCharacters, gamesList, date, currentGame } = this.state
-    const { match: { params: { gameId } } } = this.props
     const { user } = this.context
 
     return (

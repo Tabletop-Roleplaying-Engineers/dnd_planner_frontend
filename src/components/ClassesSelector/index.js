@@ -112,12 +112,14 @@ class ClassesSelector extends React.PureComponent {
           onSelect={onAddValue}
           onDeselect={onRemoveValue}
           defaultValue={R.keys(this.props.initialValue)}
+          data-testid="select-class"
         >
           {
             CLASSES.map(c =>
               <Select.Option
                 key={c.name}
                 value={c.name}
+                data-testid={`select-option-class-${c.name}`}
               >
                 {c.name}
               </Select.Option>

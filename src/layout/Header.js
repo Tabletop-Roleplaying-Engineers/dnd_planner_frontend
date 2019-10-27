@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Button, Dropdown, Icon, Layout, Menu } from 'antd'
 import { Flex } from 'noui/Position'
 import Logo from 'components/Logo'
@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { Box } from '../noui/Position'
 import { UserContext } from '../context/userContext'
+import { isTesting } from 'utils/common'
 
 const StyledHeader = styled(Layout.Header)`
   max-height: 64px;
@@ -51,6 +52,27 @@ const menu = (
   </Menu>
 )
 
+const TestLoginBtn = () => {
+  const authData = {
+    first_name: 'first_name',
+    last_name: 'last_name',
+    photo_url: 'photo_url',
+    id: 'id',
+    username: 'username',
+    auth_date: 'auth_date',
+    hash: 'hash',
+  }
+  const params = Object.keys(authData).map((key) => `${key}=${authData[key]}`).join('&')
+
+  useEffect(() => {
+    const telegramIFrame = document.querySelector('iframe[id*="telegram-login-"]')
+    // Need to remove Telegram iframe, it is rendered over the button
+    telegramIFrame.remove()
+  }, [])
+
+  return <a data-testid="login-btn" href={`/login?${params}`}>Login</a>
+}
+
 const Header = () => {
   const { user } = useContext(UserContext)
 
@@ -60,13 +82,18 @@ const Header = () => {
         <Logo />
 
         {user && (
-          <Dropdown placement="bottomRight" overlay={menu}>
-            <Button style={{ padding: '0 10px'}} type="primary">
-              Roll for...
-              {/*<Icon style={{fontSize: '20px', color: 'black'}} type="menu" />*/}
-            </Button>
-          </Dropdown>
+          <span data-testid="profile-drop-menu">
+            <Dropdown placement="bottomRight" overlay={menu}>
+              <Button style={{ padding: '0 10px'}} type="primary">
+                Roll for...
+                {/*<Icon style={{fontSize: '20px', color: 'black'}} type="menu" />*/}
+              </Button>
+            </Dropdown>
+          </span>
         )}
+
+        {isTesting && !user && <TestLoginBtn />}
+
       </Flex>
     </StyledHeader>
   )

@@ -1,4 +1,5 @@
 import * as R from 'ramda'
+import { ENVIRONMENTS } from '../constants'
 
 const stringToClassesPairs = R.split('&') // 'Bard=2&Bard=2' -> ['Bard=2', 'Bard=2']
 const stringToClassLvlPair = R.split('=') // 'Bard=2' -> ['Bard', '2']
@@ -38,4 +39,8 @@ export const omit = (props, obj) => {
   const objToOmit = { ...obj }
   props.forEach(prop => delete objToOmit[prop])
   return objToOmit
+}
+
+export const isTesting = () => {
+  return process.env.environment === ENVIRONMENTS.TEST
 }
