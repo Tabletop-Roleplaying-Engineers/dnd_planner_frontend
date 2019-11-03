@@ -5,3 +5,7 @@ export const ACTIONS = {
   MANAGE_ROLES: 'ManageRoles',
   MANAGE_USERS: 'ManageUsers',
 }
+
+export const ENVIRONMENTS = {
+  TEST: 'test',
+}

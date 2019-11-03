@@ -5,8 +5,8 @@ import { Msg } from 'ui/Text'
 export const createMenu = items => (
   <Menu>
     {
-      items.map(({ label, icon, onClick }, idx) =>
-        <Menu.Item key={idx} onClick={onClick}>
+      items.map(({ label, icon, onClick, ...other }, idx) =>
+        <Menu.Item key={idx} onClick={onClick} {...other}>
           {
             label && <Msg>{label}</Msg>
           }

@@ -66,7 +66,7 @@ const EditCharacterForm = ({ data, onSubmit }) => {
             {/* Name */}
             {isCreating && (
               <Field name="name" initialValue={data && data.name}>
-                <Input placeholder="Name"/>
+                <Input placeholder="Name" data-testid="input-name" />
               </Field>
             )}
             {!isCreating && (
@@ -75,10 +75,10 @@ const EditCharacterForm = ({ data, onSubmit }) => {
 
             {/* Faction */}
             <Field name="faction" initialValue={data && data.faction.id}>
-              <Select placeholder="Faction">
+              <Select placeholder="Faction" data-testid="select-faction">
                 {
                   factions.map(f =>
-                    <Select.Option key={f.name} value={f.id}>
+                    <Select.Option key={f.name} value={f.id} data-testid={`select-option-faction-${f.name}`}>
                       <Box inline mr={15}>
                         <StyledFactionLogo src={f.logo} alt="faction_logo"/>
                       </Box>
@@ -111,7 +111,11 @@ const EditCharacterForm = ({ data, onSubmit }) => {
             {/* Avatar */}
             <Box>
               <Field name="avatar" initialValue={data && data.avatar}>
-                <Input placeholder="Avatar URL" onChange={e => setAvatar(e.target.value.trim())}/>
+                <Input
+                  placeholder="Avatar URL"
+                  onChange={e => setAvatar(e.target.value.trim())}
+                  data-testid="input-avatar"
+                />
               </Field>
 
               {avatar && <Image src={avatar} />}
@@ -127,6 +131,7 @@ const EditCharacterForm = ({ data, onSubmit }) => {
                 icon="plus"
                 size="large"
                 disabled={form.hasErrors()}
+                data-testid="save-btn"
               >
                 Save
               </Button>
