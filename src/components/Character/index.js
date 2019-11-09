@@ -64,7 +64,7 @@ const Character = ({
             R.pipe(
               R.toPairs,
               R.map(([c, lvl]) =>    
-              <Box mx="5px">
+              <Box key={c} mx="5px">
                 <Tooltip title={c}> 
                   <Badge 
                     count={lvl}
