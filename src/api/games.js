@@ -60,6 +60,14 @@ export const FETCH_GAME_QUERY = gql`
   }
 `
 
+export const FETCH_HOSTED_GAMES_QUERY = gql`
+  query HostedGames($userId: ID!) {
+    gamesWithDM(userId: $userId){
+      ${gameFields}
+    }
+  }
+`
+
 export const CREATE_GAME_QUERY = gql`
   mutation CreateGame(
   $title: String!

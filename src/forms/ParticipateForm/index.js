@@ -5,7 +5,7 @@ import { Flex, Box } from 'noui/Position'
 import Character from 'components/Character'
 import { Header, Msg, Paragraph } from 'ui/Text'
 import styled from 'styled-components'
-import UserInfo from '../../components/UserInfo'
+import UserInfo from 'components/UserInfo'
 
 const StyledImage = styled.img`
   object-fit: cover;

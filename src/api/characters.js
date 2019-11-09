@@ -32,6 +32,13 @@ export const FETCH_CHARACTERS_QUERY = gql`
         name
         logo
       }
+      user {
+        id
+        firstName
+        lastName
+        avatar
+        username
+      }
       game {
         id
         title

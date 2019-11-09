@@ -15,6 +15,7 @@ export {
   LEAVE_GAME,
   NEW_GAME_SUBSCRIPTION,
   PARTICIPATE_GAME,
+  FETCH_HOSTED_GAMES_QUERY,
 } from './games'
 
 export const FETCH_USERS_QUERY = gql`

@@ -7,7 +7,7 @@ import { Field } from '../../noui/Form'
 import { Flex } from '../../noui/Position'
 import { Label } from '../../ui/Text'
 
-const CLASSES = [
+export const CLASSES = [
   {
     name: 'Barbarian',
     icon: require('./images/barbarian.png')

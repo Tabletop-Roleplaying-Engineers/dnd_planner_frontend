@@ -1,0 +1,7 @@
+{
+  "rules": {
+    "type": "tabs",
+    "data": "http://localhost:4000/static/rules/data.txt",
+    "image": "http://localhost:4000/static/rules/cover.jpg"
+  }
+}
