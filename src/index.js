@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
+import { ENVIRONMENTS } from './constants'
 
 ReactDOM.render((
     <App/>
@@ -11,3 +12,7 @@ ReactDOM.render((
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: http://bit.ly/CRA-PWA
 serviceWorker.unregister()
+
+if (process.env.environment === ENVIRONMENTS.TEST) {
+  console.warn('You are in the test mode!!!')
+}

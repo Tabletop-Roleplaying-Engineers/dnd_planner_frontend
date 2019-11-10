@@ -150,12 +150,14 @@ class ClassesSelector extends React.PureComponent {
           defaultValue={R.keys(this.props.initialValue)}
           disabled={calcCurrentLevel(value) >= 20}
           open={isSelectOpen}
+          data-testid="select-class"
         >
           {
             CLASSES.map(c =>
               <Select.Option
                 key={c.name}
                 value={c.name}
+                data-testid={`select-option-class-${c.name}`}
               >
                 {c.name}
               </Select.Option>

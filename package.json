@@ -12,6 +12,7 @@
     "cross-env": "^5.2.0",
     "crypto-js": "^3.1.9-1",
     "customize-cra": "^0.2.11",
+    "cypress": "3.5.0",
     "eslint-plugin-react-hooks": "^2.0.1",
     "graphql": "^14.1.1",
     "history": "^4.9.0",
@@ -39,6 +40,7 @@
   },
   "scripts": {
     "start:dev": "cross-env PORT=80 react-app-rewired start",
+    "start:test": "cross-env environment=test PORT=80 react-app-rewired start",
     "start:dev:linux": "sudo cross-env PORT=80 react-app-rewired start",
     "start": "serve -s build",
     "build": "react-app-rewired build",
@@ -47,7 +49,12 @@
     "heroku-postbuild": "npm run build"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "globals": {
+      "context": "readonly",
+      "cy": "readonly",
+      "Cypress": "readonly"
+    }
   },
   "browserslist": [
     ">0.2%",
