@@ -3,7 +3,7 @@ import { Tabs, Alert } from 'antd'
 import { Box } from 'noui/Position'
 import { Header } from 'ui/Text'
 import { withApollo } from 'react-apollo'
-import { GamesTab, CharactersTab, SettingsTab, UsersTab } from 'components/Profile'
+import { GamesTab, CharactersTab, SettingsTab, UsersTab, HostedGamesTab } from 'components/Profile'
 import { UserContext } from '../../context/userContext'
 import { ACTIONS } from '../../constants'
 
@@ -25,9 +25,16 @@ const Profile = ({ history }) => {
         <Header>Profile</Header>
       </Box>
 
-      <Tabs defaultActiveKey="characters" type="card">
-        <Tabs.TabPane tab="Games" key="games">
+      <Tabs 
+        defaultActiveKey="characters" 
+        type="card"
+      >
+        <Tabs.TabPane tab="My Games" key="games">
           <GamesTab />
+        </Tabs.TabPane>
+
+        <Tabs.TabPane tab="Game Host" key="host">
+          <HostedGamesTab />
         </Tabs.TabPane>
 
         <Tabs.TabPane tab="Characters" key="characters">

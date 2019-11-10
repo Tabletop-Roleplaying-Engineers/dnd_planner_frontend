@@ -7,7 +7,7 @@ import { Field } from '../../noui/Form'
 import { Flex } from '../../noui/Position'
 import { Label } from '../../ui/Text'
 
-const CLASSES = [
+export const CLASSES = [
   {
     name: 'Barbarian',
     icon: require('./images/barbarian.png')
@@ -58,6 +58,14 @@ const CLASSES = [
   },
 ]
 
+const calcCurrentLevel = R.pipe(
+  R.toPairs,
+  R.reduce(
+    (acc, [_, lvl]) => acc + lvl,
+    0
+  )
+)
+
 const Image = styled.img`
   height: 100%;
   object-fit: contain;
@@ -68,7 +76,14 @@ const Image = styled.img`
 class ClassesSelector extends React.PureComponent {
   state = {
     selectedClasses: [],
-    value: {}
+    value: {},
+    isSelectOpen: false
+  }
+
+  constructor(props) {
+    super(props);
+
+    this.selectRef = React.createRef();
   }
 
   componentDidMount() {
@@ -84,21 +99,35 @@ class ClassesSelector extends React.PureComponent {
 
   render () {
     const { onSelect } = this.props
-    const { selectedClasses } = this.state
+    const { selectedClasses, value, isSelectOpen } = this.state
+
     const onAddValue = value => {
-      this.setState(
-        state => ({
-          selectedClasses: R.append(value, state.selectedClasses),
-          value: R.assoc(value, 1, state.value)
-        }),
-        () => { onSelect({ value, level: 1, state: this.state }) }
-      )
+      const test = calcCurrentLevel(this.state.value) 
+      
+      if(test + 1 <= 20) {
+        this.setState(
+          state => {
+            return ({
+              selectedClasses: R.append(value, state.selectedClasses),
+              value: R.assoc(value, 1, state.value),
+              isSelectOpen: false
+            })
+          },
+          () => {
+            onSelect({ value, level: 1, state: this.state }) 
+          }
+        )
+      }
+
+      this.selectRef.current.blur()
     }
+
     const onRemoveValue = value => {
       this.setState(
         state => ({
           selectedClasses: R.reject(R.identical(value), state.selectedClasses),
-          value: R.dissoc(value, state.value)
+          value: R.dissoc(value, state.value),
+          isSelectOpen: false
         }),
         () => { onSelect({ value, level: 1, state: this.state }) }
       )
@@ -107,11 +136,20 @@ class ClassesSelector extends React.PureComponent {
     return (
       <Flex column>
         <Select
+          ref={this.selectRef}
           mode="multiple"
           placeholder="Class"
           onSelect={onAddValue}
           onDeselect={onRemoveValue}
+          onFocus={() => { 
+            this.setState(() => ({ isSelectOpen: true }))}
+          }
+          onBlur={() => { 
+            this.setState(() => ({ isSelectOpen: false }))}
+          }
           defaultValue={R.keys(this.props.initialValue)}
+          disabled={calcCurrentLevel(value) >= 20}
+          open={isSelectOpen}
           data-testid="select-class"
         >
           {
@@ -145,7 +183,7 @@ class ClassesSelector extends React.PureComponent {
 
                 <InputNumber
                   min={1}
-                  max={20}
+                  max={20 - calcCurrentLevel(this.state.value) + this.state.value[source.name]}
                   defaultValue={1}
                   onChange={level => {
                     if(level) {

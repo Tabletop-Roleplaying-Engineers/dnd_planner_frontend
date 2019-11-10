@@ -30,6 +30,22 @@ export const SettingsTab = (props) => {
       >
         Sign out
       </Button>
+
+      <iframe src="https://player.twitch.tv/?channel=ikethavel" 
+      frameborder="0" 
+      allowfullscreen="true" 
+      scrolling="no" 
+      height="378" 
+      width="620"></iframe>
+
+      <iframe 
+      src="https://www.twitch.tv/embed/ikethavel/chat" 
+      frameborder="0" 
+      scrolling="no" 
+      height="500" 
+      width="350">
+      </iframe>
+
     </Flex>
   )
 }
