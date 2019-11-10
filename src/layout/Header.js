@@ -92,7 +92,7 @@ const Header = () => {
           </span>
         )}
 
-        {isTesting && !user && <TestLoginBtn />}
+        {isTesting() && !user && <TestLoginBtn />}
 
       </Flex>
     </StyledHeader>
