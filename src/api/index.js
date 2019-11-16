@@ -59,6 +59,16 @@ export const HEALTH_CHECK_QUERY = gql`
   }
 `
 
+export const TAGS_QUERY = gql`
+  {
+    tags {
+      id
+      name
+      type
+    }
+  }
+`
+
 export const UPDATE_USER_ROLES = gql`
   mutation UpdateUserRoles($userId: ID!, $roles: [String]!){
     updateUserRoles(userId: $userId, roles: $roles) {

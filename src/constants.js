@@ -9,3 +9,8 @@ export const ACTIONS = {
 export const ENVIRONMENTS = {
   TEST: 'test',
 }
+
+export const TAGS2TEXT = {
+  AL: 'AL',
+  newbiesAllowed: 'Game for newbies',
+}

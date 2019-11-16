@@ -1,13 +1,5 @@
 import gql from 'graphql-tag'
 
-export {
-  AVAILABLE_CHARACTERS,
-  CREATE_CHARACTER_MUTATION,
-  DELETE_CHARACTER_MUTATION,
-  FETCH_CHARACTERS_QUERY,
-  UPDATE_CHARACTER_MUTATION
-} from './characters'
-
 const gameFields = `
   id
   title
@@ -18,6 +10,7 @@ const gameFields = `
   lvlTo
   players
   status
+  tags
   characters {
     id
     name
@@ -79,8 +72,7 @@ export const CREATE_GAME_QUERY = gql`
   $players: Int!,
   $telegramPost: Boolean!,
   $facebookPost: Boolean!,
-  $gameForNewbies: Boolean!,
-  $isAl: Boolean!,
+  $tags: [ID]!,
   ){
     createGame(
       title: $title
@@ -92,8 +84,7 @@ export const CREATE_GAME_QUERY = gql`
       players: $players,
       telegramPost: $telegramPost,
       facebookPost: $facebookPost,
-      gameForNewbies: $gameForNewbies,
-      isAl: $isAl,
+      tags: $tags,
     ) {
       id
       title
@@ -129,6 +120,7 @@ export const NEW_GAME_SUBSCRIPTION = gql`
       lvlFrom
       lvlTo
       players
+      tags
       characters {
         id
         name
@@ -153,7 +145,7 @@ export const NEW_GAME_SUBSCRIPTION = gql`
 `
 
 export const PARTICIPATE_GAME = gql`
-  mutation SignIn(
+  mutation ParticipateGame(
     $gameId: ID!
     $characterId: ID!
   ) {
