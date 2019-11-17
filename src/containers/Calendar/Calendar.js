@@ -137,6 +137,7 @@ class Calendar extends React.PureComponent {
     const { data: { validCharactersForGame } } = await client.query({
       query: AVAILABLE_CHARACTERS,
       variables: { gameId: game.id },
+      fetchPolicy: 'network-only',
     })
 
     this.setState({

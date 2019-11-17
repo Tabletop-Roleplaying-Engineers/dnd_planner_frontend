@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
+import * as R from 'ramda'
+import { useQuery } from '@apollo/react-hooks'
 import {
   Button,
   Upload,
@@ -11,13 +13,15 @@ import {
   Checkbox,
   Row,
   Col,
+  Spin,
 } from 'antd'
 import { Box, Flex } from 'noui/Position'
 import Form, { Field } from 'noui/Form'
 import { Msg, Header } from 'ui/Text'
 import styled from 'styled-components'
 import { playersInGame } from 'config'
-import * as R from 'ramda'
+import { TAGS_QUERY } from 'api'
+import { TAGS2TEXT } from '../../constants'
 
 const StyledImage = styled.img`
   object-fit: cover;
@@ -54,8 +58,24 @@ const validationSchema = {
 
 const NewGameForm = (props) => {
   const { onSubmit, initialValue } = props
+  const { loading, data = {} } = useQuery(TAGS_QUERY);
+  const { tags = [] } = data
   const [image, setImage] = useState(null)
   const [fileList, setFileList] = useState([])
+  const [selectedTags, setSelectedTags] = useState(new Set())
+  const tagClick = useCallback((tag) => {
+    if (selectedTags.has(tag.id)) {
+      selectedTags.delete(tag.id)
+    } else {
+      selectedTags.add(tag.id)
+    }
+
+    setSelectedTags(new Set(selectedTags))
+  }, [selectedTags])
+
+  if (loading) {
+    return <Spin />
+  }
 
   return (
     <Form
@@ -67,6 +87,7 @@ const NewGameForm = (props) => {
           startingDate: new Date(`${date.format('YYYY-MM-DD')} ${time.format('HH:mm')}`),
           lvlFrom: range[0],
           lvlTo: range[1],
+          tags: [...selectedTags.values()],
         }
         onSubmit(game, form)
       }}>
@@ -185,16 +206,11 @@ const NewGameForm = (props) => {
             </Col>
           </Row>
           <Row>
-            <Col span={12}>
-              <Field name="gameForNewbies" initialValue={false}>
-                <Checkbox >Game for newbies</Checkbox>
-              </Field>
-            </Col>
-            <Col span={12}>
-              <Field name="isAl" initialValue={false}>
-                <Checkbox >AL?</Checkbox>
-              </Field>
-            </Col>
+            {tags.map(tag => (
+              <Col span={12} key={tag.id}>
+                <Checkbox checked={selectedTags.has(tag.id)} onChange={() => tagClick(tag)}>{TAGS2TEXT[tag.name]}</Checkbox>
+              </Col>
+            ))}
           </Row>
 
           <Button

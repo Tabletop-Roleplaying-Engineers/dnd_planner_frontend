@@ -1,13 +1,13 @@
 import React from 'react'
 import { Flex, Box } from 'noui/Position'
-import { Msg, Label } from 'ui/Text'
+import { Label } from 'ui/Text'
 import styled from 'styled-components'
 import UserInfo from 'components/UserInfo'
 import { background } from 'styled-system'
 import { CLASSES } from 'components/ClassesSelector'
 import qs from 'query-string'
 import * as R from 'ramda'
-import { Badge, Avatar, Tooltip, Tag } from 'antd'
+import { Badge, Avatar, Tooltip } from 'antd'
 
 const Wrapper = styled(Flex)`
   ${background}
@@ -33,22 +33,22 @@ const getClassLogo = name => R.pipe(
   R.propOr("", "icon")
 )(CLASSES)
 
-const Character = ({ 
-  name, 
-  class: dndClass, 
-  avatar, 
+const Character = ({
+  name,
+  class: dndClass,
+  avatar,
   experience,
-  renown, 
-  faction: { name: fname, logo }, 
+  renown,
+  faction: { name: fname, logo },
   user,
-  ...props 
+  ...props
 }) => {
-  
+
   return (
     <Wrapper center {...props} inline background>
       <Box position="relative">
         {avatar && <StyledImage src={avatar} />}
-        
+
         <Tooltip title={fname}>
           {logo && <StyledFactionLogo src={logo} />}
         </Tooltip>
@@ -63,13 +63,13 @@ const Character = ({
           {
             R.pipe(
               R.toPairs,
-              R.map(([c, lvl]) =>    
+              R.map(([c, lvl]) =>
               <Box key={c} mx="5px">
-                <Tooltip title={c}> 
-                  <Badge 
+                <Tooltip title={c}>
+                  <Badge
                     count={lvl}
                   >
-                    <Avatar 
+                    <Avatar
                       size="small"
                       src={getClassLogo(c)}
                     />
