@@ -61,7 +61,7 @@ export const CLASSES = [
 const calcCurrentLevel = R.pipe(
   R.toPairs,
   R.reduce(
-    (acc, [_, lvl]) => acc + lvl,
+    (acc, [_, lvl]) => acc + parseInt(lvl, 10),
     0
   )
 )
@@ -102,8 +102,8 @@ class ClassesSelector extends React.PureComponent {
     const { selectedClasses, value, isSelectOpen } = this.state
 
     const onAddValue = value => {
-      const test = calcCurrentLevel(this.state.value) 
-      
+      const test = calcCurrentLevel(this.state.value)
+
       if(test + 1 <= 20) {
         this.setState(
           state => {
@@ -114,7 +114,7 @@ class ClassesSelector extends React.PureComponent {
             })
           },
           () => {
-            onSelect({ value, level: 1, state: this.state }) 
+            onSelect({ value, level: 1, state: this.state })
           }
         )
       }
@@ -141,10 +141,10 @@ class ClassesSelector extends React.PureComponent {
           placeholder="Class"
           onSelect={onAddValue}
           onDeselect={onRemoveValue}
-          onFocus={() => { 
+          onFocus={() => {
             this.setState(() => ({ isSelectOpen: true }))}
           }
-          onBlur={() => { 
+          onBlur={() => {
             this.setState(() => ({ isSelectOpen: false }))}
           }
           defaultValue={R.keys(this.props.initialValue)}
@@ -183,7 +183,7 @@ class ClassesSelector extends React.PureComponent {
 
                 <InputNumber
                   min={1}
-                  max={20 - calcCurrentLevel(this.state.value) + this.state.value[source.name]}
+                  max={20 - calcCurrentLevel(this.state.value) + parseInt(this.state.value[source.name], 10)}
                   defaultValue={1}
                   onChange={level => {
                     if(level) {
