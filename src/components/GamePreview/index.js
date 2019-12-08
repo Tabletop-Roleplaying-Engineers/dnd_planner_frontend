@@ -5,6 +5,7 @@ import { Header } from 'ui/Text'
 import styled from 'styled-components'
 
 const Wrapper = styled(Flex)`
+  cursor: pointer;
   position: relative;
   border-radius: 4px;
   background-color: white;

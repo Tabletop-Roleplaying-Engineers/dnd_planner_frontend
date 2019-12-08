@@ -205,10 +205,7 @@ class Calendar extends React.PureComponent {
             return (
               <Planner
                 onSelect={this.onCellClick.bind(this)}
-                disabledDate={currentDate =>
-                  currentDate.isBefore(moment().startOf('month')) ||
-                  currentDate.isAfter(moment().endOf('month'))
-                }
+                disabledDate={currentDate => currentDate.isBefore(moment().startOf('day'))}
                 dateCellRender={date => {
                   const games = fetchedGames[date.format('YYYY-MM-DD')] || []
 
