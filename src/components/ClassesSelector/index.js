@@ -172,6 +172,7 @@ class ClassesSelector extends React.PureComponent {
         {
           selectedClasses.map(c => {
             const source = R.find(R.propEq('name', c), CLASSES)
+            const classLvl = parseInt(this.state.value[source.name], 10)
 
             return (
               <Flex key={source.name}>
@@ -183,8 +184,8 @@ class ClassesSelector extends React.PureComponent {
 
                 <InputNumber
                   min={1}
-                  max={20 - calcCurrentLevel(this.state.value) + parseInt(this.state.value[source.name], 10)}
-                  defaultValue={1}
+                  max={20 - calcCurrentLevel(this.state.value) + classLvl}
+                  defaultValue={classLvl}
                   onChange={level => {
                     if(level) {
                       this.setState(
