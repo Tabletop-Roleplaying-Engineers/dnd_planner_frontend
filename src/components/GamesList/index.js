@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Row, Col, Button } from 'antd'
+import { Row, Col, Button, Icon } from 'antd'
 import styled from 'styled-components'
 import { Box, Flex } from 'noui/Position'
 import CollapsiblePanel from 'components/CollapsiblePanel'
@@ -19,6 +19,7 @@ const DateContainer = styled(Box)`
 
 const ItemBody = ({ game, onJoinClick, user }) => (
   <Row>
+    <Box px={12} py={18}>{game.description}</Box>
     <ParticipantsList characters={game.characters} />
     <Col span={24}>
       <GameActions game={game} onJoinClick={onJoinClick} user={user} />
@@ -42,9 +43,14 @@ export const GamesList = ({ games, date, onJoinClick, onNewGameClick }) => {
       {games.map(game => (
         <span key={game.id}>
           <GameContainer mt={10} mb={10}>
-            <CollapsiblePanel key={game.id} renderHeader={() => <GameInfo game={game} />}>
+            <CollapsiblePanel
+              key={game.id}
+              renderHeader={() => <GameInfo game={game} />}
+              renderFooter={({ opened }) => <Flex justifyContent="center"><Icon type={opened ? 'up' : 'down'} /></Flex>}
+            >
               <ItemBody game={game} onJoinClick={onJoinClick} user={user} />
             </CollapsiblePanel>
+
           </GameContainer>
         </span>
       ))}
