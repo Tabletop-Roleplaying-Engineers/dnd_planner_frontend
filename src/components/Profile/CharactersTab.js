@@ -154,6 +154,7 @@ export const CharactersTab = () => {
                 })
                 refetch()
                 setEditCharacterVisibility(false)
+                setCharToEdit(null)
               } catch (error) {
                 const message = error.graphQLErrors.map(err => err.message).join(' ,')
                 notification.error({ message })
