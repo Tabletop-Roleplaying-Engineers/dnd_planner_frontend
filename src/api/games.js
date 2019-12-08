@@ -16,6 +16,8 @@ const gameFields = `
     name
     experience
     renown
+    avatar
+    class
     faction {
       id
       name
@@ -126,6 +128,7 @@ export const NEW_GAME_SUBSCRIPTION = gql`
         name
         experience
         renown
+        avatar
         faction {
           id
           name
