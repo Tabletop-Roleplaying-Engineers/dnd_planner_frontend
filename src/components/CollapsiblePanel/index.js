@@ -11,7 +11,7 @@ const CollapsibleContent = styled('div')`
   `}
 `
 
-const CollapsiblePanel = ({ renderHeader, children }) => {
+const CollapsiblePanel = ({ renderHeader, renderFooter, children }) => {
   const [ contentHeight, setContentHeight ] = useState(0);
   const [ opened, setOpened ] = useState(false);
   const contentRef = useRef(null);
@@ -29,6 +29,9 @@ const CollapsiblePanel = ({ renderHeader, children }) => {
           {children}
         </div>
       </CollapsibleContent>
+      <div onClick={() => setOpened(!opened)}>
+        {renderFooter && renderFooter({ opened })}
+      </div>
     </Card>
   )
 }
