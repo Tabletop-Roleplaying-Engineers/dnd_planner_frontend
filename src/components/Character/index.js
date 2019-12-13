@@ -19,6 +19,14 @@ const StyledImage = styled.img`
   object-fit: contain;
 `
 
+const AvatarPlaceholder = styled.img`
+  height: 60px;
+  width: 60px;
+  background: rgb(204, 204, 204);
+  border-radius: 50%;
+`
+AvatarPlaceholder.displayName = 'AvatarPlaceholder'
+
 const StyledFactionLogo = styled.img`
   height: 25px;
   width: 25px;
@@ -48,6 +56,7 @@ const Character = ({
     <Wrapper center {...props} inline background>
       <Box position="relative">
         {avatar && <StyledImage src={avatar} />}
+        {!avatar && <AvatarPlaceholder />}
 
         <Tooltip title={fname}>
           {logo && <StyledFactionLogo src={logo} />}
@@ -87,5 +96,6 @@ const Character = ({
     </Wrapper>
   )
 }
+Character.displayName = 'Character'
 
 export default Character
