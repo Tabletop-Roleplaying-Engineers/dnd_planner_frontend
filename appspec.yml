@@ -3,3 +3,8 @@ os: linux
 files:
   - source: build
     destination: /usr/share/nginx/html
+hooks:
+  BeforeInstall:
+    - location: Scripts/ClearOldRev.sh
+      timeout: 180
+      runas: root
