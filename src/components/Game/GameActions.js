@@ -19,7 +19,7 @@ export const GameActions = ({ game, onJoinClick, user }) => (
           title={user.id === game.user.id ? 'You can\'t join your game' : ''}
           block
         >
-          Join
+          View
         </Button>
       )}
     </Box>

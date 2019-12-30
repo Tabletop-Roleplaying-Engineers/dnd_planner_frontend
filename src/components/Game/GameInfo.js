@@ -1,7 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-import { Row, Col, Slider, Spin } from 'antd'
+import { Row, Col, Slider, Spin, Rate, Icon } from 'antd'
+import UserInfo from 'components/UserInfo'
 import { Box, Flex } from 'noui/Position'
 import { Header } from 'ui/Text'
 import { useQuery } from '@apollo/react-hooks'
@@ -49,12 +50,13 @@ export const GameInfo = ({ game }) => {
         <Image src={game.image} alt="Game" />
       </Col>
       <Col span={8}>
-        <Box mb={10} ml={10}>
+        {/* TODO: 21 - it`s a height of EllipsisHeader block */}
+        <Box mb={50 - 21} ml={10}>
           <Link to={`/calendar/${game.id}`}>
             <EllipsisHeader
               fontSize={16}
               fontWeight="bold"
-              textAlign="center"
+              textAlign="left"
               lineHeight={1}
             >
               {game.title}
@@ -63,10 +65,23 @@ export const GameInfo = ({ game }) => {
         </Box>
         <Box mb={10} ml={10}>
           Available slots: {Math.max(game.players - game.characters.length, 0)}
+
+          <Rate 
+            character={<Icon type="user" />} 
+            defaultValue={game.characters.length}
+            count={game.players}
+            disabled
+          />
         </Box>
       </Col>
       <Col span={8}>
         <Row>
+          <Col span={24}>
+            <Flex mb={10} justifyContent="end">
+              <UserInfo {...game.user} position="left"/>
+            </Flex>
+          </Col>
+
           <Col span={24}>
             <Flex>
               {game.tags.map(tagId => (
@@ -80,12 +95,12 @@ export const GameInfo = ({ game }) => {
               <Slider
                 range
                 disabled
-                min={0}
-                max={1}
-                defaultValue={[0, 1]}
+                min={1}
+                max={20}
+                value={[game.lvlFrom, game.lvlTo]}
                 marks={{
-                  0: game.lvlFrom,
-                  1: game.lvlTo
+                  [game.lvlFrom]: game.lvlFrom,
+                  [game.lvlTo]: game.lvlTo
                 }}
                 tipFormatter={null}
               />
