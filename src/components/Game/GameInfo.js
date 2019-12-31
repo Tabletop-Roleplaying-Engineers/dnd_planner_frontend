@@ -1,13 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-import { Row, Col, Slider, Spin, Rate, Icon } from 'antd'
+import { Row, Col, Slider, Rate, Icon } from 'antd'
 import UserInfo from 'components/UserInfo'
 import { Box, Flex } from 'noui/Position'
 import { Header } from 'ui/Text'
-import { useQuery } from '@apollo/react-hooks'
-import { TAGS_QUERY } from 'api'
-import { TAGS2TEXT } from '../../constants'
 
 const Image = styled('img')`
   width: 160px;
@@ -34,16 +31,6 @@ const Tag = styled.div`
 `
 
 export const GameInfo = ({ game }) => {
-  const { loading, data = {} } = useQuery(TAGS_QUERY);
-  if (loading) {
-    return <Spin />
-  }
-  const { tags = [] } = data
-  const tagsById = tags.reduce((acc, tag) => {
-    acc[tag.id] = tag
-    return acc
-  }, {})
-
   return (
     <Row>
       <Col span={8}>
@@ -83,13 +70,6 @@ export const GameInfo = ({ game }) => {
           </Col>
 
           <Col span={24}>
-            <Flex>
-              {game.tags.map(tagId => (
-                <Tag key={tagId}>{TAGS2TEXT[tagsById[tagId].name]}</Tag>
-              ))}
-            </Flex>
-          </Col>
-          <Col span={24}>
             Available levels
             <LvlSlider>
               <Slider
@@ -106,6 +86,16 @@ export const GameInfo = ({ game }) => {
               />
             </LvlSlider>
           </Col>
+
+
+          <Col span={24}>
+            <Flex>
+              {game.tags.map(tag => (
+                <Tag key={tag.id}>{tag.name}</Tag>
+              ))}
+            </Flex>
+          </Col>
+
         </Row>
       </Col>
     </Row>
