@@ -2,7 +2,6 @@ import React from 'react'
 import { Col, Card, Avatar } from 'antd'
 const { Meta } = Card
 
-
 export const ParticipantsList = ({ characters }) => (
   characters.map(character => (
     <span key={character.id}>

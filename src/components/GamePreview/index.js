@@ -6,26 +6,28 @@ import styled from 'styled-components'
 
 const Wrapper = styled(Flex)`
   cursor: pointer;
-  position: relative;
-  border-radius: 4px;
-  background-color: white;
-  justify-content: space-between;
   flex-direction: column;
-`
-const Image = styled('img')`
   width: 100%;
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  overflow: auto;
 `
 const Title = styled(Box)`
   padding: 5px 10px;
-  position: absolute;
-  top: 0;
+`
+const HeaderWithShadow = styled(Header)`
+  text-shadow: 0px 0px 5px black;
+`
+const WithWhiteShadow = styled.div`
+  text-shadow: 0px 0px 5px #fff;
 `
 
 export const GamePreview = ({ startingDate, title, tags = [], ...props }) =>
-  <Wrapper {...props}>
-    <Image src={props.image} alt="Game" />
+  <Wrapper style={{ backgroundImage: `url(${props.image})` }} {...props}>
     <Title mb={10}>
-      <Header
+      <HeaderWithShadow
         fontSize={16}
         fontWeight="bold"
         textAlign="center"
@@ -33,13 +35,13 @@ export const GamePreview = ({ startingDate, title, tags = [], ...props }) =>
         color={props.image ? '#fff' : null}
       >
         {title}
-      </Header>
+      </HeaderWithShadow>
     </Title>
 
     <Flex justifyContent="space-between">
       <Flex column>
         {
-          tags.map(tag => <Tag key={tag}>{tag}</Tag>)
+          tags.map(tag => <WithWhiteShadow><Tag key={tag}>{tag}</Tag></WithWhiteShadow>)
         }
       </Flex>
     </Flex>
