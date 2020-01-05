@@ -208,6 +208,9 @@ export const END_GAME = gql`
   mutation EndGame(
     $gameId: ID!
   ){
-    endGame(gameId: $gameId)
+    endGame(gameId: $gameId) {
+      id
+      title
+    }
   }
 `

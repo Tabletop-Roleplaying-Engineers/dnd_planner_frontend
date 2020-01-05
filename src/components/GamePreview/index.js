@@ -21,7 +21,7 @@ const Title = styled(Box)`
   top: 0;
 `
 
-export const GamePreview = ({ startingDate, title, tags = [], ...props }) =>
+export const GamePreview = ({ startingDate, title, tags = [], showTags = false, ...props }) =>
   <Wrapper {...props}>
     <Image src={props.image} alt="Game" />
     <Title mb={10}>
@@ -36,11 +36,14 @@ export const GamePreview = ({ startingDate, title, tags = [], ...props }) =>
       </Header>
     </Title>
 
-    <Flex justifyContent="space-between">
-      <Flex column>
-        {
-          tags.map((tag, i) => <Tag key={tag.id + i}>{tag.id}</Tag>)
-        }
+    { 
+      showTags &&
+      <Flex justifyContent="space-between">
+        <Flex column>
+          {
+            tags.map((tag, i) => <Tag key={tag.id + i}>{tag.id}</Tag>)
+          }
+        </Flex>
       </Flex>
-    </Flex>
+    }
   </Wrapper>
