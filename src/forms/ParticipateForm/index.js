@@ -85,13 +85,9 @@ class ParticipateForm extends React.PureComponent {
 
           <Flex flexWrap="wrap" justifiContent="space-between">
             {
-              characters.map(({user, ...char}) =>
+              characters.map((char) =>
                 <Flex key={char.id} my={10} center>
                   <Character {...char} />
-
-                  <Box ml={20}>
-                    <UserInfo {...user} />
-                  </Box>
                 </Flex>
               )
             }

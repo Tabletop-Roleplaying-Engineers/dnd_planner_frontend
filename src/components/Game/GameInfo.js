@@ -42,8 +42,6 @@ export const GameInfo = ({ game }) => {
     acc[tag.id] = tag
     return acc
   }, {})
-  console.log('=-= tags', tags)
-  console.log('=-= game', game)
 
   return (
     <Row>

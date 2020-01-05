@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import * as R from 'ramda'
 import { Button, Input, Select, Spin, Alert } from 'antd'
 import { useQuery } from '@apollo/react-hooks';
@@ -47,12 +47,17 @@ const EditCharacterForm = ({ data, onSubmit }) => {
   const [avatar, setAvatar] = useState()
   const { loading, error, data: factionsQueryResult } = useQuery(FETCH_FACTIONS_QUERY);
   const isCreating = !data
+
+  useEffect(() => setAvatar(data && data.avatar), [])
+
   if (loading) {
     return <Spin />
   }
+
   if (error) {
     return <Alert message={error.message} type="error" />
   }
+
   const { factions } = factionsQueryResult
 
   return (
