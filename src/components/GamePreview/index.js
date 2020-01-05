@@ -41,7 +41,11 @@ export const GamePreview = ({ startingDate, title, tags = [], ...props }) =>
     <Flex justifyContent="space-between">
       <Flex column>
         {
-          tags.map(tag => <WithWhiteShadow><Tag key={tag}>{tag}</Tag></WithWhiteShadow>)
+          tags.map((tag, i) => (
+            <WithWhiteShadow>
+              <Tag key={tag.id + i}>{tag.id}</Tag>
+            </WithWhiteShadow>
+          ))
         }
       </Flex>
     </Flex>

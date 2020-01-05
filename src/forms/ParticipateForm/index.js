@@ -35,6 +35,7 @@ class ParticipateForm extends React.PureComponent {
 
   render () {
     const {
+      id,
       image,
       title,
       lvlFrom,
@@ -49,7 +50,7 @@ class ParticipateForm extends React.PureComponent {
     } = this.props
 
     return (
-      <Box>
+      <Box key={id}>
         <Flex mb={20} center justifyContent="space-between">
           <Flex column>
             <Header>
