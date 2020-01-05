@@ -10,7 +10,11 @@ const gameFields = `
   lvlTo
   players
   status
-  tags
+  tags {
+    id
+    name
+    type
+  }
   characters {
     id
     name
@@ -122,7 +126,11 @@ export const NEW_GAME_SUBSCRIPTION = gql`
       lvlFrom
       lvlTo
       players
-      tags
+      tags {
+        id
+        name
+        type
+      }
       characters {
         id
         name

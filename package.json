@@ -39,7 +39,7 @@
     "validate.js": "^0.12.0"
   },
   "scripts": {
-    "start:dev": "cross-env PORT=80 react-app-rewired start",
+    "start:dev": "react-app-rewired start",
     "start:test": "cross-env environment=test PORT=80 react-app-rewired start",
     "start:dev:linux": "sudo cross-env PORT=80 react-app-rewired start",
     "start": "serve -s build",

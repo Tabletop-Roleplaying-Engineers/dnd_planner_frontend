@@ -1,19 +1,25 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Query } from 'react-apollo'
 import {
   FETCH_HOSTED_GAMES_QUERY
 } from 'api'
+import { UserContext } from '../../context/userContext'
 import { Alert, Spin } from 'antd'
-import { Flex } from '../../noui/Position'
-import GameView from 'components/GameView'
+import { Box, Flex } from '../../noui/Position'
+import { GameInfo } from 'components/Game/GameInfo'
 
 export const HostedGamesTab = () => {
+  const { user } = useContext(UserContext);
+  console.log(user)
+
   return (
     <Query
       query={FETCH_HOSTED_GAMES_QUERY}
-      variables={{ userId: "123"}}
+      variables={{ userId: user.id}}
     >
-    {({loading, error, data: { gamesWithDM = []}}) => {
+    {({loading, error, data }) => {
+      const gamesWithDM = data ? data.gamesWithDM || [] : []
+
       if (error) {
         return <Alert message="Error" type="error" />
       }
@@ -22,8 +28,17 @@ export const HostedGamesTab = () => {
         <Spin spinning={loading}>
           <Flex column>
             {
-              gamesWithDM
-                .map(game => <GameView {...game} />)
+              gamesWithDM.map(game => 
+                <Flex>
+                  <Box width="50%">
+                    <GameInfo game={game} />
+                  </Box>
+
+                  <Flex column ml={20}>
+                    <button>DELETE</button>
+                  </Flex>
+                </Flex>
+              )
             }
             </Flex>
         </Spin>
