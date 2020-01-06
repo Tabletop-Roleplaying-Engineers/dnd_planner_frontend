@@ -28,6 +28,7 @@ const CalendarCell = styled.div`
 
 const CellLeft = styled.div`
   width: calc(100% - 30px);
+  word-break: break-word;
 `
 
 const CellRight = styled.div`

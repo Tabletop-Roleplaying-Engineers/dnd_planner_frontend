@@ -43,7 +43,7 @@ export const GamePreview = ({ startingDate, title, tags = [], ...props }) =>
         {
           tags.map((tag, i) => (
             <WithWhiteShadow>
-              <Tag key={tag.id + i}>{tag.id}</Tag>
+              <Tag key={tag.id + i}>{tag.name}</Tag>
             </WithWhiteShadow>
           ))
         }
