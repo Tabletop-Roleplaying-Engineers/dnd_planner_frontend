@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import { Row, Col, Button, Icon } from 'antd'
 import styled from 'styled-components'
+import format from 'date-fns/format'
 import { Box, Flex } from 'noui/Position'
 import CollapsiblePanel from 'components/CollapsiblePanel'
 import { ACTIONS } from '../../constants'
@@ -38,7 +39,7 @@ export const GamesList = ({ games, date, onJoinClick, onNewGameClick }) => {
         <Button type="primary" onClick={onNewGameClick} block>Create game</Button>
       )}
       <DateContainer>
-        {date.format('DD MMMM')}
+        {format(date, 'dd MMMM')}
       </DateContainer>
       {games.map(game => (
         <span key={game.id}>
