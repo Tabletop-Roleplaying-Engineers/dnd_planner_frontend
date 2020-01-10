@@ -120,7 +120,7 @@ export const Calendar = ({ games, onCellClick }) => {
         </CellRight>
       </CalendarCell>
     )
-  }, [])
+  }, [groupedGames])
 
   return (
     <>
