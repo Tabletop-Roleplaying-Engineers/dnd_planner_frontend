@@ -7,7 +7,9 @@ import isToday from 'date-fns/isToday'
 import { ResponsiveCalendar, ViewType } from 'react-responsive-calendar'
 import styled, { css } from 'styled-components'
 import { NavigationButtons } from './NavigationButtons'
+import { DateRange } from '../DateRange/DateRange'
 import { GamePreview } from '../GamePreview'
+import { Flex } from 'noui/Position'
 
 const WeekDay = styled.div`
   text-align: right;
@@ -124,7 +126,14 @@ export const Calendar = ({ games, onCellClick }) => {
 
   return (
     <>
-      <NavigationButtons onPreviousClick={() => navHandler(date, -1)} onNextClick={() => navHandler(date, 1)} />
+      <Flex justifyContent="center" mb={2}>
+        <DateRange date={date} view={view} />
+      </Flex>
+      <NavigationButtons
+        onPreviousClick={() => navHandler(date, -1)}
+        onNextClick={() => navHandler(date, 1)}
+        onTodayClick={() => setDate(new Date())}
+      />
       <ResponsiveCalendar
         date={date}
         onViewChanged={setView}
