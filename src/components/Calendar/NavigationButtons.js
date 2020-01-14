@@ -1,18 +1,33 @@
 import React from 'react'
+import styled from 'styled-components'
 import { Flex } from 'noui/Position'
 import {
   Button,
 } from 'antd'
 
-export const NavigationButtons = ({ onPreviousClick, onNextClick }) => {
+const ZeroWidth = styled(Flex)`
+  width: 0;
+`
+const RightBtn = styled(ZeroWidth)`
+  justify-content: flex-end;
+`
+
+export const NavigationButtons = ({ onPreviousClick, onNextClick, onTodayClick }) => {
   return (
     <Flex justifyContent="space-between">
-      <Button onClick={onPreviousClick}>
-        Previous
+      <ZeroWidth>
+        <Button onClick={onPreviousClick}>
+          Previous
+        </Button>
+      </ZeroWidth>
+      <Button onClick={onTodayClick}>
+        Today
       </Button>
-      <Button onClick={onNextClick}>
-        Next
-      </Button>
+      <RightBtn>
+        <Button onClick={onNextClick}>
+          Next
+        </Button>
+      </RightBtn>
     </Flex>
   )
 }
