@@ -4,6 +4,10 @@ import addMonths from 'date-fns/addMonths'
 import addWeeks from 'date-fns/addWeeks'
 import format from 'date-fns/format'
 import isToday from 'date-fns/isToday'
+import isBefore from 'date-fns/isBefore'
+import startOfMonth from 'date-fns/startOfMonth'
+import endOfMonth from 'date-fns/endOfMonth'
+import isAfter from 'date-fns/isAfter'
 import { ResponsiveCalendar, ViewType } from 'react-responsive-calendar'
 import styled, { css } from 'styled-components'
 import { NavigationButtons } from './NavigationButtons'
@@ -25,6 +29,9 @@ const CalendarCell = styled.div`
   }
   ${props => props.today && css`
     border-color: #E61721;
+  `}
+  ${props => props.dimmed && css`
+    opacity: 0.3;
   `}
 `
 
@@ -91,13 +98,16 @@ export const Calendar = ({ games, onCellClick }) => {
     setDate(date)
     onCellClick({ date, games })
   }, [onCellClick])
-  const renderCell = useCallback(({ date }) => {
-    const thisDayGames = groupedGames[format(date, 'yyyy-MM-dd')] || []
+
+  const renderCell = useCallback(({ date: currentDate }) => {
+    const thisDayGames = groupedGames[format(currentDate, 'yyyy-MM-dd')] || []
     const availablePlaces = getAvailablePlacesForGames(thisDayGames)
+
     return (
       <CalendarCell
-        today={isToday(date)}
-        onClick={() => cellClickHandler({ date, games: thisDayGames })}
+        today={isToday(currentDate)}
+        dimmed={isBefore(currentDate, startOfMonth(date)) || isAfter(currentDate, endOfMonth(date))}
+        onClick={() => cellClickHandler({ date: currentDate, games: thisDayGames })}
       >
         <CellLeft>
           {
@@ -111,7 +121,7 @@ export const Calendar = ({ games, onCellClick }) => {
         </CellLeft>
         <CellRight>
           <DateBlock>
-            {format(date, 'dd')}
+            {format(currentDate, 'dd')}
           </DateBlock>
           <TotalGamesBlock title="Total games">
             {thisDayGames.length}
@@ -122,7 +132,7 @@ export const Calendar = ({ games, onCellClick }) => {
         </CellRight>
       </CalendarCell>
     )
-  }, [])
+  }, [groupedGames, date])
 
   return (
     <>
