@@ -30,9 +30,6 @@ const CalendarCell = styled.div`
   ${props => props.today && css`
     border-color: #E61721;
   `}
-  ${props => props.dimmed && css`
-    opacity: 0.3;
-  `}
 `
 
 const CellLeft = styled.div`
@@ -45,6 +42,9 @@ const CellRight = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  ${props => props.dimmed && css`
+    opacity: 0.3;
+  `}
 `
 
 const DateBlock = styled.div`
@@ -98,7 +98,6 @@ export const Calendar = ({ games, onCellClick }) => {
     setDate(date)
     onCellClick({ date, games })
   }, [onCellClick])
-
   const renderCell = useCallback(({ date: currentDate }) => {
     const thisDayGames = groupedGames[format(currentDate, 'yyyy-MM-dd')] || []
     const availablePlaces = getAvailablePlacesForGames(thisDayGames)
@@ -106,7 +105,6 @@ export const Calendar = ({ games, onCellClick }) => {
     return (
       <CalendarCell
         today={isToday(currentDate)}
-        dimmed={isBefore(currentDate, startOfMonth(date)) || isAfter(currentDate, endOfMonth(date))}
         onClick={() => cellClickHandler({ date: currentDate, games: thisDayGames })}
       >
         <CellLeft>
@@ -119,7 +117,9 @@ export const Calendar = ({ games, onCellClick }) => {
             )
           }
         </CellLeft>
-        <CellRight>
+        <CellRight
+          dimmed={isBefore(currentDate, startOfMonth(date)) || isAfter(currentDate, endOfMonth(date))}
+        >
           <DateBlock>
             {format(currentDate, 'dd')}
           </DateBlock>
