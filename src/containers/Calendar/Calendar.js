@@ -150,7 +150,10 @@ class Calendar extends React.PureComponent {
       variables: { id }
     })
     this.setState({
-      currentGame: res.data.game,
+      currentGame: {
+        ...res.data.game,
+        startingDate: new Date(parseInt(res.data.game.startingDate, 10)),
+      },
       fetchingCurrentGame: false,
       visibleDrawer: DRAWERS.GAME,
     })
