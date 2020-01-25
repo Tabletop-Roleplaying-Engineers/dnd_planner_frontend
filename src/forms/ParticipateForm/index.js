@@ -1,10 +1,11 @@
 import { Button, Select, Spin } from 'antd'
 import * as R from 'ramda'
 import React from 'react'
+import isBefore from 'date-fns/isBefore'
+import styled from 'styled-components'
 import { Flex, Box } from 'noui/Position'
 import Character from 'components/Character'
 import { Header, Msg, Paragraph } from 'ui/Text'
-import styled from 'styled-components'
 import UserInfo from 'components/UserInfo'
 
 const StyledImage = styled.img`
@@ -46,8 +47,10 @@ class ParticipateForm extends React.PureComponent {
       availableCharacters = [],
       players,
       status,
-      onParticipate
+      onParticipate,
+      startingDate,
     } = this.props
+    const isPastGame = isBefore(new Date(startingDate), new Date())
 
     return (
       <Box key={id}>
@@ -94,8 +97,9 @@ class ParticipateForm extends React.PureComponent {
             }
           </Flex>
 
+          {isPastGame && <Msg>Registration is closed</Msg>}
           {
-            status === 'CAN_PARTICIPATE' &&
+            (!isPastGame && status === 'CAN_PARTICIPATE') &&
             <Spin spinning={this.state.participating}>
               <StyledSelect
                 placeholder="Select hero"

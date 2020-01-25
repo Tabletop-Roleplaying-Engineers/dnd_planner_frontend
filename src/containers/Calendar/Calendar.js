@@ -73,21 +73,6 @@ class Calendar extends React.PureComponent {
     })
   }
 
-  // onCellClick = (date) => {
-  //   const { user } = this.context
-
-  //   if (!user) {
-  //     return
-  //   }
-
-  //   if (user.actions.indexOf(ACTIONS.MANAGE_GAMES) >= 0) {
-  //     this.setState({
-  //       visibleDrawer: DRAWERS.NEW_GAME,
-  //       lastSelectedDate: date,
-  //     })
-  //   }
-  // }
-
   onGameClick = (games, date) => {
     this.setState({
       visibleDrawer: DRAWERS.GAMES_LIST,
@@ -165,7 +150,10 @@ class Calendar extends React.PureComponent {
       variables: { id }
     })
     this.setState({
-      currentGame: res.data.game,
+      currentGame: {
+        ...res.data.game,
+        startingDate: new Date(parseInt(res.data.game.startingDate, 10)),
+      },
       fetchingCurrentGame: false,
       visibleDrawer: DRAWERS.GAME,
     })

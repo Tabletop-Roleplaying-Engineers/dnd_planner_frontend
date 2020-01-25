@@ -4,10 +4,16 @@ import addMonths from 'date-fns/addMonths'
 import addWeeks from 'date-fns/addWeeks'
 import format from 'date-fns/format'
 import isToday from 'date-fns/isToday'
+import isBefore from 'date-fns/isBefore'
+import startOfMonth from 'date-fns/startOfMonth'
+import endOfMonth from 'date-fns/endOfMonth'
+import isAfter from 'date-fns/isAfter'
 import { ResponsiveCalendar, ViewType } from 'react-responsive-calendar'
 import styled, { css } from 'styled-components'
 import { NavigationButtons } from './NavigationButtons'
+import { DateRange } from '../DateRange/DateRange'
 import { GamePreview } from '../GamePreview'
+import { Flex } from 'noui/Position'
 
 const WeekDay = styled.div`
   text-align: right;
@@ -36,6 +42,9 @@ const CellRight = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  ${props => props.dimmed && css`
+    opacity: 0.3;
+  `}
 `
 
 const DateBlock = styled.div`
@@ -89,13 +98,14 @@ export const Calendar = ({ games, onCellClick }) => {
     setDate(date)
     onCellClick({ date, games })
   }, [onCellClick])
-  const renderCell = useCallback(({ date }) => {
-    const thisDayGames = groupedGames[format(date, 'yyyy-MM-dd')] || []
+  const renderCell = useCallback(({ date: currentDate }) => {
+    const thisDayGames = groupedGames[format(currentDate, 'yyyy-MM-dd')] || []
     const availablePlaces = getAvailablePlacesForGames(thisDayGames)
+
     return (
       <CalendarCell
-        today={isToday(date)}
-        onClick={() => cellClickHandler({ date, games: thisDayGames })}
+        today={isToday(currentDate)}
+        onClick={() => cellClickHandler({ date: currentDate, games: thisDayGames })}
       >
         <CellLeft>
           {
@@ -107,9 +117,11 @@ export const Calendar = ({ games, onCellClick }) => {
             )
           }
         </CellLeft>
-        <CellRight>
+        <CellRight
+          dimmed={isBefore(currentDate, startOfMonth(date)) || isAfter(currentDate, endOfMonth(date))}
+        >
           <DateBlock>
-            {format(date, 'dd')}
+            {format(currentDate, 'dd')}
           </DateBlock>
           <TotalGamesBlock title="Total games">
             {thisDayGames.length}
@@ -120,11 +132,18 @@ export const Calendar = ({ games, onCellClick }) => {
         </CellRight>
       </CalendarCell>
     )
-  }, [groupedGames])
+  }, [groupedGames, date])
 
   return (
     <>
-      <NavigationButtons onPreviousClick={() => navHandler(date, -1)} onNextClick={() => navHandler(date, 1)} />
+      <Flex justifyContent="center" mb={2}>
+        <DateRange date={date} view={view} />
+      </Flex>
+      <NavigationButtons
+        onPreviousClick={() => navHandler(date, -1)}
+        onNextClick={() => navHandler(date, 1)}
+        onTodayClick={() => setDate(new Date())}
+      />
       <ResponsiveCalendar
         date={date}
         onViewChanged={setView}

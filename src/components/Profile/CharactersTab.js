@@ -20,12 +20,11 @@ const CharacterMenu = ({ onEditClick, character }) => {
   return (
     <Mutation
       mutation={DELETE_CHARACTER_MUTATION}
-      update={(cache, { data: { deleteCharacter } }) => {
+      update={(cache) => {
         const { characters } = cache.readQuery({ query: FETCH_CHARACTERS_QUERY })
-
         cache.writeQuery({
           query: FETCH_CHARACTERS_QUERY,
-          data: { characters: characters.filter(c => c.id !== deleteCharacter.id) }
+          data: { characters: characters.filter(c => c.id !== character.id) }
         })
       }}
     >
