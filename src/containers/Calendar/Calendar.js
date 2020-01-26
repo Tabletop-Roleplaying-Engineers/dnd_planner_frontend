@@ -241,7 +241,7 @@ class Calendar extends React.PureComponent {
             {(createGame, {loading}) => (
               <Spin spinning={loading}>
                 <NewGameForm
-                  initialValue={{
+                  initialValues={{
                     date: this.state.lastSelectedDate,
                   }}
                   onSubmit={async (game, form) => {

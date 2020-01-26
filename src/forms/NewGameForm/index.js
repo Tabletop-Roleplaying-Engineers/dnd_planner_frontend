@@ -57,10 +57,10 @@ const validationSchema = {
 }
 
 const NewGameForm = (props) => {
-  const { onSubmit, initialValue } = props
+  const { onSubmit, initialValues } = props
   const { loading, data = {} } = useQuery(TAGS_QUERY);
   const { tags = [] } = data
-  const [image, setImage] = useState(null)
+  const [image, setImage] = useState(initialValues ? initialValues.image : null)
   const [fileList, setFileList] = useState([])
   const [selectedTags, setSelectedTags] = useState(new Set())
   const tagClick = useCallback((tag) => {
@@ -76,6 +76,8 @@ const NewGameForm = (props) => {
   if (loading) {
     return <Spin />
   }
+
+  console.log(initialValues)
 
   return (
     <Form
@@ -138,7 +140,7 @@ const NewGameForm = (props) => {
           {/* Title */}
           <Flex column>
             <Box>
-              <Field name="title">
+              <Field initialValue={initialValues && initialValues.title} name="title">
                 <Input placeholder="Title"/>
               </Field>
             </Box>
@@ -147,7 +149,12 @@ const NewGameForm = (props) => {
             <Box>
               <Msg>Select min-max levels</Msg>
 
-              <Field initialValue={[1, 4]} name="range">
+              <Field 
+                initialValue={initialValues && initialValues.lvlFrom && initialValues.lvlTo
+                  ? [initialValues.lvlFrom, initialValues.lvlTo] 
+                  : [1, 4]} 
+                name="range"
+              >
                 <Slider
                   range
                   step={1}
@@ -167,12 +174,12 @@ const NewGameForm = (props) => {
 
           <Flex justifyContent="space-between">
             {/* Date */}
-            <Field name="date" initialValue={initialValue && initialValue.date}>
+            <Field name="date" initialValue={initialValues && initialValues.date}>
               <DatePicker/>
             </Field>
 
             {/* Time */}
-            <Field name="time">
+            <Field name="time" initialValue={initialValues && initialValues.time}>
               <TimePicker format="HH:mm" minuteStep={10}/>
             </Field>
 
@@ -189,7 +196,7 @@ const NewGameForm = (props) => {
           </Flex>
 
           {/* Description */}
-          <Field name="description">
+          <Field name="description" initialValue={initialValues && initialValues.description}>
             <Input.TextArea rows={6} placeholder="Description"/>
           </Field>
 
@@ -208,7 +215,12 @@ const NewGameForm = (props) => {
           <Row>
             {tags.map(tag => (
               <Col span={12} key={tag.id}>
-                <Checkbox checked={selectedTags.has(tag.id)} onChange={() => tagClick(tag)}>{TAGS2TEXT[tag.name]}</Checkbox>
+                <Checkbox 
+                  checked={selectedTags.has(tag.id)} 
+                  onChange={() => tagClick(tag)}
+                >
+                  {TAGS2TEXT[tag.name]}
+                </Checkbox>
               </Col>
             ))}
           </Row>

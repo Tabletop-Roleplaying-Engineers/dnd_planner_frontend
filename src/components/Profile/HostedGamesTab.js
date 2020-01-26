@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import * as R from 'ramda'
 import { Query, withApollo, Mutation } from 'react-apollo'
 import {
@@ -6,9 +6,12 @@ import {
   END_GAME,
 } from 'api'
 import { UserContext } from '../../context/userContext'
-import { Alert, Spin, Card, Icon, Popconfirm } from 'antd'
+import { Alert, Spin, Card, Icon, Popconfirm, Drawer } from 'antd'
 import { Box, Flex } from '../../noui/Position'
 import { GameInfo } from 'components/Game/GameInfo'
+import NewGameForm from 'forms/NewGameForm'
+import { modalWidth } from 'config'
+
 import styled from 'styled-components'
 
 const Wrapper = styled(Card)`
@@ -18,10 +21,14 @@ const Wrapper = styled(Card)`
   justify-content: space-between;
 `
 export const HostedGamesTab = withApollo(({ client }) => {
+  const [showEditGame, setShowEditGame] = useState(false)
+  const [gameForEdit, setGameForEdit] = useState(null)
   const { user } = useContext(UserContext);
   console.log(user)
 
   return (
+    <React.Fragment>
+
     <Query
       query={FETCH_HOSTED_GAMES_QUERY}
       variables={{ userId: user.id}}
@@ -29,7 +36,6 @@ export const HostedGamesTab = withApollo(({ client }) => {
     >
     {(query) => {
       const {loading, error, data, refetch } = query
-      debugger
       const gamesWithDM = data ? data.gamesWithDM || [] : []
 
       if (error) {
@@ -45,7 +51,16 @@ export const HostedGamesTab = withApollo(({ client }) => {
                   <Wrapper
                     width="100%"
                     actions={[
-                      <Icon type="edit" key="edit" />,
+                      <Icon
+                        type="edit"
+                        key="edit"
+                        onClick={() => {
+                          debugger
+                          setGameForEdit(game)
+                          setShowEditGame(true)
+                        }}
+                      />,
+
                       <Mutation
                         mutation={END_GAME}
                         variables={{ gameId: game.id }}
@@ -80,5 +95,39 @@ export const HostedGamesTab = withApollo(({ client }) => {
       )
     }}
   </Query>
+
+    <Drawer
+      width={modalWidth()}
+      placement="right"
+      closable={false}
+      destroyOnClose={true}
+      visible={showEditGame}
+      onClose={() => setShowEditGame(false)}
+    >
+      <Mutation mutation={END_GAME}>
+        {(createGame, {loading}) => (
+          <Spin spinning={loading}>
+            <NewGameForm
+              initialValues={gameForEdit}
+              onSubmit={async (game, form) => {
+                // try {
+                //   await createGame({variables: game})
+                //   notification.success({
+                //     message: 'New game added!'
+                //   })
+                //   this.setState({ visibleDrawer: null })
+                // } catch (error) {
+                //   notification.error({
+                //     message: `Error while saving data: ${error.message}`
+                //   })
+                //   throw error
+                // }
+              }}
+            />
+          </Spin>
+        )}
+      </Mutation>
+    </Drawer>
+    </React.Fragment>
   )
 })

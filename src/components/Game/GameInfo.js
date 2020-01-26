@@ -8,6 +8,7 @@ import { Header } from 'ui/Text'
 
 const Image = styled('img')`
   width: 160px;
+  max-width: 100%;
 `
 const EllipsisHeader = styled(Header)`
   text-overflow: ellipsis;
