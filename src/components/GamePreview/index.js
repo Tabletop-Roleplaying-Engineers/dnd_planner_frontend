@@ -1,8 +1,8 @@
 import { Tag } from 'antd'
 import React from 'react'
+import styled from 'styled-components'
 import { Box, Flex } from 'noui/Position'
 import { Header } from 'ui/Text'
-import styled from 'styled-components'
 
 const Wrapper = styled(Flex)`
   cursor: pointer;
@@ -20,33 +20,37 @@ const Title = styled(Box)`
 const HeaderWithShadow = styled(Header)`
   text-shadow: 0px 0px 5px black;
 `
-const WithWhiteShadow = styled.div`
+const TagWrapper = styled.span`
   text-shadow: 0px 0px 5px #fff;
+  margin-bottom: 5px;
 `
 
-export const GamePreview = ({ startingDate, title, tags = [], ...props }) =>
-  <Wrapper style={{ backgroundImage: `url(${props.image})` }} {...props}>
-    <Title mb={10}>
-      <HeaderWithShadow
-        fontSize={16}
-        fontWeight="bold"
-        textAlign="center"
-        lineHeight={1}
-        color={props.image ? '#fff' : null}
-      >
-        {title}
-      </HeaderWithShadow>
-    </Title>
+export const GamePreview = ({ startingDate, title, tags = [], ...props }) => {
+  return (
+    <Wrapper style={{ backgroundImage: `url(${props.image})` }} {...props}>
+      <Title mb={10}>
+        <HeaderWithShadow
+          fontSize={16}
+          fontWeight="bold"
+          textAlign="center"
+          lineHeight={1}
+          color={props.image ? '#fff' : null}
+        >
+          {title}
+        </HeaderWithShadow>
+      </Title>
 
-    <Flex justifyContent="space-between">
-      <Flex column>
-        {
-          tags.map((tag, i) => (
-            <WithWhiteShadow>
-              <Tag key={tag.id + i}>{tag.name}</Tag>
-            </WithWhiteShadow>
-          ))
-        }
+      <Flex justifyContent="space-between">
+        <Flex row flexWrap="wrap" m={1}>
+          {
+            tags.map((tag, i) => (
+              <TagWrapper key={tag.id + i}>
+                <Tag>{tag.name}</Tag>
+              </TagWrapper>
+            ))
+          }
+        </Flex>
       </Flex>
-    </Flex>
-  </Wrapper>
+    </Wrapper>
+  )
+}
