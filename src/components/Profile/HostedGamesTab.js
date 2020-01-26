@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import * as R from 'ramda'
-import { Query, withApollo } from 'react-apollo'
+import { Query, withApollo, Mutation } from 'react-apollo'
 import {
   FETCH_HOSTED_GAMES_QUERY,
   END_GAME,
@@ -21,37 +21,15 @@ export const HostedGamesTab = withApollo(({ client }) => {
   const { user } = useContext(UserContext);
   console.log(user)
 
-  const deleteGame = gameId => client.mutate({
-    mutation: END_GAME,
-    variables: {
-      gameId: gameId,
-    },
-    update: (cache, { data: { endGame } }) => {
-      try {
-        const qData = cache.readQuery({query: FETCH_HOSTED_GAMES_QUERY})
-        console.warn(qData)
-
-      } catch(e) {
-        console.warn(e)
-
-      }
-
-      debugger
-      // const idx = R.findIndex(R.propEq('id', endGame.id))(qData.gamesWithDM)
-
-      // cache.writeQuery({
-      //   query: FETCH_HOSTED_GAMES_QUERY,
-      //   data: { gamesWithDM: R.remove(idx, 1, qData.gamesWithDM) },
-      // })
-    }
-  })
-
   return (
     <Query
       query={FETCH_HOSTED_GAMES_QUERY}
       variables={{ userId: user.id}}
+      // pollInterval={1000}
     >
-    {({loading, error, data }) => {
+    {(query) => {
+      const {loading, error, data, refetch } = query
+      debugger
       const gamesWithDM = data ? data.gamesWithDM || [] : []
 
       if (error) {
@@ -68,15 +46,23 @@ export const HostedGamesTab = withApollo(({ client }) => {
                     width="100%"
                     actions={[
                       <Icon type="edit" key="edit" />,
-                      <Popconfirm
-                        title="Do you want permanently delete game?"
-                        icon={<Icon type="exclamation-circle" style={{ color: 'red' }} />}
-                        onConfirm={() => deleteGame(game.id)}
-                        okText="Yes"
-                        cancelText="No"
-                      >
-                        <Icon type="delete" key="delete" />
-                      </Popconfirm>,
+                      <Mutation
+                        mutation={END_GAME}
+                        variables={{ gameId: game.id }}
+                        update={() => { refetch() }}
+                        >
+                        {(deleteGame, {loading}) => (
+                          <Popconfirm
+                          title="Do you want permanently delete game?"
+                          icon={<Icon type="exclamation-circle" style={{ color: 'red' }} />}
+                          onConfirm={deleteGame}
+                          okText="Yes"
+                          cancelText="No"
+                        >
+                          <Icon type="delete" key="delete" />
+                        </Popconfirm>
+                        )}
+                      </Mutation>,
                     ]}  
                   >
                     <Box>
