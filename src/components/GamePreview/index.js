@@ -1,49 +1,56 @@
 import { Tag } from 'antd'
 import React from 'react'
+import styled from 'styled-components'
 import { Box, Flex } from 'noui/Position'
 import { Header } from 'ui/Text'
-import styled from 'styled-components'
 
 const Wrapper = styled(Flex)`
   cursor: pointer;
-  position: relative;
-  border-radius: 4px;
-  background-color: white;
-  justify-content: space-between;
   flex-direction: column;
-`
-const Image = styled('img')`
   width: 100%;
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  overflow: auto;
 `
 const Title = styled(Box)`
   padding: 5px 10px;
-  position: absolute;
-  top: 0;
+`
+const HeaderWithShadow = styled(Header)`
+  text-shadow: 0px 0px 5px black;
+`
+const TagWrapper = styled.span`
+  text-shadow: 0px 0px 5px #fff;
+  margin-bottom: 5px;
 `
 
-export const GamePreview = ({ startingDate, title, tags = [], showTags = false, ...props }) =>
-  <Wrapper {...props}>
-    <Image src={props.image} alt="Game" />
-    <Title mb={10}>
-      <Header
-        fontSize={16}
-        fontWeight="bold"
-        textAlign="center"
-        lineHeight={1}
-        color={props.image ? '#fff' : null}
-      >
-        {title}
-      </Header>
-    </Title>
+export const GamePreview = ({ startingDate, title, tags = [], ...props }) => {
+  return (
+    <Wrapper style={{ backgroundImage: `url(${props.image})` }} {...props}>
+      <Title mb={10}>
+        <HeaderWithShadow
+          fontSize={16}
+          fontWeight="bold"
+          textAlign="center"
+          lineHeight={1}
+          color={props.image ? '#fff' : null}
+        >
+          {title}
+        </HeaderWithShadow>
+      </Title>
 
-    { 
-      showTags &&
       <Flex justifyContent="space-between">
-        <Flex column>
+        <Flex row flexWrap="wrap" m={1}>
           {
-            tags.map((tag, i) => <Tag key={tag.id + i}>{tag.id}</Tag>)
+            tags.map((tag, i) => (
+              <TagWrapper key={tag.id + i}>
+                <Tag>{tag.name}</Tag>
+              </TagWrapper>
+            ))
           }
         </Flex>
       </Flex>
-    }
-  </Wrapper>
+    </Wrapper>
+  )
+}

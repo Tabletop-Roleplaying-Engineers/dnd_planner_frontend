@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { Dropdown, Icon, Spin, notification, Alert, Drawer, Button, Form } from 'antd'
 import { useQuery, useMutation } from '@apollo/react-hooks';
+import styled from 'styled-components'
 import { Flex, Box } from 'noui/Position'
 import Card from 'ui/Card'
 import { Label } from 'ui/Text'
@@ -9,6 +10,7 @@ import EditCharacterForm from 'forms/EditCharacterForm'
 import { Mutation } from 'react-apollo'
 import { createMenu } from 'ui/shared'
 import { omit } from 'utils/common'
+import { modalWidth } from 'config'
 import {
   FETCH_CHARACTERS_QUERY,
   CREATE_CHARACTER_MUTATION,
@@ -16,16 +18,19 @@ import {
   UPDATE_CHARACTER_MUTATION,
 } from 'api'
 
+const FormContainer = styled.div`
+  padding-top: 16px;
+`
+
 const CharacterMenu = ({ onEditClick, character }) => {
   return (
     <Mutation
       mutation={DELETE_CHARACTER_MUTATION}
-      update={(cache, { data: { deleteCharacter } }) => {
+      update={(cache) => {
         const { characters } = cache.readQuery({ query: FETCH_CHARACTERS_QUERY })
-
         cache.writeQuery({
           query: FETCH_CHARACTERS_QUERY,
-          data: { characters: characters.filter(c => c.id !== deleteCharacter.id) }
+          data: { characters: characters.filter(c => c.id !== character.id) }
         })
       }}
     >
@@ -98,6 +103,24 @@ export const CharactersTab = () => {
     setEditCharacterVisibility(false)
     setCharToEdit(null)
   }
+  const onFormSubmit = useCallback(async (data) => {
+    try {
+      if (data.id) {
+        await updateCharacter({ variables: omit(['name'], data) })
+      } else {
+        await createCharacter({ variables: data })
+      }
+      notification.success({
+        message: `Character successfully ${data.id ? 'updated' : 'added'}`
+      })
+      refetch()
+      setEditCharacterVisibility(false)
+      setCharToEdit(null)
+    } catch (error) {
+      const message = error.graphQLErrors.map(err => err.message).join(' ,')
+      notification.error({ message })
+    }
+  }, [updateCharacter, createCharacter, refetch])
   let EditForm
   if (charToEdit) {
     EditForm = Form.create({ mapPropsToFields: () => charToEdit})(EditCharacterForm);
@@ -133,35 +156,21 @@ export const CharactersTab = () => {
       </Box>
 
       <Drawer
-        width={640}
+        width={modalWidth()}
         placement="left"
         closable={false}
         visible={editCharacterVisibility}
         onClose={onCharEditClose}
+        destroyOnClose
+        closable
       >
         <Spin spinning={createLoading || updateLoading}>
-          <EditForm
-            data={charToEdit}
-            onSubmit={async data => {
-              try {
-                if (data.id) {
-                  await updateCharacter({ variables: omit(['name'], data) })
-                } else {
-                  await createCharacter({ variables: data })
-                }
-                notification.success({
-                  message: `Character successfully ${data.id ? 'updated' : 'added'}`
-                })
-                refetch()
-                setEditCharacterVisibility(false)
-                setCharToEdit(null)
-              } catch (error) {
-                const message = error.graphQLErrors.map(err => err.message).join(' ,')
-                notification.error({ message })
-              }
-
-            }}
-          />
+          <FormContainer>
+            <EditForm
+              data={charToEdit}
+              onSubmit={onFormSubmit}
+            />
+          </FormContainer>
         </Spin>
       </Drawer>
     </Flex>

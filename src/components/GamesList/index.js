@@ -1,6 +1,9 @@
 import React, { useContext } from 'react'
 import { Row, Col, Button, Icon } from 'antd'
 import styled from 'styled-components'
+import format from 'date-fns/format'
+import isBefore from 'date-fns/isBefore'
+import startOfDay from 'date-fns/startOfDay'
 import { Box, Flex } from 'noui/Position'
 import CollapsiblePanel from 'components/CollapsiblePanel'
 import { ACTIONS } from '../../constants'
@@ -27,18 +30,20 @@ const ItemBody = ({ game, onJoinClick, user }) => (
   </Row>
 )
 
-const canCreateGame = user => user && user.actions.indexOf(ACTIONS.MANAGE_GAMES) >= 0
+const canCreateThisDay = date => !isBefore(date, startOfDay(new Date()))
+const canUserCreateGame = user => user && user.actions.indexOf(ACTIONS.MANAGE_GAMES) >= 0
+const canCreateGame = (user, date) => canUserCreateGame(user) && canCreateThisDay(date)
 
 export const GamesList = ({ games, date, onJoinClick, onNewGameClick }) => {
   const { user } = useContext(UserContext)
 
   return (
     <Flex column>
-      {canCreateGame(user) && (
+      {canCreateGame(user, date) && (
         <Button type="primary" onClick={onNewGameClick} block>Create game</Button>
       )}
       <DateContainer>
-        {date.format('DD MMMM')}
+        {format(date, 'dd MMMM')}
       </DateContainer>
       {games.map(game => (
         <span key={game.id}>

@@ -19,7 +19,8 @@ const GlobalStyle = createGlobalStyle`
     min-height: calc(100vh - 64px);
   }
 
-  iframe[id*=telegram-login-]{
+  iframe[id*=telegram-login-] {
+    opacity: 1;
     position: absolute;
     top: 18px;
     right: 14px;

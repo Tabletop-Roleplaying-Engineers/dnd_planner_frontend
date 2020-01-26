@@ -1,12 +1,12 @@
-import { Calendar as Planner, Drawer, notification, Spin } from 'antd'
+import { Drawer, notification, Spin } from 'antd'
 import * as R from 'ramda'
 import React from 'react'
 import NewGameForm from 'forms/NewGameForm'
 import ParticipateForm from 'forms/ParticipateForm'
-import moment from 'moment'
+import styled from 'styled-components'
 import { Mutation, Query, withApollo } from 'react-apollo'
-import { GamePreview } from 'components/GamePreview'
 import { GamesList } from 'components/GamesList'
+import { Calendar as Planner } from 'components/Calendar'
 import { GameInfo, ParticipantsList, GameActions } from 'components/Game'
 import { modalWidth } from 'config'
 import {
@@ -18,17 +18,10 @@ import {
   FETCH_GAME_QUERY
 } from 'api'
 import { UserContext } from '../../context/userContext'
-import { ACTIONS } from '../../constants'
 
-const parseGames = R.pipe(
-  R.map(game => ({
-    ...game,
-    startingDate: moment(parseInt(game.startingDate, 10)).format('YYYY-MM-DD')
-  })),
-  R.groupBy(
-    R.prop('startingDate'),
-  )
-)
+const PlannerWrapper = styled.div`
+  margin-top: 10px;
+`
 
 const DRAWERS = {
   NEW_GAME: 'NEW_GAME',
@@ -49,6 +42,7 @@ class Calendar extends React.PureComponent {
     lastSelectedDate: null,
     currentGame: null,
     fetchingCurrentGame: false,
+    date: false,
   }
 
   subscribeToNewGame = async subscribeToMore => {
@@ -80,24 +74,7 @@ class Calendar extends React.PureComponent {
     })
   }
 
-  onCellClick = (date) => {
-    const { user } = this.context
-
-    if (!user) {
-      return
-    }
-
-    if (user.actions.indexOf(ACTIONS.MANAGE_GAMES) >= 0) {
-      this.setState({
-        visibleDrawer: DRAWERS.NEW_GAME,
-        lastSelectedDate: date,
-      })
-    }
-  }
-
-  onGameClick = (games, date) => async e => {
-    e.stopPropagation()
-
+  onGameClick = (games, date) => {
     this.setState({
       visibleDrawer: DRAWERS.GAMES_LIST,
       gamesList: games,
@@ -174,7 +151,10 @@ class Calendar extends React.PureComponent {
       variables: { id }
     })
     this.setState({
-      currentGame: res.data.game,
+      currentGame: {
+        ...res.data.game,
+        startingDate: new Date(parseInt(res.data.game.startingDate, 10)),
+      },
       fetchingCurrentGame: false,
       visibleDrawer: DRAWERS.GAME,
     })
@@ -200,31 +180,10 @@ class Calendar extends React.PureComponent {
 
             this.subscribeToNewGame(subscribeToMore)
 
-            const fetchedGames = parseGames(data.games)
-
             return (
-              <Planner
-                onSelect={this.onCellClick.bind(this)}
-                disabledDate={currentDate => currentDate.isBefore(moment().startOf('day'))}
-                dateCellRender={date => {
-                  const games = fetchedGames[date.format('YYYY-MM-DD')] || []
-
-                  return (
-                    <>
-                      {
-                        R.take(1, games).map((game, idx) =>
-                          <GamePreview
-                            key={idx}
-                            mb={10}
-                            onClick={this.onGameClick(games, date)}
-                            {...game}
-                          />
-                        )
-                      }
-                    </>
-                  )
-                }}
-              />
+              <PlannerWrapper>
+                <Planner games={data.games} onCellClick={({ date, games }) => this.onGameClick(games, date)} />
+              </PlannerWrapper>
             )
           }}
         </Query>
@@ -252,8 +211,9 @@ class Calendar extends React.PureComponent {
                       })
                       this.setState({ visibleDrawer: null })
                     } catch (error) {
+                      const msg = error.graphQLErrors.map(err => err.message).join('; ')
                       notification.error({
-                        message: `Error while saving data: ${error.message}`
+                        message: `Error while saving data: ${msg}`
                       })
                       throw error
                     }
