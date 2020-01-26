@@ -42,6 +42,7 @@ class Calendar extends React.PureComponent {
     lastSelectedDate: null,
     currentGame: null,
     fetchingCurrentGame: false,
+    date: false,
   }
 
   subscribeToNewGame = async subscribeToMore => {
@@ -210,8 +211,9 @@ class Calendar extends React.PureComponent {
                       })
                       this.setState({ visibleDrawer: null })
                     } catch (error) {
+                      const msg = error.graphQLErrors.map(err => err.message).join('; ')
                       notification.error({
-                        message: `Error while saving data: ${error.message}`
+                        message: `Error while saving data: ${msg}`
                       })
                       throw error
                     }
