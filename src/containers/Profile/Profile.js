@@ -26,7 +26,7 @@ const Profile = ({ history }) => {
       </Box>
 
       <Tabs 
-        defaultActiveKey="characters" 
+        defaultActiveKey="host" 
         type="card"
       >
         <Tabs.TabPane tab="My Games" key="games">

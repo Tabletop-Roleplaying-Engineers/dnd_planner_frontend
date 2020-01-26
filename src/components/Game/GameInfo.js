@@ -8,6 +8,7 @@ import { Header } from 'ui/Text'
 
 const Image = styled('img')`
   width: 160px;
+  max-width: 100%;
 `
 const EllipsisHeader = styled(Header)`
   text-overflow: ellipsis;
@@ -51,7 +52,7 @@ export const GameInfo = ({ game }) => {
           </Link>
         </Box>
         <Box mb={10} ml={10}>
-          Available slots: {Math.max(game.players - game.characters.length, 0)}
+          Available slots: {Math.max(game.players - game.characters.length, 0)} / {game.players}
 
           <Rate 
             character={<Icon type="user" />} 
