@@ -11,6 +11,7 @@ import { Box, Flex } from '../../noui/Position'
 import { GameInfo } from 'components/Game/GameInfo'
 import NewGameForm from 'forms/NewGameForm'
 import { modalWidth } from 'config'
+import { isDesktop } from 'noui/MediaQuery'
 
 import styled from 'styled-components'
 
@@ -24,6 +25,8 @@ export const HostedGamesTab = withApollo(({ client }) => {
   const [showEditGame, setShowEditGame] = useState(false)
   const [gameForEdit, setGameForEdit] = useState(null)
   const { user } = useContext(UserContext);
+  const _isDesktop = isDesktop()
+
   console.log(user)
 
   return (
@@ -44,10 +47,14 @@ export const HostedGamesTab = withApollo(({ client }) => {
 
       return (
         <Spin spinning={loading}>
-          <Flex justifyContent="space-between" flexWrap="wrap">
+          <Flex 
+            flexDirection={_isDesktop ? 'row' : 'column'} 
+            justifyContent="space-between" 
+            flexWrap="wrap"
+          >
             {
               gamesWithDM.map(game => 
-                <Flex mb={10} width="49%" key={game.id}>
+                <Flex mb={10} width={_isDesktop ? '49%' : '100%'} key={game.id}>
                   <Wrapper
                     width="100%"
                     actions={[
@@ -55,7 +62,6 @@ export const HostedGamesTab = withApollo(({ client }) => {
                         type="edit"
                         key="edit"
                         onClick={() => {
-                          debugger
                           setGameForEdit(game)
                           setShowEditGame(true)
                         }}
@@ -68,14 +74,14 @@ export const HostedGamesTab = withApollo(({ client }) => {
                         >
                         {(deleteGame, {loading}) => (
                           <Popconfirm
-                          title="Do you want permanently delete game?"
-                          icon={<Icon type="exclamation-circle" style={{ color: 'red' }} />}
-                          onConfirm={deleteGame}
-                          okText="Yes"
-                          cancelText="No"
-                        >
-                          <Icon type="delete" key="delete" />
-                        </Popconfirm>
+                            title="Do you want permanently delete game?"
+                            icon={<Icon type="exclamation-circle" style={{ color: 'red' }} />}
+                            onConfirm={deleteGame}
+                            okText="Yes"
+                            cancelText="No"
+                          >
+                            <Icon type="delete" key="delete" />
+                          </Popconfirm>
                         )}
                       </Mutation>,
                     ]}  
@@ -110,6 +116,7 @@ export const HostedGamesTab = withApollo(({ client }) => {
             <NewGameForm
               initialValues={gameForEdit}
               onSubmit={async (game, form) => {
+                console.log(game)
                 // try {
                 //   await createGame({variables: game})
                 //   notification.success({

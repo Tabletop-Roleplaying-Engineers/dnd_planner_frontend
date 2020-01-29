@@ -23,7 +23,7 @@ const StyledSelect = styled(Select)`
   width: 300px;
 
  & > .ant-select-selection--single {
-   height: ${props => props.selected ? '70px' : 'auto'};
+   height: ${props => props.selected ? '90px' : 'auto'};
    padding-top: 3px;
  }
 `

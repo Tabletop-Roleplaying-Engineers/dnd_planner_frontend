@@ -46,6 +46,12 @@ const GlobalStyle = createGlobalStyle`
   .slick-prev:before, .slick-next:before {
      color: black;
   }
+
+  @media(max-width: 767px) {
+    .ant-drawer-wrapper-body > .ant-drawer-body {
+      padding: 24px 5px;
+    }
+  }
 `
 
 export default GlobalStyle

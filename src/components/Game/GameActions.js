@@ -24,7 +24,7 @@ export const GameActions = ({ game, onJoinClick, user }) => (
         </Button>
       )}
     </Box>
-    {shouldRenderEndBtn(user, game) && (
+    {/* {shouldRenderEndBtn(user, game) && (
       <Box m={10}>
         <Mutation
           mutation={END_GAME}
@@ -43,6 +43,6 @@ export const GameActions = ({ game, onJoinClick, user }) => (
           )}
         </Mutation>
       </Box>
-    )}
+    )} */}
   </>
 )
