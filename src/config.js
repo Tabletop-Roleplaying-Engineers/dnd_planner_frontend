@@ -6,5 +6,5 @@ export const modalWidth = () => {
   if (document.body.clientWidth > 375) {
     return R.min(document.body.clientWidth * 0.8, 640)
   }
-  return '100%'
+  return '95%'
 }

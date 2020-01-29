@@ -90,7 +90,7 @@ export const GameInfo = ({ game }) => {
 
 
           <Col span={24}>
-            <Flex>
+            <Flex column>
               {game.tags.map(tag => (
                 <Tag key={tag.id}>{tag.name}</Tag>
               ))}
