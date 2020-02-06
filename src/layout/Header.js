@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react'
 import { Button, Dropdown, Icon, Layout, Menu } from 'antd'
 import { Flex } from 'noui/Position'
 import Logo from 'components/Logo'
-import { Link } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 // import { Link } from 'react-router-dom'
 // import { Box } from 'noui/Position'
 import styled from 'styled-components'
@@ -20,33 +20,32 @@ const StyledHeader = styled(Layout.Header)`
   }
 `
 
-const menu = (
-  <Menu>
+const menu = ({ history }) => (
+  <Menu onClick={({ key, domEvent }) => {
+    domEvent.preventDefault();
+    domEvent.stopPropagation();
+
+    history.push('/' + key)
+  }}>
     <Menu.Item key="calendar">
-      <Link to="/calendar">
-        <Box inline mr="5px">
-          <Icon type="calendar" />
-        </Box>
-        Calendar
-      </Link>
+      <Box inline mr="5px">
+        <Icon type="calendar" />
+      </Box>
+      Calendar
     </Menu.Item>
 
     <Menu.Item key="dashboard">
-      <Link to="/dashboard">
-        <Box inline mr="5px">
-          <Icon type="home" />
-        </Box>
-        Dashboard
-      </Link>
+      <Box inline mr="5px">
+        <Icon type="home" />
+      </Box>
+      Dashboard
     </Menu.Item>
 
     <Menu.Item key="profile">
-      <Link to="/profile">
-        <Box inline mr="5px">
-          <Icon type="user" />
-        </Box>
-        Profile
-      </Link>
+      <Box inline mr="5px">
+        <Icon type="user" />
+      </Box>
+      Profile
     </Menu.Item>
 
   </Menu>
@@ -73,7 +72,7 @@ const TestLoginBtn = () => {
   return <a data-testid="login-btn" href={`/login?${params}`}>Login</a>
 }
 
-const Header = () => {
+const Header = ({ history }) => {
   const { user } = useContext(UserContext)
 
   return (
@@ -83,7 +82,7 @@ const Header = () => {
 
         {user && (
           <span data-testid="profile-drop-menu">
-            <Dropdown placement="bottomRight" overlay={menu}>
+            <Dropdown trigger={['click']} placement="bottomRight" overlay={menu({ history })}>
               <Button style={{ padding: '0 10px'}} type="primary">
                 Roll for...
                 {/*<Icon style={{fontSize: '20px', color: 'black'}} type="menu" />*/}
@@ -99,4 +98,4 @@ const Header = () => {
   )
 }
 
-export default Header
+export default withRouter(Header)
