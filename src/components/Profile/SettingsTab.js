@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { Flex } from 'noui/Position'
 import { Msg } from 'ui/Text'
 import { getAvatarLetters } from 'utils/common'
+import { Carousel } from 'antd'
 
 const getUserName = (user) => {
   return `${user.firstName || ''} ${user.lastName || ''}`
@@ -31,7 +32,22 @@ export const SettingsTab = (props) => {
         Sign out
       </Button>
 
-      <iframe
+      <Carousel effect="fade" dotPosition="left">
+        <div>
+          <h3>1</h3>
+        </div>
+        <div>
+          <h3>2</h3>
+        </div>
+        <div>
+          <h3>3</h3>
+        </div>
+        <div>
+          <h3>4</h3>
+        </div>
+      </Carousel>
+
+      {/* <iframe
         title="twitchPlayer"
         src="https://player.twitch.tv/?channel=ikethavel"
         frameborder="0"
@@ -48,7 +64,7 @@ export const SettingsTab = (props) => {
         scrolling="no"
         height="500"
         width="350"
-      ></iframe>
+      ></iframe> */}
 
     </Flex>
   )
