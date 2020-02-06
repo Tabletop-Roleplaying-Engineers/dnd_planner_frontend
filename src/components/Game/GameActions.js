@@ -1,13 +1,6 @@
 import React from 'react'
-import { Button, Spin } from 'antd'
-import { Mutation } from 'react-apollo'
+import { Button } from 'antd'
 import { Box } from 'noui/Position'
-import { ACTIONS } from '../../constants'
-import { END_GAME } from 'api'
-
-const shouldRenderEndBtn = (user, game) => {
-  return !!user && ((user.actions.indexOf(ACTIONS.MANAGE_GAMES) >= 0) || (user.id === game.user.id))
-}
 
 export const GameActions = ({ game, onJoinClick, user }) => (
   <>

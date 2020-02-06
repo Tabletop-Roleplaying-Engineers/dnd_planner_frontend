@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react';
-import * as R from 'ramda'
 import { Query, withApollo, Mutation } from 'react-apollo'
 import {
   FETCH_HOSTED_GAMES_QUERY,

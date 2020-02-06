@@ -158,7 +158,6 @@ export const CharactersTab = () => {
       <Drawer
         width={modalWidth()}
         placement="left"
-        closable={false}
         visible={editCharacterVisibility}
         onClose={onCharEditClose}
         destroyOnClose
