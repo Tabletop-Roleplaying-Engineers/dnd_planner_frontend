@@ -11,7 +11,7 @@ import { GameInfo } from 'components/Game/GameInfo'
 import NewGameForm from 'forms/NewGameForm'
 import { modalWidth } from 'config'
 import { isDesktop } from 'noui/MediaQuery'
-
+import * as R from 'ramda'
 import styled from 'styled-components'
 
 const Wrapper = styled(Card)`
