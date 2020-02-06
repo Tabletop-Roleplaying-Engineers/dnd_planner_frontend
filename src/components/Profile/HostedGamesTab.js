@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react';
-import * as R from 'ramda'
 import { Query, withApollo, Mutation } from 'react-apollo'
 import {
   FETCH_HOSTED_GAMES_QUERY,
@@ -47,13 +46,13 @@ export const HostedGamesTab = withApollo(({ client }) => {
 
       return (
         <Spin spinning={loading}>
-          <Flex 
-            flexDirection={_isDesktop ? 'row' : 'column'} 
-            justifyContent="space-between" 
+          <Flex
+            flexDirection={_isDesktop ? 'row' : 'column'}
+            justifyContent="space-between"
             flexWrap="wrap"
           >
             {
-              gamesWithDM.map(game => 
+              gamesWithDM.map(game =>
                 <Flex mb={10} width={_isDesktop ? '49%' : '100%'} key={game.id}>
                   <Wrapper
                     width="100%"
@@ -84,10 +83,10 @@ export const HostedGamesTab = withApollo(({ client }) => {
                           </Popconfirm>
                         )}
                       </Mutation>,
-                    ]}  
+                    ]}
                   >
                     <Box>
-                      <GameInfo 
+                      <GameInfo
                         game={game}
                         showTags
                       />
