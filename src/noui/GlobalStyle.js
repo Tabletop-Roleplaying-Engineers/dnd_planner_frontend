@@ -34,7 +34,7 @@ const GlobalStyle = createGlobalStyle`
     }
   }
 
-  .slick-list{
+  /* .slick-list{
     padding-top: 25vh !important;
     height: 80vh;
   }
@@ -45,7 +45,7 @@ const GlobalStyle = createGlobalStyle`
 
   .slick-prev:before, .slick-next:before {
      color: black;
-  }
+  } */
 
   @media(max-width: 767px) {
     .ant-drawer-wrapper-body > .ant-drawer-body {
