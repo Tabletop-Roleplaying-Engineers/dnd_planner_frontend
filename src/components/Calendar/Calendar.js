@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react'
 import * as R from 'ramda'
-import { Carousel } from 'antd'
+import { Carousel, Tag } from 'antd'
 import addMonths from 'date-fns/addMonths'
 import addWeeks from 'date-fns/addWeeks'
 import format from 'date-fns/format'
@@ -17,10 +17,12 @@ const WeekDay = styled.div`
 `
 
 const CalendarCell = styled.div`
+  position: relative;
   border-top: 2px solid #c4c4c4;
   margin: 0 4px;
   display: flex;
   height: 150px;
+
   :hover {
     background-color: #FFDBDA;
   }
@@ -29,7 +31,7 @@ const CalendarCell = styled.div`
   `}
 
   & .ant-carousel .slick-slide {
-    height: 160px;
+    height: 150px;
     overflow: hidden;
   }
 
@@ -43,6 +45,7 @@ const CalendarCell = styled.div`
     li button {
       background: black;
       width: 5px;
+      border-radius: 5px;
     }
 
     li.slick-active button {
@@ -52,13 +55,20 @@ const CalendarCell = styled.div`
   }
 `
 
+const DateBlock = styled.div`
+  position: absolute;
+  right: -10px;
+  top: 0;
+  z-index: 1;
+`
+
 const CellLeft = styled.div`
   width: calc(100% - 10px);
   word-break: break-word;
 `
 
 const CarouselBlock = styled.div`
-  height: 150px;
+  height: 146px;
 `
 
 const parseDate = game => {
@@ -103,7 +113,15 @@ export const Calendar = ({ games, onCellClick }) => {
     return (
       <CalendarCell
         today={isToday(currentDate)}
+        onClick={() => R.isEmpty(thisDayGames) 
+          ? cellClickHandler({ date: currentDate, games: thisDayGames })
+          : undefined
+        }
       >
+        <DateBlock>
+          <Tag color="volcano">{format(currentDate, 'dd')}</Tag>
+        </DateBlock>
+
         <CellLeft>
           {
             thisDayGames.length === 1 
