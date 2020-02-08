@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Spin, Alert } from 'antd'
+import { Button, Spin, Alert, Empty } from 'antd'
 import * as R from 'ramda'
 import { Flex } from 'noui/Position'
 import Card from 'ui/Card'
@@ -18,6 +18,9 @@ export const GamesTab = () => {
         if (error) {
           return <Alert message="You have to login to enter this page" type="error" />
         }
+
+        if(!loading && R.isEmpty(characters.filter(c => c.game))) 
+          return <Empty description="You are not participated in any game!" />
 
         return (
           <Spin spinning={loading}>

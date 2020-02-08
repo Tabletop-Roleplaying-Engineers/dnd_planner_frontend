@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react'
-import { Dropdown, Icon, Spin, notification, Alert, Drawer, Button, Form } from 'antd'
+import { Dropdown, Icon, Spin, notification, Alert, Drawer, Button, Form, Empty } from 'antd'
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import styled from 'styled-components'
 import { Flex, Box } from 'noui/Position'
@@ -17,6 +17,7 @@ import {
   DELETE_CHARACTER_MUTATION,
   UPDATE_CHARACTER_MUTATION,
 } from 'api'
+import * as R from 'ramda'
 
 const FormContainer = styled.div`
   padding-top: 16px;
@@ -77,6 +78,9 @@ const CharactersList = ({ data, onEditClick, loading, error }) => {
   if (error) {
     return <Alert message={error.message} type="error" />
   }
+
+  if(!loading && R.isEmpty(data.characters))
+    return <Empty description="You have no characters yet. Create one to play!" />
 
   return data.characters.map(character =>
     <Card key={character.id} py={10} px={20} my={10} inline data-testid={`character-${character.name}`}>
@@ -158,7 +162,6 @@ export const CharactersTab = () => {
       <Drawer
         width={modalWidth()}
         placement="left"
-        closable={false}
         visible={editCharacterVisibility}
         onClose={onCharEditClose}
         destroyOnClose

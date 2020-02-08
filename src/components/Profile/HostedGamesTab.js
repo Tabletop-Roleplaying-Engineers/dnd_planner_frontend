@@ -5,13 +5,13 @@ import {
   END_GAME,
 } from 'api'
 import { UserContext } from '../../context/userContext'
-import { Alert, Spin, Card, Icon, Popconfirm, Drawer } from 'antd'
+import { Alert, Spin, Card, Icon, Popconfirm, Drawer, Empty } from 'antd'
 import { Box, Flex } from '../../noui/Position'
 import { GameInfo } from 'components/Game/GameInfo'
 import NewGameForm from 'forms/NewGameForm'
 import { modalWidth } from 'config'
 import { isDesktop } from 'noui/MediaQuery'
-
+import * as R from 'ramda'
 import styled from 'styled-components'
 
 const Wrapper = styled(Card)`
@@ -43,6 +43,9 @@ export const HostedGamesTab = withApollo(({ client }) => {
       if (error) {
         return <Alert message="Error" type="error" />
       }
+
+      if(!loading && R.isEmpty(gamesWithDM))
+        return <Empty description="You are not hosted any games!" />
 
       return (
         <Spin spinning={loading}>

@@ -1,13 +1,10 @@
 import React, { useState, useCallback } from 'react'
 import * as R from 'ramda'
+import { Carousel } from 'antd'
 import addMonths from 'date-fns/addMonths'
 import addWeeks from 'date-fns/addWeeks'
 import format from 'date-fns/format'
 import isToday from 'date-fns/isToday'
-import isBefore from 'date-fns/isBefore'
-import startOfMonth from 'date-fns/startOfMonth'
-import endOfMonth from 'date-fns/endOfMonth'
-import isAfter from 'date-fns/isAfter'
 import { ResponsiveCalendar, ViewType } from 'react-responsive-calendar'
 import styled, { css } from 'styled-components'
 import { NavigationButtons } from './NavigationButtons'
@@ -30,34 +27,38 @@ const CalendarCell = styled.div`
   ${props => props.today && css`
     border-color: #E61721;
   `}
+
+  & .ant-carousel .slick-slide {
+    height: 160px;
+    overflow: hidden;
+  }
+
+  & .ant-carousel-vertical .slick-dots-right {
+    right: -5px;
+
+    li button::before {
+      display: none;
+    }
+
+    li button {
+      background: black;
+      width: 5px;
+    }
+
+    li.slick-active button {
+      background: #E40712;
+      width: 5px;
+    }
+  }
 `
 
 const CellLeft = styled.div`
-  width: calc(100% - 30px);
+  width: calc(100% - 10px);
   word-break: break-word;
 `
 
-const CellRight = styled.div`
-  width: 30px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  ${props => props.dimmed && css`
-    opacity: 0.3;
-  `}
-`
-
-const DateBlock = styled.div`
-  margin-top: 5px;
-`
-const TotalGamesBlock = styled.div`
-  margin-top: 17px;
-  font-size: 22px;
-  font-weight: bold;
-`
-const PlacesAvailableBlock = styled.div`
-  color: #FF4646;
-  font-size: 22px;
+const CarouselBlock = styled.div`
+  height: 150px;
 `
 
 const parseDate = game => {
@@ -76,8 +77,6 @@ const parseGames = R.pipe(
   groupByDate,
 )
 
-const getAvailablePlaces = game => game.players - game.characters.length
-const getAvailablePlacesForGames = games => games.reduce((acc, game) => acc + getAvailablePlaces(game), 0)
 
 export const Calendar = ({ games, onCellClick }) => {
   const groupedGames = parseGames(games)
@@ -100,36 +99,40 @@ export const Calendar = ({ games, onCellClick }) => {
   }, [onCellClick])
   const renderCell = useCallback(({ date: currentDate }) => {
     const thisDayGames = groupedGames[format(currentDate, 'yyyy-MM-dd')] || []
-    const availablePlaces = getAvailablePlacesForGames(thisDayGames)
 
     return (
       <CalendarCell
         today={isToday(currentDate)}
-        onClick={() => cellClickHandler({ date: currentDate, games: thisDayGames })}
       >
         <CellLeft>
           {
-            R.take(1, thisDayGames).map((game) =>
+            thisDayGames.length === 1 
+            ? thisDayGames.map((game) =>
               <GamePreview
+                onClick={() => cellClickHandler({ date: currentDate, games: thisDayGames })}
                 key={game.id}
                 {...game}
-              />
-            )
+              /> )
+            : <Carousel 
+                autoplay 
+                // effect="fade" 
+                dotPosition="right"
+                easing="ease-out"
+              >
+                {
+                  thisDayGames.map((game) =>
+                    <CarouselBlock key={game.id}>
+                      <GamePreview
+                        onClick={() => cellClickHandler({ date: currentDate, games: thisDayGames })}
+                        key={game.id}
+                        {...game}
+                      />
+                    </CarouselBlock>
+                  )
+                }
+            </Carousel>
           }
         </CellLeft>
-        <CellRight
-          dimmed={isBefore(currentDate, startOfMonth(date)) || isAfter(currentDate, endOfMonth(date))}
-        >
-          <DateBlock>
-            {format(currentDate, 'dd')}
-          </DateBlock>
-          <TotalGamesBlock title="Total games">
-            {thisDayGames.length}
-          </TotalGamesBlock>
-          <PlacesAvailableBlock title="Slots available">
-            {availablePlaces}
-          </PlacesAvailableBlock>
-        </CellRight>
       </CalendarCell>
     )
   }, [groupedGames, date])
