@@ -1,11 +1,10 @@
 import React, { useContext } from 'react'
-import { Row, Col, Button, Icon } from 'antd'
+import { Row, Col, Button } from 'antd'
 import styled from 'styled-components'
 import format from 'date-fns/format'
 import isBefore from 'date-fns/isBefore'
 import startOfDay from 'date-fns/startOfDay'
 import { Box, Flex } from 'noui/Position'
-import CollapsiblePanel from 'components/CollapsiblePanel'
 import { ACTIONS } from '../../constants'
 import { UserContext } from '../../context/userContext'
 import { GameInfo } from 'components/Game/GameInfo'
@@ -14,6 +13,7 @@ import { GameActions } from 'components/Game/GameActions'
 
 const GameContainer = styled(Box)`
   cursor: pointer;
+  border: 1px solid #e8e8e8;
 `
 const DateContainer = styled(Box)`
   font-size: 18px;
@@ -47,15 +47,9 @@ export const GamesList = ({ games, date, onJoinClick, onNewGameClick }) => {
       </DateContainer>
       {games.map(game => (
         <span key={game.id}>
-          <GameContainer mt={10} mb={10}>
-            <CollapsiblePanel
-              key={game.id}
-              renderHeader={() => <GameInfo game={game} />}
-              renderFooter={({ opened }) => <Flex justifyContent="center"><Icon type={opened ? 'up' : 'down'} /></Flex>}
-            >
-              <ItemBody game={game} onJoinClick={onJoinClick} user={user} />
-            </CollapsiblePanel>
-
+          <GameContainer mt={10} mb={10} p={10}>
+            <GameInfo game={game} />
+            <ItemBody game={game} onJoinClick={onJoinClick} user={user} />
           </GameContainer>
         </span>
       ))}

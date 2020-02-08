@@ -17,25 +17,5 @@ export const GameActions = ({ game, onJoinClick, user }) => (
         </Button>
       )}
     </Box>
-    {/* {shouldRenderEndBtn(user, game) && (
-      <Box m={10}>
-        <Mutation
-          mutation={END_GAME}
-          variables={{ gameId: game.id }}
-        >
-          {(endGame, { loading }) => (
-            <Spin spinning={loading}>
-              <Button
-                type="primary"
-                onClick={endGame}
-                block
-              >
-                End game
-              </Button>
-            </Spin>
-          )}
-        </Mutation>
-      </Box>
-    )} */}
   </>
 )
