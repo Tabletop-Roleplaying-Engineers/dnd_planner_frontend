@@ -1,12 +1,11 @@
 import React, { useState, useContext } from 'react'
-import { Button, Select, Spin } from 'antd'
+import { Button, Select, Spin, Alert } from 'antd'
 import { useQuery } from '@apollo/react-hooks';
 import * as R from 'ramda'
 import isBefore from 'date-fns/isBefore'
 import styled from 'styled-components'
 import { Box } from 'noui/Position'
 import Character from 'components/Character'
-import { Msg } from 'ui/Text'
 import { AVAILABLE_CHARACTERS } from 'api'
 import { UserContext } from '../../context/userContext'
 
@@ -24,6 +23,8 @@ export const GameParticipation = (props) => {
     id,
     onParticipate,
     startingDate,
+    user: gameMaster,
+    characters,
   } = props
   const isPastGame = isBefore(new Date(startingDate), new Date())
   const [participating, setParticipating] = useState(false)
@@ -38,11 +39,19 @@ export const GameParticipation = (props) => {
   const availableCharacters = data.validCharactersForGame || []
 
   if (isPastGame) {
-    return (<Msg>Registration is closed</Msg>);
+    return (<Alert message="Registration is closed" type="warning" />);
   }
 
   if (!user) {
-    return (<Msg>Please login to be able to participate the game</Msg>)
+    return (<Alert message="Please login to be able to participate the game" type="warning" />)
+  }
+
+  if (gameMaster.id === user.id) {
+    return (<Alert message="You can't participate your own game" type="warning" />)
+  }
+
+  if (characters.some(character => character.user.id === user.id)) {
+    return (<Alert message="You already participating this game" type="warning" />)
   }
 
   return (
