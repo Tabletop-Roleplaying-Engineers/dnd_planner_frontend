@@ -1,23 +1,14 @@
 import React from 'react'
-import { Col, Card, Avatar } from 'antd'
-import { isDesktop } from 'noui/MediaQuery'
-const { Meta } = Card
+import { Col, Card } from 'antd'
+import Character from 'components/Character'
 
 export const ParticipantsList = ({ characters }) => {
-  const _isDesktop = isDesktop()
-
   return characters.map(character => (
-    <span key={character.id}>
-        <Col span={_isDesktop ? 12 : 24}>
-          <Card size="small" bordered={false}>
-            <Meta
-              avatar={<Avatar size={54} src={character.user.avatar} />}
-              title={character.name}
-              description={`${character.user.firstName || ''} ${character.user.lastName || ''}`}
-            />
-          </Card>
-        </Col>
-    </span>
+      <Col md={12} key={character.id}>
+        <Card size="small" bordered={false}>
+          <Character {...character} />
+        </Card>
+      </Col>
   ))
 }
 

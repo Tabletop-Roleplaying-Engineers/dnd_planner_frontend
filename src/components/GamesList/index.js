@@ -20,12 +20,12 @@ const DateContainer = styled(Box)`
   margin-top: 10px;
 `
 
-const ItemBody = ({ game, onJoinClick, user }) => (
+const ItemBody = ({ game }) => (
   <Row>
     <Box px={12} py={18}>{game.description}</Box>
     <ParticipantsList characters={game.characters} />
     <Col span={24}>
-      <GameActions game={game} onJoinClick={onJoinClick} user={user} />
+      <GameActions game={game} />
     </Col>
   </Row>
 )
@@ -34,7 +34,7 @@ const canCreateThisDay = date => !isBefore(date, startOfDay(new Date()))
 const canUserCreateGame = user => user && user.actions.indexOf(ACTIONS.MANAGE_GAMES) >= 0
 const canCreateGame = (user, date) => canUserCreateGame(user) && canCreateThisDay(date)
 
-export const GamesList = ({ games, date, onJoinClick, onNewGameClick }) => {
+export const GamesList = ({ games, date, onNewGameClick }) => {
   const { user } = useContext(UserContext)
 
   return (
@@ -49,7 +49,7 @@ export const GamesList = ({ games, date, onJoinClick, onNewGameClick }) => {
         <span key={game.id}>
           <GameContainer mt={10} mb={10} p={10}>
             <GameInfo game={game} />
-            <ItemBody game={game} onJoinClick={onJoinClick} user={user} />
+            <ItemBody game={game} />
           </GameContainer>
         </span>
       ))}
