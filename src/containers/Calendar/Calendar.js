@@ -2,18 +2,16 @@ import { Drawer, notification, Spin } from 'antd'
 import * as R from 'ramda'
 import React from 'react'
 import NewGameForm from 'forms/NewGameForm'
-import ParticipateForm from 'forms/ParticipateForm'
 import styled from 'styled-components'
 import { Mutation, Query, withApollo } from 'react-apollo'
 import { GamesList } from 'components/GamesList'
 import { Calendar as Planner } from 'components/Calendar'
-import { GameInfo, ParticipantsList, GameActions } from 'components/Game'
+import { GameInfo, ParticipantsList, GameParticipation } from 'components/Game'
 import { modalWidth } from 'config'
 import {
   FETCH_GAMES_QUERY,
   CREATE_GAME_QUERY,
   NEW_GAME_SUBSCRIPTION,
-  AVAILABLE_CHARACTERS,
   PARTICIPATE_GAME,
   FETCH_GAME_QUERY
 } from 'api'
@@ -34,8 +32,6 @@ class Calendar extends React.PureComponent {
   static contextType = UserContext
 
   state = {
-    selectedGame: null,
-    availableCharacters: [],
     unsubscribeFromGames: null,
     visibleDrawer: null,
     gamesList: [],
@@ -83,13 +79,13 @@ class Calendar extends React.PureComponent {
   }
 
   onParticipate = async character => {
-    const {client} = this.props
-    const {selectedGame} = this.state
+    const { client } = this.props
+    const { currentGame } = this.state
 
     await client.mutate({
       mutation: PARTICIPATE_GAME,
       variables: {
-        gameId: selectedGame.id,
+        gameId: currentGame.id,
         characterId: character.id
       },
       update: (cache, {data: {participateGame}}) => {
@@ -103,24 +99,8 @@ class Calendar extends React.PureComponent {
           data: {games: [...R.remove(idx, 1, games), updatedGame]},
         })
 
-        this.setState({ selectedGame: updatedGame })
+        this.setState({ currentGame: updatedGame })
       }
-    })
-  }
-
-  onGameSelect = async game => {
-    const { client } = this.props
-
-    const { data: { validCharactersForGame } } = await client.query({
-      query: AVAILABLE_CHARACTERS,
-      variables: { gameId: game.id },
-      fetchPolicy: 'network-only',
-    })
-
-    this.setState({
-      visibleDrawer: DRAWERS.PARTICIPATE_GAME,
-      selectedGame: game,
-      availableCharacters: validCharactersForGame
     })
   }
 
@@ -168,8 +148,7 @@ class Calendar extends React.PureComponent {
   }
 
   render () {
-    const { selectedGame, availableCharacters, gamesList, date, currentGame } = this.state
-    const { user } = this.context
+    const { gamesList, date, currentGame } = this.state
 
     return (
       <>
@@ -224,22 +203,6 @@ class Calendar extends React.PureComponent {
           </Mutation>
         </Drawer>
 
-        {/* Participate form */}
-        <Drawer
-          destroyOnClose={true}
-          width={modalWidth()}
-          placement="right"
-          closable={false}
-          visible={this.state.visibleDrawer === DRAWERS.PARTICIPATE_GAME}
-          onClose={() => this.setState({ visibleDrawer: null })}
-        >
-          <ParticipateForm
-            {...selectedGame}
-            availableCharacters={availableCharacters}
-            onParticipate={this.onParticipate}
-          />
-        </Drawer>
-
         {/* Games list */}
         <Drawer
           destroyOnClose={true}
@@ -252,7 +215,6 @@ class Calendar extends React.PureComponent {
           <GamesList
             games={gamesList}
             date={date}
-            onJoinClick={game => this.onGameSelect(game)}
             onNewGameClick={() => this.setState({ visibleDrawer: DRAWERS.NEW_GAME })}
           />
         </Drawer>
@@ -270,7 +232,10 @@ class Calendar extends React.PureComponent {
             <>
               <GameInfo game={currentGame} />
               <ParticipantsList characters={currentGame.characters} />
-              <GameActions game={currentGame} onJoinClick={game => this.onGameSelect(game)} user={user} />
+              <GameParticipation
+                {...currentGame}
+                onParticipate={this.onParticipate}
+              />
             </>
           )}
         </Drawer>
