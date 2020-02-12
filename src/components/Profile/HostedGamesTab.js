@@ -22,14 +22,12 @@ const Wrapper = styled(Card)`
   justify-content: space-between;
 `
 export const HostedGamesTab = withApollo(({ client }) => {
-   const [showEditGame, setShowEditGame] = useState(false)
+  const [showEditGame, setShowEditGame] = useState(false)
   const [gameForEdit, setGameForEdit] = useState(null)
   const { user } = useContext(UserContext);
   const _isDesktop = isDesktop()
 
   return (
-    <React.Fragment>
-
     <Query
       query={FETCH_HOSTED_GAMES_QUERY}
       variables={{ userId: user.id}}
@@ -45,9 +43,9 @@ export const HostedGamesTab = withApollo(({ client }) => {
 
       if(!loading && R.isEmpty(gamesWithDM))
         return <Empty description="You are not hosted any games!" />
-      
+
       return (
-        <Fragment>
+        <>
           <Spin spinning={loading}>
             <Flex
               flexDirection={_isDesktop ? 'row' : 'column'}
@@ -124,10 +122,9 @@ export const HostedGamesTab = withApollo(({ client }) => {
                 )}
               </Mutation>
             </Drawer>
-        </Fragment>
+        </>
       )
     }}
-  </Query>
-    </React.Fragment>
+    </Query>
   )
 })
