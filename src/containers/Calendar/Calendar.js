@@ -181,6 +181,7 @@ class Calendar extends React.PureComponent {
                 <NewGameForm
                   initialValues={{
                     date: this.state.lastSelectedDate,
+                    tags: ['AL', 'Newbies allowed']
                   }}
                   onSubmit={async (game, form) => {
                     try {

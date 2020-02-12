@@ -1,6 +1,5 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useRef } from 'react'
 import * as R from 'ramda'
-import { useQuery } from '@apollo/react-hooks'
 import moment from 'moment'
 import {
   Button,
@@ -14,15 +13,13 @@ import {
   Checkbox,
   Row,
   Col,
-  Spin,
+  Tag
 } from 'antd'
 import { Box, Flex } from 'noui/Position'
 import Form, { Field } from 'noui/Form'
 import { Msg, Header } from 'ui/Text'
 import styled from 'styled-components'
 import { playersInGame } from 'config'
-import { TAGS_QUERY } from 'api'
-import { TAGS2TEXT } from '../../constants'
 
 const StyledImage = styled.img`
   object-fit: cover;
@@ -59,24 +56,32 @@ const validationSchema = {
 
 const NewGameForm = (props) => {
   const { onSubmit, initialValues, showSharing } = props
-  const { loading, data = {} } = useQuery(TAGS_QUERY);
-  const { tags = [] } = data
+  
+  const [tags, setTags] = useState(initialValues ? initialValues.tags : [])
+  const [newTag, setNewTag] = useState('')
+  const [showTagInput, setShowTagInput] = useState()
+  const inputTag = useRef(null);
+
   const [image, setImage] = useState(initialValues ? initialValues.image : null)
   const [fileList, setFileList] = useState([])
-  const [selectedTags, setSelectedTags] = useState(new Set())
-  const tagClick = useCallback((tag) => {
-    if (selectedTags.has(tag.id)) {
-      selectedTags.delete(tag.id)
-    } else {
-      selectedTags.add(tag.id)
-    }
 
-    setSelectedTags(new Set(selectedTags))
-  }, [selectedTags])
+  const handleNewTagClick = useCallback(
+    () => {
+      setShowTagInput(true)
+  
+      setTimeout(() => {
+        if(inputTag.current) inputTag.current.focus();
+      }, 10)
+    }, []
+  )
 
-  if (loading) {
-    return <Spin />
-  }
+  const handleNewTagConfirm = useCallback(
+    () => {
+      if(newTag) setTags([...tags, newTag])
+      setNewTag('')
+      setShowTagInput(false)
+    }, [newTag]
+  )
 
   console.log(initialValues)
 
@@ -91,7 +96,7 @@ const NewGameForm = (props) => {
           startingDate: new Date(`${date.format('YYYY-MM-DD')} ${time.format('HH:mm')}`),
           lvlFrom: range[0],
           lvlTo: range[1],
-          tags: [...selectedTags.values()],
+          // tags: [...selectedTags.values()],
         }
         onSubmit(game, form)
       }}>
@@ -223,16 +228,44 @@ const NewGameForm = (props) => {
           }
 
           <Row>
-            {tags.map(tag => (
-              <Col span={12} key={tag.id}>
-                <Checkbox 
-                  checked={selectedTags.has(tag.id)} 
-                  onChange={() => tagClick(tag)}
+            <Col span={24}>
+              {
+                tags.map((tag, idx) =>
+                  <Tag 
+                    key={tag}
+                    closable
+                    onClose={e => {
+                      e.preventDefault();
+                      setTags(R.remove(idx, 1, tags))
+                    }}
+                  >
+                    {tag}
+                  </Tag> 
+                )
+              }
+
+              {showTagInput && (
+                <Input
+                  ref={inputTag}
+                  type="text"
+                  size="small"
+                  style={{ width: 78 }}
+                  value={newTag}
+                  onChange={e => setNewTag(e.target.value)}
+                  onBlur={handleNewTagConfirm}
+                  onPressEnter={handleNewTagConfirm}
+                />
+              )}
+
+              {!showTagInput && (
+                <Tag
+                  style={{ background: '#fff', borderStyle: 'dashed' }}
+                  onClick={handleNewTagClick}
                 >
-                  {TAGS2TEXT[tag.name]}
-                </Checkbox>
-              </Col>
-            ))}
+                  <Icon type="plus" /> New Tag
+                </Tag>
+              )}
+            </Col>
           </Row>
 
           <Box mt={15}>
@@ -243,7 +276,6 @@ const NewGameForm = (props) => {
               Submit
             </Button>
           </Box>
-
         </Box>
       }
     </Form>
