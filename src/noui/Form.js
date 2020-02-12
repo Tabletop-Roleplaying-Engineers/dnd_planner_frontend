@@ -37,21 +37,23 @@ export const Field = ({ children, name, initialValue, ...props }) =>
   <FormContext.Consumer>
     {({ form, validation }) => {
       return <Form.Item>
-        {form.getFieldDecorator(name, {
-          initialValue,
-          rules: [{
-            validator: (r, v, cb) => {
-              if(!r.field) return cb()
+        {
+          form.getFieldDecorator(name, {
+            initialValue,
+            rules: [{
+              validator: (r, v, cb) => {
+                if(!r.field) return cb()
 
-              const data = validate({ [r.field]: v }, { [r.field]: validation[r.field] })
-              return R.pipe(
-                R.propOr([], r.field),
-                res => !R.isEmpty(res) ? R.join(', ', res): undefined,
-                cb,
-              )(data)
-            },
-          }],
-        })(children)}
+                const data = validate({ [r.field]: v }, { [r.field]: validation[r.field] })
+                return R.pipe(
+                  R.propOr([], r.field),
+                  res => !R.isEmpty(res) ? R.join(', ', res): undefined,
+                  cb,
+                )(data)
+              },
+            }],
+          })(children)
+        }
       </Form.Item>
     }}
   </FormContext.Consumer>

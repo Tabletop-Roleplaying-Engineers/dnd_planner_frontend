@@ -214,3 +214,53 @@ export const END_GAME = gql`
     }
   }
 `
+
+export const UPDATE_GAME_QUERY = gql`
+  mutation CreateGame(
+  $id: ID!
+  $title: String!
+  $image: String!
+  $description: String!
+  $startingDate: String!
+  $lvlFrom: Int!,
+  $lvlTo: Int!,
+  $players: Int!,
+  $telegramPost: Boolean!,
+  $facebookPost: Boolean!,
+  $tags: [ID]!,
+  ){
+    editGame(
+      id: $id
+      title: $title
+      image: $image
+      description: $description
+      startingDate: $startingDate
+      lvlFrom: $lvlFrom
+      lvlTo: $lvlTo
+      players: $players,
+      telegramPost: $telegramPost,
+      facebookPost: $facebookPost,
+      tags: $tags,
+    ) {
+      id
+      title
+      image
+      description
+      startingDate
+      lvlFrom
+      lvlTo
+      players
+      characters {
+        id,
+        name,
+        experience,
+        renown
+        faction {
+          id
+          name
+          logo
+        }
+      },
+    }
+  }
+`
