@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react'
 import * as R from 'ramda'
 import { useQuery } from '@apollo/react-hooks'
+import moment from 'moment'
 import {
   Button,
   Upload,
@@ -57,7 +58,7 @@ const validationSchema = {
 }
 
 const NewGameForm = (props) => {
-  const { onSubmit, initialValues } = props
+  const { onSubmit, initialValues, showSharing } = props
   const { loading, data = {} } = useQuery(TAGS_QUERY);
   const { tags = [] } = data
   const [image, setImage] = useState(initialValues ? initialValues.image : null)
@@ -84,6 +85,7 @@ const NewGameForm = (props) => {
       validation={validationSchema}
       onSubmit={({date, time, range, ...data}, form) => {
         const game = {
+          id: initialValues.id,
           ...data,
           image: image,
           startingDate: new Date(`${date.format('YYYY-MM-DD')} ${time.format('HH:mm')}`),
@@ -101,7 +103,7 @@ const NewGameForm = (props) => {
 
           {/* Image */}
           <Flex column mb={20}>
-            <Field name="image">
+            <Field name="image" initialValue={image}>
               <Upload.Dragger
                 accept="image/*"
                 beforeUpload={file => {
@@ -174,18 +176,22 @@ const NewGameForm = (props) => {
 
           <Flex justifyContent="space-between">
             {/* Date */}
-            <Field name="date" initialValue={initialValues && initialValues.date}>
+            <Field name="date" 
+              initialValue={initialValues && initialValues.startingDate && moment(new Date(parseInt(initialValues.startingDate, 10)))}
+              >
               <DatePicker/>
             </Field>
 
             {/* Time */}
-            <Field name="time" initialValue={initialValues && initialValues.time}>
+            <Field name="time" 
+              initialValue={initialValues && initialValues.startingDate && moment(new Date(parseInt(initialValues.startingDate, 10)))}
+              >
               <TimePicker format="HH:mm" minuteStep={10}/>
             </Field>
 
             {/* Players */}
             <Box width="30%">
-              <Field name="players">
+              <Field name="players" initialValue={initialValues && initialValues.players}>
                 <Select placeholder="Players count">
                   {
                     playersInGame.map(p => <Select.Option key={p} value={p}>{p}</Select.Option>)
@@ -200,18 +206,22 @@ const NewGameForm = (props) => {
             <Input.TextArea rows={6} placeholder="Description"/>
           </Field>
 
-          <Row>
-            <Col span={12}>
-              <Field name="telegramPost" initialValue={false}>
-                <Checkbox >Post in Telegram</Checkbox>
-              </Field>
-            </Col>
-            <Col span={12}>
-              <Field name="facebookPost" initialValue={false}>
-                <Checkbox >Post in Facebook</Checkbox>
-              </Field>
-            </Col>
-          </Row>
+          {
+            showSharing &&
+            <Row>
+              <Col span={12}>
+                <Field name="telegramPost" initialValue={false}>
+                  <Checkbox >Post in Telegram</Checkbox>
+                </Field>
+              </Col>
+              <Col span={12}>
+                <Field name="facebookPost" initialValue={false}>
+                  <Checkbox >Post in Facebook</Checkbox>
+                </Field>
+              </Col>
+            </Row>
+          }
+
           <Row>
             {tags.map(tag => (
               <Col span={12} key={tag.id}>
@@ -225,12 +235,15 @@ const NewGameForm = (props) => {
             ))}
           </Row>
 
-          <Button
-            disabled={form.hasErrors()}
-            htmlType="submit"
-          >
-            Submit
-          </Button>
+          <Box mt={15}>
+            <Button
+              disabled={form.hasErrors()}
+              htmlType="submit"
+            >
+              Submit
+            </Button>
+          </Box>
+
         </Box>
       }
     </Form>

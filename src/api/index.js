@@ -16,6 +16,7 @@ export {
   NEW_GAME_SUBSCRIPTION,
   PARTICIPATE_GAME,
   FETCH_HOSTED_GAMES_QUERY,
+  UPDATE_GAME_QUERY
 } from './games'
 
 export const FETCH_USERS_QUERY = gql`
