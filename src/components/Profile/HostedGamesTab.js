@@ -1,4 +1,4 @@
-import React, { useContext, useState, Fragment } from 'react';
+import React, { useContext, useState } from 'react';
 import { Query, withApollo, Mutation } from 'react-apollo'
 import {
   FETCH_HOSTED_GAMES_QUERY,

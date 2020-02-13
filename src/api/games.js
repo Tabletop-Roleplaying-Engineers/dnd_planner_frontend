@@ -225,8 +225,6 @@ export const UPDATE_GAME_QUERY = gql`
   $lvlFrom: Int!,
   $lvlTo: Int!,
   $players: Int!,
-  $telegramPost: Boolean!,
-  $facebookPost: Boolean!,
   $tags: [ID]!,
   ){
     editGame(
@@ -238,8 +236,6 @@ export const UPDATE_GAME_QUERY = gql`
       lvlFrom: $lvlFrom
       lvlTo: $lvlTo
       players: $players,
-      telegramPost: $telegramPost,
-      facebookPost: $facebookPost,
       tags: $tags,
     ) {
       id
