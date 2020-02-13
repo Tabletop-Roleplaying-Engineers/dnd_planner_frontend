@@ -4,8 +4,8 @@ self.__precacheManifest = [
     "url": "/static/media/cemetery.fd6c2b4a.jpg"
   },
   {
-    "revision": "c098ab271f4b0c889a67",
-    "url": "/static/js/main.c098ab27.chunk.js"
+    "revision": "97a386bda6fe9b36c67d",
+    "url": "/static/js/main.97a386bd.chunk.js"
   },
   {
     "revision": "89b11aba02c6d953faecc9bdb1cc1c25",
@@ -344,7 +344,7 @@ self.__precacheManifest = [
     "url": "/static/css/1.8b00fcc0.chunk.css"
   },
   {
-    "revision": "69aa8f6520d99b87b127904c8f8329f9",
+    "revision": "8e4936a4fd994633f116ebe0f1a78c92",
     "url": "/index.html"
   }
 ];
