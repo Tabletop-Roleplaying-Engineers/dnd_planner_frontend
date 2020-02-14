@@ -44,8 +44,8 @@ export const GamePreview = ({ startingDate, title, tags = [], ...props }) => {
         <Flex row flexWrap="wrap" m={1}>
           {
             tags.map((tag, i) => (
-              <TagWrapper key={tag.id + i}>
-                <Tag>{tag.name}</Tag>
+              <TagWrapper key={tag + i}>
+                <Tag>{tag}</Tag>
               </TagWrapper>
             ))
           }

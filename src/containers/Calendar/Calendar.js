@@ -185,7 +185,6 @@ class Calendar extends React.PureComponent {
                     tags: ['AL', 'Newbies allowed']
                   }}
                   onSubmit={async (game, form) => {
-                    debugger;
                     try {
                       await createGame({variables: game})
                       notification.success({

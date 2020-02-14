@@ -10,11 +10,7 @@ const gameFields = `
   lvlTo
   players
   status
-  tags {
-    id
-    name
-    type
-  }
+  tags
   characters {
     id
     name
@@ -78,7 +74,7 @@ export const CREATE_GAME_QUERY = gql`
   $players: Int!,
   $telegramPost: Boolean!,
   $facebookPost: Boolean!,
-  $tags: [ID]!,
+  $tags: [String]!,
   ){
     createGame(
       title: $title
@@ -126,11 +122,7 @@ export const NEW_GAME_SUBSCRIPTION = gql`
       lvlFrom
       lvlTo
       players
-      tags {
-        id
-        name
-        type
-      }
+      tags
       characters {
         id
         name
@@ -225,7 +217,7 @@ export const UPDATE_GAME_QUERY = gql`
   $lvlFrom: Int!,
   $lvlTo: Int!,
   $players: Int!,
-  $tags: [ID]!,
+  $tags: [String]!,
   $telegramPost: Boolean!,
   $facebookPost: Boolean!,
   ){
