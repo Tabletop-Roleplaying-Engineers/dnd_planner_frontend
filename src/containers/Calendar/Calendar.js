@@ -179,6 +179,7 @@ class Calendar extends React.PureComponent {
             {(createGame, {loading}) => (
               <Spin spinning={loading}>
                 <NewGameForm
+                  showSharing
                   initialValues={{
                     date: this.state.lastSelectedDate,
                     tags: ['AL', 'Newbies allowed']

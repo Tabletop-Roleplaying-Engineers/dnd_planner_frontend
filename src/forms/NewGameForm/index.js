@@ -85,7 +85,7 @@ const NewGameForm = (props) => {
     }, [newTag]
   )
 
-  console.log(initialValues)
+  // console.log(initialValues)
 
   return (
     <Form
@@ -183,16 +183,18 @@ const NewGameForm = (props) => {
 
           <Flex justifyContent="space-between">
             {/* Date */}
-            <Field name="date" 
+            <Field 
+              name="date" 
               initialValue={initialValues && initialValues.startingDate && moment(new Date(parseInt(initialValues.startingDate, 10)))}
-              >
+            >
               <DatePicker/>
             </Field>
 
             {/* Time */}
-            <Field name="time" 
+            <Field 
+              name="time" 
               initialValue={initialValues && initialValues.startingDate && moment(new Date(parseInt(initialValues.startingDate, 10)))}
-              >
+            >
               <TimePicker format="HH:mm" minuteStep={10}/>
             </Field>
 
@@ -213,21 +215,18 @@ const NewGameForm = (props) => {
             <Input.TextArea rows={6} placeholder="Description"/>
           </Field>
 
-          {
-            showSharing &&
-            <Row>
-              <Col span={12}>
-                <Field name="telegramPost" initialValue={false}>
-                  <Checkbox >Post in Telegram</Checkbox>
-                </Field>
-              </Col>
-              <Col span={12}>
-                <Field name="facebookPost" initialValue={false}>
-                  <Checkbox >Post in Facebook</Checkbox>
-                </Field>
-              </Col>
-            </Row>
-          }
+          <Row>
+            <Col span={12}>
+              <Field name="telegramPost" initialValue={false}>
+                <Checkbox disabled={!showSharing}>Post in Telegram</Checkbox>
+              </Field>
+            </Col>
+            <Col span={12}>
+              <Field name="facebookPost" initialValue={false}>
+                <Checkbox disabled={!showSharing}>Post in Facebook</Checkbox>
+              </Field>
+            </Col>
+          </Row>
 
           <Row>
             <Col span={24}>

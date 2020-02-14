@@ -11,7 +11,7 @@ const _Form = ({ children, form, validation = {}, onSubmit, ...props }) => {
         e.preventDefault()
         form.validateFields(async (err, values) => {
           if (!err) {
-            console.log('Received values of form: ', values)
+            // console.log('Received values of form: ', values)
             await onSubmit(values, form)
           }
         })
