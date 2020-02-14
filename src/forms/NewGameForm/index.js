@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react'
+import React, { useState, useCallback, useRef, useEffect } from 'react'
 import * as R from 'ramda'
 import moment from 'moment'
 import {
@@ -68,11 +68,13 @@ const NewGameForm = (props) => {
   const handleNewTagClick = useCallback(
     () => {
       setShowTagInput(true)
-  
-      setTimeout(() => {
-        if(inputTag.current) inputTag.current.focus();
-      }, 10)
     }, []
+  )
+
+  useEffect(
+    () => {
+      if(inputTag.current) inputTag.current.focus();
+    }, [showTagInput]
   )
 
   const handleNewTagConfirm = useCallback(
@@ -96,7 +98,7 @@ const NewGameForm = (props) => {
           startingDate: new Date(`${date.format('YYYY-MM-DD')} ${time.format('HH:mm')}`),
           lvlFrom: range[0],
           lvlTo: range[1],
-          // tags: [...selectedTags.values()],
+          tags
         }
         onSubmit(game, form)
       }}>
