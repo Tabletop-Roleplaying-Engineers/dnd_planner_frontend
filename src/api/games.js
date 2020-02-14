@@ -216,7 +216,7 @@ export const END_GAME = gql`
 `
 
 export const UPDATE_GAME_QUERY = gql`
-  mutation CreateGame(
+  mutation UpdateGame(
   $id: ID!
   $title: String!
   $image: String!
@@ -226,6 +226,8 @@ export const UPDATE_GAME_QUERY = gql`
   $lvlTo: Int!,
   $players: Int!,
   $tags: [ID]!,
+  $telegramPost: Boolean!,
+  $facebookPost: Boolean!,
   ){
     editGame(
       id: $id
@@ -237,6 +239,8 @@ export const UPDATE_GAME_QUERY = gql`
       lvlTo: $lvlTo
       players: $players,
       tags: $tags,
+      telegramPost: $telegramPost,
+      facebookPost: $facebookPost
     ) {
       id
       title

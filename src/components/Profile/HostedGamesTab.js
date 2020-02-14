@@ -111,8 +111,10 @@ export const HostedGamesTab = withApollo(({ client }) => {
                 {(updateGame, { loading }) => (
                   <Spin spinning={loading}>
                     <NewGameForm
+                      showSharing
                       initialValues={gameForEdit}
                       onSubmit={async (game, form) => {
+                        debugger;
                         await updateGame({ variables: game })
                         setShowEditGame(false)
                         refetch()
