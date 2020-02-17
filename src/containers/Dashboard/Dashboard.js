@@ -23,7 +23,7 @@ function Dashboard (props) {
           height={['50vw', '25vw']}
           onClick={() => props.history.push('/help#the_rules')}
         />
-        
+
         <ZoomCard
           title="Календар"
           image={calendarCover}
@@ -32,7 +32,7 @@ function Dashboard (props) {
           height={['50vw', '25vw']}
           onClick={() => props.history.push('/calendar')}
         />
-        
+
         <ZoomCard
           title="Ліга Авантюристів"
           image={loreCover}
@@ -42,10 +42,10 @@ function Dashboard (props) {
           onClick={() => props.history.push('/lore')}
         />
       </Flex>
-      
+
       <Box pt={20}>
         <Header>Коротко про головне:</Header>
-        
+
         <Box my={10}>
           <Paragraph>
             Dungeons & Dragons (укр. «Підземелля і дракони», скорочується до D&D або DnD) — настільна рольова гра в
@@ -53,7 +53,7 @@ function Dashboard (props) {
             фентезі, яка випускається компанією <a href="https://company.wizards.com/">Wizards of the Coast</a>.
           </Paragraph>
         </Box>
-        
+
         <Box my={10}>
           <Paragraph>
             У грі беруть участь ігровий майстер (Dungeon Master, DM, Майстер) та кілька гравців, зазвичай від 3-х до
@@ -63,7 +63,7 @@ function Dashboard (props) {
             чи помічники. Також він описує сам світ і події, що в ньому відбуваються.
           </Paragraph>
         </Box>
-        
+
         <Box my={10}>
           <Paragraph>
             Протягом гри кожен гравець задає дії для свого персонажа, а результати дій визначаються Майстром відповідно
@@ -72,7 +72,7 @@ function Dashboard (props) {
             Dragons»: «DM завжди правий».
           </Paragraph>
         </Box>
-        
+
         <Box my={10}>
           <Paragraph>
             У Львові D&D активно розвивається завдяки групі <a href="https://www.facebook.com/groups/dnd.lviv/">"Пряма
@@ -80,23 +80,23 @@ function Dashboard (props) {
             клубу-магазину настільних ігор <a href="http://octopus.lviv.ua/">"Octopus"</a>.
           </Paragraph>
         </Box>
-        
+
         <Flex column my={10}>
           <Paragraph>
-            Телеграм-канал: <a href="https://t.me/LvivAL">https://t.me/LvivAL</a>
+            Телеграм-канал: <a href="https://t.me/LvivDnD" target="_blank" rel="noopener noreferrer">https://t.me/LvivDnD</a>
           </Paragraph>
           <Paragraph>
-            Генерація персонажа: <a href="https://www.dndbeyond.com/">https://www.dndbeyond.com/</a>
+            Генерація персонажа: <a href="https://www.dndbeyond.com/" target="_blank" rel="noopener noreferrer">https://www.dndbeyond.com/</a>
           </Paragraph>
           <Paragraph>
-            Що таке Ліга Авантюристів: <a href="https://bit.ly/2F75e8u">https://bit.ly/2F75e8u</a>
+            Що таке Ліга Авантюристів: <a href="https://bit.ly/2F75e8u" target="_blank" rel="noopener noreferrer">https://bit.ly/2F75e8u</a>
           </Paragraph>
           <Paragraph>
-            Календар подій: <a href="http://clc.am/j1Ggbg">http://clc.am/j1Ggbg</a>
+            Календар подій: <a href="http://clc.am/j1Ggbg" target="_blank" rel="noopener noreferrer">http://clc.am/j1Ggbg</a>
           </Paragraph>
         </Flex>
       </Box>
-      
+
       {/*<Box>*/}
       {/*  <Button onClick={() => {*/}
       {/*    localStorage.setItem('FIRST_PAGE', '/calendar')*/}
