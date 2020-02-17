@@ -55,7 +55,7 @@ const validationSchema = {
 }
 
 const NewGameForm = (props) => {
-  const { onSubmit, initialValues, showSharing } = props
+  const { onSubmit, initialValues = { tags: [] }, showSharing } = props
   
   const [tags, setTags] = useState(initialValues.tags)
   const [newTag, setNewTag] = useState('')
