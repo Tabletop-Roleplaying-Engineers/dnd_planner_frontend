@@ -22,7 +22,6 @@ const DateContainer = styled(Box)`
 
 const ItemBody = ({ game }) => (
   <Row>
-    <Box px={12} py={18}>{game.description}</Box>
     <ParticipantsList characters={game.characters} />
     <Col span={24}>
       <GameActions game={game} />

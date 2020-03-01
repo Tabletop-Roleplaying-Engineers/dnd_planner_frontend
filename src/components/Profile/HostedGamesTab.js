@@ -98,7 +98,7 @@ export const HostedGamesTab = withApollo(({ client }) => {
               }
               </Flex>
           </Spin>
-        
+
           <Drawer
               width={modalWidth()}
               placement="right"
@@ -114,7 +114,6 @@ export const HostedGamesTab = withApollo(({ client }) => {
                       showSharing
                       initialValues={gameForEdit}
                       onSubmit={async (game, form) => {
-                        debugger;
                         await updateGame({ variables: game })
                         setShowEditGame(false)
                         refetch()
