@@ -182,6 +182,7 @@ class Calendar extends React.PureComponent {
                   showSharing
                   initialValues={{
                     date: this.state.lastSelectedDate,
+                    tags: ['AL', 'Newbies allowed']
                   }}
                   onSubmit={async (game, form) => {
                     try {
