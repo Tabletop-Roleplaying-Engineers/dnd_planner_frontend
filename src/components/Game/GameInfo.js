@@ -93,9 +93,9 @@ export const GameInfo = ({ game }) => {
           </Col>
         </Row>
         <Row>
-            {game.tags.map(tag => (
-              <Col key={tag.id} span={12}>
-                <Tag>{tag.name}</Tag>
+            {game.tags.map((tag, i) => (
+              <Col key={tag + i} span={12}>
+                <Tag>{tag}</Tag>
               </Col>
             ))}
         </Row>
