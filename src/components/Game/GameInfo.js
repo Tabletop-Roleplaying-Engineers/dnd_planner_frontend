@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
+import format from 'date-fns/format'
 import { Row, Col, Slider, Rate, Icon } from 'antd'
 import UserInfo from 'components/UserInfo'
 import { Box, Flex } from 'noui/Position'
@@ -60,6 +61,7 @@ export const GameInfo = ({ game }) => {
           </Col>
         </Row>
         <Row>
+          {/* Slots */}
           <Col sm={12}>
             <Box mb={10} ml={10}>
               Available slots: {Math.max(game.players - game.characters.length, 0)} / {game.players}
@@ -72,6 +74,7 @@ export const GameInfo = ({ game }) => {
               />
             </Box>
           </Col>
+          {/* Levels */}
           <Col sm={12}>
             <Box mb={10} ml={10}>
               Available levels
@@ -90,6 +93,16 @@ export const GameInfo = ({ game }) => {
                 />
               </LvlSlider>
             </Box>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Box mb={10} ml={10}>{format(game.startingDate, 'dd MMMM HH:mm')}</Box>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Box mb={10} ml={10}>{game.description}</Box>
           </Col>
         </Row>
         <Row>

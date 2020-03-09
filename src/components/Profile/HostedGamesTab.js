@@ -98,7 +98,7 @@ export const HostedGamesTab = withApollo(({ client }) => {
               }
               </Flex>
           </Spin>
-        
+
           <Drawer
               width={modalWidth()}
               placement="right"
