@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Route, Switch } from 'react-router-dom'
 import Home from 'containers/Home'
 import Login from 'containers/Login'
@@ -11,10 +11,50 @@ import Lore from 'containers/League'
 import NotFound from 'containers/NotFound'
 import _history from './history'
 import { Box } from '../noui/Position'
+import { AUTH_STORAGE_KEY } from '../constants'
+import { UserContext } from '../context/userContext'
+import {
+  CURRENT_USER,
+} from 'api'
+import { withApollo } from 'react-apollo';
 
 export const history = _history
 
-export default function Routing() {
+const isJwtUserCorrect = (data) => data && data.currentUser
+
+const logout = (setUser) => {
+  localStorage.removeItem(AUTH_STORAGE_KEY)
+  setUser(null)
+  history.replace('/')
+}
+
+export function Routing(props) {
+  const { user, setUser } = useContext(UserContext)
+
+  useEffect(() => {
+    // After moving to another server we have vanished database,
+    // but some users has JWT generated on the previous server
+    // but corresponding user doesn't exist on the database
+    // so we need this check when application is started
+    (async function() {
+      if (!user) {
+        return
+      }
+      const { client: { query } } = props
+      try {
+        const res = await query({
+          query: CURRENT_USER,
+        })
+        const { data } = res
+        if (!isJwtUserCorrect(data)) {
+          logout(setUser)
+        }
+      } catch (error) {
+        logout(setUser)
+      }
+    })()
+  }, [])
+
   return (
     <Switch>
       <Box mx={[10]}>
@@ -33,3 +73,5 @@ export default function Routing() {
     </Switch>
   )
 }
+
+export default withApollo(Routing)
