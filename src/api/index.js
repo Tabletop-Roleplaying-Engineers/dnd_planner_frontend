@@ -35,6 +35,22 @@ export const FETCH_USERS_QUERY = gql`
   }
 `
 
+export const CURRENT_USER = gql`
+  {
+    currentUser {
+      id
+      firstName
+      lastName
+      username
+      avatar
+      roles {
+        name
+        id
+      }
+    }
+  }
+`
+
 export const FETCH_ROLES_QUERY = gql`
   {
     roles {
