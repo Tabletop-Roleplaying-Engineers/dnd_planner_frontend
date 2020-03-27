@@ -1,5 +1,6 @@
 import * as R from 'ramda'
 import { ENVIRONMENTS } from '../constants'
+import format from 'date-fns/format'
 
 const stringToClassesPairs = R.split('&') // 'Bard=2&Bard=2' -> ['Bard=2', 'Bard=2']
 const stringToClassLvlPair = R.split('=') // 'Bard=2' -> ['Bard', '2']
@@ -43,4 +44,13 @@ export const omit = (props, obj) => {
 
 export const isTesting = () => {
   return process.env.environment === ENVIRONMENTS.TEST
+}
+
+export const parseGame = game => {
+  const date = new Date(parseInt(game.startingDate, 10))
+  return {
+    ...game,
+    dateKey: format(date, 'yyyy-MM-dd'),
+    startingDate: date,
+  }
 }

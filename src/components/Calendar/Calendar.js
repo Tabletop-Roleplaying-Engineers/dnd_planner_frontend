@@ -10,6 +10,7 @@ import styled, { css } from 'styled-components'
 import { NavigationButtons } from './NavigationButtons'
 import { DateRange } from '../DateRange/DateRange'
 import { GamePreview } from '../GamePreview'
+import { parseGame } from '../../utils/common'
 import { Flex } from 'noui/Position'
 
 const WeekDay = styled.div`
@@ -71,19 +72,10 @@ const CarouselBlock = styled.div`
   height: 146px;
 `
 
-const parseDate = game => {
-  const date = new Date(parseInt(game.startingDate, 10))
-  return {
-    ...game,
-    dateKey: format(date, 'yyyy-MM-dd'),
-    startingDate: date,
-  }
-}
-
 const groupByDate = R.groupBy(R.prop('dateKey'))
 
 const parseGames = R.pipe(
-  R.map(parseDate),
+  R.map(parseGame),
   groupByDate,
 )
 
@@ -113,7 +105,7 @@ export const Calendar = ({ games, onCellClick }) => {
     return (
       <CalendarCell
         today={isToday(currentDate)}
-        onClick={() => R.isEmpty(thisDayGames) 
+        onClick={() => R.isEmpty(thisDayGames)
           ? cellClickHandler({ date: currentDate, games: thisDayGames })
           : undefined
         }
@@ -124,16 +116,16 @@ export const Calendar = ({ games, onCellClick }) => {
 
         <CellLeft>
           {
-            thisDayGames.length === 1 
+            thisDayGames.length === 1
             ? thisDayGames.map((game) =>
               <GamePreview
                 onClick={() => cellClickHandler({ date: currentDate, games: thisDayGames })}
                 key={game.id}
                 {...game}
               /> )
-            : <Carousel 
-                autoplay 
-                // effect="fade" 
+            : <Carousel
+                autoplay
+                // effect="fade"
                 dotPosition="right"
                 easing="ease-out"
               >
