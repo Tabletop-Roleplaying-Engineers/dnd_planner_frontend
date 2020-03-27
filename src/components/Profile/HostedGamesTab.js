@@ -14,6 +14,7 @@ import { modalWidth } from 'config'
 import { isDesktop } from 'noui/MediaQuery'
 import * as R from 'ramda'
 import styled from 'styled-components'
+import { parseGame } from 'utils/common';
 
 const Wrapper = styled(Card)`
   width: 100%;
@@ -35,13 +36,14 @@ export const HostedGamesTab = withApollo(({ client }) => {
     >
     {(query) => {
       const {loading, error, data, refetch } = query
-      const gamesWithDM = data ? data.gamesWithDM || [] : []
+      const gamesWithDM = (data && data.gamesWithDM) || []
+      const parsedGames = gamesWithDM.map(parseGame)
 
       if (error) {
         return <Alert message="Error" type="error" />
       }
 
-      if(!loading && R.isEmpty(gamesWithDM))
+      if(!loading && R.isEmpty(parsedGames))
         return <Empty description="You are not hosted any games!" />
 
       return (
@@ -53,7 +55,7 @@ export const HostedGamesTab = withApollo(({ client }) => {
               flexWrap="wrap"
             >
               {
-                gamesWithDM.map(game =>
+                parsedGames.map(game =>
                   <Flex mb={10} width={_isDesktop ? '49%' : '100%'} key={game.id}>
                     <Wrapper
                       width="100%"
