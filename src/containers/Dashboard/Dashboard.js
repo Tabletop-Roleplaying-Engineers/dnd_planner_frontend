@@ -1,13 +1,16 @@
 import React from 'react'
+
 import { Box, Flex } from 'noui/Position'
 import ZoomCard from 'components/ZoomCard'
 import { Header, Paragraph } from 'ui/Text'
 import { withRouter } from 'react-router-dom'
-import loreCover from './shared/lore.jpg'
 import rulesCover from './shared/rules.jpg'
 import calendarCover from './shared/calendar.png'
 
-function Dashboard (props) {
+import { IFrame } from './shared/styled'
+
+
+function Dashboard(props) {
   return (
     <Box mt={10} mx={30}>
       <Flex
@@ -33,14 +36,17 @@ function Dashboard (props) {
           onClick={() => props.history.push('/calendar')}
         />
 
-        <ZoomCard
-          title="Ліга Авантюристів"
-          image={loreCover}
+        <IFrame
+          title="twitchPlayer"
+          src="https://player.twitch.tv/?channel=dnd_lviv_guild"
+          frameborder="0"
+          allowfullscreen="true"
+          scrolling="no"
           width={['90vw', '33%']}
-          my={[10, 0]}
           height={['50vw', '25vw']}
-          onClick={() => props.history.push('/lore')}
-        />
+          my={[10, 0]}
+        ></IFrame>
+
       </Flex>
 
       <Box pt={20}>
@@ -96,16 +102,6 @@ function Dashboard (props) {
           </Paragraph>
         </Flex>
       </Box>
-
-      {/*<Box>*/}
-      {/*  <Button onClick={() => {*/}
-      {/*    localStorage.setItem('FIRST_PAGE', '/calendar')*/}
-      {/*    props.history.push('/calendar')*/}
-      {/*  }}*/}
-      {/*  >*/}
-      {/*    Do not show me this page again!*/}
-      {/*  </Button>*/}
-      {/*</Box>*/}
     </Box>
   )
 }
