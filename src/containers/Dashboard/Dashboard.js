@@ -28,7 +28,7 @@ function Dashboard(props) {
         />
 
         <ZoomCard
-          title="Календар ігор"
+          title="Календар подій"
           image={calendarCover}
           width={['90vw', '33%']}
           my={[10, 0]}
