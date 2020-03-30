@@ -1,14 +1,6 @@
 import React, { useContext, useEffect } from 'react'
 import { Route, Switch } from 'react-router-dom'
-import Home from 'containers/Home'
-import Login from 'containers/Login'
-import Players from 'containers/Players'
-import Calendar from 'containers/Calendar'
-import Profile from 'containers/Profile'
-import Dashboard from 'containers/Dashboard'
-import Help from 'containers/Help'
-import Lore from 'containers/League'
-import NotFound from 'containers/NotFound'
+
 import _history from './history'
 import { Box } from '../noui/Position'
 import { AUTH_STORAGE_KEY } from '../constants'
@@ -17,6 +9,17 @@ import {
   CURRENT_USER,
 } from 'api'
 import { withApollo } from 'react-apollo';
+
+import NotFound from 'containers/NotFound'
+
+import Home from 'containers/Home'
+import Login from 'containers/Login'
+import Players from 'containers/Players'
+import Calendar from 'containers/Calendar'
+import Profile from 'containers/Profile'
+import Dashboard from 'containers/Dashboard'
+import Rules from 'containers/Rules'
+import Lore from 'containers/League'
 
 export const history = _history
 
@@ -64,7 +67,7 @@ export function Routing(props) {
         <Route path='/players' component={Players}/>
         <Route path='/profile' component={Profile}/>
         <Route path='/dashboard' component={Dashboard}/>
-        <Route path='/help' component={Help}/>
+        <Route path='/rules' component={Rules}/>
         <Route path='/lore' component={Lore}/>
       </Box>
 

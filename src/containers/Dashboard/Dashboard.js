@@ -24,7 +24,7 @@ function Dashboard(props) {
           width={['90vw', '33%']}
           my={[10, 0]}
           height={['50vw', '25vw']}
-          onClick={() => props.history.push('/help#the_rules')}
+          onClick={() => props.history.push('/rules')}
         />
 
         <ZoomCard

@@ -19,6 +19,10 @@ export {
   UPDATE_GAME_QUERY
 } from './games'
 
+export {
+  FETCH_RULES
+} from './rules'
+
 export const FETCH_USERS_QUERY = gql`
   query Users($username: String!) {
     users(username: $username){
