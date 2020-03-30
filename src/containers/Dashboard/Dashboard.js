@@ -19,7 +19,7 @@ function Dashboard(props) {
         alignItems="center"
       >
         <ZoomCard
-          title="Правила"
+          title="Ліга Авантюристів"
           image={rulesCover}
           width={['90vw', '33%']}
           my={[10, 0]}
@@ -28,7 +28,7 @@ function Dashboard(props) {
         />
 
         <ZoomCard
-          title="Календар"
+          title="Календар ігор"
           image={calendarCover}
           width={['90vw', '33%']}
           my={[10, 0]}
@@ -95,10 +95,7 @@ function Dashboard(props) {
             Генерація персонажа: <a href="https://www.dndbeyond.com/" target="_blank" rel="noopener noreferrer">https://www.dndbeyond.com/</a>
           </Paragraph>
           <Paragraph>
-            Що таке Ліга Авантюристів: <a href="https://bit.ly/2F75e8u" target="_blank" rel="noopener noreferrer">https://bit.ly/2F75e8u</a>
-          </Paragraph>
-          <Paragraph>
-            Календар подій: <a href="http://clc.am/j1Ggbg" target="_blank" rel="noopener noreferrer">http://clc.am/j1Ggbg</a>
+            Базові правила D&D 5e: <a href="https://dnd.wizards.com/articles/features/basicrules" target="_blank" rel="noopener noreferrer">https://dnd.wizards.com/articles/features/basicrules</a>
           </Paragraph>
         </Flex>
       </Box>
