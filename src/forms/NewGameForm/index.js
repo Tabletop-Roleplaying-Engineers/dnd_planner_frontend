@@ -158,10 +158,10 @@ const NewGameForm = (props) => {
             <Box>
               <Msg>Select min-max levels</Msg>
 
-              <Field 
+              <Field
                 initialValue={initialValues && initialValues.lvlFrom && initialValues.lvlTo
-                  ? [initialValues.lvlFrom, initialValues.lvlTo] 
-                  : [1, 4]} 
+                  ? [initialValues.lvlFrom, initialValues.lvlTo]
+                  : [1, 4]}
                 name="range"
               >
                 <Slider
@@ -183,17 +183,17 @@ const NewGameForm = (props) => {
 
           <Flex justifyContent="space-between">
             {/* Date */}
-            <Field 
-              name="date" 
-              initialValue={initialValues && initialValues.startingDate && moment(new Date(parseInt(initialValues.startingDate, 10)))}
+            <Field
+              name="date"
+              initialValue={initialValues && initialValues.startingDate && moment(initialValues.startingDate)}
             >
               <DatePicker/>
             </Field>
 
             {/* Time */}
-            <Field 
-              name="time" 
-              initialValue={initialValues && initialValues.startingDate && moment(new Date(parseInt(initialValues.startingDate, 10)))}
+            <Field
+              name="time"
+              initialValue={initialValues && initialValues.startingDate && moment(initialValues.startingDate)}
             >
               <TimePicker format="HH:mm" minuteStep={10}/>
             </Field>
@@ -232,7 +232,7 @@ const NewGameForm = (props) => {
             <Col span={24}>
               {
                 tags.map((tag, idx) =>
-                  <Tag 
+                  <Tag
                     key={tag}
                     closable
                     onClose={e => {
@@ -241,7 +241,7 @@ const NewGameForm = (props) => {
                     }}
                   >
                     {tag}
-                  </Tag> 
+                  </Tag>
                 )
               }
 
