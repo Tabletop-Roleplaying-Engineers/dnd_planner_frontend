@@ -181,7 +181,7 @@ class Calendar extends React.PureComponent {
                 <NewGameForm
                   showSharing
                   initialValues={{
-                    date: this.state.lastSelectedDate,
+                    startingDate: this.state.lastSelectedDate,
                     tags: ['AL', 'Newbies allowed']
                   }}
                   onSubmit={async (game, form) => {
@@ -217,7 +217,7 @@ class Calendar extends React.PureComponent {
           <GamesList
             games={gamesList}
             date={date}
-            onNewGameClick={() => this.setState({ visibleDrawer: DRAWERS.NEW_GAME })}
+            onNewGameClick={() => this.setState({ visibleDrawer: DRAWERS.NEW_GAME, lastSelectedDate: date })}
           />
         </Drawer>
 
