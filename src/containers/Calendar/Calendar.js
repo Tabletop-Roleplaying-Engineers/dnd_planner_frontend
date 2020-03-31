@@ -99,7 +99,7 @@ class Calendar extends React.PureComponent {
           data: {games: [...R.remove(idx, 1, games), updatedGame]},
         })
 
-        this.setState({ currentGame: updatedGame })
+        this.setState({ currentGame: { ...currentGame, ...participateGame } })
       }
     })
   }
