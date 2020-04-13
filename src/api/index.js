@@ -1,117 +1,65 @@
 import gql from 'graphql-tag'
 
-export const FETCH_GAMES_QUERY = gql`
-  {
-    games {
+export {
+  AVAILABLE_CHARACTERS,
+  CREATE_CHARACTER_MUTATION,
+  DELETE_CHARACTER_MUTATION,
+  FETCH_CHARACTERS_QUERY,
+  UPDATE_CHARACTER_MUTATION
+} from './characters'
+export {
+  CREATE_GAME_QUERY,
+  END_GAME,
+  FETCH_GAMES_QUERY,
+  FETCH_GAME_QUERY,
+  LEAVE_GAME,
+  NEW_GAME_SUBSCRIPTION,
+  PARTICIPATE_GAME,
+  FETCH_HOSTED_GAMES_QUERY,
+  UPDATE_GAME_QUERY
+} from './games'
+
+export {
+  FETCH_RULES
+} from './rules'
+
+export const FETCH_USERS_QUERY = gql`
+  query Users($username: String!) {
+    users(username: $username){
       id
-      title
-      image
-      description
-      startingDate
-      lvlFrom
-      lvlTo
-      players
-      status
-      characters {
-        id
+      firstName
+      lastName
+      username
+      avatar
+      roles {
         name
-        experience
-        renown
-        faction {
-          id
-          name
-          logo
-        }
-        user {
-          id
-          firstName
-          lastName
-          avatar
-          username
-        }
-      }
-      user {
-        firstName
-        lastName
-        avatar
-        username
+        id
       }
     }
   }
 `
 
-export const CREATE_GAME_QUERY = gql`
-  mutation CreateGame(
-  $title: String!
-  $image: String!
-  $description: String!
-  $startingDate: String!
-  $lvlFrom: Int!,
-  $lvlTo: Int!,
-  $players: Int!,
-  ){
-    createGame(
-      title: $title
-      image: $image
-      description: $description
-      startingDate: $startingDate
-      lvlFrom: $lvlFrom
-      lvlTo: $lvlTo
-      players: $players,
-    ) {
-      id
-      title
-      image
-      description
-      startingDate
-      lvlFrom
-      lvlTo
-      players
-      status
-      user {
-        firstName
-        lastName
-        avatar
-        username
-      }
-      characters {
-        id,
-        name,
-        experience,
-        renown
-        faction {
-          id
-          name
-          logo
-        }
-      },
-    }
-  }
-`
-
-export const FETCH_CHARACTERS_QUERY = gql`
+export const CURRENT_USER = gql`
   {
-    characters{
+    currentUser {
+      id
+      firstName
+      lastName
+      username
+      avatar
+      roles {
+        name
+        id
+      }
+    }
+  }
+`
+
+export const FETCH_ROLES_QUERY = gql`
+  {
+    roles {
       id
       name
-      class
-      avatar
-      experience
-      renown
-      faction {
-        id
-        name
-        logo
-      }
-      game {
-        id
-        title
-        image
-        description
-        startingDate
-        lvlFrom
-        lvlTo
-      }
     }
   }
 `
@@ -126,58 +74,28 @@ export const FETCH_FACTIONS_QUERY = gql`
   }
 `
 
-export const CREATE_CHARACTER_MUTATION = gql`
-  mutation CreateCharacter(
-  $name: String!
-  $faction: ID!
-  $class: String!
-  $avatar: String!
-  ) {
-    createCharacter(name: $name, faction: $faction, class: $class, avatar: $avatar) {
+export const HEALTH_CHECK_QUERY = gql`
+  {
+    healthCheck
+  }
+`
+
+export const TAGS_QUERY = gql`
+  {
+    tags {
       id
       name
-      class
-      avatar
-      experience
-      renown
-      faction {
-        id
-        name
-        logo
-      }
+      type
     }
   }
 `
 
-export const DELETE_CHARACTER_MUTATION = gql`
-  mutation DeleteCharacter($id: ID!){
-    deleteCharacter(id: $id) {
-      id
-    }
-  }
-`
-
-export const NEW_GAME_SUBSCRIPTION = gql`
-  subscription {
-    newGame {
-      id
-      title
-      image
-      description
-      startingDate
-      lvlFrom
-      lvlTo
-      players
-      characters {
+export const UPDATE_USER_ROLES = gql`
+  mutation UpdateUserRoles($userId: ID!, $roles: [String]!){
+    updateUserRoles(userId: $userId, roles: $roles) {
+      roles {
         id
         name
-        experience
-        renown
-        faction {
-          id
-          name
-          logo
-        }
       }
     }
   }
@@ -202,72 +120,5 @@ export const SIGN_IN_MUTATION = gql`
       avatar: $avatar
       authDate: $authDate
     )
-  }
-`
-
-export const AVAILABLE_CHARACTERS = gql`
-  query AvailableCharacters($gameId: ID!) {
-    validCharactersForGame(gameId: $gameId){
-      id
-      name
-      class
-      avatar
-      experience
-      renown
-      faction {
-        id
-        name
-        logo
-      }
-    }
-  }
-`
-
-export const PARTICIPATE_GAME = gql`
-  mutation SignIn(
-    $gameId: ID!
-    $characterId: ID!
-  ) {
-    participateGame(
-      gameId: $gameId
-      characterId: $characterId
-    ) {
-      id
-      players
-      status
-      characters {
-        id
-        name
-        class
-        avatar
-        experience
-        renown
-        faction {
-          id
-          name
-          logo
-        }
-        user {
-          id
-          firstName
-          lastName
-          avatar
-          username
-        }
-      }
-    }
-  }
-`
-
-export const LEAVE_GAME = gql`
-  mutation LeaveGame(
-    $characterId: ID!
-  ){
-    leaveGame(characterId: $characterId){
-      id,
-      game {
-        id
-      }
-    }
   }
 `

@@ -1,11 +1,25 @@
-import React from 'react'
-import { Button, Upload, Icon, Input, Select, DatePicker, TimePicker, Slider } from 'antd'
+import React, { useState, useCallback, useRef, useEffect } from 'react'
+import * as R from 'ramda'
+import moment from 'moment'
+import {
+  Button,
+  Upload,
+  Icon,
+  Input,
+  Select,
+  DatePicker,
+  TimePicker,
+  Slider,
+  Checkbox,
+  Row,
+  Col,
+  Tag
+} from 'antd'
 import { Box, Flex } from 'noui/Position'
 import Form, { Field } from 'noui/Form'
 import { Msg, Header } from 'ui/Text'
 import styled from 'styled-components'
 import { playersInGame } from 'config'
-import * as R from 'ramda'
 
 const StyledImage = styled.img`
   object-fit: cover;
@@ -14,6 +28,9 @@ const StyledImage = styled.img`
 `
 
 const validationSchema = {
+  image: {
+    presence: true,
+  },
   title: {
     presence: true,
     length: {
@@ -37,112 +54,220 @@ const validationSchema = {
   },
 }
 
-class NewGameForm extends React.PureComponent {
-  state = {
-    image: null,
-  }
+const NewGameForm = (props) => {
+  const { onSubmit, initialValues = { tags: [] }, showSharing } = props
 
-  componentWillUnmount () {
-    this.setState({image: null})
-  }
+  const [tags, setTags] = useState(initialValues.tags)
+  const [newTag, setNewTag] = useState('')
+  const [showTagInput, setShowTagInput] = useState()
+  const inputTag = useRef(null);
 
-  render () {
-    const {image} = this.state
+  const [image, setImage] = useState(initialValues ? initialValues.image : null)
+  const [fileList, setFileList] = useState([])
 
-    return (
-      <Form
-        validation={validationSchema}
-        onSubmit={({date, time, range, ...data}, form) => {
-          const game = {
-            image: this.state.image,
-            startingDate: new Date(`${date.format('YYYY-MM-DD')} ${time.format('HH:mm')}`),
-            lvlFrom: range[0],
-            lvlTo: range[1],
-            ...data,
-          }
-          this.props.onSubmit(game, form)
-        }}>
-        {({form}) =>
-          <Box>
-            <Box mb={20}>
-              <Header>Add new Game</Header>
-            </Box>
+  const handleNewTagClick = useCallback(
+    () => {
+      setShowTagInput(true)
+    }, []
+  )
 
-            <Flex column mb={20}>
+  useEffect(
+    () => {
+      if(inputTag.current) inputTag.current.focus();
+    }, [showTagInput]
+  )
+
+  const handleNewTagConfirm = useCallback(
+    () => {
+      if(newTag) setTags([...tags, newTag])
+      setNewTag('')
+      setShowTagInput(false)
+    }, [newTag]
+  )
+
+  return (
+    <Form
+      validation={validationSchema}
+      onSubmit={({date, time, range, ...data}, form) => {
+        const game = {
+          id: initialValues.id,
+          ...data,
+          image: image,
+          startingDate: new Date(`${date.format('YYYY-MM-DD')} ${time.format('HH:mm')}`),
+          lvlFrom: range[0],
+          lvlTo: range[1],
+          tags
+        }
+        onSubmit(game, form)
+      }}>
+      {({form}) =>
+        <Box>
+          <Box mb={20}>
+            <Header>Add new Game</Header>
+          </Box>
+
+          {/* Image */}
+          <Flex column mb={20}>
+            <Field name="image" initialValue={image}>
               <Upload.Dragger
+                accept="image/*"
                 beforeUpload={file => {
                   const fr = new FileReader()
-                  fr.onload = () => this.setState({image: fr.result})
+                  fr.onload = () => setImage(fr.result)
                   fr.readAsDataURL(file)
+                  setFileList([file])
 
                   return false
                 }}
+                onRemove={(e) => {
+                  setFileList([])
+                  setImage(null)
+                  form.setFieldsValue({
+                    image: null
+                  })
+                }}
+                fileList={fileList}
               >
                 {
                   image
                     ? <StyledImage src={image}/>
-                    : <React.Fragment>
-                      <Msg className="ant-upload-drag-icon">
-                        <Icon type="inbox"/>
-                      </Msg>
-                      <Msg className="ant-upload-text">Click or drag file to this area to upload</Msg>
-                    </React.Fragment>
+                    : (
+                      <>
+                        <Msg className="ant-upload-drag-icon">
+                          <Icon type="inbox"/>
+                        </Msg>
+                        <Msg className="ant-upload-text">Click or drag file to this area to upload</Msg>
+                      </>
+                    )
                 }
               </Upload.Dragger>
-            </Flex>
+            </Field>
+          </Flex>
 
-            <Flex column>
-              <Box>
-                <Field name="title">
-                  <Input placeholder="Title"/>
-                </Field>
-              </Box>
-
-              <Box>
-                <Msg>Select min-max levels</Msg>
-
-                <Field initialValue={[1, 4]} name="range">
-                  <Slider
-                    range
-                    step={1}
-                    min={1}
-                    max={20}
-                    marks={R.pipe(
-                      R.repeat(R.__, 20),
-                      R.addIndex(R.map)((v, idx) => ++idx),
-                      R.map(n => [n, n]),
-                      R.fromPairs,
-                    )(null)
-                    }
-                  />
-                </Field>
-              </Box>
-            </Flex>
-
-            <Flex justifyContent="space-between">
-              <Field name="date">
-                <DatePicker/>
+          {/* Title */}
+          <Flex column>
+            <Box>
+              <Field initialValue={initialValues && initialValues.title} name="title">
+                <Input placeholder="Title"/>
               </Field>
+            </Box>
 
-              <Field name="time">
-                <TimePicker format="HH:mm" minuteStep={10}/>
+            {/* Levels */}
+            <Box>
+              <Msg>Select min-max levels</Msg>
+
+              <Field
+                initialValue={initialValues && initialValues.lvlFrom && initialValues.lvlTo
+                  ? [initialValues.lvlFrom, initialValues.lvlTo]
+                  : [1, 4]}
+                name="range"
+              >
+                <Slider
+                  range
+                  step={1}
+                  min={1}
+                  max={20}
+                  marks={R.pipe(
+                    R.repeat(R.__, 20),
+                    R.addIndex(R.map)((v, idx) => ++idx),
+                    R.map(n => [n, n]),
+                    R.fromPairs,
+                  )(null)
+                  }
+                />
               </Field>
+            </Box>
+          </Flex>
 
-              <Box width="30%">
-                <Field name="players">
-                  <Select placeholder="Players count">
-                    {
-                      playersInGame.map(p => <Select.Option key={p} value={p}>{p}</Select.Option>)
-                    }
-                  </Select>
-                </Field>
-              </Box>
-            </Flex>
-
-            <Field name="description">
-              <Input.TextArea rows={6} placeholder="Description"/>
+          <Flex justifyContent="space-between">
+            {/* Date */}
+            <Field
+              name="date"
+              initialValue={initialValues && initialValues.startingDate && moment(initialValues.startingDate)}
+            >
+              <DatePicker/>
             </Field>
 
+            {/* Time */}
+            <Field
+              name="time"
+              initialValue={initialValues && initialValues.startingDate && moment(initialValues.startingDate)}
+            >
+              <TimePicker format="HH:mm" minuteStep={10}/>
+            </Field>
+
+            {/* Players */}
+            <Box width="30%">
+              <Field name="players" initialValue={initialValues && initialValues.players}>
+                <Select placeholder="Players count">
+                  {
+                    playersInGame.map(p => <Select.Option key={p} value={p}>{p}</Select.Option>)
+                  }
+                </Select>
+              </Field>
+            </Box>
+          </Flex>
+
+          {/* Description */}
+          <Field name="description" initialValue={initialValues && initialValues.description}>
+            <Input.TextArea rows={6} placeholder="Description"/>
+          </Field>
+
+          <Row>
+            <Col span={12}>
+              <Field name="telegramPost" initialValue={false}>
+                <Checkbox disabled={!showSharing}>Post in Telegram</Checkbox>
+              </Field>
+            </Col>
+            <Col span={12}>
+              <Field name="facebookPost" initialValue={false}>
+                <Checkbox disabled={!showSharing}>Post in Facebook</Checkbox>
+              </Field>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col span={24}>
+              {
+                tags.map((tag, idx) =>
+                  <Tag
+                    key={tag}
+                    closable
+                    onClose={e => {
+                      e.preventDefault();
+                      setTags(R.remove(idx, 1, tags))
+                    }}
+                  >
+                    {tag}
+                  </Tag>
+                )
+              }
+
+              {showTagInput && (
+                <Input
+                  ref={inputTag}
+                  type="text"
+                  size="small"
+                  style={{ width: 78 }}
+                  value={newTag}
+                  onChange={e => setNewTag(e.target.value)}
+                  onBlur={handleNewTagConfirm}
+                  onPressEnter={handleNewTagConfirm}
+                />
+              )}
+
+              {!showTagInput && (
+                <Tag
+                  style={{ background: '#fff', borderStyle: 'dashed' }}
+                  onClick={handleNewTagClick}
+                >
+                  <Icon type="plus" /> New Tag
+                </Tag>
+              )}
+            </Col>
+          </Row>
+
+          <Box mt={15}>
             <Button
               disabled={form.hasErrors()}
               htmlType="submit"
@@ -150,10 +275,10 @@ class NewGameForm extends React.PureComponent {
               Submit
             </Button>
           </Box>
-        }
-      </Form>
-    )
-  }
+        </Box>
+      }
+    </Form>
+  )
 }
 
 export default NewGameForm

@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import moment from 'moment'
+import format from 'date-fns/format'
 import { Flex } from 'noui/Position'
 import { Msg } from 'ui/Text'
 
@@ -9,16 +9,19 @@ const StyledImage = styled.img`
   object-fit: contain;
 `
 
-const GameView = ({ title, image, startingDate, ...props }) => (
-  <Flex {...props} inline>
-    {image && <StyledImage src={image}/>}
-    
-    <Flex ml={10} py="5px" column justifyContent="space-between">
-      <Msg>{title}</Msg>
-      <Msg>at {moment.unix(startingDate/1000).format('MMMM Do YYYY, h:mm:ss a')}</Msg>
+const GameView = ({ title, image, startingDate, ...props }) => {
+  const date = new Date(parseInt(startingDate, 10))
+  return (
+    <Flex {...props} inline>
+      {image && <StyledImage src={image} />}
+
+      <Flex ml={10} py="5px" column justifyContent="space-between">
+        <Msg>{title}</Msg>
+        <Msg>at {format(date, 'MMMM do yyyy, h:mm:ss a')}</Msg>
+      </Flex>
     </Flex>
-  </Flex>
-)
+  )
+}
 
 export default GameView
 

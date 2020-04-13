@@ -1,7 +1,17 @@
 import React from 'react'
-import { Flex } from 'noui/Position'
-import { Msg } from 'ui/Text'
+import { Flex, Box } from 'noui/Position'
+import { Label } from 'ui/Text'
 import styled from 'styled-components'
+import UserInfo from 'components/UserInfo'
+import { background } from 'styled-system'
+import { CLASSES } from 'components/ClassesSelector'
+import qs from 'query-string'
+import * as R from 'ramda'
+import { Badge, Avatar, Tooltip } from 'antd'
+
+const Wrapper = styled(Flex)`
+  ${background}
+`
 
 const StyledImage = styled.img`
   height: 60px;
@@ -9,14 +19,83 @@ const StyledImage = styled.img`
   object-fit: contain;
 `
 
-const Character = ({ name, experience, faction: { name: fname, logo }, renown, ...props }) =>
-  <Flex {...props} inline>
-    {logo && <StyledImage src={logo}/>}
-  
-    <Flex ml={10} py="5px" column justifyContent="space-between">
-      <Msg>{name} [{experience}]</Msg>
-      <Msg>from {fname} ({renown})</Msg>
-    </Flex>
-  </Flex>
+const AvatarPlaceholder = styled.img`
+  height: 60px;
+  width: 60px;
+  background: rgb(204, 204, 204);
+  border-radius: 50%;
+`
+AvatarPlaceholder.displayName = 'AvatarPlaceholder'
+
+const StyledFactionLogo = styled.img`
+  height: 25px;
+  width: 25px;
+  object-fit: contain;
+  position: absolute;
+  right: -10px;
+  top: -10px;
+`
+
+const getClassLogo = name => R.pipe(
+  R.find(R.propEq('name', name)),
+  R.propOr("", "icon")
+)(CLASSES)
+
+const Character = ({
+  name,
+  class: dndClass,
+  avatar,
+  experience,
+  renown,
+  faction: { name: fname, logo },
+  user,
+  ...props
+}) => {
+
+  return (
+    <Wrapper center {...props} inline background>
+      <Box position="relative">
+        {avatar && <StyledImage src={avatar} />}
+        {!avatar && <AvatarPlaceholder />}
+
+        <Tooltip title={fname}>
+          {logo && <StyledFactionLogo src={logo} />}
+        </Tooltip>
+      </Box>
+
+      <Flex ml={10} py="5px" column justifyContent="space-between">
+        <Box mb={10}>
+          <Label>{name}</Label>
+        </Box>
+
+        <Flex>
+          {
+            R.pipe(
+              R.toPairs,
+              R.map(([c, lvl]) =>
+              <Box key={c} mx="5px">
+                <Tooltip title={c}>
+                  <Badge
+                    count={lvl}
+                  >
+                    <Avatar
+                      size="small"
+                      src={getClassLogo(c)}
+                    />
+                  </Badge>
+                </Tooltip>
+              </Box>),
+            )(qs.parse(dndClass))
+          }
+        </Flex>
+      </Flex>
+
+      <Flex ml={15} column center>
+        <UserInfo {...user} position="left"/>
+      </Flex>
+    </Wrapper>
+  )
+}
+Character.displayName = 'Character'
 
 export default Character

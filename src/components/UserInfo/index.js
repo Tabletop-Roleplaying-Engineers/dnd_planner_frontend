@@ -11,5 +11,6 @@ const UserInfo = ({ firstName, lastName, username, avatar, position = 'top' }) =
       <Avatar size="large" src={avatar}/>
     </a>
   </Tooltip>
+UserInfo.displayName = 'UserInfo'
 
 export default UserInfo

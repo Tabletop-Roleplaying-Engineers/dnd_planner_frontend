@@ -1,11 +1,12 @@
 import { Button, Select, Spin } from 'antd'
 import * as R from 'ramda'
 import React from 'react'
+import isBefore from 'date-fns/isBefore'
+import styled from 'styled-components'
 import { Flex, Box } from 'noui/Position'
 import Character from 'components/Character'
 import { Header, Msg, Paragraph } from 'ui/Text'
-import styled from 'styled-components'
-import UserInfo from '../../components/UserInfo'
+import UserInfo from 'components/UserInfo'
 
 const StyledImage = styled.img`
   object-fit: cover;
@@ -20,9 +21,9 @@ const Description = styled(Flex)`
 
 const StyledSelect = styled(Select)`
   width: 300px;
-  
+
  & > .ant-select-selection--single {
-   height: ${props => props.selected ? '70px' : 'auto'};
+   height: ${props => props.selected ? '90px' : 'auto'};
    padding-top: 3px;
  }
 `
@@ -32,9 +33,10 @@ class ParticipateForm extends React.PureComponent {
     selectedCharacter: null,
     participating: false,
   }
-  
+
   render () {
     const {
+      id,
       image,
       title,
       lvlFrom,
@@ -45,60 +47,59 @@ class ParticipateForm extends React.PureComponent {
       availableCharacters = [],
       players,
       status,
-      onParticipate
+      onParticipate,
+      startingDate,
     } = this.props
-    
+    const isPastGame = isBefore(new Date(startingDate), new Date())
+
     return (
-      <Box>
+      <Box key={id}>
         <Flex mb={20} center justifyContent="space-between">
           <Flex column>
             <Header>
               {title}
             </Header>
-  
+
             <Msg>{lvlFrom} - {lvlTo}</Msg>
           </Flex>
-        
+
           <Flex column alignItems="flex-end">
             <Msg>Dungeon Master</Msg>
-            
+
             <UserInfo {...user} position="left"/>
           </Flex>
         </Flex>
-        
+
         <StyledImage src={image}/>
-        
+
         <Description column my={20}>
           {
             description
               .split('\n')
-              .map(msg => <Paragraph>{msg}</Paragraph>)
+              .map(msg => <Paragraph key={msg}>{msg}</Paragraph>)
           }
         </Description>
-        
+
         <Box>
           <Flex justifyContent="space-between">
             <Msg>Players:</Msg>
-            
+
             <Msg>{characters.length} / {players}</Msg>
           </Flex>
-          
+
           <Flex flexWrap="wrap" justifiContent="space-between">
             {
-              characters.map(({user, ...char}) =>
+              characters.map((char) =>
                 <Flex key={char.id} my={10} center>
                   <Character {...char} />
-                  
-                  <Box ml={20}>
-                    <UserInfo {...user} />
-                  </Box>
                 </Flex>
               )
             }
           </Flex>
-          
+
+          {isPastGame && <Msg>Registration is closed</Msg>}
           {
-            status === 'CAN_PARTICIPATE' &&
+            (!isPastGame && status === 'CAN_PARTICIPATE') &&
             <Spin spinning={this.state.participating}>
               <StyledSelect
                 placeholder="Select hero"
@@ -116,7 +117,7 @@ class ParticipateForm extends React.PureComponent {
                   )
                 }
               </StyledSelect>
-              
+
               <Box mt={20}>
                 <Button
                   type="primary"
@@ -133,9 +134,9 @@ class ParticipateForm extends React.PureComponent {
               </Box>
             </Spin>
           }
-        
+
         </Box>
-      
+
       </Box>
     )
   }

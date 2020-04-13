@@ -11,7 +11,7 @@ const _Form = ({ children, form, validation = {}, onSubmit, ...props }) => {
         e.preventDefault()
         form.validateFields(async (err, values) => {
           if (!err) {
-            console.log('Received values of form: ', values)
+            // console.log('Received values of form: ', values)
             await onSubmit(values, form)
           }
         })
@@ -37,21 +37,23 @@ export const Field = ({ children, name, initialValue, ...props }) =>
   <FormContext.Consumer>
     {({ form, validation }) => {
       return <Form.Item>
-        {form.getFieldDecorator(name, {
-          initialValue,
-          rules: [{
-            validator: (r, v, cb) => {
-              if(!r.field) return cb()
+        {
+          form.getFieldDecorator(name, {
+            initialValue,
+            rules: [{
+              validator: (r, v, cb) => {
+                if(!r.field) return cb()
 
-              const data = validate({ [r.field]: v }, { [r.field]: validation[r.field] })
-              return R.pipe(
-                R.propOr([], r.field),
-                res => !R.isEmpty(res) ? R.join(', ', res): undefined,
-                cb,
-              )(data)
-            },
-          }],
-        })(children)}
+                const data = validate({ [r.field]: v }, { [r.field]: validation[r.field] })
+                return R.pipe(
+                  R.propOr([], r.field),
+                  res => !R.isEmpty(res) ? R.join(', ', res): undefined,
+                  cb,
+                )(data)
+              },
+            }],
+          })(children)
+        }
       </Form.Item>
     }}
   </FormContext.Consumer>

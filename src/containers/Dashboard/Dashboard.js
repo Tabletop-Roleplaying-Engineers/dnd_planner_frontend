@@ -1,13 +1,16 @@
 import React from 'react'
+
 import { Box, Flex } from 'noui/Position'
 import ZoomCard from 'components/ZoomCard'
 import { Header, Paragraph } from 'ui/Text'
 import { withRouter } from 'react-router-dom'
-import loreCover from './shared/lore.jpg'
 import rulesCover from './shared/rules.jpg'
 import calendarCover from './shared/calendar.png'
 
-function Dashboard (props) {
+import { IFrame } from './shared/styled'
+
+
+function Dashboard(props) {
   return (
     <Box mt={10} mx={30}>
       <Flex
@@ -16,36 +19,39 @@ function Dashboard (props) {
         alignItems="center"
       >
         <ZoomCard
-          title="Правила"
+          title="Ліга Авантюристів"
           image={rulesCover}
           width={['90vw', '33%']}
           my={[10, 0]}
           height={['50vw', '25vw']}
-          onClick={() => props.history.push('/help#the_rules')}
+          onClick={() => props.history.push('/rules')}
         />
-        
+
         <ZoomCard
-          title="Календар"
+          title="Календар подій"
           image={calendarCover}
           width={['90vw', '33%']}
           my={[10, 0]}
           height={['50vw', '25vw']}
           onClick={() => props.history.push('/calendar')}
         />
-        
-        <ZoomCard
-          title="Ліга Авантюристів"
-          image={loreCover}
+
+        <IFrame
+          title="twitchPlayer"
+          src="https://player.twitch.tv/?channel=dnd_lviv_guild"
+          frameborder="0"
+          allowfullscreen="true"
+          scrolling="no"
           width={['90vw', '33%']}
-          my={[10, 0]}
           height={['50vw', '25vw']}
-          onClick={() => props.history.push('/lore')}
-        />
+          my={[10, 0]}
+        ></IFrame>
+
       </Flex>
-      
+
       <Box pt={20}>
         <Header>Коротко про головне:</Header>
-        
+
         <Box my={10}>
           <Paragraph>
             Dungeons & Dragons (укр. «Підземелля і дракони», скорочується до D&D або DnD) — настільна рольова гра в
@@ -53,7 +59,7 @@ function Dashboard (props) {
             фентезі, яка випускається компанією <a href="https://company.wizards.com/">Wizards of the Coast</a>.
           </Paragraph>
         </Box>
-        
+
         <Box my={10}>
           <Paragraph>
             У грі беруть участь ігровий майстер (Dungeon Master, DM, Майстер) та кілька гравців, зазвичай від 3-х до
@@ -63,7 +69,7 @@ function Dashboard (props) {
             чи помічники. Також він описує сам світ і події, що в ньому відбуваються.
           </Paragraph>
         </Box>
-        
+
         <Box my={10}>
           <Paragraph>
             Протягом гри кожен гравець задає дії для свого персонажа, а результати дій визначаються Майстром відповідно
@@ -72,7 +78,7 @@ function Dashboard (props) {
             Dragons»: «DM завжди правий».
           </Paragraph>
         </Box>
-        
+
         <Box my={10}>
           <Paragraph>
             У Львові D&D активно розвивається завдяки групі <a href="https://www.facebook.com/groups/dnd.lviv/">"Пряма
@@ -80,32 +86,19 @@ function Dashboard (props) {
             клубу-магазину настільних ігор <a href="http://octopus.lviv.ua/">"Octopus"</a>.
           </Paragraph>
         </Box>
-        
+
         <Flex column my={10}>
           <Paragraph>
-            Телеграм-канал: <a href="https://t.me/LvivAL">https://t.me/LvivAL</a>
+            Телеграм-канал: <a href="https://t.me/LvivDnD" target="_blank" rel="noopener noreferrer">https://t.me/LvivDnD</a>
           </Paragraph>
           <Paragraph>
-            Генерація персонажа: <a href="https://www.dndbeyond.com/">https://www.dndbeyond.com/</a>
+            Генерація персонажа: <a href="https://www.dndbeyond.com/" target="_blank" rel="noopener noreferrer">https://www.dndbeyond.com/</a>
           </Paragraph>
           <Paragraph>
-            Що таке Ліга Авантюристів: <a href="https://bit.ly/2F75e8u">https://bit.ly/2F75e8u</a>
-          </Paragraph>
-          <Paragraph>
-            Календар подій: <a href="http://clc.am/j1Ggbg">http://clc.am/j1Ggbg</a>
+            Базові правила D&D 5e: <a href="https://dnd.wizards.com/articles/features/basicrules" target="_blank" rel="noopener noreferrer">https://dnd.wizards.com/articles/features/basicrules</a>
           </Paragraph>
         </Flex>
       </Box>
-      
-      {/*<Box>*/}
-      {/*  <Button onClick={() => {*/}
-      {/*    localStorage.setItem('FIRST_PAGE', '/calendar')*/}
-      {/*    props.history.push('/calendar')*/}
-      {/*  }}*/}
-      {/*  >*/}
-      {/*    Do not show me this page again!*/}
-      {/*  </Button>*/}
-      {/*</Box>*/}
     </Box>
   )
 }
