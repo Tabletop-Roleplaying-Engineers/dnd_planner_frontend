@@ -1,6 +1,6 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { Button, Select, Spin, Alert } from 'antd'
-import { useQuery } from '@apollo/react-hooks';
+import { useLazyQuery } from '@apollo/react-hooks';
 import * as R from 'ramda'
 import isBefore from 'date-fns/isBefore'
 import styled from 'styled-components'
@@ -30,13 +30,22 @@ export const GameParticipation = (props) => {
   const [participating, setParticipating] = useState(false)
   const [selectedCharacter, setSelectedCharacter] = useState(null)
   const { user } = useContext(UserContext)
-  const { data = {} } = useQuery(AVAILABLE_CHARACTERS, {
-    variables: {
-      gameId: id,
-    },
-    fetchPolicy: 'network-only',
-  });
+  const [loadAvailableCharacters, { data = {} }] = useLazyQuery(
+    AVAILABLE_CHARACTERS,
+    {
+      variables: {
+        gameId: id,
+      },
+      fetchPolicy: 'network-only',
+    }
+  )
   const availableCharacters = data.validCharactersForGame || []
+
+  useEffect(() => {
+    if (user) {
+      loadAvailableCharacters()
+    }
+  }, [user])
 
   if (isPastGame) {
     return (<Alert message="Registration is closed" type="warning" />);
