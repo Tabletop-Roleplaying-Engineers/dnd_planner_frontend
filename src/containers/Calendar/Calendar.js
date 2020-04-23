@@ -101,6 +101,10 @@ class Calendar extends React.PureComponent {
 
         this.setState({ currentGame: { ...currentGame, ...participateGame } })
       }
+    }).catch((error) => {
+      notification.error({
+        message: error.message
+      })
     })
   }
 
@@ -234,10 +238,12 @@ class Calendar extends React.PureComponent {
             <>
               <GameInfo game={currentGame} />
               <ParticipantsList characters={currentGame.characters} />
-              <GameParticipation
-                {...currentGame}
-                onParticipate={this.onParticipate}
-              />
+              {currentGame.characters.length < currentGame.players && (
+                <GameParticipation
+                  {...currentGame}
+                  onParticipate={this.onParticipate}
+                />
+              )}
             </>
           )}
         </Drawer>
