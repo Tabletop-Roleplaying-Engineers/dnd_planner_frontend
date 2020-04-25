@@ -44,7 +44,7 @@
     "start:test": "cross-env environment=test PORT=80 react-app-rewired start",
     "start:dev:linux": "sudo cross-env PORT=80 react-app-rewired start",
     "start": "serve -s build",
-    "build": "react-app-rewired build",
+    "build": "rm -rf build && react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-app-rewired eject",
     "heroku-postbuild": "npm run build",
