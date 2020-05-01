@@ -65,17 +65,17 @@ export const FETCH_HOSTED_GAMES_QUERY = gql`
 
 export const CREATE_GAME_QUERY = gql`
   mutation CreateGame(
-  $title: String!
-  $image: String!
-  $description: String!
-  $startingDate: String!
-  $lvlFrom: Int!,
-  $lvlTo: Int!,
-  $players: Int!,
-  $telegramPost: Boolean!,
-  $facebookPost: Boolean!,
-  $tags: [String]!,
-  ){
+    $title: String!
+    $image: String!
+    $description: String!
+    $startingDate: String!
+    $lvlFrom: Int!
+    $lvlTo: Int!
+    $players: Int!
+    $telegramPost: Boolean!
+    $facebookPost: Boolean!
+    $tags: [String]!
+  ) {
     createGame(
       title: $title
       image: $image
@@ -83,10 +83,10 @@ export const CREATE_GAME_QUERY = gql`
       startingDate: $startingDate
       lvlFrom: $lvlFrom
       lvlTo: $lvlTo
-      players: $players,
-      telegramPost: $telegramPost,
-      facebookPost: $facebookPost,
-      tags: $tags,
+      players: $players
+      telegramPost: $telegramPost
+      facebookPost: $facebookPost
+      tags: $tags
     ) {
       id
       title
@@ -97,16 +97,16 @@ export const CREATE_GAME_QUERY = gql`
       lvlTo
       players
       characters {
-        id,
-        name,
-        experience,
+        id
+        name
+        experience
         renown
         faction {
           id
           name
           logo
         }
-      },
+      }
     }
   }
 `
@@ -148,14 +148,8 @@ export const NEW_GAME_SUBSCRIPTION = gql`
 `
 
 export const PARTICIPATE_GAME = gql`
-  mutation ParticipateGame(
-    $gameId: ID!
-    $characterId: ID!
-  ) {
-    participateGame(
-      gameId: $gameId
-      characterId: $characterId
-    ) {
+  mutation ParticipateGame($gameId: ID!, $characterId: ID!) {
+    participateGame(gameId: $gameId, characterId: $characterId) {
       id
       players
       status
@@ -184,11 +178,9 @@ export const PARTICIPATE_GAME = gql`
 `
 
 export const LEAVE_GAME = gql`
-  mutation LeaveGame(
-    $characterId: ID!
-  ){
-    leaveGame(characterId: $characterId){
-      id,
+  mutation LeaveGame($characterId: ID!) {
+    leaveGame(characterId: $characterId) {
+      id
       game {
         id
       }
@@ -197,9 +189,7 @@ export const LEAVE_GAME = gql`
 `
 
 export const END_GAME = gql`
-  mutation EndGame(
-    $gameId: ID!
-  ){
+  mutation EndGame($gameId: ID!) {
     endGame(gameId: $gameId) {
       id
       title
@@ -209,18 +199,18 @@ export const END_GAME = gql`
 
 export const UPDATE_GAME_QUERY = gql`
   mutation UpdateGame(
-  $id: ID!
-  $title: String!
-  $image: String!
-  $description: String!
-  $startingDate: String!
-  $lvlFrom: Int!,
-  $lvlTo: Int!,
-  $players: Int!,
-  $tags: [String]!,
-  $telegramPost: Boolean!,
-  $facebookPost: Boolean!,
-  ){
+    $id: ID!
+    $title: String!
+    $image: String!
+    $description: String!
+    $startingDate: String!
+    $lvlFrom: Int!
+    $lvlTo: Int!
+    $players: Int!
+    $tags: [String]!
+    $telegramPost: Boolean!
+    $facebookPost: Boolean!
+  ) {
     editGame(
       id: $id
       title: $title
@@ -229,9 +219,9 @@ export const UPDATE_GAME_QUERY = gql`
       startingDate: $startingDate
       lvlFrom: $lvlFrom
       lvlTo: $lvlTo
-      players: $players,
-      tags: $tags,
-      telegramPost: $telegramPost,
+      players: $players
+      tags: $tags
+      telegramPost: $telegramPost
       facebookPost: $facebookPost
     ) {
       id
@@ -243,16 +233,16 @@ export const UPDATE_GAME_QUERY = gql`
       lvlTo
       players
       characters {
-        id,
-        name,
-        experience,
+        id
+        name
+        experience
         renown
         faction {
           id
           name
           logo
         }
-      },
+      }
     }
   }
 `
