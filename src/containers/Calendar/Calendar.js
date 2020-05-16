@@ -13,12 +13,25 @@ import {
   CREATE_GAME_QUERY,
   NEW_GAME_SUBSCRIPTION,
   PARTICIPATE_GAME,
-  FETCH_GAME_QUERY
+  FETCH_GAME_QUERY,
 } from 'api'
 import { UserContext } from '../../context/userContext'
 
 const PlannerWrapper = styled.div`
   margin-top: 10px;
+`
+
+const LoaderWrapper = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.1);
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
 
 const DRAWERS = {
@@ -39,6 +52,8 @@ class Calendar extends React.PureComponent {
     currentGame: null,
     fetchingCurrentGame: false,
     date: false,
+    from: '0',
+    to: '0',
   }
 
   subscribeToNewGame = async subscribeToMore => {
@@ -60,13 +75,10 @@ class Calendar extends React.PureComponent {
 
           return {
             ...prev,
-            games: [
-              ...prev.games,
-              newGame,
-            ],
+            games: [...prev.games, newGame],
           }
-        }
-      })
+        },
+      }),
     })
   }
 
@@ -82,34 +94,47 @@ class Calendar extends React.PureComponent {
     const { client } = this.props
     const { currentGame } = this.state
 
-    await client.mutate({
-      mutation: PARTICIPATE_GAME,
-      variables: {
-        gameId: currentGame.id,
-        characterId: character.id
-      },
-      update: (cache, {data: {participateGame}}) => {
-        const { games } = cache.readQuery({query: FETCH_GAMES_QUERY})
+    await client
+      .mutate({
+        mutation: PARTICIPATE_GAME,
+        variables: {
+          gameId: currentGame.id,
+          characterId: character.id,
+        },
+        update: (cache, { data: { participateGame } }) => {
+          const { from, to } = this.state
+          const { games } = cache.readQuery({
+            query: FETCH_GAMES_QUERY,
+            variables: {
+              from,
+              to,
+            },
+          })
 
-        const idx = R.findIndex(R.propEq('id', participateGame.id))(games)
-        const updatedGame = { ...games[idx], ...participateGame }
+          const idx = R.findIndex(R.propEq('id', participateGame.id))(games)
+          const updatedGame = { ...games[idx], ...participateGame }
 
-        cache.writeQuery({
-          query: FETCH_GAMES_QUERY,
-          data: {games: [...R.remove(idx, 1, games), updatedGame]},
-        })
+          cache.writeQuery({
+            query: FETCH_GAMES_QUERY,
+            data: { games: [...R.remove(idx, 1, games), updatedGame] },
+          })
 
-        this.setState({ currentGame: { ...currentGame, ...participateGame } })
-      }
-    }).catch((error) => {
-      notification.error({
-        message: error.message
+          this.setState({ currentGame: { ...currentGame, ...participateGame } })
+        },
       })
-    })
+      .catch(error => {
+        notification.error({
+          message: error.message,
+        })
+      })
   }
 
   componentDidMount(prevProps) {
-    const { match: { params: { gameId } } } = this.props
+    const {
+      match: {
+        params: { gameId },
+      },
+    } = this.props
 
     if (gameId) {
       this.fetchCurrentGame(gameId)
@@ -117,7 +142,11 @@ class Calendar extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    const { match: { params: { gameId } } } = this.props
+    const {
+      match: {
+        params: { gameId },
+      },
+    } = this.props
 
     if (prevProps.match.params.gameId !== gameId && gameId) {
       this.fetchCurrentGame(gameId)
@@ -125,14 +154,16 @@ class Calendar extends React.PureComponent {
   }
 
   async fetchCurrentGame(id) {
-    const { client: { query } } = this.props
+    const {
+      client: { query },
+    } = this.props
 
     this.setState({
       fetchingCurrentGame: true,
     })
     const res = await query({
       query: FETCH_GAME_QUERY,
-      variables: { id }
+      variables: { id },
     })
     this.setState({
       currentGame: {
@@ -151,21 +182,39 @@ class Calendar extends React.PureComponent {
     history.push('/calendar')
   }
 
-  render () {
-    const { gamesList, date, currentGame } = this.state
+  onRangeChanged = (from, to) => {
+    console.log('=-= d', from, to)
+    this.setState({
+      from,
+      to,
+    })
+  }
+
+  render() {
+    const { gamesList, date, currentGame, from, to } = this.state
 
     return (
       <>
-        <Query query={FETCH_GAMES_QUERY}>
-          {({loading, error, data, subscribeToMore}) => {
-            if (loading) return <Spin/>
+        <Query query={FETCH_GAMES_QUERY} variables={{ from, to }}>
+          {({ loading, error, data, subscribeToMore }) => {
             if (error) return <div>Error: {error.message}</div>
 
             this.subscribeToNewGame(subscribeToMore)
 
             return (
               <PlannerWrapper>
-                <Planner games={data.games} onCellClick={({ date, games }) => this.onGameClick(games, date)} />
+                <Planner
+                  games={data.games || []}
+                  onCellClick={({ date, games }) =>
+                    this.onGameClick(games, date)
+                  }
+                  onRangeChanged={this.onRangeChanged}
+                />
+                {loading && (
+                  <LoaderWrapper>
+                    <Spin />
+                  </LoaderWrapper>
+                )}
               </PlannerWrapper>
             )
           }}
@@ -177,28 +226,32 @@ class Calendar extends React.PureComponent {
           closable={false}
           destroyOnClose={true}
           visible={this.state.visibleDrawer === DRAWERS.NEW_GAME}
-          onClose={() => this.setState({ visibleDrawer: null, lastSelectedDate: null })}
+          onClose={() =>
+            this.setState({ visibleDrawer: null, lastSelectedDate: null })
+          }
         >
           <Mutation mutation={CREATE_GAME_QUERY}>
-            {(createGame, {loading}) => (
+            {(createGame, { loading }) => (
               <Spin spinning={loading}>
                 <NewGameForm
                   showSharing
                   initialValues={{
                     startingDate: this.state.lastSelectedDate,
-                    tags: ['AL', 'Newbies allowed']
+                    tags: ['AL', 'Newbies allowed'],
                   }}
                   onSubmit={async (game, form) => {
                     try {
-                      await createGame({variables: game})
+                      await createGame({ variables: game })
                       notification.success({
-                        message: 'New game added!'
+                        message: 'New game added!',
                       })
                       this.setState({ visibleDrawer: null })
                     } catch (error) {
-                      const msg = error.graphQLErrors.map(err => err.message).join('; ')
+                      const msg = error.graphQLErrors
+                        .map(err => err.message)
+                        .join('; ')
                       notification.error({
-                        message: `Error while saving data: ${msg}`
+                        message: `Error while saving data: ${msg}`,
                       })
                       throw error
                     }
@@ -221,7 +274,12 @@ class Calendar extends React.PureComponent {
           <GamesList
             games={gamesList}
             date={date}
-            onNewGameClick={() => this.setState({ visibleDrawer: DRAWERS.NEW_GAME, lastSelectedDate: date })}
+            onNewGameClick={() =>
+              this.setState({
+                visibleDrawer: DRAWERS.NEW_GAME,
+                lastSelectedDate: date,
+              })
+            }
           />
         </Drawer>
 
