@@ -85,45 +85,21 @@ function Dashboard(props) {
 
         <Box my={10}>
           <Paragraph>
-            У Львові D&D активно розвивається завдяки групі{' '}
-            <a href="https://www.facebook.com/groups/dnd.lviv/">
-              "Пряма Гільдія"
-            </a>{' '}
-            та клубу-магазину настільних ігор{' '}
-            <a href="http://octopus.lviv.ua/">"Octopus"</a>.
+            У Львові D&D активно розвивається завдяки групі <a href="https://www.facebook.com/dndlviv/" target="_blank" rel="noopener noreferrer">"Пряма
+            Гільдія"</a> та
+            клубу-магазину настільних ігор <a href="http://octopus.lviv.ua/" target="_blank" rel="noopener noreferrer">"Octopus"</a>.
           </Paragraph>
         </Box>
 
         <Flex column my={10}>
           <Paragraph>
-            Телеграм-канал:{' '}
-            <a
-              href="https://t.me/LvivDnD"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              https://t.me/LvivDnD
-            </a>
+            <a href="https://t.me/LvivDnD" target="_blank" rel="noopener noreferrer">Телеграм-канал</a>
           </Paragraph>
           <Paragraph>
-            Генерація персонажа:{' '}
-            <a
-              href="https://www.dndbeyond.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              https://www.dndbeyond.com/
-            </a>
+            <a href="https://www.dndbeyond.com/" target="_blank" rel="noopener noreferrer">Генерація персонажа</a>
           </Paragraph>
           <Paragraph>
-            Базові правила D&D 5e:{' '}
-            <a
-              href="https://dnd.wizards.com/articles/features/basicrules"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              https://dnd.wizards.com/articles/features/basicrules
-            </a>
+            <a href="https://dnd.wizards.com/articles/features/basicrules" target="_blank" rel="noopener noreferrer">Базові правила D&D 5e</a>
           </Paragraph>
         </Flex>
       </Box>
