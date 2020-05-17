@@ -183,7 +183,6 @@ class Calendar extends React.PureComponent {
   }
 
   onRangeChanged = (from, to) => {
-    console.log('=-= d', from, to)
     this.setState({
       from,
       to,
