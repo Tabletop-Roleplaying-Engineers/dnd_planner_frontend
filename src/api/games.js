@@ -175,10 +175,10 @@ export const PARTICIPATE_GAME = gql`
 `
 
 export const LEAVE_GAME = gql`
-  mutation LeaveGame($characterId: ID!) {
-    leaveGame(characterId: $characterId) {
+  mutation LeaveGame($characterId: ID!, $gameId: ID!) {
+    leaveGame(characterId: $characterId, gameId: $gameId) {
       id
-      game {
+      games {
         id
       }
     }
@@ -240,6 +240,14 @@ export const UPDATE_GAME_QUERY = gql`
           logo
         }
       }
+    }
+  }
+`
+
+export const FETCH_GAMES_USER_PLAY_QUERY = gql`
+  query GamesUserPlay($includeOld: Boolean) {
+    gamesUserPlay(includeOld: $includeOld){
+      ${gameFields}
     }
   }
 `

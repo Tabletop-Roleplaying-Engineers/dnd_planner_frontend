@@ -3,7 +3,13 @@ import { Tabs, Alert } from 'antd'
 import { Box } from 'noui/Position'
 import { Header } from 'ui/Text'
 import { withApollo } from 'react-apollo'
-import { GamesTab, CharactersTab, SettingsTab, UsersTab, HostedGamesTab } from 'components/Profile'
+import {
+  GamesTab,
+  CharactersTab,
+  SettingsTab,
+  UsersTab,
+  HostedGamesTab,
+} from 'components/Profile'
 import { UserContext } from '../../context/userContext'
 import { ACTIONS } from '../../constants'
 
@@ -16,7 +22,9 @@ const Profile = ({ history }) => {
   const canManageRoles = user.actions.indexOf(ACTIONS.MANAGE_ROLES) >= 0
 
   if (!user) {
-    return <Alert message="You have to login to enter this page" type="warning" />
+    return (
+      <Alert message="You have to login to enter this page" type="warning" />
+    )
   }
 
   return (
@@ -25,10 +33,7 @@ const Profile = ({ history }) => {
         <Header>Profile</Header>
       </Box>
 
-      <Tabs 
-        defaultActiveKey="host" 
-        type="card"
-      >
+      <Tabs defaultActiveKey="games" type="card">
         <Tabs.TabPane tab="My Games" key="games">
           <GamesTab />
         </Tabs.TabPane>
@@ -42,10 +47,13 @@ const Profile = ({ history }) => {
         </Tabs.TabPane>
 
         <Tabs.TabPane tab="User and Settings" key="settings">
-          <SettingsTab user={user} onLogOutClick={() => {
-            localStorage.removeItem('AUTH_DATA')
-            setUser(null)
-          }} />
+          <SettingsTab
+            user={user}
+            onLogOutClick={() => {
+              localStorage.removeItem('AUTH_DATA')
+              setUser(null)
+            }}
+          />
         </Tabs.TabPane>
 
         {canManageRoles && (
