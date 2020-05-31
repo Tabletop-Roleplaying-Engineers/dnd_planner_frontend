@@ -5,7 +5,7 @@ export {
   CREATE_CHARACTER_MUTATION,
   DELETE_CHARACTER_MUTATION,
   FETCH_CHARACTERS_QUERY,
-  UPDATE_CHARACTER_MUTATION
+  UPDATE_CHARACTER_MUTATION,
 } from './characters'
 export {
   CREATE_GAME_QUERY,
@@ -16,16 +16,15 @@ export {
   NEW_GAME_SUBSCRIPTION,
   PARTICIPATE_GAME,
   FETCH_HOSTED_GAMES_QUERY,
-  UPDATE_GAME_QUERY
+  FETCH_GAMES_USER_PLAY_QUERY,
+  UPDATE_GAME_QUERY,
 } from './games'
 
-export {
-  FETCH_RULES
-} from './rules'
+export { FETCH_RULES } from './rules'
 
 export const FETCH_USERS_QUERY = gql`
   query Users($username: String!) {
-    users(username: $username){
+    users(username: $username) {
       id
       firstName
       lastName
@@ -91,7 +90,7 @@ export const TAGS_QUERY = gql`
 `
 
 export const UPDATE_USER_ROLES = gql`
-  mutation UpdateUserRoles($userId: ID!, $roles: [String]!){
+  mutation UpdateUserRoles($userId: ID!, $roles: [String]!) {
     updateUserRoles(userId: $userId, roles: $roles) {
       roles {
         id
@@ -112,11 +111,11 @@ export const SIGN_IN_MUTATION = gql`
     $authDate: String!
   ) {
     signIn(
-      id: $id,
-      firstName: $firstName,
-      lastName: $lastName,
-      username: $username,
-      hash: $hash,
+      id: $id
+      firstName: $firstName
+      lastName: $lastName
+      username: $username
+      hash: $hash
       avatar: $avatar
       authDate: $authDate
     )
