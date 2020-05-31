@@ -21,6 +21,19 @@ const PlannerWrapper = styled.div`
   margin-top: 10px;
 `
 
+const LoaderWrapper = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.1);
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
 const DRAWERS = {
   NEW_GAME: 'NEW_GAME',
   GAMES_LIST: 'GAMES_LIST',
@@ -39,6 +52,8 @@ class Calendar extends React.PureComponent {
     currentGame: null,
     fetchingCurrentGame: false,
     date: false,
+    from: '0',
+    to: '0',
   }
 
   subscribeToNewGame = async subscribeToMore => {
@@ -87,7 +102,14 @@ class Calendar extends React.PureComponent {
           characterId: character.id,
         },
         update: (cache, { data: { participateGame } }) => {
-          const { games } = cache.readQuery({ query: FETCH_GAMES_QUERY })
+          const { from, to } = this.state
+          const { games } = cache.readQuery({
+            query: FETCH_GAMES_QUERY,
+            variables: {
+              from,
+              to,
+            },
+          })
 
           const idx = R.findIndex(R.propEq('id', participateGame.id))(games)
           const updatedGame = { ...games[idx], ...participateGame }
@@ -97,9 +119,7 @@ class Calendar extends React.PureComponent {
             data: { games: [...R.remove(idx, 1, games), updatedGame] },
           })
 
-          this.setState({
-            currentGame: { ...currentGame, ...participateGame },
-          })
+          this.setState({ currentGame: { ...currentGame, ...participateGame } })
         },
       })
       .catch(error => {
@@ -162,14 +182,20 @@ class Calendar extends React.PureComponent {
     history.push('/calendar')
   }
 
+  onRangeChanged = (from, to) => {
+    this.setState({
+      from,
+      to,
+    })
+  }
+
   render() {
-    const { gamesList, date, currentGame } = this.state
+    const { gamesList, date, currentGame, from, to } = this.state
 
     return (
       <>
-        <Query query={FETCH_GAMES_QUERY}>
+        <Query query={FETCH_GAMES_QUERY} variables={{ from, to }}>
           {({ loading, error, data, subscribeToMore }) => {
-            if (loading) return <Spin />
             if (error) return <div>Error: {error.message}</div>
 
             this.subscribeToNewGame(subscribeToMore)
@@ -177,11 +203,17 @@ class Calendar extends React.PureComponent {
             return (
               <PlannerWrapper>
                 <Planner
-                  games={data.games}
+                  games={data.games || []}
                   onCellClick={({ date, games }) =>
                     this.onGameClick(games, date)
                   }
+                  onRangeChanged={this.onRangeChanged}
                 />
+                {loading && (
+                  <LoaderWrapper>
+                    <Spin />
+                  </LoaderWrapper>
+                )}
               </PlannerWrapper>
             )
           }}

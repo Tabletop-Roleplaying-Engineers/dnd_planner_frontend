@@ -9,7 +9,6 @@ const gameFields = `
   lvlFrom
   lvlTo
   players
-  status
   tags
   characters {
     id
@@ -40,8 +39,8 @@ const gameFields = `
   }
 `
 export const FETCH_GAMES_QUERY = gql`
-  {
-    games {
+  query Games($from: String!, $to: String!) {
+    games(from: $from, to: $to) {
       ${gameFields}
     }
   }
@@ -135,7 +134,6 @@ export const NEW_GAME_SUBSCRIPTION = gql`
           logo
         }
       }
-      status
       user {
         id
         firstName
@@ -152,7 +150,6 @@ export const PARTICIPATE_GAME = gql`
     participateGame(gameId: $gameId, characterId: $characterId) {
       id
       players
-      status
       characters {
         id
         name
@@ -178,10 +175,10 @@ export const PARTICIPATE_GAME = gql`
 `
 
 export const LEAVE_GAME = gql`
-  mutation LeaveGame($characterId: ID!) {
-    leaveGame(characterId: $characterId) {
+  mutation LeaveGame($characterId: ID!, $gameId: ID!) {
+    leaveGame(characterId: $characterId, gameId: $gameId) {
       id
-      game {
+      games {
         id
       }
     }
@@ -243,6 +240,14 @@ export const UPDATE_GAME_QUERY = gql`
           logo
         }
       }
+    }
+  }
+`
+
+export const FETCH_GAMES_USER_PLAY_QUERY = gql`
+  query GamesUserPlay($includeOld: Boolean) {
+    gamesUserPlay(includeOld: $includeOld){
+      ${gameFields}
     }
   }
 `

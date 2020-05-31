@@ -1,10 +1,14 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import * as R from 'ramda'
 import { Carousel, Tag } from 'antd'
 import addMonths from 'date-fns/addMonths'
 import addWeeks from 'date-fns/addWeeks'
 import format from 'date-fns/format'
 import isToday from 'date-fns/isToday'
+import startOfMonth from 'date-fns/startOfMonth'
+import endOfMonth from 'date-fns/endOfMonth'
+import startOfWeek from 'date-fns/startOfWeek'
+import endOfWeek from 'date-fns/endOfWeek'
 import { ResponsiveCalendar, ViewType } from 'react-responsive-calendar'
 import styled, { css } from 'styled-components'
 import { NavigationButtons } from './NavigationButtons'
@@ -25,11 +29,13 @@ const CalendarCell = styled.div`
   height: 150px;
 
   :hover {
-    background-color: #FFDBDA;
+    background-color: #ffdbda;
   }
-  ${props => props.today && css`
-    border-color: #E61721;
-  `}
+  ${props =>
+    props.today &&
+    css`
+      border-color: #e61721;
+    `}
 
   & .ant-carousel .slick-slide {
     height: 150px;
@@ -50,7 +56,7 @@ const CalendarCell = styled.div`
     }
 
     li.slick-active button {
-      background: #E40712;
+      background: #e40712;
       width: 5px;
     }
   }
@@ -79,73 +85,104 @@ const parseGames = R.pipe(
   groupByDate,
 )
 
-
-export const Calendar = ({ games, onCellClick }) => {
+export const Calendar = ({ games, onCellClick, onRangeChanged = () => {} }) => {
   const groupedGames = parseGames(games)
   const [date, setDate] = useState(new Date())
   const [view, setView] = useState()
-  const navHandler = useCallback((date, value) => {
-    const incrementFn = view === ViewType.MOBILE ? addWeeks : addMonths
-    setDate(incrementFn(date, value))
-  }, [view])
+  const [range, setRange] = useState({ from: null, to: null })
+  const navHandler = useCallback(
+    (date, value) => {
+      const incrementFn = view === ViewType.MOBILE ? addWeeks : addMonths
+      setDate(incrementFn(date, value))
+    },
+    [view],
+  )
   const renderWeekDay = useCallback(({ date }) => {
-    return (
-      <WeekDay>
-        {format(date, 'E')}
-      </WeekDay>
-    )
+    return <WeekDay>{format(date, 'E')}</WeekDay>
   }, [])
-  const cellClickHandler = useCallback(({ date, games }) => {
-    setDate(date)
-    onCellClick({ date, games })
-  }, [onCellClick])
-  const renderCell = useCallback(({ date: currentDate }) => {
-    const thisDayGames = groupedGames[format(currentDate, 'yyyy-MM-dd')] || []
+  const cellClickHandler = useCallback(
+    ({ date, games }) => {
+      setDate(date)
+      onCellClick({ date, games })
+    },
+    [onCellClick],
+  )
+  const renderCell = useCallback(
+    ({ date: currentDate }) => {
+      const thisDayGames = groupedGames[format(currentDate, 'yyyy-MM-dd')] || []
 
-    return (
-      <CalendarCell
-        today={isToday(currentDate)}
-        onClick={() => R.isEmpty(thisDayGames)
-          ? cellClickHandler({ date: currentDate, games: thisDayGames })
-          : undefined
-        }
-      >
-        <DateBlock>
-          <Tag color="volcano">{format(currentDate, 'dd')}</Tag>
-        </DateBlock>
+      return (
+        <CalendarCell
+          today={isToday(currentDate)}
+          onClick={() =>
+            R.isEmpty(thisDayGames)
+              ? cellClickHandler({ date: currentDate, games: thisDayGames })
+              : undefined
+          }
+        >
+          <DateBlock>
+            <Tag color="volcano">{format(currentDate, 'dd')}</Tag>
+          </DateBlock>
 
-        <CellLeft>
-          {
-            thisDayGames.length === 1
-            ? thisDayGames.map((game) =>
-              <GamePreview
-                onClick={() => cellClickHandler({ date: currentDate, games: thisDayGames })}
-                key={game.id}
-                {...game}
-              /> )
-            : <Carousel
+          <CellLeft>
+            {thisDayGames.length === 1 ? (
+              thisDayGames.map(game => (
+                <GamePreview
+                  onClick={() =>
+                    cellClickHandler({ date: currentDate, games: thisDayGames })
+                  }
+                  key={game.id}
+                  {...game}
+                />
+              ))
+            ) : (
+              <Carousel
                 autoplay
                 // effect="fade"
                 dotPosition="right"
                 easing="ease-out"
               >
-                {
-                  thisDayGames.map((game) =>
-                    <CarouselBlock key={game.id}>
-                      <GamePreview
-                        onClick={() => cellClickHandler({ date: currentDate, games: thisDayGames })}
-                        key={game.id}
-                        {...game}
-                      />
-                    </CarouselBlock>
-                  )
-                }
-            </Carousel>
-          }
-        </CellLeft>
-      </CalendarCell>
-    )
-  }, [groupedGames, date])
+                {thisDayGames.map(game => (
+                  <CarouselBlock key={game.id}>
+                    <GamePreview
+                      onClick={() =>
+                        cellClickHandler({
+                          date: currentDate,
+                          games: thisDayGames,
+                        })
+                      }
+                      key={game.id}
+                      {...game}
+                    />
+                  </CarouselBlock>
+                ))}
+              </Carousel>
+            )}
+          </CellLeft>
+        </CalendarCell>
+      )
+    },
+    [groupedGames, date],
+  )
+  useEffect(() => {
+    if (!view) {
+      return
+    }
+    if (view === ViewType.MOBILE) {
+      const from = startOfWeek(date)
+      const to = endOfWeek(date)
+      setRange({ from, to })
+    } else {
+      const from = startOfMonth(date)
+      const to = endOfMonth(date)
+      setRange({ from, to })
+    }
+  }, [view, date])
+  useEffect(() => {
+    if (range.from && range.to) {
+      onRangeChanged(range.from, range.to)
+    }
+  }, [range, onRangeChanged])
 
   return (
     <>

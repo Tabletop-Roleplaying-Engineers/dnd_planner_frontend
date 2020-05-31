@@ -73,7 +73,7 @@ export const FETCH_CHARACTERS_IN_GAME_QUERY = gql`
         avatar
         username
       }
-      game {
+      games {
         id
         title
         image
