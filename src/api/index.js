@@ -121,3 +121,9 @@ export const SIGN_IN_MUTATION = gql`
     )
   }
 `
+
+export const SIGN_IN_ON_BEHALF_MUTATION = gql`
+  mutation SignInOnBehalf($userId: ID!) {
+    signInOnBehalf(userId: $userId)
+  }
+`
