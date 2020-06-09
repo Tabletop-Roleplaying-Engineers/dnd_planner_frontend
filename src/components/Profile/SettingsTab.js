@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import { Button, Avatar } from 'antd'
 import styled from 'styled-components'
 import { Flex } from 'noui/Position'
