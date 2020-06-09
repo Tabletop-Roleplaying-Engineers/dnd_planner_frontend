@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { Button, Select, Spin, Alert } from 'antd'
-import { useLazyQuery } from '@apollo/react-hooks';
+import { useLazyQuery } from '@apollo/react-hooks'
 import * as R from 'ramda'
 import isBefore from 'date-fns/isBefore'
 import styled from 'styled-components'
@@ -12,13 +12,13 @@ import { UserContext } from '../../context/userContext'
 const StyledSelect = styled(Select)`
   width: 100%;
 
- & > .ant-select-selection--single {
-   height: ${props => props.selected ? '90px' : 'auto'};
-   padding-top: 3px;
- }
+  & > .ant-select-selection--single {
+    height: ${props => (props.selected ? '90px' : 'auto')};
+    padding-top: 3px;
+  }
 `
 
-export const GameParticipation = (props) => {
+export const GameParticipation = props => {
   const {
     id,
     onParticipate,
@@ -37,7 +37,7 @@ export const GameParticipation = (props) => {
         gameId: id,
       },
       fetchPolicy: 'network-only',
-    }
+    },
   )
   const availableCharacters = data.validCharactersForGame || []
 
@@ -48,11 +48,16 @@ export const GameParticipation = (props) => {
   }, [user])
 
   if (isPastGame) {
-    return (<Alert message="Registration is closed" type="warning" />);
+    return <Alert message="Registration is closed" type="warning" />
   }
 
   if (!user) {
-    return (<Alert message="Please login to be able to participate the game" type="warning" />)
+    return (
+      <Alert
+        message="Please login to be able to participate the game"
+        type="warning"
+      />
+    )
   }
 
   if (gameMaster.id === user.id) {
@@ -74,13 +79,11 @@ export const GameParticipation = (props) => {
             setSelectedCharacter(char)
           }}
         >
-          {
-            availableCharacters.map(char =>
-              <StyledSelect.Option key={char.id} value={JSON.stringify(char)}>
-                <Character {...char} />
-              </StyledSelect.Option>
-            )
-          }
+          {availableCharacters.map(char => (
+            <StyledSelect.Option key={char.id} value={JSON.stringify(char)}>
+              <Character {...char} />
+            </StyledSelect.Option>
+          ))}
         </StyledSelect>
 
         <Box mt={20}>

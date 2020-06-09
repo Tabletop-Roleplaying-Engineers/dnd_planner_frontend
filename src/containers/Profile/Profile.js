@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useCallback } from 'react'
 import { Tabs, Alert } from 'antd'
 import { Box } from 'noui/Position'
 import { Header } from 'ui/Text'
@@ -15,6 +15,20 @@ import { ACTIONS } from '../../constants'
 
 const Profile = ({ history }) => {
   const { user, setUser } = useContext(UserContext)
+  const setOnBehalfToken = useCallback(token => {
+    const originalToken = localStorage.getItem('AUTH_DATA')
+    localStorage.setItem('AUTH_DATA_ORIGINAL', originalToken)
+    localStorage.setItem('AUTH_DATA', token)
+    // eslint-disable-next-line no-restricted-globals
+    location.reload()
+  }, [])
+  const originalToken = localStorage.getItem('AUTH_DATA_ORIGINAL')
+  const logoutBehalf = useCallback(() => {
+    localStorage.setItem('AUTH_DATA', originalToken)
+    localStorage.removeItem('AUTH_DATA_ORIGINAL')
+    // eslint-disable-next-line no-restricted-globals
+    location.reload()
+  }, [originalToken])
   if (!user) {
     history.replace('/')
     return null
@@ -53,12 +67,14 @@ const Profile = ({ history }) => {
               localStorage.removeItem('AUTH_DATA')
               setUser(null)
             }}
+            logoutBehalf={logoutBehalf}
+            isOnBehalf={!!originalToken}
           />
         </Tabs.TabPane>
 
         {canManageRoles && (
           <Tabs.TabPane tab="Users" key="users">
-            <UsersTab />
+            <UsersTab setOnBehalfToken={setOnBehalfToken} />
           </Tabs.TabPane>
         )}
       </Tabs>
