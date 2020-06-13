@@ -185,9 +185,9 @@ export const LEAVE_GAME = gql`
   }
 `
 
-export const END_GAME = gql`
-  mutation EndGame($gameId: ID!) {
-    endGame(gameId: $gameId) {
+export const DELETE_GAME = gql`
+  mutation DeleteGame($id: ID!) {
+    deleteGame(id: $id) {
       id
       title
     }

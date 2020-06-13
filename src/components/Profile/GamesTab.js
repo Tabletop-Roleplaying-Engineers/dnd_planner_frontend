@@ -21,8 +21,9 @@ export const GamesTab = () => {
   const { user } = useContext(UserContext)
   const { gamesUserPlay = [] } = data
 
+  // TODO: Error and result in the same time
   if (error) {
-    return <Alert message="You have to login to enter this page" type="error" />
+    return <Alert message={error.message} type="error" />
   }
 
   if (!loading && R.isEmpty(gamesUserPlay))
