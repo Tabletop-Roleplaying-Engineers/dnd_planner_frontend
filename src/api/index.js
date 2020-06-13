@@ -9,7 +9,7 @@ export {
 } from './characters'
 export {
   CREATE_GAME_QUERY,
-  END_GAME,
+  DELETE_GAME,
   FETCH_GAMES_QUERY,
   FETCH_GAME_QUERY,
   LEAVE_GAME,
