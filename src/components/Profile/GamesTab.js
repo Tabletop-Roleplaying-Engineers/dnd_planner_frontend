@@ -1,72 +1,70 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Button, Spin, Alert, Empty } from 'antd'
 import * as R from 'ramda'
-import { Flex } from 'noui/Position'
+import { Mutation } from 'react-apollo'
+import { useQuery } from '@apollo/react-hooks'
+import { Flex, Box } from 'noui/Position'
 import Card from 'ui/Card'
 import Character from 'components/Character'
-import { Mutation, Query } from 'react-apollo'
-import {
-  FETCH_CHARACTERS_QUERY,
-  LEAVE_GAME
-} from 'api'
+import { FETCH_GAMES_USER_PLAY_QUERY, LEAVE_GAME } from 'api'
 import GameView from 'components/GameView'
+import { UserContext } from 'context/userContext'
+
+const getUsersCharacter = (userId, game) => {
+  return game.characters.find(character => character.user.id === userId)
+}
 
 export const GamesTab = () => {
+  const { loading, error, data = {}, refetch } = useQuery(
+    FETCH_GAMES_USER_PLAY_QUERY,
+  )
+  const { user } = useContext(UserContext)
+  const { gamesUserPlay = [] } = data
+
+  // TODO: Error and result in the same time
+  if (error) {
+    return <Alert message={error.message} type="error" />
+  }
+
+  if (!loading && R.isEmpty(gamesUserPlay))
+    return <Empty description="You are not participated in any game!" />
+
   return (
-    <Query query={FETCH_CHARACTERS_QUERY}>
-      {({loading, error, data: { characters = [] } }) => {
-        if (error) {
-          return <Alert message="You have to login to enter this page" type="error" />
-        }
+    <Spin spinning={loading}>
+      {gamesUserPlay.map(game => (
+        <Card key={game.id} py={10} px={20} my={10}>
+          <Flex column>
+            <GameView {...game} />
 
-        if(!loading && R.isEmpty(characters.filter(c => c.game))) 
-          return <Empty description="You are not participated in any game!" />
+            <Box mt={10}>
+              <Mutation
+                mutation={LEAVE_GAME}
+                variables={{
+                  characterId: getUsersCharacter(user.id, game).id,
+                  gameId: game.id,
+                }}
+                update={(cache, { data: { leaveGame } }) => {
+                  refetch()
+                }}
+              >
+                {(leaveGame, { loading }) => (
+                  <Spin spinning={loading}>
+                    <Button type="primary" size="large" onClick={leaveGame}>
+                      Leave Game
+                    </Button>
+                  </Spin>
+                )}
+              </Mutation>
+            </Box>
 
-        return (
-          <Spin spinning={loading}>
-            {
-              characters
-              .filter(c => c.game)
-              .map(character =>
-                <Card key={character.id} py={10} px={20} my={10}>
-                  <Flex column>
-                    <GameView {...character.game} />
-
-                    <Flex mt={20} justifyContent="space-between">
-                      <Character {...character} />
-
-                      <Mutation
-                        mutation={LEAVE_GAME}
-                        variables={{characterId: character.id}}
-                        update={(cache, {data: {leaveGame}}) => {
-                          const {characters} = cache.readQuery({query: FETCH_CHARACTERS_QUERY})
-
-                          cache.writeQuery({
-                            query: FETCH_CHARACTERS_QUERY,
-                            data: {characters: R.reject(R.propEq('id', leaveGame.id), characters)}
-                          })
-                        }}
-                      >
-                        {(leaveGame, {loading}) => (
-                          <Spin spinning={loading}>
-                            <Button
-                              type="primary"
-                              size="large"
-                              onClick={leaveGame}
-                            >
-                              Leave Game
-                            </Button>
-                          </Spin>
-                        )}
-                      </Mutation>
-
-                    </Flex>
-                  </Flex>
-                </Card>)
-            }
-          </Spin>
-        )
-      }}
-    </Query>
+            <Flex mt={20} flexDirection="column" alignItems="flex-start">
+              {game.characters.map(character => (
+                <Character key={character.id} {...character} />
+              ))}
+            </Flex>
+          </Flex>
+        </Card>
+      ))}
+    </Spin>
   )
 }

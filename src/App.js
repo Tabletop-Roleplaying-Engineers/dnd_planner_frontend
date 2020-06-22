@@ -19,7 +19,7 @@ import { decode } from './utils/jwt'
 import { AUTH_STORAGE_KEY } from './constants'
 
 const httpLink = createHttpLink({
-  uri: process.env.REACT_APP_API_HTTP_URL
+  uri: process.env.REACT_APP_API_HTTP_URL,
 })
 
 const authLink = setContext((_, { headers }) => {
@@ -28,8 +28,8 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      authorization: userData || ''
-    }
+      authorization: userData || '',
+    },
   }
 })
 
@@ -37,7 +37,7 @@ const wsLink = new WebSocketLink({
   uri: process.env.REACT_APP_API_WS_URL,
   options: {
     reconnect: true,
-  }
+  },
 })
 
 const link = split(
@@ -46,17 +46,23 @@ const link = split(
     return kind === 'OperationDefinition' && operation === 'subscription'
   },
   wsLink,
-  authLink.concat(httpLink)
+  authLink.concat(httpLink),
 )
 
 const client = new ApolloClient({
   link: link,
-  cache: new InMemoryCache()
+  cache: new InMemoryCache(),
 })
 
 const getUser = () => {
   const token = getText(AUTH_STORAGE_KEY)
-  return decode(token)
+  const user = decode(token)
+
+  return {
+    actions: [],
+    roles: [],
+    ...user,
+  }
 }
 
 const App = () => {

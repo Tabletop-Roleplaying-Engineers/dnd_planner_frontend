@@ -5,10 +5,9 @@ import ZoomCard from 'components/ZoomCard'
 import { Header, Paragraph } from 'ui/Text'
 import { withRouter } from 'react-router-dom'
 import rulesCover from './shared/rules.jpg'
-import calendarCover from './shared/calendar.png'
+import calendarCover from './shared/calendar.jpg'
 
 import { IFrame } from './shared/styled'
-
 
 function Dashboard(props) {
   return (
@@ -46,7 +45,6 @@ function Dashboard(props) {
           height={['50vw', '25vw']}
           my={[10, 0]}
         ></IFrame>
-
       </Flex>
 
       <Box pt={20}>
@@ -54,48 +52,54 @@ function Dashboard(props) {
 
         <Box my={10}>
           <Paragraph>
-            Dungeons & Dragons (укр. «Підземелля і дракони», скорочується до D&D або DnD) — настільна рольова гра в
-            стилі
-            фентезі, яка випускається компанією <a href="https://company.wizards.com/">Wizards of the Coast</a>.
+            Dungeons & Dragons (укр. «Підземелля і дракони», скорочується до D&D
+            або DnD) — настільна рольова гра в стилі фентезі, яка випускається
+            компанією{' '}
+            <a href="https://company.wizards.com/">Wizards of the Coast</a>.
           </Paragraph>
         </Box>
 
         <Box my={10}>
           <Paragraph>
-            У грі беруть участь ігровий майстер (Dungeon Master, DM, Майстер) та кілька гравців, зазвичай від 3-х до
-            6-ти. Для гри необхідні листи персонажів із записами їхніх характеристик, багатогранні кубики (на 4, 6, 8,
-            10, 12 та 20 граней), іноді розграфлене поле та мініатюрки. Кожен гравець керує діями одного персонажа
-            ігрового світу. Майстер діє від імені всіх неігрових персонажів (NPC, Non Player Character), таких як вороги
-            чи помічники. Також він описує сам світ і події, що в ньому відбуваються.
+            У грі беруть участь ігровий майстер (Dungeon Master, DM, Майстер) та
+            кілька гравців, зазвичай від 3-х до 6-ти. Для гри необхідні листи
+            персонажів із записами їхніх характеристик, багатогранні кубики (на
+            4, 6, 8, 10, 12 та 20 граней), іноді розграфлене поле та мініатюрки.
+            Кожен гравець керує діями одного персонажа ігрового світу. Майстер
+            діє від імені всіх неігрових персонажів (NPC, Non Player Character),
+            таких як вороги чи помічники. Також він описує сам світ і події, що
+            в ньому відбуваються.
           </Paragraph>
         </Box>
 
         <Box my={10}>
           <Paragraph>
-            Протягом гри кожен гравець задає дії для свого персонажа, а результати дій визначаються Майстром відповідно
-            до правил. Випадкові події моделюються киданням грального кубика (англ. dice). Іноді рішення майстра можуть
-            не відповідати правилам задля сприяння цікавості ігрового сеансу. Це є «золотим правилом Dungeons &
+            Протягом гри кожен гравець задає дії для свого персонажа, а
+            результати дій визначаються Майстром відповідно до правил. Випадкові
+            події моделюються киданням грального кубика (англ. dice). Іноді
+            рішення майстра можуть не відповідати правилам задля сприяння
+            цікавості ігрового сеансу. Це є «золотим правилом Dungeons &
             Dragons»: «DM завжди правий».
           </Paragraph>
         </Box>
 
         <Box my={10}>
           <Paragraph>
-            У Львові D&D активно розвивається завдяки групі <a href="https://www.facebook.com/groups/dnd.lviv/">"Пряма
+            У Львові D&D активно розвивається завдяки групі <a href="https://www.facebook.com/dndlviv/" target="_blank" rel="noopener noreferrer">"Пряма
             Гільдія"</a> та
-            клубу-магазину настільних ігор <a href="http://octopus.lviv.ua/">"Octopus"</a>.
+            клубу-магазину настільних ігор <a href="http://octopus.lviv.ua/" target="_blank" rel="noopener noreferrer">"Octopus"</a>.
           </Paragraph>
         </Box>
 
         <Flex column my={10}>
           <Paragraph>
-            Телеграм-канал: <a href="https://t.me/LvivDnD" target="_blank" rel="noopener noreferrer">https://t.me/LvivDnD</a>
+            <a href="https://t.me/LvivDnD" target="_blank" rel="noopener noreferrer">Телеграм-канал</a>
           </Paragraph>
           <Paragraph>
-            Генерація персонажа: <a href="https://www.dndbeyond.com/" target="_blank" rel="noopener noreferrer">https://www.dndbeyond.com/</a>
+            <a href="https://www.dndbeyond.com/" target="_blank" rel="noopener noreferrer">Генерація персонажа</a>
           </Paragraph>
           <Paragraph>
-            Базові правила D&D 5e: <a href="https://dnd.wizards.com/articles/features/basicrules" target="_blank" rel="noopener noreferrer">https://dnd.wizards.com/articles/features/basicrules</a>
+            <a href="https://dnd.wizards.com/articles/features/basicrules" target="_blank" rel="noopener noreferrer">Базові правила D&D 5e</a>
           </Paragraph>
         </Flex>
       </Box>

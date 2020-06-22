@@ -9,7 +9,6 @@ const gameFields = `
   lvlFrom
   lvlTo
   players
-  status
   tags
   characters {
     id
@@ -40,8 +39,8 @@ const gameFields = `
   }
 `
 export const FETCH_GAMES_QUERY = gql`
-  {
-    games {
+  query Games($from: String!, $to: String!) {
+    games(from: $from, to: $to) {
       ${gameFields}
     }
   }
@@ -65,17 +64,17 @@ export const FETCH_HOSTED_GAMES_QUERY = gql`
 
 export const CREATE_GAME_QUERY = gql`
   mutation CreateGame(
-  $title: String!
-  $image: String!
-  $description: String!
-  $startingDate: String!
-  $lvlFrom: Int!,
-  $lvlTo: Int!,
-  $players: Int!,
-  $telegramPost: Boolean!,
-  $facebookPost: Boolean!,
-  $tags: [String]!,
-  ){
+    $title: String!
+    $image: String!
+    $description: String!
+    $startingDate: String!
+    $lvlFrom: Int!
+    $lvlTo: Int!
+    $players: Int!
+    $telegramPost: Boolean!
+    $facebookPost: Boolean!
+    $tags: [String]!
+  ) {
     createGame(
       title: $title
       image: $image
@@ -83,10 +82,10 @@ export const CREATE_GAME_QUERY = gql`
       startingDate: $startingDate
       lvlFrom: $lvlFrom
       lvlTo: $lvlTo
-      players: $players,
-      telegramPost: $telegramPost,
-      facebookPost: $facebookPost,
-      tags: $tags,
+      players: $players
+      telegramPost: $telegramPost
+      facebookPost: $facebookPost
+      tags: $tags
     ) {
       id
       title
@@ -97,16 +96,16 @@ export const CREATE_GAME_QUERY = gql`
       lvlTo
       players
       characters {
-        id,
-        name,
-        experience,
+        id
+        name
+        experience
         renown
         faction {
           id
           name
           logo
         }
-      },
+      }
     }
   }
 `
@@ -135,7 +134,6 @@ export const NEW_GAME_SUBSCRIPTION = gql`
           logo
         }
       }
-      status
       user {
         id
         firstName
@@ -148,17 +146,10 @@ export const NEW_GAME_SUBSCRIPTION = gql`
 `
 
 export const PARTICIPATE_GAME = gql`
-  mutation ParticipateGame(
-    $gameId: ID!
-    $characterId: ID!
-  ) {
-    participateGame(
-      gameId: $gameId
-      characterId: $characterId
-    ) {
+  mutation ParticipateGame($gameId: ID!, $characterId: ID!) {
+    participateGame(gameId: $gameId, characterId: $characterId) {
       id
       players
-      status
       characters {
         id
         name
@@ -184,23 +175,19 @@ export const PARTICIPATE_GAME = gql`
 `
 
 export const LEAVE_GAME = gql`
-  mutation LeaveGame(
-    $characterId: ID!
-  ){
-    leaveGame(characterId: $characterId){
-      id,
-      game {
+  mutation LeaveGame($characterId: ID!, $gameId: ID!) {
+    leaveGame(characterId: $characterId, gameId: $gameId) {
+      id
+      games {
         id
       }
     }
   }
 `
 
-export const END_GAME = gql`
-  mutation EndGame(
-    $gameId: ID!
-  ){
-    endGame(gameId: $gameId) {
+export const DELETE_GAME = gql`
+  mutation DeleteGame($id: ID!) {
+    deleteGame(id: $id) {
       id
       title
     }
@@ -209,18 +196,18 @@ export const END_GAME = gql`
 
 export const UPDATE_GAME_QUERY = gql`
   mutation UpdateGame(
-  $id: ID!
-  $title: String!
-  $image: String!
-  $description: String!
-  $startingDate: String!
-  $lvlFrom: Int!,
-  $lvlTo: Int!,
-  $players: Int!,
-  $tags: [String]!,
-  $telegramPost: Boolean!,
-  $facebookPost: Boolean!,
-  ){
+    $id: ID!
+    $title: String!
+    $image: String!
+    $description: String!
+    $startingDate: String!
+    $lvlFrom: Int!
+    $lvlTo: Int!
+    $players: Int!
+    $tags: [String]!
+    $telegramPost: Boolean!
+    $facebookPost: Boolean!
+  ) {
     editGame(
       id: $id
       title: $title
@@ -229,9 +216,9 @@ export const UPDATE_GAME_QUERY = gql`
       startingDate: $startingDate
       lvlFrom: $lvlFrom
       lvlTo: $lvlTo
-      players: $players,
-      tags: $tags,
-      telegramPost: $telegramPost,
+      players: $players
+      tags: $tags
+      telegramPost: $telegramPost
       facebookPost: $facebookPost
     ) {
       id
@@ -243,16 +230,24 @@ export const UPDATE_GAME_QUERY = gql`
       lvlTo
       players
       characters {
-        id,
-        name,
-        experience,
+        id
+        name
+        experience
         renown
         faction {
           id
           name
           logo
         }
-      },
+      }
+    }
+  }
+`
+
+export const FETCH_GAMES_USER_PLAY_QUERY = gql`
+  query GamesUserPlay($includeOld: Boolean) {
+    gamesUserPlay(includeOld: $includeOld){
+      ${gameFields}
     }
   }
 `
