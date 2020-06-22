@@ -13,13 +13,16 @@ import {
   Checkbox,
   Row,
   Col,
-  Tag
+  Tag,
+  ConfigProvider,
 } from 'antd'
 import { Box, Flex } from 'noui/Position'
 import Form, { Field } from 'noui/Form'
 import { Msg, Header } from 'ui/Text'
 import styled from 'styled-components'
 import { playersInGame } from 'config'
+import uk_UA from 'antd/lib/locale-provider/uk_UA'
+import 'moment/locale/uk'
 
 const StyledImage = styled.img`
   object-fit: cover;
@@ -38,69 +41,69 @@ const validationSchema = {
     },
   },
   range: {
-    presence: {allowEmpty: false},
+    presence: { allowEmpty: false },
   },
   date: {
-    presence: {allowEmpty: false},
+    presence: { allowEmpty: false },
   },
   time: {
-    presence: {allowEmpty: false},
+    presence: { allowEmpty: false },
   },
   players: {
-    presence: {allowEmpty: false},
+    presence: { allowEmpty: false },
   },
   description: {
-    presence: {allowEmpty: false},
+    presence: { allowEmpty: false },
   },
 }
 
-const NewGameForm = (props) => {
+// Needs to show ant.design `DatePicked` with UA formatting
+moment.locale('uk')
+
+const NewGameForm = props => {
   const { onSubmit, initialValues = { tags: [] }, showSharing } = props
 
   const [tags, setTags] = useState(initialValues.tags)
   const [newTag, setNewTag] = useState('')
   const [showTagInput, setShowTagInput] = useState()
-  const inputTag = useRef(null);
+  const inputTag = useRef(null)
 
   const [image, setImage] = useState(initialValues ? initialValues.image : null)
   const [fileList, setFileList] = useState([])
 
-  const handleNewTagClick = useCallback(
-    () => {
-      setShowTagInput(true)
-    }, []
-  )
+  const handleNewTagClick = useCallback(() => {
+    setShowTagInput(true)
+  }, [])
 
-  useEffect(
-    () => {
-      if(inputTag.current) inputTag.current.focus();
-    }, [showTagInput]
-  )
+  useEffect(() => {
+    if (inputTag.current) inputTag.current.focus()
+  }, [showTagInput])
 
-  const handleNewTagConfirm = useCallback(
-    () => {
-      if(newTag) setTags([...tags, newTag])
-      setNewTag('')
-      setShowTagInput(false)
-    }, [newTag]
-  )
+  const handleNewTagConfirm = useCallback(() => {
+    if (newTag) setTags([...tags, newTag])
+    setNewTag('')
+    setShowTagInput(false)
+  }, [newTag])
 
   return (
     <Form
       validation={validationSchema}
-      onSubmit={({date, time, range, ...data}, form) => {
+      onSubmit={({ date, time, range, ...data }, form) => {
         const game = {
           id: initialValues.id,
           ...data,
           image: image,
-          startingDate: new Date(`${date.format('YYYY-MM-DD')} ${time.format('HH:mm')}`),
+          startingDate: new Date(
+            `${date.format('YYYY-MM-DD')} ${time.format('HH:mm')}`,
+          ),
           lvlFrom: range[0],
           lvlTo: range[1],
-          tags
+          tags,
         }
         onSubmit(game, form)
-      }}>
-      {({form}) =>
+      }}
+    >
+      {({ form }) => (
         <Box>
           <Box mb={20}>
             <Header>Add new Game</Header>
@@ -119,27 +122,27 @@ const NewGameForm = (props) => {
 
                   return false
                 }}
-                onRemove={(e) => {
+                onRemove={e => {
                   setFileList([])
                   setImage(null)
                   form.setFieldsValue({
-                    image: null
+                    image: null,
                   })
                 }}
                 fileList={fileList}
               >
-                {
-                  image
-                    ? <StyledImage src={image}/>
-                    : (
-                      <>
-                        <Msg className="ant-upload-drag-icon">
-                          <Icon type="inbox"/>
-                        </Msg>
-                        <Msg className="ant-upload-text">Click or drag file to this area to upload</Msg>
-                      </>
-                    )
-                }
+                {image ? (
+                  <StyledImage src={image} />
+                ) : (
+                  <>
+                    <Msg className="ant-upload-drag-icon">
+                      <Icon type="inbox" />
+                    </Msg>
+                    <Msg className="ant-upload-text">
+                      Click or drag file to this area to upload
+                    </Msg>
+                  </>
+                )}
               </Upload.Dragger>
             </Field>
           </Flex>
@@ -147,8 +150,11 @@ const NewGameForm = (props) => {
           {/* Title */}
           <Flex column>
             <Box>
-              <Field initialValue={initialValues && initialValues.title} name="title">
-                <Input placeholder="Title"/>
+              <Field
+                initialValue={initialValues && initialValues.title}
+                name="title"
+              >
+                <Input placeholder="Title" />
               </Field>
             </Box>
 
@@ -157,9 +163,11 @@ const NewGameForm = (props) => {
               <Msg>Select min-max levels</Msg>
 
               <Field
-                initialValue={initialValues && initialValues.lvlFrom && initialValues.lvlTo
-                  ? [initialValues.lvlFrom, initialValues.lvlTo]
-                  : [1, 4]}
+                initialValue={
+                  initialValues && initialValues.lvlFrom && initialValues.lvlTo
+                    ? [initialValues.lvlFrom, initialValues.lvlTo]
+                    : [1, 4]
+                }
                 name="range"
               >
                 <Slider
@@ -172,8 +180,7 @@ const NewGameForm = (props) => {
                     R.addIndex(R.map)((v, idx) => ++idx),
                     R.map(n => [n, n]),
                     R.fromPairs,
-                  )(null)
-                  }
+                  )(null)}
                 />
               </Field>
             </Box>
@@ -181,36 +188,56 @@ const NewGameForm = (props) => {
 
           <Flex justifyContent="space-between">
             {/* Date */}
-            <Field
-              name="date"
-              initialValue={initialValues && initialValues.startingDate && moment(initialValues.startingDate)}
-            >
-              <DatePicker/>
-            </Field>
+            <ConfigProvider locale={uk_UA}>
+              <Field
+                name="date"
+                initialValue={
+                  initialValues &&
+                  initialValues.startingDate &&
+                  moment(initialValues.startingDate)
+                }
+              >
+                <DatePicker />
+              </Field>
+            </ConfigProvider>
 
             {/* Time */}
-            <Field
-              name="time"
-              initialValue={initialValues && initialValues.startingDate && moment(initialValues.startingDate)}
-            >
-              <TimePicker format="HH:mm" minuteStep={10}/>
-            </Field>
+            <ConfigProvider locale={uk_UA}>
+              <Field
+                name="time"
+                initialValue={
+                  initialValues &&
+                  initialValues.startingDate &&
+                  moment(initialValues.startingDate)
+                }
+              >
+                <TimePicker format="HH:mm" minuteStep={10} />
+              </Field>
+            </ConfigProvider>
 
             {/* Players */}
             <Box width="30%">
-              <Field name="players" initialValue={initialValues && initialValues.players}>
+              <Field
+                name="players"
+                initialValue={initialValues && initialValues.players}
+              >
                 <Select placeholder="Players count">
-                  {
-                    playersInGame.map(p => <Select.Option key={p} value={p}>{p}</Select.Option>)
-                  }
+                  {playersInGame.map(p => (
+                    <Select.Option key={p} value={p}>
+                      {p}
+                    </Select.Option>
+                  ))}
                 </Select>
               </Field>
             </Box>
           </Flex>
 
           {/* Description */}
-          <Field name="description" initialValue={initialValues && initialValues.description}>
-            <Input.TextArea rows={6} placeholder="Description"/>
+          <Field
+            name="description"
+            initialValue={initialValues && initialValues.description}
+          >
+            <Input.TextArea rows={6} placeholder="Description" />
           </Field>
 
           <Row>
@@ -228,20 +255,18 @@ const NewGameForm = (props) => {
 
           <Row>
             <Col span={24}>
-              {
-                tags.map((tag, idx) =>
-                  <Tag
-                    key={tag}
-                    closable
-                    onClose={e => {
-                      e.preventDefault();
-                      setTags(R.remove(idx, 1, tags))
-                    }}
-                  >
-                    {tag}
-                  </Tag>
-                )
-              }
+              {tags.map((tag, idx) => (
+                <Tag
+                  key={tag}
+                  closable
+                  onClose={e => {
+                    e.preventDefault()
+                    setTags(R.remove(idx, 1, tags))
+                  }}
+                >
+                  {tag}
+                </Tag>
+              ))}
 
               {showTagInput && (
                 <Input
@@ -268,15 +293,12 @@ const NewGameForm = (props) => {
           </Row>
 
           <Box mt={15}>
-            <Button
-              disabled={form.hasErrors()}
-              htmlType="submit"
-            >
+            <Button disabled={form.hasErrors()} htmlType="submit">
               Submit
             </Button>
           </Box>
         </Box>
-      }
+      )}
     </Form>
   )
 }
