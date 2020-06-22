@@ -27,6 +27,14 @@ const AvatarPlaceholder = styled.img`
 `
 AvatarPlaceholder.displayName = 'AvatarPlaceholder'
 
+const StyledClassesWrapper = styled(Flex)`
+  flex-wrap: wrap;
+`
+
+const StyledNameAndClassesWrapper = styled(Flex)`
+  word-break: break-all;
+`
+
 const StyledFactionLogo = styled.img`
   height: 25px;
   width: 25px;
@@ -36,10 +44,11 @@ const StyledFactionLogo = styled.img`
   top: -10px;
 `
 
-const getClassLogo = name => R.pipe(
-  R.find(R.propEq('name', name)),
-  R.propOr("", "icon")
-)(CLASSES)
+const getClassLogo = name =>
+  R.pipe(
+    R.find(R.propEq('name', name)),
+    R.propOr('', 'icon'),
+  )(CLASSES)
 
 const Character = ({
   name,
@@ -51,9 +60,8 @@ const Character = ({
   user,
   ...props
 }) => {
-
   return (
-    <Wrapper center {...props} inline background>
+    <Wrapper {...props} background width="100%">
       <Box position="relative">
         {avatar && <StyledImage src={avatar} />}
         {!avatar && <AvatarPlaceholder />}
@@ -63,35 +71,35 @@ const Character = ({
         </Tooltip>
       </Box>
 
-      <Flex ml={10} py="5px" column justifyContent="space-between">
+      <StyledNameAndClassesWrapper
+        ml={10}
+        py="5px"
+        column
+        justifyContent="space-between"
+        width="100%"
+      >
         <Box mb={10}>
           <Label>{name}</Label>
         </Box>
 
-        <Flex>
-          {
-            R.pipe(
-              R.toPairs,
-              R.map(([c, lvl]) =>
-              <Box key={c} mx="5px">
+        <StyledClassesWrapper>
+          {R.pipe(
+            R.toPairs,
+            R.map(([c, lvl]) => (
+              <Box key={c} m="10px">
                 <Tooltip title={c}>
-                  <Badge
-                    count={lvl}
-                  >
-                    <Avatar
-                      size="small"
-                      src={getClassLogo(c)}
-                    />
+                  <Badge count={lvl}>
+                    <Avatar size="small" src={getClassLogo(c)} />
                   </Badge>
                 </Tooltip>
-              </Box>),
-            )(qs.parse(dndClass))
-          }
-        </Flex>
-      </Flex>
+              </Box>
+            )),
+          )(qs.parse(dndClass))}
+        </StyledClassesWrapper>
+      </StyledNameAndClassesWrapper>
 
-      <Flex ml={15} column center>
-        <UserInfo {...user} position="left"/>
+      <Flex ml={15} mt={15} column>
+        <UserInfo {...user} position="left" />
       </Flex>
     </Wrapper>
   )

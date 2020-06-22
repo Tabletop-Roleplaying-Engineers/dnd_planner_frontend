@@ -1,6 +1,16 @@
 import React, { useState, useCallback } from 'react'
-import { Dropdown, Icon, Spin, notification, Alert, Drawer, Button, Form, Empty } from 'antd'
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import {
+  Dropdown,
+  Icon,
+  Spin,
+  notification,
+  Alert,
+  Drawer,
+  Button,
+  Form,
+  Empty,
+} from 'antd'
+import { useQuery, useMutation } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import { Flex, Box } from 'noui/Position'
 import Card from 'ui/Card'
@@ -23,31 +33,37 @@ const FormContainer = styled.div`
   padding-top: 16px;
 `
 
+const CardWrapper = styled(Flex)`
+  flex-shrink: 0;
+`
+
+const ListWrapper = styled(Flex)`
+  flex-wrap: wrap;
+`
+
 const CharacterMenu = ({ onEditClick, character }) => {
   return (
     <Mutation
       mutation={DELETE_CHARACTER_MUTATION}
-      update={(cache) => {
-        const { characters } = cache.readQuery({ query: FETCH_CHARACTERS_QUERY })
+      update={cache => {
+        const { characters } = cache.readQuery({
+          query: FETCH_CHARACTERS_QUERY,
+        })
         cache.writeQuery({
           query: FETCH_CHARACTERS_QUERY,
-          data: { characters: characters.filter(c => c.id !== character.id) }
+          data: { characters: characters.filter(c => c.id !== character.id) },
         })
       }}
     >
       {(deleteCharacter, { loading }) => (
-        <Box
-          position="absolute"
-          top={0}
-          right={10}
-        >
+        <Box position="absolute" top={0} right={10}>
           <Dropdown
             overlay={createMenu([
               {
                 label: 'Edit',
                 icon: 'edit',
                 onClick: () => onEditClick(character),
-                'data-testid': "character-menu-edit",
+                'data-testid': 'character-menu-edit',
               },
               {
                 label: 'Delete',
@@ -55,15 +71,12 @@ const CharacterMenu = ({ onEditClick, character }) => {
                 onClick: async () => {
                   await deleteCharacter({ variables: { id: character.id } })
                 },
-                'data-testid': "character-menu-delete",
-              }
+                'data-testid': 'character-menu-delete',
+              },
             ])}
             trigger={['click']}
           >
-            <Icon
-              type="ellipsis"
-              data-testid="character-menu"
-            />
+            <Icon type="ellipsis" data-testid="character-menu" />
           </Dropdown>
         </Box>
       )}
@@ -79,65 +92,86 @@ const CharactersList = ({ data, onEditClick, loading, error }) => {
     return <Alert message={error.message} type="error" />
   }
 
-  if(!loading && R.isEmpty(data.characters))
-    return <Empty description="You have no characters yet. Create one to play!" />
+  if (!loading && R.isEmpty(data.characters))
+    return (
+      <Empty description="You have no characters yet. Create one to play!" />
+    )
 
-  return data.characters.map(character =>
-    <Card key={character.id} py={10} px={20} my={10} inline data-testid={`character-${character.name}`}>
-      <Character {...character} />
+  return data.characters.map(character => (
+    <CardWrapper width={['100%', '100%', '50%', '33%']} px="10px" column>
+      <Card
+        key={character.id}
+        py={10}
+        px={20}
+        my={10}
+        inline
+        data-testid={`character-${character.name}`}
+        width="100%"
+      >
+        <Character {...character} />
 
-      <CharacterMenu onEditClick={onEditClick} character={character} />
-    </Card>
-  )
+        <CharacterMenu onEditClick={onEditClick} character={character} />
+      </Card>
+    </CardWrapper>
+  ))
 }
 
 export const CharactersTab = () => {
   const [editCharacterVisibility, setEditCharacterVisibility] = useState(false)
   const [charToEdit, setCharToEdit] = useState()
-  const { loading, error, data, refetch } = useQuery(FETCH_CHARACTERS_QUERY);
-  const [createCharacter, createCharacterResult] = useMutation(CREATE_CHARACTER_MUTATION);
+  const { loading, error, data, refetch } = useQuery(FETCH_CHARACTERS_QUERY)
+  const [createCharacter, createCharacterResult] = useMutation(
+    CREATE_CHARACTER_MUTATION,
+  )
   const createLoading = createCharacterResult.loading
-  const [updateCharacter, updateCharacterResult] = useMutation(UPDATE_CHARACTER_MUTATION);
+  const [updateCharacter, updateCharacterResult] = useMutation(
+    UPDATE_CHARACTER_MUTATION,
+  )
   const updateLoading = updateCharacterResult.loading
-  const onEditClick = (character) => {
+  const onEditClick = character => {
     setEditCharacterVisibility(true)
     setCharToEdit(character)
   }
-  const onCharEditClose = (character) => {
+  const onCharEditClose = character => {
     setEditCharacterVisibility(false)
     setCharToEdit(null)
   }
-  const onFormSubmit = useCallback(async (data) => {
-    try {
-      if (data.id) {
-        await updateCharacter({ variables: omit(['name'], data) })
-      } else {
-        await createCharacter({ variables: data })
+  const onFormSubmit = useCallback(
+    async data => {
+      try {
+        if (data.id) {
+          await updateCharacter({ variables: omit(['name'], data) })
+        } else {
+          await createCharacter({ variables: data })
+        }
+        notification.success({
+          message: `Character successfully ${data.id ? 'updated' : 'added'}`,
+        })
+        refetch()
+        setEditCharacterVisibility(false)
+        setCharToEdit(null)
+      } catch (error) {
+        const message = error.graphQLErrors.map(err => err.message).join(' ,')
+        notification.error({ message })
       }
-      notification.success({
-        message: `Character successfully ${data.id ? 'updated' : 'added'}`
-      })
-      refetch()
-      setEditCharacterVisibility(false)
-      setCharToEdit(null)
-    } catch (error) {
-      const message = error.graphQLErrors.map(err => err.message).join(' ,')
-      notification.error({ message })
-    }
-  }, [updateCharacter, createCharacter, refetch])
+    },
+    [updateCharacter, createCharacter, refetch],
+  )
   let EditForm
   if (charToEdit) {
-    EditForm = Form.create({ mapPropsToFields: () => charToEdit})(EditCharacterForm);
+    EditForm = Form.create({ mapPropsToFields: () => charToEdit })(
+      EditCharacterForm,
+    )
   } else {
-    EditForm = EditCharacterForm;
+    EditForm = EditCharacterForm
   }
 
   return (
     <Flex flexDirection={['row', 'row']} justifyContent="space-between">
-      <Box column width={['100%', '40%']}>
+      <Box column width="100%">
         <Label>Characters:</Label>
 
-        <Flex column>
+        <Box column width={['100%', '40%']}>
           <Button
             style={{ width: '100%' }}
             type="primary"
@@ -149,14 +183,16 @@ export const CharactersTab = () => {
           >
             Add new Character
           </Button>
+        </Box>
 
+        <ListWrapper>
           <CharactersList
             data={data}
             onEditClick={onEditClick}
             loading={loading}
             error={error}
           />
-        </Flex>
+        </ListWrapper>
       </Box>
 
       <Drawer
@@ -169,10 +205,7 @@ export const CharactersTab = () => {
       >
         <Spin spinning={createLoading || updateLoading}>
           <FormContainer>
-            <EditForm
-              data={charToEdit}
-              onSubmit={onFormSubmit}
-            />
+            <EditForm data={charToEdit} onSubmit={onFormSubmit} />
           </FormContainer>
         </Spin>
       </Drawer>

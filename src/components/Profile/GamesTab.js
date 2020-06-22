@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Button, Spin, Alert, Empty } from 'antd'
+import { Button, Spin, Alert, Empty, Row, Col } from 'antd'
 import * as R from 'ramda'
 import { Mutation } from 'react-apollo'
 import { useQuery } from '@apollo/react-hooks'
@@ -57,11 +57,15 @@ export const GamesTab = () => {
               </Mutation>
             </Box>
 
-            <Flex mt={20} flexDirection="column" alignItems="flex-start">
+            <Row>
               {game.characters.map(character => (
-                <Character key={character.id} {...character} />
+                <Col key={character.id} md={12} lg={8}>
+                  <Box p={10}>
+                    <Character {...character} />
+                  </Box>
+                </Col>
               ))}
-            </Flex>
+            </Row>
           </Flex>
         </Card>
       ))}
