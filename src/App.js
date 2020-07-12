@@ -58,11 +58,15 @@ const getUser = () => {
   const token = getText(AUTH_STORAGE_KEY)
   const user = decode(token)
 
-  return {
-    actions: [],
-    roles: [],
-    ...user,
+  if (user) {
+    return {
+      actions: [],
+      roles: [],
+      ...user,
+    }
   }
+
+  return null
 }
 
 const App = () => {

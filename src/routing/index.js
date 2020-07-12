@@ -1,14 +1,13 @@
 import React, { useContext, useEffect } from 'react'
 import { Route, Switch } from 'react-router-dom'
+import { withApollo } from 'react-apollo'
 
 import _history from './history'
 import { Box } from '../noui/Position'
 import { AUTH_STORAGE_KEY } from '../constants'
 import { UserContext } from '../context/userContext'
-import {
-  CURRENT_USER,
-} from 'api'
-import { withApollo } from 'react-apollo';
+import { CURRENT_USER } from 'api'
+import { getText } from 'utils/storage'
 
 import NotFound from 'containers/NotFound'
 
@@ -23,9 +22,9 @@ import Lore from 'containers/League'
 
 export const history = _history
 
-const isJwtUserCorrect = (data) => data && data.currentUser
+const isJwtUserCorrect = data => data && data.currentUser
 
-const logout = (setUser) => {
+const logout = setUser => {
   localStorage.removeItem(AUTH_STORAGE_KEY)
   setUser(null)
   history.replace('/')
@@ -40,10 +39,12 @@ export function Routing(props) {
     // but corresponding user doesn't exist on the database
     // so we need this check when application is started
     (async function() {
-      if (!user) {
+      if (!user || !getText('AUTH_DATA')) {
         return
       }
-      const { client: { query } } = props
+      const {
+        client: { query },
+      } = props
       try {
         const res = await query({
           query: CURRENT_USER,
@@ -61,18 +62,18 @@ export function Routing(props) {
   return (
     <Switch>
       <Box mx={[10]}>
-        <Route exact path='/' component={Home}/>
-        <Route path='/login' component={Login}/>
-        <Route path='/calendar' component={Calendar}/>
-        <Route path='/players' component={Players}/>
-        <Route path='/profile' component={Profile}/>
-        <Route path='/dashboard' component={Dashboard}/>
-        <Route path='/rules' component={Rules}/>
-        <Route path='/lore' component={Lore}/>
+        <Route exact path="/" component={Home} />
+        <Route path="/login" component={Login} />
+        <Route path="/calendar" component={Calendar} />
+        <Route path="/players" component={Players} />
+        <Route path="/profile" component={Profile} />
+        <Route path="/dashboard" component={Dashboard} />
+        <Route path="/rules" component={Rules} />
+        <Route path="/lore" component={Lore} />
       </Box>
 
       {/* 404*/}
-      <Route component={NotFound}/>
+      <Route component={NotFound} />
     </Switch>
   )
 }
