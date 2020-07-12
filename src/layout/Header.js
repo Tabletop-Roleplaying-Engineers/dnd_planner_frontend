@@ -15,18 +15,20 @@ const StyledHeader = styled(Layout.Header)`
   height: 64px;
   background: black;
 
-  &.ant-layout-header{
+  &.ant-layout-header {
     padding: 0 3vw 0 0;
   }
 `
 
 const menu = ({ history }) => (
-  <Menu onClick={({ key, domEvent }) => {
-    domEvent.preventDefault();
-    domEvent.stopPropagation();
+  <Menu
+    onClick={({ key, domEvent }) => {
+      domEvent.preventDefault()
+      domEvent.stopPropagation()
 
-    history.push('/' + key)
-  }}>
+      history.push('/' + key)
+    }}
+  >
     <Menu.Item key="calendar">
       <Box inline mr="5px">
         <Icon type="calendar" />
@@ -47,7 +49,6 @@ const menu = ({ history }) => (
       </Box>
       Profile
     </Menu.Item>
-
   </Menu>
 )
 
@@ -61,15 +62,23 @@ const TestLoginBtn = () => {
     auth_date: 'auth_date',
     hash: 'hash',
   }
-  const params = Object.keys(authData).map((key) => `${key}=${authData[key]}`).join('&')
+  const params = Object.keys(authData)
+    .map(key => `${key}=${authData[key]}`)
+    .join('&')
 
   useEffect(() => {
-    const telegramIFrame = document.querySelector('iframe[id*="telegram-login-"]')
+    const telegramIFrame = document.querySelector(
+      'iframe[id*="telegram-login-"]',
+    )
     // Need to remove Telegram iframe, it is rendered over the button
     telegramIFrame.remove()
   }, [])
 
-  return <a data-testid="login-btn" href={`/login?${params}`}>Login</a>
+  return (
+    <a data-testid="login-btn" href={`/login?${params}`}>
+      Login
+    </a>
+  )
 }
 
 const Header = ({ history }) => {
@@ -82,8 +91,12 @@ const Header = ({ history }) => {
 
         {user && (
           <span data-testid="profile-drop-menu">
-            <Dropdown trigger={['click']} placement="bottomRight" overlay={menu({ history })}>
-              <Button style={{ padding: '0 10px'}} type="primary">
+            <Dropdown
+              trigger={['click']}
+              placement="bottomRight"
+              overlay={menu({ history })}
+            >
+              <Button style={{ padding: '0 10px' }} type="primary">
                 Roll for...
                 {/*<Icon style={{fontSize: '20px', color: 'black'}} type="menu" />*/}
               </Button>
@@ -92,7 +105,6 @@ const Header = ({ history }) => {
         )}
 
         {isTesting() && !user && <TestLoginBtn />}
-
       </Flex>
     </StyledHeader>
   )
