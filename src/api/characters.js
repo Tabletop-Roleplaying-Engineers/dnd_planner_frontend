@@ -82,9 +82,13 @@ export const CREATE_CHARACTER_MUTATION = gql`
 
 export const DELETE_CHARACTER_MUTATION = gql`
   mutation DeleteCharacter($id: ID!) {
-    deleteCharacter(id: $id) {
-      id
-    }
+    deleteCharacter(id: $id)
+  }
+`
+
+export const REMOVE_CHARACTER_FROM_GAME_MUTATION = gql`
+  mutation RemoveCharacterFromGame($characterId: ID!, $gameId: ID!) {
+    removeCharacterFromGame(characterId: $characterId, gameId: $gameId)
   }
 `
 

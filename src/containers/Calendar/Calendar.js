@@ -14,6 +14,7 @@ import {
   NEW_GAME_SUBSCRIPTION,
   PARTICIPATE_GAME,
   FETCH_GAME_QUERY,
+  REMOVE_CHARACTER_FROM_GAME_MUTATION,
 } from 'api'
 import { UserContext } from '../../context/userContext'
 
@@ -189,8 +190,57 @@ class Calendar extends React.PureComponent {
     })
   }
 
+  onRemoveCharClick = async (game, character) => {
+    const { client } = this.props
+
+    await client
+      .mutate({
+        mutation: REMOVE_CHARACTER_FROM_GAME_MUTATION,
+        variables: {
+          gameId: game.id,
+          characterId: character.id,
+        },
+        update: (cache, { data: { participateGame } }) => {
+          const { from, to } = this.state
+          const { games } = cache.readQuery({
+            query: FETCH_GAMES_QUERY,
+            variables: {
+              from,
+              to,
+            },
+          })
+
+          const idx = R.findIndex(R.propEq('id', game.id))(games)
+          const charIndex = R.findIndex(R.propEq('id', character.id))(
+            game.characters,
+          )
+          game.characters.splice(charIndex, 1)
+          const updatedGame = {
+            ...game,
+            startingDate: game.startingDate.getTime().toString(),
+          }
+          const updatedGames = {
+            games: [...R.remove(idx, 1, games), updatedGame],
+          }
+
+          cache.writeQuery({
+            query: FETCH_GAMES_QUERY,
+            data: updatedGames,
+          })
+
+          this.setState({ currentGame: { ...game } })
+        },
+      })
+      .catch(error => {
+        notification.error({
+          message: error.message,
+        })
+      })
+  }
+
   render() {
     const { gamesList, date, currentGame, from, to } = this.state
+    const { user } = this.context
 
     return (
       <>
@@ -294,7 +344,14 @@ class Calendar extends React.PureComponent {
           {currentGame && (
             <>
               <GameInfo game={currentGame} />
-              <ParticipantsList characters={currentGame.characters} />
+              <ParticipantsList
+                characters={currentGame.characters}
+                game={currentGame}
+                user={user}
+                onRemoveCharClick={char =>
+                  this.onRemoveCharClick(currentGame, char)
+                }
+              />
               {currentGame.characters.length < currentGame.players && (
                 <GameParticipation
                   {...currentGame}

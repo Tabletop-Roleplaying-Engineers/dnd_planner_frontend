@@ -4,6 +4,8 @@ export const ACTIONS = {
   MANAGE_GAMES: 'ManageGames',
   MANAGE_ROLES: 'ManageRoles',
   MANAGE_USERS: 'ManageUsers',
+  MANAGE_PARTICIPANTS: 'ManageParticipants',
+  MANAGE_PARTICIPANTS_ON_OWN_GAMES: 'ManageParticipantsOnOwnGames',
 }
 
 export const ENVIRONMENTS = {

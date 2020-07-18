@@ -13135,10 +13135,10 @@ react-popper@^1.3.6:
     typed-styles "^0.0.7"
     warning "^4.0.2"
 
-react-responsive-calendar@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/react-responsive-calendar/-/react-responsive-calendar-0.3.0.tgz#09855394a32c6a5250d4ad582dec2705f15a264b"
-  integrity sha512-ugdAgCKtN8mCNTAny5n4oxBvwRtIceOlDdmspIgW6VamZg7uiW9GRo8a/XRC/m6h9haVkK+iOhcXRqpUn1FdKw==
+react-responsive-calendar@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/react-responsive-calendar/-/react-responsive-calendar-0.4.0.tgz#34a95f2cd6e9f5c368e888d522f5a4e2f40a338c"
+  integrity sha512-Wknw/k3BzFkNAd2dlh/aqvekds5kS8/mWsu6vQzPfsurtzB8lJCs67nwx/F93oeD96k+wVSTLW2anCWJnyju/Q==
 
 react-responsive@^6.1.1:
   version "6.1.2"
