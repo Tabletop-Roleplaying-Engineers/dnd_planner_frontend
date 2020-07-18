@@ -1,5 +1,5 @@
-import React from 'react'
-import { Row, Col, Card, Dropdown, Icon } from 'antd'
+import React, { useState, useCallback } from 'react'
+import { Row, Col, Card, Dropdown, Icon, Modal } from 'antd'
 import Character from 'components/Character'
 import { Box } from 'noui/Position'
 import { createMenu } from 'ui/shared'
@@ -29,6 +29,14 @@ const shouldShowMenu = (user, game) => {
 export const ParticipantsList = props => {
   const { characters, game, user, onRemoveCharClick } = props
   const showMenu = shouldShowMenu(user, game)
+  const [characterToRemove, setCharacterToRemove] = useState(null)
+  const onRemovingConfirm = useCallback(
+    async char => {
+      await onRemoveCharClick(char)
+      setCharacterToRemove(null)
+    },
+    [onRemoveCharClick],
+  )
 
   return (
     <Row>
@@ -43,7 +51,7 @@ export const ParticipantsList = props => {
                     {
                       label: 'Remove from game',
                       icon: 'delete',
-                      onClick: () => onRemoveCharClick(character),
+                      onClick: () => setCharacterToRemove(character),
                       'data-testid': 'character-menu-remove-from-game',
                     },
                   ])}
@@ -58,6 +66,19 @@ export const ParticipantsList = props => {
           </Card>
         </Col>
       ))}
+
+      {/* Remove character from game dialog */}
+      <Modal
+        title="Remove character from game"
+        visible={!!characterToRemove}
+        onOk={() => onRemovingConfirm(characterToRemove)}
+        onCancel={() => setCharacterToRemove(null)}
+      >
+        <p>
+          Are you sure that you want to remove{' '}
+          <b>{characterToRemove && characterToRemove.name}</b> from this game?
+        </p>
+      </Modal>
     </Row>
   )
 }
