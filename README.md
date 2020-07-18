@@ -1,27 +1,35 @@
 ## Run on server
+
 Build project on your workstation
+
 ```
 yarn build
 ```
+
 Commit the code and push it
 
 Go to the frontend folder on the server and run next command
+
 ```
 git pull
 sudo docker build -t dnd-planner-frontend .
 ```
+
 Use `docker container ls` to see running images, if you see `dnd-planner-frontend` use `docker stop <id>` to stop an image then run next command:
+
 ```
 sudo docker run -d -p 80:80 dnd-planner-frontend
 ```
+
 Use `docker container ls` and make sure that you see `dnd-planner-frontend` image.
 
 In case when you don't see `dnd-planner-frontend` image running use `attached mode`
+
 ```
 sudo docker run -p 80:80 dnd-planner-frontend
 ```
 
-***
+---
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -32,7 +40,7 @@ In the project directory, you can run:
 ### `npm start`
 
 Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Open [http://127.0.0.1:3000](http://127.0.0.1:3000) to view it in the browser.
 
 The page will reload if you make edits.<br>
 You will also see any lint errors in the console.
