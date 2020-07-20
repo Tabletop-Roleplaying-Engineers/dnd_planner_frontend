@@ -1,12 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { Button, Select, Spin, Alert } from 'antd'
-import { useLazyQuery } from '@apollo/react-hooks'
+import { useLazyQuery, useMutation } from '@apollo/react-hooks'
 import * as R from 'ramda'
 import isBefore from 'date-fns/isBefore'
 import styled from 'styled-components'
 import { Box } from 'noui/Position'
 import Character from 'components/Character'
-import { AVAILABLE_CHARACTERS } from 'api'
+import { AVAILABLE_CHARACTERS, LEAVE_GAME } from 'api'
 import { UserContext } from '../../context/userContext'
 
 const StyledSelect = styled(Select)`
@@ -19,15 +19,10 @@ const StyledSelect = styled(Select)`
 `
 
 export const GameParticipation = props => {
-  const {
-    id,
-    onParticipate,
-    startingDate,
-    user: gameMaster,
-    characters,
-  } = props
+  const { onParticipate, game, onLeave } = props
+  const { id, startingDate, user: gameMaster, characters } = game
   const isPastGame = isBefore(new Date(startingDate), new Date())
-  const [participating, setParticipating] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [selectedCharacter, setSelectedCharacter] = useState(null)
   const { user } = useContext(UserContext)
   const [loadAvailableCharacters, { data = {} }] = useLazyQuery(
@@ -39,6 +34,7 @@ export const GameParticipation = props => {
       fetchPolicy: 'network-only',
     },
   )
+  const [leaveGame] = useMutation(LEAVE_GAME)
   const availableCharacters = data.validCharactersForGame || []
 
   useEffect(() => {
@@ -61,16 +57,49 @@ export const GameParticipation = props => {
   }
 
   if (gameMaster.id === user.id) {
-    return (<Alert message="You can't participate your own game" type="warning" />)
+    return (
+      <Alert message="You can't participate your own game" type="warning" />
+    )
   }
 
-  if (characters.some(character => character.user.id === user.id)) {
-    return (<Alert message="You already participating this game" type="warning" />)
+  const currentUsersCharacter = characters.find(
+    character => character.user.id === user.id,
+  )
+  if (currentUsersCharacter) {
+    return (
+      <Box>
+        <Alert
+          message="You already participating this game as {currentUsersCharacter.name}"
+          type="warning"
+        />
+        <Box mt="10px">
+          <Spin spinning={loading}>
+            <Button
+              type="primary"
+              size="large"
+              onClick={async () => {
+                setLoading(true)
+                await leaveGame({
+                  variables: {
+                    gameId: id,
+                    characterId: currentUsersCharacter.id,
+                  },
+                })
+                await onLeave()
+                setLoading(false)
+              }}
+            >
+              Leave game
+            </Button>
+          </Spin>
+        </Box>
+      </Box>
+    )
   }
 
   return (
     <Box>
-      <Spin spinning={participating}>
+      <Spin spinning={loading}>
         <StyledSelect
           placeholder="Select hero"
           selected={selectedCharacter}
@@ -92,9 +121,9 @@ export const GameParticipation = props => {
             size="large"
             disabled={R.isNil(selectedCharacter)}
             onClick={async () => {
-              setParticipating(true)
+              setLoading(true)
               await onParticipate(selectedCharacter)
-              setParticipating(false)
+              setLoading(false)
             }}
           >
             Participate
