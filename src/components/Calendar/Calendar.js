@@ -27,6 +27,7 @@ const CalendarCell = styled.div`
   margin: 0 4px;
   display: flex;
   height: 150px;
+  overflow: hidden;
 
   :hover {
     background-color: #ffdbda;
