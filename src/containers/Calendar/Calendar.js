@@ -165,6 +165,7 @@ class Calendar extends React.PureComponent {
     const res = await query({
       query: FETCH_GAME_QUERY,
       variables: { id },
+      fetchPolicy: 'network-only',
     })
     this.setState({
       currentGame: {
@@ -354,8 +355,9 @@ class Calendar extends React.PureComponent {
               />
               {currentGame.characters.length < currentGame.players && (
                 <GameParticipation
-                  {...currentGame}
+                  game={currentGame}
                   onParticipate={this.onParticipate}
+                  onLeave={() => this.fetchCurrentGame(currentGame.id)}
                 />
               )}
             </>
