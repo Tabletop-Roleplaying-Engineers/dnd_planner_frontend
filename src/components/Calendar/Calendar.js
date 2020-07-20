@@ -139,9 +139,9 @@ export const Calendar = ({ games, onCellClick, onRangeChanged = () => {} }) => {
             ) : (
               <Carousel
                 autoplay
-                // effect="fade"
                 dotPosition="right"
                 easing="ease-out"
+                adaptiveHeight
               >
                 {thisDayGames.map(game => (
                   <CarouselBlock key={game.id}>
