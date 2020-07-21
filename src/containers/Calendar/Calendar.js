@@ -245,7 +245,11 @@ class Calendar extends React.PureComponent {
 
     return (
       <>
-        <Query query={FETCH_GAMES_QUERY} variables={{ from, to }}>
+        <Query
+          query={FETCH_GAMES_QUERY}
+          variables={{ from, to }}
+          fetchPolicy="network-only"
+        >
           {({ loading, error, data, subscribeToMore }) => {
             if (error) return <div>Error: {error.message}</div>
 
