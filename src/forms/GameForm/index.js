@@ -62,7 +62,6 @@ moment.locale('uk')
 
 const GameForm = props => {
   const { onSubmit, initialValues = { tags: [] }, showSharing } = props
-  console.log('=-= initialValues', initialValues)
   const isEdit = !!initialValues.id
 
   const [tags, setTags] = useState(initialValues.tags)

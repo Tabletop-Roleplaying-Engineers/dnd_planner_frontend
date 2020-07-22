@@ -1,4 +1,4 @@
-import { Drawer, notification, Spin } from 'antd'
+import { Drawer, notification, Spin, Modal } from 'antd'
 import * as R from 'ramda'
 import React from 'react'
 import GameForm from 'forms/GameForm'
@@ -55,6 +55,7 @@ class Calendar extends React.PureComponent {
     date: false,
     from: '0',
     to: '0',
+    cancelCreatingGameConfirmation: false,
   }
 
   subscribeToNewGame = async subscribeToMore => {
@@ -239,8 +240,23 @@ class Calendar extends React.PureComponent {
       })
   }
 
+  onCancelEditing = () => {
+    this.setState({
+      cancelCreatingGameConfirmation: false,
+      visibleDrawer: null,
+      lastSelectedDate: null,
+    })
+  }
+
   render() {
-    const { gamesList, date, currentGame, from, to } = this.state
+    const {
+      gamesList,
+      date,
+      currentGame,
+      from,
+      to,
+      cancelCreatingGameConfirmation,
+    } = this.state
     const { user } = this.context
 
     return (
@@ -274,6 +290,7 @@ class Calendar extends React.PureComponent {
           }}
         </Query>
 
+        {/* Game form */}
         <Drawer
           width={modalWidth()}
           placement="right"
@@ -281,7 +298,7 @@ class Calendar extends React.PureComponent {
           destroyOnClose={true}
           visible={this.state.visibleDrawer === DRAWERS.NEW_GAME}
           onClose={() =>
-            this.setState({ visibleDrawer: null, lastSelectedDate: null })
+            this.setState({ cancelCreatingGameConfirmation: true })
           }
         >
           <Mutation mutation={CREATE_GAME_QUERY}>
@@ -367,6 +384,18 @@ class Calendar extends React.PureComponent {
             </>
           )}
         </Drawer>
+
+        {/* Cancel creating game confirmation dialog */}
+        <Modal
+          title="Cancel creating"
+          visible={cancelCreatingGameConfirmation}
+          onOk={() => this.onCancelEditing(false)}
+          onCancel={() =>
+            this.setState({ cancelCreatingGameConfirmation: false })
+          }
+        >
+          <p>Are you sure that you want to cancel creating?</p>
+        </Modal>
       </>
     )
   }
