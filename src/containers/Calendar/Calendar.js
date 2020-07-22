@@ -1,7 +1,7 @@
 import { Drawer, notification, Spin } from 'antd'
 import * as R from 'ramda'
 import React from 'react'
-import NewGameForm from 'forms/NewGameForm'
+import GameForm from 'forms/GameForm'
 import styled from 'styled-components'
 import { Mutation, Query, withApollo } from 'react-apollo'
 import { GamesList } from 'components/GamesList'
@@ -287,7 +287,7 @@ class Calendar extends React.PureComponent {
           <Mutation mutation={CREATE_GAME_QUERY}>
             {(createGame, { loading }) => (
               <Spin spinning={loading}>
-                <NewGameForm
+                <GameForm
                   showSharing
                   initialValues={{
                     startingDate: this.state.lastSelectedDate,
