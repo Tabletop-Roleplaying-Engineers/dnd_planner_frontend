@@ -1,11 +1,11 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useCallback } from 'react'
 import { Query, withApollo, Mutation } from 'react-apollo'
 import { FETCH_HOSTED_GAMES_QUERY, DELETE_GAME, UPDATE_GAME_QUERY } from 'api'
 import { UserContext } from '../../context/userContext'
-import { Alert, Spin, Card, Icon, Popconfirm, Drawer, Empty } from 'antd'
+import { Alert, Spin, Card, Icon, Popconfirm, Drawer, Empty, Modal } from 'antd'
 import { Box, Flex } from '../../noui/Position'
 import { GameInfo } from 'components/Game/GameInfo'
-import NewGameForm from 'forms/NewGameForm'
+import GameForm from 'forms/GameForm'
 import { modalWidth } from 'config'
 import { isDesktop } from 'noui/MediaQuery'
 import * as R from 'ramda'
@@ -20,9 +20,16 @@ const Wrapper = styled(Card)`
 `
 export const HostedGamesTab = withApollo(({ client }) => {
   const [showEditGame, setShowEditGame] = useState(false)
+  const [cancelEditingConfirmation, setCancelEditingConfirmation] = useState(
+    false,
+  )
   const [gameForEdit, setGameForEdit] = useState(null)
   const { user } = useContext(UserContext)
   const _isDesktop = isDesktop()
+  const onCancelEditing = useCallback(() => {
+    setShowEditGame(false)
+    setCancelEditingConfirmation(false)
+  }, [])
 
   return (
     <Query
@@ -109,12 +116,12 @@ export const HostedGamesTab = withApollo(({ client }) => {
               closable={false}
               destroyOnClose={true}
               visible={showEditGame}
-              onClose={() => setShowEditGame(false)}
+              onClose={() => setCancelEditingConfirmation(true)}
             >
               <Mutation mutation={UPDATE_GAME_QUERY}>
                 {(updateGame, { loading }) => (
                   <Spin spinning={loading}>
-                    <NewGameForm
+                    <GameForm
                       showSharing
                       initialValues={gameForEdit}
                       onSubmit={async (game, form) => {
@@ -127,6 +134,16 @@ export const HostedGamesTab = withApollo(({ client }) => {
                 )}
               </Mutation>
             </Drawer>
+
+            {/* Cancel editing confirmation dialog */}
+            <Modal
+              title="Cancel editing"
+              visible={cancelEditingConfirmation}
+              onOk={() => onCancelEditing(false)}
+              onCancel={() => setCancelEditingConfirmation(false)}
+            >
+              <p>Are you sure that you want to cancel editing?</p>
+            </Modal>
           </>
         )
       }}

@@ -60,8 +60,9 @@ const validationSchema = {
 // Needs to show ant.design `DatePicked` with UA formatting
 moment.locale('uk')
 
-const NewGameForm = props => {
+const GameForm = props => {
   const { onSubmit, initialValues = { tags: [] }, showSharing } = props
+  const isEdit = !!initialValues.id
 
   const [tags, setTags] = useState(initialValues.tags)
   const [newTag, setNewTag] = useState('')
@@ -106,7 +107,11 @@ const NewGameForm = props => {
       {({ form }) => (
         <Box>
           <Box mb={20}>
-            <Header>Add new Game</Header>
+            {isEdit ? (
+              <Header>Edit Game</Header>
+            ) : (
+              <Header>Add new Game</Header>
+            )}
           </Box>
 
           {/* Image */}
@@ -303,4 +308,4 @@ const NewGameForm = props => {
   )
 }
 
-export default NewGameForm
+export default GameForm
