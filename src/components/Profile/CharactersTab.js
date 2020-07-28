@@ -195,7 +195,7 @@ export const CharactersTab = () => {
 
         <Box column width={['100%', '40%']}>
           <Button
-            style={{ width: '100%' }}
+            style={{ width: '100%', margin: '20px 0' }}
             type="primary"
             shape="round"
             icon="plus"
