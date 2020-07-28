@@ -44,7 +44,7 @@ const ListWrapper = styled(Flex)`
 
 const CharacterMenu = ({ onEditClick, character }) => {
   const [deleteCharacterConfirmation, setDeleteCharacterConfirmation] = useState(false)
-  const [characterToDeleteId, setCharacterToDeleteId] = useState(false)
+  const [characterToDeleteId, setCharacterToDeleteId] = useState(null)
   const onDeleteCharacter = async (deleteCharacter) => {
     setDeleteCharacterConfirmation(false)
     setCharacterToDeleteId(null)
