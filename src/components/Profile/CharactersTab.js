@@ -18,7 +18,6 @@ import Card from 'ui/Card'
 import { Label } from 'ui/Text'
 import Character from 'components/Character'
 import EditCharacterForm from 'forms/EditCharacterForm'
-import { Mutation } from 'react-apollo'
 import { createMenu } from 'ui/shared'
 import { omit } from 'utils/common'
 import { modalWidth } from 'config'
@@ -50,58 +49,55 @@ const CharacterMenu = ({ onEditClick, character }) => {
     setCharacterToDeleteId(null)
     await deleteCharacter({ variables: { id: characterToDeleteId } })
   }
+  const [deleteCharacter] = useMutation(DELETE_CHARACTER_MUTATION, {
+    update(cache) {
+      const { characters } = cache.readQuery({
+        query: FETCH_CHARACTERS_QUERY,
+      })
+      cache.writeQuery({
+        query: FETCH_CHARACTERS_QUERY,
+        data: { characters: characters.filter(c => c.id !== character.id) },
+      })
+    }
+  })
+
   return (
-    <Mutation
-      mutation={DELETE_CHARACTER_MUTATION}
-      update={cache => {
-        const { characters } = cache.readQuery({
-          query: FETCH_CHARACTERS_QUERY,
-        })
-        cache.writeQuery({
-          query: FETCH_CHARACTERS_QUERY,
-          data: { characters: characters.filter(c => c.id !== character.id) },
-        })
-      }}
-    >
-      {(deleteCharacter, { loading }) => (
-        <Box position="absolute" top={0} right={10}>
-          <Dropdown
-            overlay={createMenu([
-              {
-                label: 'Edit',
-                icon: 'edit',
-                onClick: () => onEditClick(character),
-                'data-testid': 'character-menu-edit',
-              },
-              {
-                label: 'Delete',
-                icon: 'delete',
-                onClick: async () => {
-                  setDeleteCharacterConfirmation(true)
-                  setCharacterToDeleteId(character.id)
-                },
-                'data-testid': 'character-menu-delete',
-              },
-            ])}
-            trigger={['click']}
-          >
-            <Icon type="ellipsis" data-testid="character-menu" />
-          </Dropdown>
-          {/* Delete character confirmation dialog */}
-          <Modal
-            title="Delete character"
-            visible={deleteCharacterConfirmation}
-            onOk={() => onDeleteCharacter(deleteCharacter)}
-            onCancel={() => {
-              setDeleteCharacterConfirmation(false)
-              setCharacterToDeleteId(null)
-            }}
-          >
-            <p>Are you sure that you want to delete {character.name}?</p>
-          </Modal>
-        </Box>
-      )}
-    </Mutation>
+    <Box position="absolute" top={0} right={10}>
+      <Dropdown
+        overlay={createMenu([
+          {
+            label: 'Edit',
+            icon: 'edit',
+            onClick: () => onEditClick(character),
+            'data-testid': 'character-menu-edit',
+          },
+          {
+            label: 'Delete',
+            icon: 'delete',
+            onClick: async () => {
+              setDeleteCharacterConfirmation(true)
+              setCharacterToDeleteId(character.id)
+            },
+            'data-testid': 'character-menu-delete',
+          },
+        ])}
+        trigger={['click']}
+      >
+        <Icon type="ellipsis" data-testid="character-menu" />
+      </Dropdown>
+      {/* Delete character confirmation dialog */}
+      <Modal
+        title="Delete character"
+        visible={deleteCharacterConfirmation}
+        onOk={() => onDeleteCharacter(deleteCharacter)}
+        onCancel={() => {
+          setDeleteCharacterConfirmation(false)
+          setCharacterToDeleteId(null)
+        }}
+      >
+        <p>Are you sure that you want to delete {character.name}?</p>
+      </Modal>
+    </Box>
   )
 }
 
