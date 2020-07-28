@@ -9,6 +9,7 @@ import {
   Button,
   Form,
   Empty,
+  Modal
 } from 'antd'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import styled from 'styled-components'
@@ -42,6 +43,13 @@ const ListWrapper = styled(Flex)`
 `
 
 const CharacterMenu = ({ onEditClick, character }) => {
+  const [deleteCharacterConfirmation, setDeleteCharacterConfirmation] = useState(false)
+  const [characterToDeleteId, setCharacterToDeleteId] = useState(false)
+  const onDeleteCharacter = async (deleteCharacter) => {
+    setDeleteCharacterConfirmation(false)
+    setCharacterToDeleteId(null)
+    await deleteCharacter({ variables: { id: characterToDeleteId } })
+  }
   return (
     <Mutation
       mutation={DELETE_CHARACTER_MUTATION}
@@ -69,7 +77,8 @@ const CharacterMenu = ({ onEditClick, character }) => {
                 label: 'Delete',
                 icon: 'delete',
                 onClick: async () => {
-                  await deleteCharacter({ variables: { id: character.id } })
+                  setDeleteCharacterConfirmation(true)
+                  setCharacterToDeleteId(character.id)
                 },
                 'data-testid': 'character-menu-delete',
               },
@@ -78,6 +87,18 @@ const CharacterMenu = ({ onEditClick, character }) => {
           >
             <Icon type="ellipsis" data-testid="character-menu" />
           </Dropdown>
+          {/* Delete character confirmation dialog */}
+          <Modal
+            title="Delete character"
+            visible={deleteCharacterConfirmation}
+            onOk={() => onDeleteCharacter(deleteCharacter)}
+            onCancel={() => {
+              setDeleteCharacterConfirmation(false)
+              setCharacterToDeleteId(null)
+            }}
+          >
+            <p>Are you sure that you want to delete {character.name}?</p>
+          </Modal>
         </Box>
       )}
     </Mutation>
@@ -98,7 +119,8 @@ const CharactersList = ({ data, onEditClick, loading, error }) => {
     )
 
   return data.characters.map(character => (
-    <CardWrapper width={['100%', '100%', '50%', '33%']} px="10px" column>
+    <CardWrapper width={['100%', '100%', '50%', '33%']} px="10px" column
+      key={character.id}>
       <Card
         key={character.id}
         py={10}
