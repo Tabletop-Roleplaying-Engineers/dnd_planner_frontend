@@ -170,8 +170,8 @@ export const Calendar = ({ games, onCellClick, onRangeChanged = () => {} }) => {
       return
     }
     if (view === ViewType.MOBILE) {
-      const from = startOfWeek(date)
-      const to = endOfWeek(date)
+      const from = startOfWeek(date, { weekStartsOn: 1 })
+      const to = endOfWeek(date, { weekStartsOn: 1 })
       setRange({ from, to })
     } else {
       const from = startOfMonth(date)
