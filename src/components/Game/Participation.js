@@ -50,7 +50,7 @@ export const GameParticipation = props => {
   if (!user) {
     return (
       <Alert
-        message="Please login to be able to participate the game"
+        message="Please log in to be able to participate in the game"
         type="warning"
       />
     )
@@ -58,7 +58,7 @@ export const GameParticipation = props => {
 
   if (gameMaster.id === user.id) {
     return (
-      <Alert message="You can't participate your own game" type="warning" />
+      <Alert message="You can't participate in your own game" type="warning" />
     )
   }
 
@@ -69,7 +69,7 @@ export const GameParticipation = props => {
     return (
       <Box>
         <Alert
-          message="You already participating this game as {currentUsersCharacter.name}"
+          message={`You are participating in this game as ${currentUsersCharacter.name}`}
           type="warning"
         />
         <Box mt="10px">
@@ -86,6 +86,7 @@ export const GameParticipation = props => {
                   },
                 })
                 await onLeave()
+                setSelectedCharacter(null)
                 setLoading(false)
               }}
             >

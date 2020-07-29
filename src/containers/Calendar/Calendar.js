@@ -15,6 +15,7 @@ import {
   PARTICIPATE_GAME,
   FETCH_GAME_QUERY,
   REMOVE_CHARACTER_FROM_GAME_MUTATION,
+  FETCH_GAMES_USER_PLAY_QUERY
 } from 'api'
 import { UserContext } from '../../context/userContext'
 
@@ -123,6 +124,7 @@ class Calendar extends React.PureComponent {
 
           this.setState({ currentGame: { ...currentGame, ...participateGame } })
         },
+        refetchQueries: [ { query: FETCH_GAMES_USER_PLAY_QUERY }],
       })
       .catch(error => {
         notification.error({
