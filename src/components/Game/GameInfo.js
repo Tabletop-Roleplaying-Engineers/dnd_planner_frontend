@@ -7,6 +7,7 @@ import UserInfo from 'components/UserInfo'
 import { Box, Flex } from 'noui/Position'
 import { Header } from 'ui/Text'
 import { FormattedText } from 'components/FormattedText/FormattedText'
+import { FormattedMessage } from 'react-intl'
 
 const Image = styled('img')`
   max-width: 100%;
@@ -65,9 +66,13 @@ export const GameInfo = ({ game }) => {
           {/* Slots */}
           <Col sm={12}>
             <Box mb={10} ml={10}>
-              Available slots:{' '}
-              {Math.max(game.players - game.characters.length, 0)} /{' '}
-              {game.players}
+              <FormattedMessage
+                id="availableSlots"
+                values={{
+                  count: Math.max(game.players - game.characters.length, 0),
+                  max: game.players,
+                }}
+              />
               <Rate
                 character={<Icon type="user" />}
                 defaultValue={game.characters.length}

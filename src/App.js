@@ -17,6 +17,8 @@ import { getText } from './utils/storage'
 import { UserContext } from './context/userContext'
 import { decode } from './utils/jwt'
 import { AUTH_STORAGE_KEY } from './constants'
+import { messages } from 'intl/messagesUa'
+import { IntlProvider } from 'react-intl'
 
 const httpLink = createHttpLink({
   uri: process.env.REACT_APP_API_HTTP_URL,
@@ -77,27 +79,29 @@ const App = () => {
   }
 
   return (
-    <UserContext.Provider value={contextValue}>
-      <ApolloProvider client={client}>
-        <ApolloHooksProvider client={client}>
-          <Router history={history}>
-            <React.Fragment>
-              <GlobalStyle />
+    <IntlProvider messages={messages} locale="ua" defaultLocale="ua">
+      <UserContext.Provider value={contextValue}>
+        <ApolloProvider client={client}>
+          <ApolloHooksProvider client={client}>
+            <Router history={history}>
+              <React.Fragment>
+                <GlobalStyle />
 
-              <Layout>
-                <Header />
-                {/*TODO add routing here*/}
-                <Layout.Content>
-                  <Routing />
-                </Layout.Content>
+                <Layout>
+                  <Header />
+                  {/*TODO add routing here*/}
+                  <Layout.Content>
+                    <Routing />
+                  </Layout.Content>
 
-                {/*<Layout.Footer>footer</Layout.Footer>*/}
-              </Layout>
-            </React.Fragment>
-          </Router>
-        </ApolloHooksProvider>
-      </ApolloProvider>
-    </UserContext.Provider>
+                  {/*<Layout.Footer>footer</Layout.Footer>*/}
+                </Layout>
+              </React.Fragment>
+            </Router>
+          </ApolloHooksProvider>
+        </ApolloProvider>
+      </UserContext.Provider>
+    </IntlProvider>
   )
 }
 
