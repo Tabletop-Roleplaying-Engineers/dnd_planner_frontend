@@ -79,7 +79,7 @@ const App = () => {
   }
 
   return (
-    <IntlProvider messages={messages} locale="ua" defaultLocale="ua">
+    <IntlProvider messages={messages} locale="uk" defaultLocale="ua">
       <UserContext.Provider value={contextValue}>
         <ApolloProvider client={client}>
           <ApolloHooksProvider client={client}>
