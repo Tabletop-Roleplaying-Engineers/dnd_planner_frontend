@@ -8,6 +8,7 @@ import { Box } from 'noui/Position'
 import Character from 'components/Character'
 import { AVAILABLE_CHARACTERS, LEAVE_GAME } from 'api'
 import { UserContext } from '../../context/userContext'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 const StyledSelect = styled(Select)`
   width: 100%;
@@ -20,6 +21,7 @@ const StyledSelect = styled(Select)`
 
 export const GameParticipation = props => {
   const { onParticipate, game, onLeave } = props
+  const intl = useIntl()
   const { id, startingDate, user: gameMaster, characters } = game
   const isPastGame = isBefore(new Date(startingDate), new Date())
   const [loading, setLoading] = useState(false)
@@ -44,13 +46,22 @@ export const GameParticipation = props => {
   }, [user])
 
   if (isPastGame) {
-    return <Alert message="Registration is closed" type="warning" />
+    return (
+      <Alert
+        message={intl.formatMessage({
+          id: 'participation.registrationIsClosed',
+        })}
+        type="warning"
+      />
+    )
   }
 
   if (!user) {
     return (
       <Alert
-        message="Please log in to be able to participate in the game"
+        message={intl.formatMessage({
+          id: 'participation.loginToRegister',
+        })}
         type="warning"
       />
     )
@@ -58,7 +69,12 @@ export const GameParticipation = props => {
 
   if (gameMaster.id === user.id) {
     return (
-      <Alert message="You can't participate in your own game" type="warning" />
+      <Alert
+        message={intl.formatMessage({
+          id: 'participation.ownGameError',
+        })}
+        type="warning"
+      />
     )
   }
 
@@ -69,7 +85,12 @@ export const GameParticipation = props => {
     return (
       <Box>
         <Alert
-          message={`You are participating in this game as ${currentUsersCharacter.name}`}
+          message={intl.formatMessage(
+            {
+              id: 'participation.participationMassage',
+            },
+            { name: currentUsersCharacter.name },
+          )}
           type="warning"
         />
         <Box mt="10px">
@@ -90,7 +111,7 @@ export const GameParticipation = props => {
                 setLoading(false)
               }}
             >
-              Leave game
+              <FormattedMessage id="participation.leave" />
             </Button>
           </Spin>
         </Box>
@@ -102,7 +123,9 @@ export const GameParticipation = props => {
     <Box>
       <Spin spinning={loading}>
         <StyledSelect
-          placeholder="Select hero"
+          placeholder={intl.formatMessage({
+            id: 'participation.selectHeroBtn',
+          })}
           selected={selectedCharacter}
           onSelect={data => {
             const char = JSON.parse(data)
@@ -127,7 +150,7 @@ export const GameParticipation = props => {
               setLoading(false)
             }}
           >
-            Participate
+            <FormattedMessage id="participation.participateBtn" />
           </Button>
         </Box>
       </Spin>
