@@ -44,7 +44,7 @@ const ListWrapper = styled(Flex)`
 const CharacterMenu = ({ onEditClick, character }) => {
   const [deleteCharacterConfirmation, setDeleteCharacterConfirmation] = useState(false)
   const [characterToDeleteId, setCharacterToDeleteId] = useState(null)
-  const onDeleteCharacter = async (deleteCharacter) => {
+  const onDeleteCharacter = async () => {
     setDeleteCharacterConfirmation(false)
     setCharacterToDeleteId(null)
     await deleteCharacter({ variables: { id: characterToDeleteId } })
@@ -89,7 +89,7 @@ const CharacterMenu = ({ onEditClick, character }) => {
       <Modal
         title="Delete character"
         visible={deleteCharacterConfirmation}
-        onOk={() => onDeleteCharacter(deleteCharacter)}
+        onOk={() => onDeleteCharacter()}
         onCancel={() => {
           setDeleteCharacterConfirmation(false)
           setCharacterToDeleteId(null)
