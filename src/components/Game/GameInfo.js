@@ -6,6 +6,7 @@ import { Row, Col, Slider, Rate, Icon } from 'antd'
 import UserInfo from 'components/UserInfo'
 import { Box, Flex } from 'noui/Position'
 import { Header } from 'ui/Text'
+import { FormattedText } from 'components/FormattedText/FormattedText'
 
 const Image = styled('img')`
   max-width: 100%;
@@ -23,7 +24,7 @@ const LvlSlider = styled(Box)`
 
 const Tag = styled.div`
   border-radius: 5px;
-  background: #C4C4C4;
+  background: #c4c4c4;
   color: #fff;
   display: flex;
   justify-content: center;
@@ -64,8 +65,9 @@ export const GameInfo = ({ game }) => {
           {/* Slots */}
           <Col sm={12}>
             <Box mb={10} ml={10}>
-              Available slots: {Math.max(game.players - game.characters.length, 0)} / {game.players}
-
+              Available slots:{' '}
+              {Math.max(game.players - game.characters.length, 0)} /{' '}
+              {game.players}
               <Rate
                 character={<Icon type="user" />}
                 defaultValue={game.characters.length}
@@ -87,7 +89,7 @@ export const GameInfo = ({ game }) => {
                   value={[game.lvlFrom, game.lvlTo]}
                   marks={{
                     [game.lvlFrom]: game.lvlFrom,
-                    [game.lvlTo]: game.lvlTo
+                    [game.lvlTo]: game.lvlTo,
                   }}
                   tipFormatter={null}
                 />
@@ -97,20 +99,24 @@ export const GameInfo = ({ game }) => {
         </Row>
         <Row>
           <Col>
-            <Box mb={10} ml={10}>{format(game.startingDate, 'dd MMMM HH:mm')}</Box>
+            <Box mb={10} ml={10}>
+              {format(game.startingDate, 'dd MMMM HH:mm')}
+            </Box>
           </Col>
         </Row>
         <Row>
           <Col>
-            <Box mb={10} ml={10}>{game.description}</Box>
+            <Box mb={10} ml={10}>
+              <FormattedText text={game.description} />
+            </Box>
           </Col>
         </Row>
         <Row>
-            {game.tags.map((tag, i) => (
-              <Col key={tag + i} span={12}>
-                <Tag>{tag}</Tag>
-              </Col>
-            ))}
+          {game.tags.map((tag, i) => (
+            <Col key={tag + i} span={12}>
+              <Tag>{tag}</Tag>
+            </Col>
+          ))}
         </Row>
       </Col>
     </Row>

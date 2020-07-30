@@ -14,7 +14,7 @@ const Login = ({ location, history, client }) => {
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    (async () => {
+    const fn = async () => {
       const {
         first_name,
         last_name,
@@ -50,14 +50,18 @@ const Login = ({ location, history, client }) => {
       } catch (err) {
         setError(err)
       }
-    })()
+    }
+    fn()
   }, [])
 
   if (error) {
+    const errorArray = error.networkError
+      ? Array.from(error.networkError.result.errors.values())
+      : error.graphQLErrors
     return (
       <Box pt="10px">
         <Alert
-          message={error.graphQLErrors.map(err => err.message).join(', ')}
+          message={errorArray.map(err => err.message).join(', ')}
           type="error"
         />
       </Box>
