@@ -1,13 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-import format from 'date-fns/format'
 import { Row, Col, Slider, Rate, Icon } from 'antd'
 import UserInfo from 'components/UserInfo'
 import { Box, Flex } from 'noui/Position'
 import { Header } from 'ui/Text'
 import { FormattedText } from 'components/FormattedText/FormattedText'
 import { FormattedMessage } from 'react-intl'
+import { useDateFormat } from 'utils/hooks/useDateFormat'
 
 const Image = styled('img')`
   max-width: 100%;
@@ -35,6 +35,8 @@ const Tag = styled.div`
 `
 
 export const GameInfo = ({ game }) => {
+  const format = useDateFormat()
+
   return (
     <Row>
       <Col sm={8}>
@@ -84,7 +86,7 @@ export const GameInfo = ({ game }) => {
           {/* Levels */}
           <Col sm={12}>
             <Box mb={10} ml={10}>
-              Available levels
+              <FormattedMessage id="availableLevels" />
               <LvlSlider>
                 <Slider
                   range
