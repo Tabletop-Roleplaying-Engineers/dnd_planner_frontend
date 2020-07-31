@@ -4,6 +4,7 @@ import Character from 'components/Character'
 import { Box } from 'noui/Position'
 import { createMenu } from 'ui/shared'
 import { ACTIONS } from '../../constants'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 const isOwnGame = (user, game) => game && user && game.user.id === user.id
 
@@ -27,6 +28,7 @@ const shouldShowMenu = (user, game) => {
 }
 
 export const ParticipantsList = props => {
+  const intl = useIntl()
   const { characters, game, user, onRemoveCharClick } = props
   const showMenu = shouldShowMenu(user, game)
   const [characterToRemove, setCharacterToRemove] = useState(null)
@@ -49,7 +51,9 @@ export const ParticipantsList = props => {
                 <Dropdown
                   overlay={createMenu([
                     {
-                      label: 'Remove from game',
+                      label: intl.formatMessage({
+                        id: 'character.removeFromGameBtn',
+                      }),
                       icon: 'delete',
                       onClick: () => setCharacterToRemove(character),
                       'data-testid': 'character-menu-remove-from-game',
@@ -69,14 +73,20 @@ export const ParticipantsList = props => {
 
       {/* Remove character from game dialog */}
       <Modal
-        title="Remove character from game"
+        title={intl.formatMessage({
+          id: 'character.removeFromGameDialogHeader',
+        })}
         visible={!!characterToRemove}
         onOk={() => onRemovingConfirm(characterToRemove)}
         onCancel={() => setCharacterToRemove(null)}
       >
         <p>
-          Are you sure that you want to remove{' '}
-          <b>{characterToRemove && characterToRemove.name}</b> from this game?
+          <FormattedMessage
+            id="character.removeFromGameDialogContent"
+            values={{
+              name: <b>{characterToRemove && characterToRemove.name}</b>,
+            }}
+          />
         </p>
       </Modal>
     </Row>
