@@ -9,6 +9,7 @@ import {
   Button,
   Form,
   Empty,
+  Modal
 } from 'antd'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import styled from 'styled-components'
@@ -17,7 +18,6 @@ import Card from 'ui/Card'
 import { Label } from 'ui/Text'
 import Character from 'components/Character'
 import EditCharacterForm from 'forms/EditCharacterForm'
-import { Mutation } from 'react-apollo'
 import { createMenu } from 'ui/shared'
 import { omit } from 'utils/common'
 import { modalWidth } from 'config'
@@ -42,45 +42,62 @@ const ListWrapper = styled(Flex)`
 `
 
 const CharacterMenu = ({ onEditClick, character }) => {
+  const [deleteCharacterConfirmation, setDeleteCharacterConfirmation] = useState(false)
+  const [characterToDeleteId, setCharacterToDeleteId] = useState(null)
+  const onDeleteCharacter = async () => {
+    setDeleteCharacterConfirmation(false)
+    setCharacterToDeleteId(null)
+    await deleteCharacter({ variables: { id: characterToDeleteId } })
+  }
+  const [deleteCharacter] = useMutation(DELETE_CHARACTER_MUTATION, {
+    update(cache) {
+      const { characters } = cache.readQuery({
+        query: FETCH_CHARACTERS_QUERY,
+      })
+      cache.writeQuery({
+        query: FETCH_CHARACTERS_QUERY,
+        data: { characters: characters.filter(c => c.id !== character.id) },
+      })
+    }
+  })
+
   return (
-    <Mutation
-      mutation={DELETE_CHARACTER_MUTATION}
-      update={cache => {
-        const { characters } = cache.readQuery({
-          query: FETCH_CHARACTERS_QUERY,
-        })
-        cache.writeQuery({
-          query: FETCH_CHARACTERS_QUERY,
-          data: { characters: characters.filter(c => c.id !== character.id) },
-        })
-      }}
-    >
-      {(deleteCharacter, { loading }) => (
-        <Box position="absolute" top={0} right={10}>
-          <Dropdown
-            overlay={createMenu([
-              {
-                label: 'Edit',
-                icon: 'edit',
-                onClick: () => onEditClick(character),
-                'data-testid': 'character-menu-edit',
-              },
-              {
-                label: 'Delete',
-                icon: 'delete',
-                onClick: async () => {
-                  await deleteCharacter({ variables: { id: character.id } })
-                },
-                'data-testid': 'character-menu-delete',
-              },
-            ])}
-            trigger={['click']}
-          >
-            <Icon type="ellipsis" data-testid="character-menu" />
-          </Dropdown>
-        </Box>
-      )}
-    </Mutation>
+    <Box position="absolute" top={0} right={10}>
+      <Dropdown
+        overlay={createMenu([
+          {
+            label: 'Edit',
+            icon: 'edit',
+            onClick: () => onEditClick(character),
+            'data-testid': 'character-menu-edit',
+          },
+          {
+            label: 'Delete',
+            icon: 'delete',
+            onClick: async () => {
+              setDeleteCharacterConfirmation(true)
+              setCharacterToDeleteId(character.id)
+            },
+            'data-testid': 'character-menu-delete',
+          },
+        ])}
+        trigger={['click']}
+      >
+        <Icon type="ellipsis" data-testid="character-menu" />
+      </Dropdown>
+      {/* Delete character confirmation dialog */}
+      <Modal
+        title="Delete character"
+        visible={deleteCharacterConfirmation}
+        onOk={() => onDeleteCharacter()}
+        onCancel={() => {
+          setDeleteCharacterConfirmation(false)
+          setCharacterToDeleteId(null)
+        }}
+      >
+        <p>Are you sure that you want to delete {character.name}?</p>
+      </Modal>
+    </Box>
   )
 }
 
@@ -98,7 +115,8 @@ const CharactersList = ({ data, onEditClick, loading, error }) => {
     )
 
   return data.characters.map(character => (
-    <CardWrapper width={['100%', '100%', '50%', '33%']} px="10px" column>
+    <CardWrapper width={['100%', '100%', '50%', '33%']} px="10px" column
+      key={character.id}>
       <Card
         key={character.id}
         py={10}
@@ -173,7 +191,7 @@ export const CharactersTab = () => {
 
         <Box column width={['100%', '40%']}>
           <Button
-            style={{ width: '100%' }}
+            style={{ width: '100%', margin: '20px 0' }}
             type="primary"
             shape="round"
             icon="plus"
