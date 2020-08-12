@@ -1,4 +1,11 @@
 export const messages = {
+  'common.game.title': 'Назва',
+  'common.game.tag': 'Тег',
+  'menu.calendar': 'Календар',
+  'menu.dashboard': 'Головна',
+  'menu.search': 'Пошук',
+  'menu.profile': 'Профайл',
+  'menu.buttonLabel': 'Roll for...',
   availableSlots: 'Доступні слоти: {count} / {max}',
   availableLevels: 'Доступні рівні',
   'character.removeFromGameBtn': 'Видалити з гри',
@@ -13,4 +20,16 @@ export const messages = {
   'participation.participateBtn': 'Зареєструватися',
   'participation.participationMassage': 'Ви берете участь у цій грі як {name}',
   'participation.leave': 'Покинути гру',
+  'search.tabs.games': 'Ігри',
+  'search.userInput.placeholder': 'Майстер',
+  'search.titleInput.tooltip': 'Зверніть увагу: "назва" враховує регістр',
+  'search.tagInput.tooltip':
+    'Використовуйте подвійні лапки для пошуку цілого тегу (на приклад "al")',
+  'search.table.image': 'Зображення',
+  'search.table.title': 'Назва',
+  'search.table.gm': 'Майстер',
+  'search.table.levels': 'Рівні',
+  'search.table.starting': 'Початок',
+  'search.table.tags': 'Теги',
+  'userSelect.all': 'Всі',
 }

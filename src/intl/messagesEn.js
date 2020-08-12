@@ -1,4 +1,11 @@
 export const messages = {
+  'common.game.title': 'Title',
+  'common.game.tag': 'Tag',
+  'menu.calendar': 'Calendar',
+  'menu.dashboard': 'Dashboard',
+  'menu.search': 'Search',
+  'menu.profile': 'Profile',
+  'menu.buttonLabel': 'Roll for...',
   availableSlots: 'Available slots: {count} / {max}',
   availableLevels: 'Available levels',
   'character.removeFromGameBtn': 'Remove from game',
@@ -14,4 +21,16 @@ export const messages = {
   'participation.participationMassage':
     'You are participating in this game as {name}',
   'participation.leave': 'Leave game',
+  'search.tabs.games': 'Games',
+  'search.userInput.placeholder': 'Game master',
+  'search.titleInput.tooltip': 'Please note: title is case sensitive',
+  'search.tagInput.tooltip':
+    'Use double quotes to search whole tag (e.g. "al")',
+  'search.table.image': 'Image',
+  'search.table.title': 'Title',
+  'search.table.gm': 'GM',
+  'search.table.levels': 'Levels',
+  'search.table.starting': 'Starting',
+  'search.table.tags': 'Tags',
+  'userSelect.all': 'All',
 }
