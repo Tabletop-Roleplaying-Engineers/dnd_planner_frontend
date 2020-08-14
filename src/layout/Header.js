@@ -1,14 +1,13 @@
 import React, { useContext, useEffect } from 'react'
 import { Button, Dropdown, Icon, Layout, Menu } from 'antd'
-import { Flex } from 'noui/Position'
-import Logo from 'components/Logo'
 import { withRouter } from 'react-router-dom'
-// import { Link } from 'react-router-dom'
-// import { Box } from 'noui/Position'
 import styled from 'styled-components'
+import { FormattedMessage } from 'react-intl'
+import { Flex } from 'noui/Position'
+import { isTesting } from 'utils/common'
+import Logo from 'components/Logo'
 import { Box } from '../noui/Position'
 import { UserContext } from '../context/userContext'
-import { isTesting } from 'utils/common'
 
 const StyledHeader = styled(Layout.Header)`
   max-height: 64px;
@@ -33,21 +32,28 @@ const menu = ({ history }) => (
       <Box inline mr="5px">
         <Icon type="calendar" />
       </Box>
-      Calendar
+      <FormattedMessage id="menu.calendar" />
     </Menu.Item>
 
     <Menu.Item key="dashboard">
       <Box inline mr="5px">
         <Icon type="home" />
       </Box>
-      Dashboard
+      <FormattedMessage id="menu.dashboard" />
+    </Menu.Item>
+
+    <Menu.Item key="search">
+      <Box inline mr="5px">
+        <Icon type="search" />
+      </Box>
+      <FormattedMessage id="menu.search" />
     </Menu.Item>
 
     <Menu.Item key="profile">
       <Box inline mr="5px">
         <Icon type="user" />
       </Box>
-      Profile
+      <FormattedMessage id="menu.profile" />
     </Menu.Item>
   </Menu>
 )
@@ -97,8 +103,7 @@ const Header = ({ history }) => {
               overlay={menu({ history })}
             >
               <Button style={{ padding: '0 10px' }} type="primary">
-                Roll for...
-                {/*<Icon style={{fontSize: '20px', color: 'black'}} type="menu" />*/}
+                <FormattedMessage id="menu.buttonLabel" />
               </Button>
             </Dropdown>
           </span>
