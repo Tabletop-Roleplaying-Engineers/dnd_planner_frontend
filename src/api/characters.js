@@ -1,5 +1,14 @@
 import gql from 'graphql-tag'
 
+const userFragment = `
+user {
+  id
+  firstName
+  lastName
+  avatar
+  username
+}
+`
 export const AVAILABLE_CHARACTERS = gql`
   query AvailableCharacters($gameId: ID!) {
     validCharactersForGame(gameId: $gameId) {
@@ -14,6 +23,7 @@ export const AVAILABLE_CHARACTERS = gql`
         name
         logo
       }
+      ${userFragment}
     }
   }
 `

@@ -14,7 +14,7 @@ const toClassLvlPairs = R.pipe(
 export const convertClassesObjToString = R.pipe(
   R.toPairs(),
   R.map(([val, lvl]) => `${val}=${lvl}`),
-  R.join('&')
+  R.join('&'),
 )
 
 export const convertClassesStringToObj = R.pipe(
@@ -22,7 +22,7 @@ export const convertClassesStringToObj = R.pipe(
   R.fromPairs,
 )
 
-export const getAvatarLetters = (user) => {
+export const getAvatarLetters = user => {
   let name = ''
   if (user.firstName) {
     name += user.firstName.slice(0, 1)
@@ -53,4 +53,19 @@ export const parseGame = game => {
     dateKey: format(date, 'yyyy-MM-dd'),
     startingDate: date,
   }
+}
+
+export const getUserName = user => {
+  const nameParts = []
+  if (user.firstName) {
+    nameParts.push(user.firstName)
+  }
+  if (user.lastName) {
+    nameParts.push(user.lastName)
+  }
+  if (nameParts.length > 0) {
+    return nameParts.join(' ')
+  }
+
+  return user.username
 }

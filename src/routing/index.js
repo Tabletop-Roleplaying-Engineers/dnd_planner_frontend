@@ -19,6 +19,7 @@ import Profile from 'containers/Profile'
 import Dashboard from 'containers/Dashboard'
 import Rules from 'containers/Rules'
 import Lore from 'containers/League'
+import Search from 'containers/Search'
 
 export const history = _history
 
@@ -38,7 +39,7 @@ export function Routing(props) {
     // but some users has JWT generated on the previous server
     // but corresponding user doesn't exist on the database
     // so we need this check when application is started
-    (async function() {
+    const fn = async function() {
       if (!user || !getText('AUTH_DATA')) {
         return
       }
@@ -56,7 +57,8 @@ export function Routing(props) {
       } catch (error) {
         logout(setUser)
       }
-    })()
+    }
+    fn()
   }, [])
 
   return (
@@ -70,6 +72,7 @@ export function Routing(props) {
         <Route path="/dashboard" component={Dashboard} />
         <Route path="/rules" component={Rules} />
         <Route path="/lore" component={Lore} />
+        <Route path="/search" component={Search} />
       </Box>
 
       {/* 404*/}

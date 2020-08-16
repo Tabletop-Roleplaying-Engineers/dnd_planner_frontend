@@ -19,6 +19,7 @@ export {
   FETCH_HOSTED_GAMES_QUERY,
   FETCH_GAMES_USER_PLAY_QUERY,
   UPDATE_GAME_QUERY,
+  SEARCH_GAMES,
 } from './games'
 
 export { FETCH_RULES } from './rules'

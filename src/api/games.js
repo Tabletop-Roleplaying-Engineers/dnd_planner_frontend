@@ -251,3 +251,23 @@ export const FETCH_GAMES_USER_PLAY_QUERY = gql`
     }
   }
 `
+
+export const SEARCH_GAMES = gql`
+  query gamesSearch($userId: String, $title: String, $tag: String) {
+    gamesSearch(userId: $userId, title: $title, tag: $tag) {
+      ${gameFields}
+    }
+  }
+`
+
+export const USERS_WHO_CREATED_GAMES = gql`
+  {
+    usersWhoCreatedGames {
+      id
+      avatar
+      firstName
+      lastName
+      username
+    }
+  }
+`
