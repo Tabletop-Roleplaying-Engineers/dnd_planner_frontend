@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect, useCallback } from 'react'
 import { Button, Select, Spin, Alert } from 'antd'
 import { useLazyQuery, useMutation } from '@apollo/react-hooks'
 import * as R from 'ramda'
@@ -19,6 +19,8 @@ const StyledSelect = styled(Select)`
   }
 `
 
+// TODO: move side effects to the `FullGameContainer` to fix remove character from the participation list
+
 export const GameParticipation = props => {
   const { onParticipate, game, onLeave } = props
   const intl = useIntl()
@@ -38,12 +40,15 @@ export const GameParticipation = props => {
   )
   const [leaveGame] = useMutation(LEAVE_GAME)
   const availableCharacters = data.validCharactersForGame || []
-
-  useEffect(() => {
+  const refetchCharacters = useCallback(() => {
     if (user) {
-      loadAvailableCharacters()
+      return loadAvailableCharacters()
     }
   }, [user])
+
+  useEffect(() => {
+    refetchCharacters()
+  }, [refetchCharacters])
 
   if (isPastGame) {
     return (
@@ -106,7 +111,8 @@ export const GameParticipation = props => {
                     characterId: currentUsersCharacter.id,
                   },
                 })
-                await onLeave()
+                await refetchCharacters()
+                await onLeave(currentUsersCharacter)
                 setSelectedCharacter(null)
                 setLoading(false)
               }}

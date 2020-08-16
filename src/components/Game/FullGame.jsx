@@ -1,7 +1,13 @@
 import React from 'react'
 import { GameInfo, ParticipantsList, GameParticipation } from 'components/Game'
 
-export const FullGame = ({ game, user, onRemoveChar }) => {
+export const FullGame = ({
+  game,
+  user,
+  onRemoveChar,
+  onParticipate,
+  onLeave,
+}) => {
   return (
     <>
       <GameInfo game={game} />
@@ -11,13 +17,13 @@ export const FullGame = ({ game, user, onRemoveChar }) => {
         user={user}
         onRemoveCharClick={char => onRemoveChar(char)}
       />
-      {/* {game.characters.length < game.players && (
-          <GameParticipation
-            game={game}
-            onParticipate={this.onParticipate}
-            onLeave={() => this.fetchCurrentGame(game.id)}
-          />
-        )} */}
+      {game.characters.length < game.players && (
+        <GameParticipation
+          game={game}
+          onParticipate={onParticipate}
+          onLeave={onLeave}
+        />
+      )}
     </>
   )
 }

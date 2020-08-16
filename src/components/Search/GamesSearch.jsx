@@ -14,13 +14,18 @@ const ImageInColumn = styled.img`
   max-width: 150px;
   max-height: 150px;
 `
+const TagPointer = styled(Tag)`
+  &.ant-tag {
+    cursor: pointer;
+  }
+`
 
 const TimeColumn = ({ time }) => {
   const format = useDateFormat()
 
   return format(time, 'dd MMMM HH:mm')
 }
-const useColumns = () => {
+const useColumns = ({ onTagClick = () => {} }) => {
   const intl = useIntl()
   const columns = useMemo(() => [
     {
@@ -66,7 +71,12 @@ const useColumns = () => {
       title: intl.formatMessage({ id: 'search.table.tags' }),
       dataIndex: 'tags',
       key: 'tags',
-      render: tags => tags.map(tag => <Tag key={tag}>{tag}</Tag>),
+      render: tags =>
+        tags.map(tag => (
+          <TagPointer key={tag} onClick={e => onTagClick(e, tag)}>
+            {tag}
+          </TagPointer>
+        )),
     },
   ])
 
@@ -103,7 +113,13 @@ export const GamesSearch = ({
   const debouncedTitle = useDebounce(title, 300)
   const debouncedTag = useDebounce(tag, 300)
   const debouncedUserId = useDebounce(userId, 300)
-  const columns = useColumns()
+  const onTagClick = useCallback((e, tag) => {
+    setTag(`"${tag}"`)
+    e.stopPropagation()
+  }, [])
+  const columns = useColumns({
+    onTagClick,
+  })
   const searchCurrent = useCallback(() => {
     onSearch({
       title: debouncedTitle,
