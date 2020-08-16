@@ -1,17 +1,23 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import styled from 'styled-components'
 import { useIntl, FormattedMessage } from 'react-intl'
-import { Table, Input, Tag, Row, Col, Popover, Icon } from 'antd'
+import { Drawer, Table, Input, Tag, Row, Col, Popover, Icon } from 'antd'
 import { Flex, Box } from 'noui/Position'
 import { useDebounce } from 'utils/hooks'
 import { useDateFormat } from 'utils/hooks/useDateFormat'
 import { UsersSelect } from 'components/UsersSelect/UsersSelect'
-import { useMemo } from 'react'
+import { modalWidth } from 'config'
+import { FullGameContainer } from 'containers/Game/FullGameContainer'
 
 const Container = styled.div``
 const ImageInColumn = styled.img`
   max-width: 150px;
   max-height: 150px;
+`
+const TagPointer = styled(Tag)`
+  &.ant-tag {
+    cursor: pointer;
+  }
 `
 
 const TimeColumn = ({ time }) => {
@@ -19,7 +25,7 @@ const TimeColumn = ({ time }) => {
 
   return format(time, 'dd MMMM HH:mm')
 }
-const useColumns = () => {
+const useColumns = ({ onTagClick = () => {} }) => {
   const intl = useIntl()
   const columns = useMemo(() => [
     {
@@ -65,7 +71,12 @@ const useColumns = () => {
       title: intl.formatMessage({ id: 'search.table.tags' }),
       dataIndex: 'tags',
       key: 'tags',
-      render: tags => tags.map(tag => <Tag key={tag}>{tag}</Tag>),
+      render: tags =>
+        tags.map(tag => (
+          <TagPointer key={tag} onClick={e => onTagClick(e, tag)}>
+            {tag}
+          </TagPointer>
+        )),
     },
   ])
 
@@ -98,18 +109,32 @@ export const GamesSearch = ({
   const [title, setTitle] = useState('')
   const [tag, setTag] = useState('')
   const [userId, setUserId] = useState(null)
+  const [selected, setSelected] = useState(null)
   const debouncedTitle = useDebounce(title, 300)
   const debouncedTag = useDebounce(tag, 300)
   const debouncedUserId = useDebounce(userId, 300)
-  const columns = useColumns()
-
-  useEffect(() => {
+  const onTagClick = useCallback((e, tag) => {
+    setTag(`"${tag}"`)
+    e.stopPropagation()
+  }, [])
+  const columns = useColumns({
+    onTagClick,
+  })
+  const searchCurrent = useCallback(() => {
     onSearch({
       title: debouncedTitle,
       tag: debouncedTag,
       userId: debouncedUserId,
     })
   }, [onSearch, debouncedTitle, debouncedTag, debouncedUserId])
+  const onSelectedUpdate = useCallback(game => {
+    setSelected(game)
+    searchCurrent()
+  }, [])
+
+  useEffect(() => {
+    searchCurrent()
+  }, [searchCurrent, onSelectedUpdate])
 
   return (
     <Container>
@@ -145,7 +170,23 @@ export const GamesSearch = ({
         columns={columns}
         loading={loading}
         scroll={{ x: true }}
+        onRow={record => ({
+          onClick: () => setSelected(record),
+        })}
       />
+
+      <Drawer
+        destroyOnClose={true}
+        width={modalWidth()}
+        placement="right"
+        closable={false}
+        visible={!!selected}
+        onClose={() => setSelected(null)}
+      >
+        {selected && (
+          <FullGameContainer game={selected} onUpdate={onSelectedUpdate} />
+        )}
+      </Drawer>
     </Container>
   )
 }

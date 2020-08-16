@@ -36,6 +36,10 @@ const Tag = styled.div`
 
 export const GameInfo = ({ game }) => {
   const format = useDateFormat()
+  const starting =
+    typeof game.startingDate === 'string'
+      ? new Date(parseInt(game.startingDate, 10))
+      : game.startingDate
 
   return (
     <Row>
@@ -107,7 +111,7 @@ export const GameInfo = ({ game }) => {
         <Row>
           <Col>
             <Box mb={10} ml={10}>
-              {format(game.startingDate, 'dd MMMM HH:mm')}
+              {format(new Date(starting), 'dd MMMM HH:mm')}
             </Box>
           </Col>
         </Row>
