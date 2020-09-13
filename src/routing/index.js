@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useCallback } from 'react'
 import { Route, Switch } from 'react-router-dom'
 import { withApollo } from 'react-apollo'
 
@@ -6,8 +6,8 @@ import _history from './history'
 import { Box } from '../noui/Position'
 import { AUTH_STORAGE_KEY } from '../constants'
 import { UserContext } from '../context/userContext'
-import { CURRENT_USER } from 'api'
-import { getText } from 'utils/storage'
+import { REFRESH_TOKEN } from 'api'
+import { getText, setText } from 'utils/storage'
 
 import NotFound from 'containers/NotFound'
 
@@ -23,7 +23,7 @@ import Search from 'containers/Search'
 
 export const history = _history
 
-const isJwtUserCorrect = data => data && data.currentUser
+const isError = data => !data || !data.refreshToken
 
 const logout = setUser => {
   localStorage.removeItem(AUTH_STORAGE_KEY)
@@ -32,33 +32,40 @@ const logout = setUser => {
 }
 
 export function Routing(props) {
+  const {
+    client: { mutate },
+  } = props
   const { user, setUser } = useContext(UserContext)
+  const refreshToken = useCallback(async () => {
+    const token = getText(AUTH_STORAGE_KEY)
+    if (!user || !token) {
+      return
+    }
+
+    try {
+      const res = await mutate({
+        mutation: REFRESH_TOKEN,
+        variables: { token },
+      })
+      const { data } = res
+      if (isError(data)) {
+        return logout(setUser)
+      }
+
+      // Set new token
+      setText(AUTH_STORAGE_KEY, data.refreshToken)
+    } catch (error) {
+      logout(setUser)
+    }
+  }, [user, mutate])
 
   useEffect(() => {
     // After moving to another server we have vanished database,
     // but some users has JWT generated on the previous server
     // but corresponding user doesn't exist on the database
     // so we need this check when application is started
-    const fn = async function() {
-      if (!user || !getText('AUTH_DATA')) {
-        return
-      }
-      const {
-        client: { query },
-      } = props
-      try {
-        const res = await query({
-          query: CURRENT_USER,
-        })
-        const { data } = res
-        if (!isJwtUserCorrect(data)) {
-          logout(setUser)
-        }
-      } catch (error) {
-        logout(setUser)
-      }
-    }
-    fn()
+    // Another case is when we need to update roles/actions for the user, without refreshing user have to relogin himself
+    refreshToken()
   }, [])
 
   return (
