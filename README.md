@@ -29,6 +29,18 @@ In case when you don't see `dnd-planner-frontend` image running use `attached mo
 sudo docker run -p 80:80 dnd-planner-frontend
 ```
 
+## Release
+
+Run in console:
+
+- `git checkout` to the `development` branch
+- `git pull` to fetch last changes
+- `yarn version` to bump version
+- `git push` to push everything
+- `git push --tags` to push new version tag
+
+Go to the Github and create new PR from `development` to the `master`. Add appropriate description (what was done in the release) and merge to the master.
+
 ---
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
