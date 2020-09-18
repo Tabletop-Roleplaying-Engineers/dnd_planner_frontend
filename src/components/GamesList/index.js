@@ -10,6 +10,7 @@ import { UserContext } from '../../context/userContext'
 import { GameInfo } from 'components/Game/GameInfo'
 import { ParticipantsList } from 'components/Game/ParticipantsList'
 import { GameActions } from 'components/Game/GameActions'
+import { hasAction } from 'utils/common'
 
 const GameContainer = styled(Box)`
   cursor: pointer;
@@ -30,8 +31,11 @@ const ItemBody = ({ game }) => (
 )
 
 const canCreateThisDay = date => !isBefore(date, startOfDay(new Date()))
-const canUserCreateGame = user => user && user.actions.indexOf(ACTIONS.MANAGE_GAMES) >= 0
-const canCreateGame = (user, date) => canUserCreateGame(user) && canCreateThisDay(date)
+const canUserCreateGame = user =>
+  hasAction(user, ACTIONS.MANAGE_GAMES) ||
+  hasAction(user, ACTIONS.MANAGE_OWN_GAMES)
+const canCreateGame = (user, date) =>
+  canUserCreateGame(user) && canCreateThisDay(date)
 
 export const GamesList = ({ games, date, onNewGameClick }) => {
   const { user } = useContext(UserContext)
@@ -39,11 +43,11 @@ export const GamesList = ({ games, date, onNewGameClick }) => {
   return (
     <Flex column>
       {canCreateGame(user, date) && (
-        <Button type="primary" onClick={onNewGameClick} block>Create game</Button>
+        <Button type="primary" onClick={onNewGameClick} block>
+          Create game
+        </Button>
       )}
-      <DateContainer>
-        {format(date, 'dd MMMM')}
-      </DateContainer>
+      <DateContainer>{format(date, 'dd MMMM')}</DateContainer>
       {games.map(game => (
         <span key={game.id}>
           <GameContainer mt={10} mb={10} p={10}>

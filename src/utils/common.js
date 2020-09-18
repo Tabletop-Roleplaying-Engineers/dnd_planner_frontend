@@ -69,3 +69,6 @@ export const getUserName = user => {
 
   return user.username
 }
+
+export const hasAction = (user, action) =>
+  user && user.actions.indexOf(action) >= 0
