@@ -1,6 +1,12 @@
 export const messages = {
   'common.game.title': 'Назва',
   'common.game.tag': 'Тег',
+  'common.edit': 'Редагувати',
+  'common.cancel': 'Скасуванти',
+  'common.proceed': 'Продовжити',
+  'common.cancelEditing': 'Скасування редагування',
+  'common.cancelEditingMessage':
+    'Ви впевненні що хочете скасувати редагування?',
   'menu.calendar': 'Календар',
   'menu.dashboard': 'Головна',
   'menu.search': 'Пошук',

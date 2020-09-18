@@ -1,6 +1,12 @@
 export const messages = {
   'common.game.title': 'Title',
   'common.game.tag': 'Tag',
+  'common.edit': 'Edit',
+  'common.cancel': 'Cancel',
+  'common.proceed': 'Proceed',
+  'common.cancelEditing': 'Cancel editing',
+  'common.cancelEditingMessage':
+    'Are you sure that you want to cancel editing?',
   'menu.calendar': 'Calendar',
   'menu.dashboard': 'Dashboard',
   'menu.search': 'Search',
