@@ -23,6 +23,7 @@ import styled from 'styled-components'
 import { playersInGame } from 'config'
 import uk_UA from 'antd/lib/locale-provider/uk_UA'
 import 'moment/locale/uk'
+import { UsersSelect } from 'components/UsersSelect/UsersSelect'
 
 const StyledImage = styled.img`
   object-fit: cover;
@@ -61,7 +62,13 @@ const validationSchema = {
 moment.locale('uk')
 
 const GameForm = props => {
-  const { onSubmit, initialValues = { tags: [] }, showSharing } = props
+  const {
+    onSubmit,
+    initialValues = { tags: [] },
+    showSharing,
+    users = [],
+    withMasterField,
+  } = props
   const isEdit = !!initialValues.id
 
   const [tags, setTags] = useState(initialValues.tags)
@@ -71,6 +78,7 @@ const GameForm = props => {
 
   const [image, setImage] = useState(initialValues ? initialValues.image : null)
   const [fileList, setFileList] = useState([])
+  const [userId, setUserId] = useState()
 
   const handleNewTagClick = useCallback(() => {
     setShowTagInput(true)
@@ -100,6 +108,7 @@ const GameForm = props => {
           lvlFrom: range[0],
           lvlTo: range[1],
           tags,
+          userId,
         }
         onSubmit(game, form)
       }}
@@ -113,6 +122,17 @@ const GameForm = props => {
               <Header>Add new Game</Header>
             )}
           </Box>
+
+          {/* Master */}
+          {withMasterField && (
+            <Box mb={20}>
+              <UsersSelect
+                users={users}
+                onChange={value => setUserId(value && value.id)}
+                initial={initialValues.user && initialValues.user.id}
+              />
+            </Box>
+          )}
 
           {/* Image */}
           <Flex column mb={20}>

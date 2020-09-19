@@ -15,9 +15,12 @@ import {
   PARTICIPATE_GAME,
   FETCH_GAME_QUERY,
   REMOVE_CHARACTER_FROM_GAME_MUTATION,
-  FETCH_GAMES_USER_PLAY_QUERY
+  FETCH_GAMES_USER_PLAY_QUERY,
 } from 'api'
 import { UserContext } from '../../context/userContext'
+import { hasAction } from 'utils/common'
+import { ACTIONS } from '../../constants'
+import { USERS_WHO_CREATED_GAMES } from 'api/games'
 
 const PlannerWrapper = styled.div`
   margin-top: 10px;
@@ -57,6 +60,7 @@ class Calendar extends React.PureComponent {
     from: '0',
     to: '0',
     cancelCreatingGameConfirmation: false,
+    gameMasters: [],
   }
 
   subscribeToNewGame = async subscribeToMore => {
@@ -124,7 +128,7 @@ class Calendar extends React.PureComponent {
 
           this.setState({ currentGame: { ...currentGame, ...participateGame } })
         },
-        refetchQueries: [ { query: FETCH_GAMES_USER_PLAY_QUERY }],
+        refetchQueries: [{ query: FETCH_GAMES_USER_PLAY_QUERY }],
       })
       .catch(error => {
         notification.error({
@@ -143,6 +147,7 @@ class Calendar extends React.PureComponent {
     if (gameId) {
       this.fetchCurrentGame(gameId)
     }
+    this.fetchGameMasters()
   }
 
   componentDidUpdate(prevProps) {
@@ -177,6 +182,21 @@ class Calendar extends React.PureComponent {
       },
       fetchingCurrentGame: false,
       visibleDrawer: DRAWERS.GAME,
+    })
+  }
+
+  async fetchGameMasters() {
+    const {
+      client: { query },
+    } = this.props
+
+    const res = await query({
+      query: USERS_WHO_CREATED_GAMES,
+      fetchPolicy: 'network-only',
+    })
+    console.log('=-= res', res)
+    this.setState({
+      gameMasters: res.data.usersWhoCreatedGames,
     })
   }
 
@@ -258,6 +278,7 @@ class Calendar extends React.PureComponent {
       from,
       to,
       cancelCreatingGameConfirmation,
+      gameMasters,
     } = this.state
     const { user } = this.context
 
@@ -308,9 +329,12 @@ class Calendar extends React.PureComponent {
               <Spin spinning={loading}>
                 <GameForm
                   showSharing
+                  withMasterField={hasAction(user, ACTIONS.UPDATE_GAME_MASTER)}
+                  users={gameMasters}
                   initialValues={{
                     startingDate: this.state.lastSelectedDate,
                     tags: ['AL', 'Newbies allowed'],
+                    userId: user.id,
                   }}
                   onSubmit={async (game, form) => {
                     try {

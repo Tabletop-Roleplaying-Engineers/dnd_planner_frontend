@@ -207,6 +207,7 @@ export const UPDATE_GAME_QUERY = gql`
     $tags: [String]!
     $telegramPost: Boolean!
     $facebookPost: Boolean!
+    $userId: String
   ) {
     editGame(
       id: $id
@@ -220,6 +221,7 @@ export const UPDATE_GAME_QUERY = gql`
       tags: $tags
       telegramPost: $telegramPost
       facebookPost: $facebookPost
+      userId: $userId
     ) {
       id
       title

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { Avatar, Select } from 'antd'
 import styled from 'styled-components'
 import { Flex, Box } from 'noui/Position'
@@ -14,10 +14,11 @@ export const UsersSelect = ({
   users = [],
   onChange = () => {},
   withEmpty = false,
+  initial,
 }) => {
   const intl = useIntl()
   const usersById = useDictionary(users)
-  const [selected, setSelected] = useState(null)
+  const [selected, setSelected] = useState(initial)
   const onSelect = useCallback(
     id => {
       setSelected(id)
@@ -26,10 +27,14 @@ export const UsersSelect = ({
     [usersById, onChange],
   )
 
+  useEffect(() => {
+    setSelected(initial)
+  }, [initial])
+
   return (
     <StyledSelect
       placeholder={intl.formatMessage({ id: 'search.userInput.placeholder' })}
-      selected={selected}
+      value={selected}
       onSelect={onSelect}
     >
       {withEmpty && (
