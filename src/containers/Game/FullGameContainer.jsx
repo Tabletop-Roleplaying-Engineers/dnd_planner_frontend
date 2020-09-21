@@ -6,7 +6,7 @@ import { FullGame } from 'components/Game'
 import { UserContext } from 'context/userContext'
 import { REMOVE_CHARACTER_FROM_GAME_MUTATION, PARTICIPATE_GAME } from 'api'
 
-export const FullGameContainer = ({ game, onUpdate }) => {
+export const FullGameContainer = ({ game, onUpdate, onEditClick }) => {
   const { user } = useContext(UserContext)
   const removeCharFromSelectedGame = useCallback(
     async character => {
@@ -73,6 +73,7 @@ export const FullGameContainer = ({ game, onUpdate }) => {
       onRemoveChar={onRemoveChar}
       onParticipate={onParticipate}
       onLeave={removeCharFromSelectedGame}
+      onEditClick={onEditClick}
     />
   )
 }
