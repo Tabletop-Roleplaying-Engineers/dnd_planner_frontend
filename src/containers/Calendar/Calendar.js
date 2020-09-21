@@ -1,6 +1,7 @@
-import { Drawer, notification, Spin, Modal } from 'antd'
-import * as R from 'ramda'
 import React from 'react'
+import * as R from 'ramda'
+import { Drawer, notification, Spin, Modal } from 'antd'
+import { FormattedMessage } from 'react-intl'
 import GameForm from 'forms/GameForm'
 import styled from 'styled-components'
 import { Mutation, Query, withApollo } from 'react-apollo'
@@ -16,11 +17,11 @@ import {
   FETCH_GAME_QUERY,
   REMOVE_CHARACTER_FROM_GAME_MUTATION,
   FETCH_GAMES_USER_PLAY_QUERY,
+  FETCH_USERS_QUERY,
 } from 'api'
 import { UserContext } from '../../context/userContext'
 import { hasAction } from 'utils/common'
-import { ACTIONS } from '../../constants'
-import { USERS_WHO_CREATED_GAMES } from 'api/games'
+import { ACTIONS, ROLES } from '../../constants'
 
 const PlannerWrapper = styled.div`
   margin-top: 10px;
@@ -191,12 +192,13 @@ class Calendar extends React.PureComponent {
     } = this.props
 
     const res = await query({
-      query: USERS_WHO_CREATED_GAMES,
-      fetchPolicy: 'network-only',
+      query: FETCH_USERS_QUERY,
+      variables: {
+        role: ROLES.GameMaster,
+      },
     })
-    console.log('=-= res', res)
     this.setState({
-      gameMasters: res.data.usersWhoCreatedGames,
+      gameMasters: res.data.users,
     })
   }
 
@@ -331,6 +333,7 @@ class Calendar extends React.PureComponent {
                   showSharing
                   withMasterField={hasAction(user, ACTIONS.UPDATE_GAME_MASTER)}
                   users={gameMasters}
+                  user={user}
                   initialValues={{
                     startingDate: this.state.lastSelectedDate,
                     tags: ['AL', 'Newbies allowed'],
@@ -413,14 +416,18 @@ class Calendar extends React.PureComponent {
 
         {/* Cancel creating game confirmation dialog */}
         <Modal
-          title="Cancel creating"
+          title={<FormattedMessage id="common.cancelCreating" />}
           visible={cancelCreatingGameConfirmation}
+          okText={<FormattedMessage id="common.cancel" />}
           onOk={() => this.onCancelEditing(false)}
+          cancelText={<FormattedMessage id="common.proceed" />}
           onCancel={() =>
             this.setState({ cancelCreatingGameConfirmation: false })
           }
         >
-          <p>Are you sure that you want to cancel creating?</p>
+          <p>
+            <FormattedMessage id="common.cancelCreatingMessage" />
+          </p>
         </Modal>
       </>
     )

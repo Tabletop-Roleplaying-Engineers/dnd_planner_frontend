@@ -1,9 +1,13 @@
 export const messages = {
   'common.game.title': 'Title',
   'common.game.tag': 'Tag',
+  'common.submit': 'Submit',
   'common.edit': 'Edit',
   'common.cancel': 'Cancel',
   'common.proceed': 'Proceed',
+  'common.cancelCreating': 'Cancel creating',
+  'common.cancelCreatingMessage':
+    'Are you sure that you want to cancel creating?',
   'common.cancelEditing': 'Cancel editing',
   'common.cancelEditingMessage':
     'Are you sure that you want to cancel editing?',
@@ -39,4 +43,24 @@ export const messages = {
   'search.table.starting': 'Starting',
   'search.table.tags': 'Tags',
   'userSelect.all': 'All',
+
+  'validation.image.required': 'Image is required',
+  'validation.title.required': "Title can't be blank",
+  'validation.title.length':
+    'Title is too short (minimum is {number} characters)',
+  'validation.range.required': 'Range is required',
+  'validation.date.required': 'Date is required',
+  'validation.time.required': 'Time is required',
+  'validation.players.required': 'Players number is required',
+  'validation.description.required': "Description can't be blank",
+
+  'gameForm.addNewGame': 'Add new Game',
+  'gameForm.editNewGame': 'Edit Game',
+  'gameForm.image.upload': 'Click or drag file to this area to upload',
+  'gameForm.levels.title': 'Select min-max levels',
+  'gameForm.players.title': 'Players count',
+  'gameForm.description.title': 'Description',
+  'gameForm.postInTelegram': 'Post in Telegram',
+  'gameForm.postInFacebook': 'Post in Facebook',
+  'gameForm.newTag': 'New Tag',
 }

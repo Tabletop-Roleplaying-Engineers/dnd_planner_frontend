@@ -1,5 +1,9 @@
 export const AUTH_STORAGE_KEY = 'AUTH_DATA'
 
+export const ROLES = {
+  GameMaster: 'GameMaster',
+}
+
 export const ACTIONS = {
   MANAGE_GAMES: 'ManageGames',
   MANAGE_OWN_GAMES: 'ManageOwnGames',

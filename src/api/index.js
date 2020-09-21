@@ -25,8 +25,8 @@ export {
 export { FETCH_RULES } from './rules'
 
 export const FETCH_USERS_QUERY = gql`
-  query Users($username: String!) {
-    users(username: $username) {
+  query Users($username: String, $role: String) {
+    users(username: $username, role: $role) {
       id
       firstName
       lastName

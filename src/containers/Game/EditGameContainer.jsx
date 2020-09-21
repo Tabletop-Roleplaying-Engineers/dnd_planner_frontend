@@ -4,17 +4,22 @@ import { useQuery, useMutation } from '@apollo/react-hooks'
 import { UPDATE_GAME_QUERY } from 'api'
 import { UserContext } from '../../context/userContext'
 import GameForm from 'forms/GameForm'
-import { USERS_WHO_CREATED_GAMES } from 'api/games'
-import { ACTIONS } from '../../constants'
+import { FETCH_USERS_QUERY } from 'api'
+import { ACTIONS, ROLES } from '../../constants'
+import { hasAction } from 'utils/common'
 
-const canUpdateGameMaster = user =>
-  user && user.actions.indexOf(ACTIONS.UPDATE_GAME_MASTER) >= 0
+const canUpdateGameMaster = user => hasAction(user, ACTIONS.UPDATE_GAME_MASTER)
 
 export const EditGameContainer = ({ game, onUpdated }) => {
   const { user } = useContext(UserContext)
   const [updateGame, result] = useMutation(UPDATE_GAME_QUERY)
-  const { loading: loadingUsers, data: users } = useQuery(
-    USERS_WHO_CREATED_GAMES,
+  const { loading: loadingUsers, data: usersResult } = useQuery(
+    FETCH_USERS_QUERY,
+    {
+      variables: {
+        role: ROLES.GameMaster,
+      },
+    },
   )
   const onSubmit = useCallback(async game => {
     await updateGame({ variables: game })
@@ -27,7 +32,7 @@ export const EditGameContainer = ({ game, onUpdated }) => {
         showSharing
         initialValues={game}
         onSubmit={onSubmit}
-        users={users && users.usersWhoCreatedGames}
+        users={usersResult && usersResult.users}
         withMasterField={canUpdateGameMaster(user)}
       />
     </Spin>

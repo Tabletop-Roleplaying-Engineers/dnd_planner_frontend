@@ -21,41 +21,49 @@ const _Form = ({ children, form, validation = {}, onSubmit, ...props }) => {
       <FormContext.Provider value={{ form, validation }}>
         {children({
           form: {
-            hasErrors: () => !R.pipe(
-              R.reject(R.isNil),
-              R.isEmpty
-            )(form.getFieldsError()),
-            ...form
-          }
+            hasErrors: () =>
+              !R.pipe(
+                R.reject(R.isNil),
+                R.isEmpty,
+              )(form.getFieldsError()),
+            ...form,
+          },
         })}
       </FormContext.Provider>
     </Form>
   )
 }
 
-export const Field = ({ children, name, initialValue, ...props }) =>
+export const Field = ({ children, name, initialValue, ...props }) => (
   <FormContext.Consumer>
     {({ form, validation }) => {
-      return <Form.Item>
-        {
-          form.getFieldDecorator(name, {
+      return (
+        <Form.Item>
+          {form.getFieldDecorator(name, {
             initialValue,
-            rules: [{
-              validator: (r, v, cb) => {
-                if(!r.field) return cb()
+            rules: [
+              {
+                validator: (r, v, cb) => {
+                  if (!r.field) return cb()
 
-                const data = validate({ [r.field]: v }, { [r.field]: validation[r.field] })
-                return R.pipe(
-                  R.propOr([], r.field),
-                  res => !R.isEmpty(res) ? R.join(', ', res): undefined,
-                  cb,
-                )(data)
+                  const data = validate(
+                    { [r.field]: v },
+                    { [r.field]: validation[r.field] },
+                    { fullMessages: false },
+                  )
+                  return R.pipe(
+                    R.propOr([], r.field),
+                    res => (!R.isEmpty(res) ? R.join(', ', res) : undefined),
+                    cb,
+                  )(data)
+                },
               },
-            }],
-          })(children)
-        }
-      </Form.Item>
+            ],
+          })(children)}
+        </Form.Item>
+      )
     }}
   </FormContext.Consumer>
+)
 
 export default Form.create()(_Form)
