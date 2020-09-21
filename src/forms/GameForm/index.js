@@ -271,37 +271,45 @@ const GameForm = props => {
             </Box>
           </Flex>
 
-          <Flex justifyContent="space-between">
+          <Row gutter={10}>
             {/* Date */}
-            <ConfigProvider locale={uk_UA}>
-              <Field
-                name="date"
-                initialValue={
-                  initialValues &&
-                  initialValues.startingDate &&
-                  moment(initialValues.startingDate)
-                }
-              >
-                <DatePicker />
-              </Field>
-            </ConfigProvider>
+            <Col xs={24} md={8}>
+              <ConfigProvider locale={uk_UA}>
+                <Field
+                  name="date"
+                  initialValue={
+                    initialValues &&
+                    initialValues.startingDate &&
+                    moment(initialValues.startingDate)
+                  }
+                >
+                  <DatePicker style={{ width: '100%' }} />
+                </Field>
+              </ConfigProvider>
+            </Col>
 
             {/* Time */}
-            <ConfigProvider locale={uk_UA}>
-              <Field
-                name="time"
-                initialValue={
-                  initialValues &&
-                  initialValues.startingDate &&
-                  moment(initialValues.startingDate)
-                }
-              >
-                <TimePicker format="HH:mm" minuteStep={10} />
-              </Field>
-            </ConfigProvider>
+            <Col xs={24} md={8}>
+              <ConfigProvider locale={uk_UA}>
+                <Field
+                  name="time"
+                  initialValue={
+                    initialValues &&
+                    initialValues.startingDate &&
+                    moment(initialValues.startingDate)
+                  }
+                >
+                  <TimePicker
+                    format="HH:mm"
+                    minuteStep={10}
+                    style={{ width: '100%' }}
+                  />
+                </Field>
+              </ConfigProvider>
+            </Col>
 
             {/* Players */}
-            <Box width="30%">
+            <Col xs={24} md={8}>
               <Field
                 name="players"
                 initialValue={initialValues && initialValues.players}
@@ -318,8 +326,8 @@ const GameForm = props => {
                   ))}
                 </Select>
               </Field>
-            </Box>
-          </Flex>
+            </Col>
+          </Row>
 
           {/* Description */}
           <Field
