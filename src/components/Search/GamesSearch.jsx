@@ -8,6 +8,8 @@ import { useDateFormat } from 'utils/hooks/useDateFormat'
 import { UsersSelect } from 'components/UsersSelect/UsersSelect'
 import { modalWidth } from 'config'
 import { FullGameContainer } from 'containers/Game/FullGameContainer'
+import { EditGameDrawer } from 'containers/Game/EditGameDrawer'
+import { parseGame } from 'utils/common'
 
 const Container = styled.div``
 const ImageInColumn = styled.img`
@@ -110,6 +112,7 @@ export const GamesSearch = ({
   const [tag, setTag] = useState('')
   const [userId, setUserId] = useState(null)
   const [selected, setSelected] = useState(null)
+  const [gameForEdit, setGameForEdit] = useState(null)
   const debouncedTitle = useDebounce(title, 300)
   const debouncedTag = useDebounce(tag, 300)
   const debouncedUserId = useDebounce(userId, 300)
@@ -131,6 +134,17 @@ export const GamesSearch = ({
     setSelected(game)
     searchCurrent()
   }, [])
+  const onEditClick = useCallback(() => {
+    setGameForEdit(parseGame(selected))
+    setSelected(null)
+  }, [selected])
+  const onCancelEditing = useCallback(() => {
+    setGameForEdit(null)
+  }, [selected])
+  const onGameUpdated = useCallback(() => {
+    setGameForEdit(null)
+    searchCurrent()
+  }, [selected])
 
   useEffect(() => {
     searchCurrent()
@@ -170,6 +184,7 @@ export const GamesSearch = ({
         columns={columns}
         loading={loading}
         scroll={{ x: true }}
+        rowKey="id"
         onRow={record => ({
           onClick: () => setSelected(record),
         })}
@@ -184,9 +199,20 @@ export const GamesSearch = ({
         onClose={() => setSelected(null)}
       >
         {selected && (
-          <FullGameContainer game={selected} onUpdate={onSelectedUpdate} />
+          <FullGameContainer
+            game={selected}
+            onUpdate={onSelectedUpdate}
+            onEditClick={onEditClick}
+          />
         )}
       </Drawer>
+
+      {/* Edit game */}
+      <EditGameDrawer
+        game={gameForEdit}
+        onUpdated={onGameUpdated}
+        onCancel={onCancelEditing}
+      />
     </Container>
   )
 }

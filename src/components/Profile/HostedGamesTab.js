@@ -1,16 +1,15 @@
 import React, { useContext, useState, useCallback } from 'react'
 import { Query, withApollo, Mutation } from 'react-apollo'
-import { FETCH_HOSTED_GAMES_QUERY, DELETE_GAME, UPDATE_GAME_QUERY } from 'api'
-import { UserContext } from '../../context/userContext'
-import { Alert, Spin, Card, Icon, Popconfirm, Drawer, Empty, Modal } from 'antd'
-import { Box, Flex } from '../../noui/Position'
-import { GameInfo } from 'components/Game/GameInfo'
-import GameForm from 'forms/GameForm'
-import { modalWidth } from 'config'
-import { isDesktop } from 'noui/MediaQuery'
+import { Alert, Spin, Card, Icon, Popconfirm, Empty } from 'antd'
 import * as R from 'ramda'
 import styled from 'styled-components'
+import { FETCH_HOSTED_GAMES_QUERY, DELETE_GAME } from 'api'
+import { UserContext } from '../../context/userContext'
+import { Box, Flex } from '../../noui/Position'
+import { GameInfo } from 'components/Game/GameInfo'
+import { isDesktop } from 'noui/MediaQuery'
 import { parseGame } from 'utils/common'
+import { EditGameDrawer } from 'containers/Game/EditGameDrawer'
 
 const Wrapper = styled(Card)`
   width: 100%;
@@ -19,16 +18,11 @@ const Wrapper = styled(Card)`
   justify-content: space-between;
 `
 export const HostedGamesTab = withApollo(({ client }) => {
-  const [showEditGame, setShowEditGame] = useState(false)
-  const [cancelEditingConfirmation, setCancelEditingConfirmation] = useState(
-    false,
-  )
   const [gameForEdit, setGameForEdit] = useState(null)
   const { user } = useContext(UserContext)
   const _isDesktop = isDesktop()
   const onCancelEditing = useCallback(() => {
-    setShowEditGame(false)
-    setCancelEditingConfirmation(false)
+    setGameForEdit(null)
   }, [])
 
   return (
@@ -71,7 +65,6 @@ export const HostedGamesTab = withApollo(({ client }) => {
                           key="edit"
                           onClick={() => {
                             setGameForEdit(game)
-                            setShowEditGame(true)
                           }}
                         />,
 
@@ -110,40 +103,15 @@ export const HostedGamesTab = withApollo(({ client }) => {
               </Flex>
             </Spin>
 
-            <Drawer
-              width={modalWidth()}
-              placement="right"
-              closable={false}
-              destroyOnClose={true}
-              visible={showEditGame}
-              onClose={() => setCancelEditingConfirmation(true)}
-            >
-              <Mutation mutation={UPDATE_GAME_QUERY}>
-                {(updateGame, { loading }) => (
-                  <Spin spinning={loading}>
-                    <GameForm
-                      showSharing
-                      initialValues={gameForEdit}
-                      onSubmit={async (game, form) => {
-                        await updateGame({ variables: game })
-                        setShowEditGame(false)
-                        refetch()
-                      }}
-                    />
-                  </Spin>
-                )}
-              </Mutation>
-            </Drawer>
-
-            {/* Cancel editing confirmation dialog */}
-            <Modal
-              title="Cancel editing"
-              visible={cancelEditingConfirmation}
-              onOk={() => onCancelEditing(false)}
-              onCancel={() => setCancelEditingConfirmation(false)}
-            >
-              <p>Are you sure that you want to cancel editing?</p>
-            </Modal>
+            {/* Edit game */}
+            <EditGameDrawer
+              game={gameForEdit}
+              onUpdated={() => {
+                setGameForEdit(null)
+                refetch()
+              }}
+              onCancel={onCancelEditing}
+            />
           </>
         )
       }}

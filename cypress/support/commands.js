@@ -1,5 +1,5 @@
-import { CREATE_GAME_QUERY } from '../../src/api/games';
-import { USERS } from '../users';
+import { CREATE_GAME_QUERY } from '../../src/api/games'
+import { USERS } from '../users'
 
 // ***********************************************
 // This example commands.js shows you how to
@@ -14,7 +14,9 @@ import { USERS } from '../users';
 //
 // -- This is a parent command --
 Cypress.Commands.add('login', (user = USERS.simpleUser) => {
-  const params = Object.keys(user).map((key) => `${key}=${user[key]}`).join('&')
+  const params = Object.keys(user)
+    .map(key => `${key}=${user[key]}`)
+    .join('&')
 
   cy.visit(`/login?${params}`)
   cy.get('[data-testid=profile-drop-menu]').should('be.visible')
@@ -30,19 +32,18 @@ Cypress.Commands.add('createGame', (variables = {}) => {
     facebookPost: false,
     gameForNewbies: false,
     isAl: false,
-    startingDate: (new Date()).toISOString(),
+    startingDate: new Date().toISOString(),
     telegramPost: false,
   }
   const data = {
-    "operationName": "CreateGame",
-    "variables": {
+    operationName: 'CreateGame',
+    variables: {
       ...defaultVariables,
       ...variables,
     },
-    "query": CREATE_GAME_QUERY
+    query: CREATE_GAME_QUERY,
   }
-  const token = localStorage.getItem('AUTH_DATA');
-  console.log('=-= token', token)
+  const token = localStorage.getItem('AUTH_DATA')
   cy.request({
     url: 'http://localhost:4000/',
     method: 'POST',
@@ -57,8 +58,7 @@ Cypress.Commands.add('addRoles', (userId, roles) => {
     userId,
     roles,
   }
-  const token = localStorage.getItem('AUTH_DATA');
-  console.log('=-= token', token)
+  const token = localStorage.getItem('AUTH_DATA')
   cy.request({
     url: 'http://localhost:4000/addRoles',
     method: 'POST',

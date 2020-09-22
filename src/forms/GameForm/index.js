@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef, useEffect } from 'react'
+import React, { useState, useCallback, useRef, useEffect, useMemo } from 'react'
 import * as R from 'ramda'
 import moment from 'moment'
 import {
@@ -23,6 +23,8 @@ import styled from 'styled-components'
 import { playersInGame } from 'config'
 import uk_UA from 'antd/lib/locale-provider/uk_UA'
 import 'moment/locale/uk'
+import { UsersSelect } from 'components/UsersSelect/UsersSelect'
+import { useIntl, FormattedMessage } from 'react-intl'
 
 const StyledImage = styled.img`
   object-fit: cover;
@@ -30,39 +32,96 @@ const StyledImage = styled.img`
   height: 300px;
 `
 
-const validationSchema = {
-  image: {
-    presence: true,
-  },
-  title: {
-    presence: true,
-    length: {
-      minimum: 6,
-    },
-  },
-  range: {
-    presence: { allowEmpty: false },
-  },
-  date: {
-    presence: { allowEmpty: false },
-  },
-  time: {
-    presence: { allowEmpty: false },
-  },
-  players: {
-    presence: { allowEmpty: false },
-  },
-  description: {
-    presence: { allowEmpty: false },
-  },
+const useValidation = () => {
+  const intl = useIntl()
+
+  return useMemo(
+    () => ({
+      image: {
+        presence: {
+          message: intl.formatMessage({ id: 'validation.image.required' }),
+        },
+      },
+      title: {
+        presence: {
+          message: intl.formatMessage({ id: 'validation.title.required' }),
+        },
+        length: {
+          message: intl.formatMessage({ id: 'validation.title.length' }),
+          minimum: 6,
+        },
+      },
+      range: {
+        presence: {
+          message: intl.formatMessage({ id: 'validation.range.required' }),
+          allowEmpty: false,
+        },
+      },
+      date: {
+        presence: {
+          message: intl.formatMessage({ id: 'validation.date.required' }),
+          allowEmpty: false,
+        },
+      },
+      time: {
+        presence: {
+          message: intl.formatMessage({ id: 'validation.time.required' }),
+          allowEmpty: false,
+        },
+      },
+      players: {
+        presence: {
+          message: intl.formatMessage({ id: 'validation.players.required' }),
+          allowEmpty: false,
+        },
+      },
+      description: {
+        presence: {
+          message: intl.formatMessage({
+            id: 'validation.description.required',
+          }),
+          allowEmpty: false,
+        },
+      },
+    }),
+    [],
+  )
 }
 
 // Needs to show ant.design `DatePicked` with UA formatting
 moment.locale('uk')
 
 const GameForm = props => {
-  const { onSubmit, initialValues = { tags: [] }, showSharing } = props
+  const intl = useIntl()
+  const {
+    onSubmit,
+    initialValues = { tags: [] },
+    showSharing,
+    users = [],
+    withMasterField,
+    user,
+  } = props
+  const validationSchema = useValidation()
   const isEdit = !!initialValues.id
+  const usersWithLocals = useMemo(() => {
+    const clone = [...users]
+    if (initialValues.user) {
+      const exist = !!clone.find(u => u.id === initialValues.user.id)
+      if (!exist) {
+        clone.push(initialValues.user)
+      }
+    }
+    if (user) {
+      const exist = !!clone.find(u => u.id === user.id)
+      if (!exist) {
+        clone.push(user)
+      }
+    }
+
+    return clone
+  }, [users, initialValues, user])
+  const initialMaster =
+    (initialValues.user && initialValues.user.id) || (user && user.id)
 
   const [tags, setTags] = useState(initialValues.tags)
   const [newTag, setNewTag] = useState('')
@@ -71,6 +130,7 @@ const GameForm = props => {
 
   const [image, setImage] = useState(initialValues ? initialValues.image : null)
   const [fileList, setFileList] = useState([])
+  const [userId, setUserId] = useState()
 
   const handleNewTagClick = useCallback(() => {
     setShowTagInput(true)
@@ -100,6 +160,7 @@ const GameForm = props => {
           lvlFrom: range[0],
           lvlTo: range[1],
           tags,
+          userId,
         }
         onSubmit(game, form)
       }}
@@ -108,11 +169,26 @@ const GameForm = props => {
         <Box>
           <Box mb={20}>
             {isEdit ? (
-              <Header>Edit Game</Header>
+              <Header>
+                <FormattedMessage id="gameForm.editNewGame" />
+              </Header>
             ) : (
-              <Header>Add new Game</Header>
+              <Header>
+                <FormattedMessage id="gameForm.addNewGame" />
+              </Header>
             )}
           </Box>
+
+          {/* Master */}
+          {withMasterField && (
+            <Box mb={20}>
+              <UsersSelect
+                users={usersWithLocals}
+                onChange={value => setUserId(value && value.id)}
+                initial={initialMaster}
+              />
+            </Box>
+          )}
 
           {/* Image */}
           <Flex column mb={20}>
@@ -144,7 +220,7 @@ const GameForm = props => {
                       <Icon type="inbox" />
                     </Msg>
                     <Msg className="ant-upload-text">
-                      Click or drag file to this area to upload
+                      <FormattedMessage id="gameForm.image.upload" />
                     </Msg>
                   </>
                 )}
@@ -159,13 +235,17 @@ const GameForm = props => {
                 initialValue={initialValues && initialValues.title}
                 name="title"
               >
-                <Input placeholder="Title" />
+                <Input
+                  placeholder={intl.formatMessage({ id: 'common.game.title' })}
+                />
               </Field>
             </Box>
 
             {/* Levels */}
             <Box>
-              <Msg>Select min-max levels</Msg>
+              <Msg>
+                <FormattedMessage id="gameForm.levels.title" />
+              </Msg>
 
               <Field
                 initialValue={
@@ -191,42 +271,54 @@ const GameForm = props => {
             </Box>
           </Flex>
 
-          <Flex justifyContent="space-between">
+          <Row gutter={10}>
             {/* Date */}
-            <ConfigProvider locale={uk_UA}>
-              <Field
-                name="date"
-                initialValue={
-                  initialValues &&
-                  initialValues.startingDate &&
-                  moment(initialValues.startingDate)
-                }
-              >
-                <DatePicker />
-              </Field>
-            </ConfigProvider>
+            <Col xs={24} md={8}>
+              <ConfigProvider locale={uk_UA}>
+                <Field
+                  name="date"
+                  initialValue={
+                    initialValues &&
+                    initialValues.startingDate &&
+                    moment(initialValues.startingDate)
+                  }
+                >
+                  <DatePicker style={{ width: '100%' }} />
+                </Field>
+              </ConfigProvider>
+            </Col>
 
             {/* Time */}
-            <ConfigProvider locale={uk_UA}>
-              <Field
-                name="time"
-                initialValue={
-                  initialValues &&
-                  initialValues.startingDate &&
-                  moment(initialValues.startingDate)
-                }
-              >
-                <TimePicker format="HH:mm" minuteStep={10} />
-              </Field>
-            </ConfigProvider>
+            <Col xs={24} md={8}>
+              <ConfigProvider locale={uk_UA}>
+                <Field
+                  name="time"
+                  initialValue={
+                    initialValues &&
+                    initialValues.startingDate &&
+                    moment(initialValues.startingDate)
+                  }
+                >
+                  <TimePicker
+                    format="HH:mm"
+                    minuteStep={10}
+                    style={{ width: '100%' }}
+                  />
+                </Field>
+              </ConfigProvider>
+            </Col>
 
             {/* Players */}
-            <Box width="30%">
+            <Col xs={24} md={8}>
               <Field
                 name="players"
                 initialValue={initialValues && initialValues.players}
               >
-                <Select placeholder="Players count">
+                <Select
+                  placeholder={intl.formatMessage({
+                    id: 'gameForm.players.title',
+                  })}
+                >
                   {playersInGame.map(p => (
                     <Select.Option key={p} value={p}>
                       {p}
@@ -234,26 +326,35 @@ const GameForm = props => {
                   ))}
                 </Select>
               </Field>
-            </Box>
-          </Flex>
+            </Col>
+          </Row>
 
           {/* Description */}
           <Field
             name="description"
             initialValue={initialValues && initialValues.description}
           >
-            <Input.TextArea rows={6} placeholder="Description" />
+            <Input.TextArea
+              rows={6}
+              placeholder={intl.formatMessage({
+                id: 'gameForm.description.title',
+              })}
+            />
           </Field>
 
           <Row>
             <Col span={12}>
               <Field name="telegramPost" initialValue={false}>
-                <Checkbox disabled={!showSharing}>Post in Telegram</Checkbox>
+                <Checkbox disabled={!showSharing}>
+                  <FormattedMessage id="gameForm.postInTelegram" />
+                </Checkbox>
               </Field>
             </Col>
             <Col span={12}>
               <Field name="facebookPost" initialValue={false}>
-                <Checkbox disabled={!showSharing}>Post in Facebook</Checkbox>
+                <Checkbox disabled={!showSharing}>
+                  <FormattedMessage id="gameForm.postInFacebook" />
+                </Checkbox>
               </Field>
             </Col>
           </Row>
@@ -291,7 +392,7 @@ const GameForm = props => {
                   style={{ background: '#fff', borderStyle: 'dashed' }}
                   onClick={handleNewTagClick}
                 >
-                  <Icon type="plus" /> New Tag
+                  <Icon type="plus" /> <FormattedMessage id="gameForm.newTag" />
                 </Tag>
               )}
             </Col>
@@ -299,7 +400,7 @@ const GameForm = props => {
 
           <Box mt={15}>
             <Button disabled={form.hasErrors()} htmlType="submit">
-              Submit
+              <FormattedMessage id="common.submit" />
             </Button>
           </Box>
         </Box>
