@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useCallback } from 'react'
 import { Route, Switch } from 'react-router-dom'
 import { withApollo } from 'react-apollo'
+import { decode } from '../utils/jwt'
 
 import _history from './history'
 import { Box } from '../noui/Position'
@@ -54,6 +55,7 @@ export function Routing(props) {
 
       // Set new token
       setText(AUTH_STORAGE_KEY, data.refreshToken)
+      setUser(decode(token))
     } catch (error) {
       logout(setUser)
     }
