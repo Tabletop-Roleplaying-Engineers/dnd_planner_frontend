@@ -16,6 +16,7 @@ export const EditGameDrawer = ({
     onCancel()
     setCancelEditingConfirmation(false)
   }, [])
+  const isEdit = !!(game && game.id)
 
   return (
     <>
@@ -32,7 +33,11 @@ export const EditGameDrawer = ({
 
       {/* Cancel editing confirmation dialog */}
       <Modal
-        title={<FormattedMessage id="common.cancelEditing" />}
+        title={
+          <FormattedMessage
+            id={isEdit ? 'common.cancelEditing' : 'common.cancelCreating'}
+          />
+        }
         visible={cancelEditingConfirmation && game}
         okText={<FormattedMessage id="common.cancel" />}
         onOk={() => onCancelEditing(false)}
@@ -40,7 +45,13 @@ export const EditGameDrawer = ({
         onCancel={() => setCancelEditingConfirmation(false)}
       >
         <p>
-          <FormattedMessage id="common.cancelEditingMessage" />
+          <FormattedMessage
+            id={
+              isEdit
+                ? 'common.cancelEditingMessage'
+                : 'common.cancelCreatingMessage'
+            }
+          />
         </p>
       </Modal>
     </>

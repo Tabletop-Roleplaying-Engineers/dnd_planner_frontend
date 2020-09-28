@@ -63,4 +63,7 @@ export const messages = {
   'gameForm.postInTelegram': 'Post in Telegram',
   'gameForm.postInFacebook': 'Post in Facebook',
   'gameForm.newTag': 'New Tag',
+  'gameForm.gameCreated': 'The game has been created',
+  'gameForm.gameEdited': 'The game has been updated',
+  'gameForm.requestError': 'Error while saving data: {message}',
 }
