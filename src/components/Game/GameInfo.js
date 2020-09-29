@@ -5,7 +5,7 @@ import { Row, Col, Slider, Rate, Icon } from 'antd'
 import UserInfo from 'components/UserInfo'
 import { Box, Flex } from 'noui/Position'
 import { Header } from 'ui/Text'
-import { FormattedText } from 'components/FormattedText/FormattedText'
+import { MarkdownViewer } from 'components/Markdown'
 import { FormattedMessage } from 'react-intl'
 import { useDateFormat } from 'utils/hooks/useDateFormat'
 
@@ -118,7 +118,7 @@ export const GameInfo = ({ game }) => {
         <Row>
           <Col>
             <Box mb={10} ml={10}>
-              <FormattedText text={game.description} />
+              <MarkdownViewer markdown={game.description} />
             </Box>
           </Col>
         </Row>

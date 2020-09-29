@@ -24,6 +24,7 @@ import { playersInGame } from 'config'
 import uk_UA from 'antd/lib/locale-provider/uk_UA'
 import 'moment/locale/uk'
 import { UsersSelect } from 'components/UsersSelect/UsersSelect'
+import { MarkdownEditor } from 'components/Markdown'
 import { useIntl, FormattedMessage } from 'react-intl'
 
 const StyledImage = styled.img`
@@ -173,10 +174,10 @@ const GameForm = props => {
                 <FormattedMessage id="gameForm.editNewGame" />
               </Header>
             ) : (
-              <Header>
-                <FormattedMessage id="gameForm.addNewGame" />
-              </Header>
-            )}
+                <Header>
+                  <FormattedMessage id="gameForm.addNewGame" />
+                </Header>
+              )}
           </Box>
 
           {/* Master */}
@@ -215,15 +216,15 @@ const GameForm = props => {
                 {image ? (
                   <StyledImage src={image} />
                 ) : (
-                  <>
-                    <Msg className="ant-upload-drag-icon">
-                      <Icon type="inbox" />
-                    </Msg>
-                    <Msg className="ant-upload-text">
-                      <FormattedMessage id="gameForm.image.upload" />
-                    </Msg>
-                  </>
-                )}
+                    <>
+                      <Msg className="ant-upload-drag-icon">
+                        <Icon type="inbox" />
+                      </Msg>
+                      <Msg className="ant-upload-text">
+                        <FormattedMessage id="gameForm.image.upload" />
+                      </Msg>
+                    </>
+                  )}
               </Upload.Dragger>
             </Field>
           </Flex>
@@ -331,15 +332,14 @@ const GameForm = props => {
 
           {/* Description */}
           <Field
-            name="description"
+            name='description'
             initialValue={initialValues && initialValues.description}
           >
-            <Input.TextArea
-              rows={6}
+            <MarkdownEditor
+              rowsCount={4}
               placeholder={intl.formatMessage({
                 id: 'gameForm.description.title',
-              })}
-            />
+              })} />
           </Field>
 
           <Row>
