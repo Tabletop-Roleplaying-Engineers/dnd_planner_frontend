@@ -1,27 +1,22 @@
 import React from 'react'
 import * as R from 'ramda'
-import { Drawer, notification, Spin, Modal } from 'antd'
-import { FormattedMessage } from 'react-intl'
-import GameForm from 'forms/GameForm'
+import { Drawer, notification, Spin } from 'antd'
 import styled from 'styled-components'
-import { Mutation, Query, withApollo } from 'react-apollo'
+import { Query, withApollo } from 'react-apollo'
 import { GamesList } from 'components/GamesList'
 import { Calendar as Planner } from 'components/Calendar'
 import { GameInfo, ParticipantsList, GameParticipation } from 'components/Game'
 import { modalWidth } from 'config'
 import {
   FETCH_GAMES_QUERY,
-  CREATE_GAME_QUERY,
   NEW_GAME_SUBSCRIPTION,
   PARTICIPATE_GAME,
   FETCH_GAME_QUERY,
   REMOVE_CHARACTER_FROM_GAME_MUTATION,
   FETCH_GAMES_USER_PLAY_QUERY,
-  FETCH_USERS_QUERY,
 } from 'api'
 import { UserContext } from '../../context/userContext'
-import { hasAction } from 'utils/common'
-import { ACTIONS, ROLES } from '../../constants'
+import { EditGameDrawer } from 'containers/Game/EditGameDrawer'
 
 const PlannerWrapper = styled.div`
   margin-top: 10px;
@@ -60,8 +55,6 @@ class Calendar extends React.PureComponent {
     date: false,
     from: '0',
     to: '0',
-    cancelCreatingGameConfirmation: false,
-    gameMasters: [],
   }
 
   subscribeToNewGame = async subscribeToMore => {
@@ -148,7 +141,6 @@ class Calendar extends React.PureComponent {
     if (gameId) {
       this.fetchCurrentGame(gameId)
     }
-    this.fetchGameMasters()
   }
 
   componentDidUpdate(prevProps) {
@@ -183,22 +175,6 @@ class Calendar extends React.PureComponent {
       },
       fetchingCurrentGame: false,
       visibleDrawer: DRAWERS.GAME,
-    })
-  }
-
-  async fetchGameMasters() {
-    const {
-      client: { query },
-    } = this.props
-
-    const res = await query({
-      query: FETCH_USERS_QUERY,
-      variables: {
-        role: ROLES.GameMaster,
-      },
-    })
-    this.setState({
-      gameMasters: res.data.users,
     })
   }
 
@@ -264,24 +240,8 @@ class Calendar extends React.PureComponent {
       })
   }
 
-  onCancelEditing = () => {
-    this.setState({
-      cancelCreatingGameConfirmation: false,
-      visibleDrawer: null,
-      lastSelectedDate: null,
-    })
-  }
-
   render() {
-    const {
-      gamesList,
-      date,
-      currentGame,
-      from,
-      to,
-      cancelCreatingGameConfirmation,
-      gameMasters,
-    } = this.state
+    const { gamesList, date, currentGame, from, to } = this.state
     const { user } = this.context
 
     return (
@@ -316,51 +276,17 @@ class Calendar extends React.PureComponent {
         </Query>
 
         {/* Game form */}
-        <Drawer
-          width={modalWidth()}
-          placement="right"
-          closable={false}
-          destroyOnClose={true}
-          visible={this.state.visibleDrawer === DRAWERS.NEW_GAME}
-          onClose={() =>
-            this.setState({ cancelCreatingGameConfirmation: true })
+        <EditGameDrawer
+          game={
+            this.state.visibleDrawer === DRAWERS.NEW_GAME && {
+              startingDate: this.state.lastSelectedDate,
+              tags: ['AL', 'Newbies allowed'],
+              userId: user.id,
+            }
           }
-        >
-          <Mutation mutation={CREATE_GAME_QUERY}>
-            {(createGame, { loading }) => (
-              <Spin spinning={loading}>
-                <GameForm
-                  showSharing
-                  withMasterField={hasAction(user, ACTIONS.UPDATE_GAME_MASTER)}
-                  users={gameMasters}
-                  user={user}
-                  initialValues={{
-                    startingDate: this.state.lastSelectedDate,
-                    tags: ['AL', 'Newbies allowed'],
-                    userId: user.id,
-                  }}
-                  onSubmit={async (game, form) => {
-                    try {
-                      await createGame({ variables: game })
-                      notification.success({
-                        message: 'New game added!',
-                      })
-                      this.setState({ visibleDrawer: null })
-                    } catch (error) {
-                      const msg = error.graphQLErrors
-                        .map(err => err.message)
-                        .join('; ')
-                      notification.error({
-                        message: `Error while saving data: ${msg}`,
-                      })
-                      throw error
-                    }
-                  }}
-                />
-              </Spin>
-            )}
-          </Mutation>
-        </Drawer>
+          onUpdated={() => this.setState({ visibleDrawer: null })}
+          onCancel={() => this.setState({ visibleDrawer: null })}
+        />
 
         {/* Games list */}
         <Drawer
@@ -413,22 +339,6 @@ class Calendar extends React.PureComponent {
             </>
           )}
         </Drawer>
-
-        {/* Cancel creating game confirmation dialog */}
-        <Modal
-          title={<FormattedMessage id="common.cancelCreating" />}
-          visible={cancelCreatingGameConfirmation}
-          okText={<FormattedMessage id="common.cancel" />}
-          onOk={() => this.onCancelEditing(false)}
-          cancelText={<FormattedMessage id="common.proceed" />}
-          onCancel={() =>
-            this.setState({ cancelCreatingGameConfirmation: false })
-          }
-        >
-          <p>
-            <FormattedMessage id="common.cancelCreatingMessage" />
-          </p>
-        </Modal>
       </>
     )
   }

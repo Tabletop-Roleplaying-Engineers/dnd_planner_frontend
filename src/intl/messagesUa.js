@@ -62,4 +62,7 @@ export const messages = {
   'gameForm.postInTelegram': 'Пост в Telegram',
   'gameForm.postInFacebook': 'Пост в Facebook',
   'gameForm.newTag': 'Новий тег',
+  'gameForm.gameCreated': 'Гра створена',
+  'gameForm.gameEdited': 'Гра оновлена',
+  'gameForm.requestError': 'Помилка під час збереження даних: {message}',
 }
