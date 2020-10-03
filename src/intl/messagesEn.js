@@ -11,6 +11,8 @@ export const messages = {
   'common.cancelEditing': 'Cancel editing',
   'common.cancelEditingMessage':
     'Are you sure that you want to cancel editing?',
+  'common.pleaseWait': 'Please wait...',
+
   'menu.calendar': 'Calendar',
   'menu.dashboard': 'Dashboard',
   'menu.search': 'Search',
@@ -66,4 +68,7 @@ export const messages = {
   'gameForm.gameCreated': 'The game has been created',
   'gameForm.gameEdited': 'The game has been updated',
   'gameForm.requestError': 'Error while saving data: {message}',
+
+  'login.validation.emptyUsername':
+    'You have to set "username" ("@someUserName") in your Telegram account',
 }

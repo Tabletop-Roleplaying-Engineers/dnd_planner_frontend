@@ -10,6 +10,8 @@ export const messages = {
   'common.cancelEditing': 'Скасування редагування',
   'common.cancelEditingMessage':
     'Ви впевненні що хочете скасувати редагування?',
+  'common.pleaseWait': 'Будь ласка, зачекайте...',
+
   'menu.calendar': 'Календар',
   'menu.dashboard': 'Головна',
   'menu.search': 'Пошук',
@@ -65,4 +67,7 @@ export const messages = {
   'gameForm.gameCreated': 'Гра створена',
   'gameForm.gameEdited': 'Гра оновлена',
   'gameForm.requestError': 'Помилка під час збереження даних: {message}',
+
+  'login.validation.emptyUsername':
+    'Ім`я користувача (псевдонім) має бути не пустим в Telegram профілі',
 }
