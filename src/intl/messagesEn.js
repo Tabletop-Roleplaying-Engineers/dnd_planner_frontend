@@ -2,6 +2,7 @@ export const messages = {
   'common.game.title': 'Title',
   'common.game.tag': 'Tag',
   'common.submit': 'Submit',
+  'common.save': 'Save',
   'common.edit': 'Edit',
   'common.cancel': 'Cancel',
   'common.proceed': 'Proceed',
@@ -12,6 +13,9 @@ export const messages = {
   'common.cancelEditingMessage':
     'Are you sure that you want to cancel editing?',
   'common.pleaseWait': 'Please wait...',
+  'common.name': 'Name',
+  'common.faction': 'Faction',
+  'common.avatarUrl': 'Avatar URL',
 
   'menu.calendar': 'Calendar',
   'menu.dashboard': 'Dashboard',
@@ -50,6 +54,12 @@ export const messages = {
   'validation.title.required': "Title can't be blank",
   'validation.title.length':
     'Title is too short (minimum is {number} characters)',
+  'validation.name.required': "Name can't be blank",
+  'validation.name.length':
+    'Name is too short (minimum is {number} characters)',
+  'validation.faction.required': "Faction can't be blank",
+  'validation.class.required': "Class can't be blank",
+  'validation.avatar.required': "Avatar can't be blank",
   'validation.range.required': 'Range is required',
   'validation.date.required': 'Date is required',
   'validation.time.required': 'Time is required',
@@ -71,4 +81,7 @@ export const messages = {
 
   'login.validation.emptyUsername':
     'You have to set "username" ("@someUserName") in your Telegram account',
+
+  'character.avatar.invalidUrl':
+    "We can't load image from the provided URL. It should be an link to the image itself.",
 }
