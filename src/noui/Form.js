@@ -43,19 +43,24 @@ export const Field = ({ children, name, initialValue, ...props }) => (
             initialValue,
             rules: [
               {
-                validator: (r, v, cb) => {
+                validator: async (r, v, cb) => {
                   if (!r.field) return cb()
 
-                  const data = validate(
-                    { [r.field]: v },
-                    { [r.field]: validation[r.field] },
-                    { fullMessages: false },
-                  )
-                  return R.pipe(
-                    R.propOr([], r.field),
-                    res => (!R.isEmpty(res) ? R.join(', ', res) : undefined),
-                    cb,
-                  )(data)
+                  try {
+                    await validate.async(
+                      { [r.field]: v },
+                      { [r.field]: validation[r.field] },
+                      { fullMessages: false },
+                    )
+                    cb()
+                    return
+                  } catch (error) {
+                    return R.pipe(
+                      R.propOr([], r.field),
+                      res => (!R.isEmpty(res) ? R.join(', ', res) : undefined),
+                      cb,
+                    )(error)
+                  }
                 },
               },
             ],
