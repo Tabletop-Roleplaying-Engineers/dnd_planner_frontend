@@ -84,14 +84,14 @@ const useValidation = () => {
         },
       },
     }),
-    [],
+    [intl],
   )
 }
 
 // Needs to show ant.design `DatePicked` with UA formatting
 moment.locale('uk')
 
-const GameForm = props => {
+const GameForm = (props) => {
   const intl = useIntl()
   const {
     onSubmit,
@@ -106,13 +106,13 @@ const GameForm = props => {
   const usersWithLocals = useMemo(() => {
     const clone = [...users]
     if (initialValues.user) {
-      const exist = !!clone.find(u => u.id === initialValues.user.id)
+      const exist = !!clone.find((u) => u.id === initialValues.user.id)
       if (!exist) {
         clone.push(initialValues.user)
       }
     }
     if (user) {
-      const exist = !!clone.find(u => u.id === user.id)
+      const exist = !!clone.find((u) => u.id === user.id)
       if (!exist) {
         clone.push(user)
       }
@@ -144,7 +144,7 @@ const GameForm = props => {
     if (newTag) setTags([...tags, newTag])
     setNewTag('')
     setShowTagInput(false)
-  }, [newTag])
+  }, [newTag, tags])
 
   return (
     <Form
@@ -184,7 +184,7 @@ const GameForm = props => {
             <Box mb={20}>
               <UsersSelect
                 users={usersWithLocals}
-                onChange={value => setUserId(value && value.id)}
+                onChange={(value) => setUserId(value && value.id)}
                 initial={initialMaster}
               />
             </Box>
@@ -195,7 +195,7 @@ const GameForm = props => {
             <Field name="image" initialValue={image}>
               <Upload.Dragger
                 accept="image/*"
-                beforeUpload={file => {
+                beforeUpload={(file) => {
                   const fr = new FileReader()
                   fr.onload = () => setImage(fr.result)
                   fr.readAsDataURL(file)
@@ -203,7 +203,7 @@ const GameForm = props => {
 
                   return false
                 }}
-                onRemove={e => {
+                onRemove={() => {
                   setFileList([])
                   setImage(null)
                   form.setFieldsValue({
@@ -263,7 +263,7 @@ const GameForm = props => {
                   marks={R.pipe(
                     R.repeat(R.__, 20),
                     R.addIndex(R.map)((v, idx) => ++idx),
-                    R.map(n => [n, n]),
+                    R.map((n) => [n, n]),
                     R.fromPairs,
                   )(null)}
                 />
@@ -319,7 +319,7 @@ const GameForm = props => {
                     id: 'gameForm.players.title',
                   })}
                 >
-                  {playersInGame.map(p => (
+                  {playersInGame.map((p) => (
                     <Select.Option key={p} value={p}>
                       {p}
                     </Select.Option>
@@ -365,7 +365,7 @@ const GameForm = props => {
                 <Tag
                   key={tag}
                   closable
-                  onClose={e => {
+                  onClose={(e) => {
                     e.preventDefault()
                     setTags(R.remove(idx, 1, tags))
                   }}
@@ -381,7 +381,7 @@ const GameForm = props => {
                   size="small"
                   style={{ width: 78 }}
                   value={newTag}
-                  onChange={e => setNewTag(e.target.value)}
+                  onChange={(e) => setNewTag(e.target.value)}
                   onBlur={handleNewTagConfirm}
                   onPressEnter={handleNewTagConfirm}
                 />

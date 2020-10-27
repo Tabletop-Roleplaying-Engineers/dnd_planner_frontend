@@ -15,7 +15,7 @@ import { ACTIONS } from '../../constants'
 
 const Profile = ({ history }) => {
   const { user, setUser } = useContext(UserContext)
-  const setOnBehalfToken = useCallback(token => {
+  const setOnBehalfToken = useCallback((token) => {
     const originalToken = localStorage.getItem('AUTH_DATA')
     localStorage.setItem('AUTH_DATA_ORIGINAL', originalToken)
     localStorage.setItem('AUTH_DATA', token)
@@ -31,6 +31,7 @@ const Profile = ({ history }) => {
   }, [originalToken])
   if (!user) {
     history.replace('/')
+
     return null
   }
   const canManageRoles = user.actions.indexOf(ACTIONS.MANAGE_ROLES) >= 0

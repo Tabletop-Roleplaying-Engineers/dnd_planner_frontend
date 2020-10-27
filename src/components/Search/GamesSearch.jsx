@@ -29,58 +29,61 @@ const TimeColumn = ({ time }) => {
 }
 const useColumns = ({ onTagClick = () => {} }) => {
   const intl = useIntl()
-  const columns = useMemo(() => [
-    {
-      title: intl.formatMessage({ id: 'search.table.image' }),
-      dataIndex: 'image',
-      key: 'image',
-      render: (url, game) => <ImageInColumn src={url} alt="game" />,
-    },
-    {
-      title: intl.formatMessage({ id: 'search.table.title' }),
-      dataIndex: 'title',
-      key: 'title',
-    },
-    {
-      title: intl.formatMessage({ id: 'search.table.gm' }),
-      dataIndex: 'user',
-      key: 'user',
-      render: user => {
-        if (user.firstName || user.lastName) {
-          return `${user.firstName || ''} ${user.lastName || ''} (${
-            user.username
-          })`
-        }
-
-        return `${user.username}`
+  const columns = useMemo(
+    () => [
+      {
+        title: intl.formatMessage({ id: 'search.table.image' }),
+        dataIndex: 'image',
+        key: 'image',
+        render: (url) => <ImageInColumn src={url} alt="game" />,
       },
-    },
-    {
-      title: intl.formatMessage({ id: 'search.table.levels' }),
-      dataIndex: 'levels',
-      key: 'levels',
-      render: (_, game) => `${game.lvlFrom} - ${game.lvlTo}`,
-    },
-    {
-      title: intl.formatMessage({ id: 'search.table.starting' }),
-      dataIndex: 'startingDate',
-      key: 'startingDate',
-      render: startingDate => (
-        <TimeColumn time={new Date(parseInt(startingDate))} />
-      ),
-    },
-    {
-      title: intl.formatMessage({ id: 'search.table.tags' }),
-      dataIndex: 'tags',
-      key: 'tags',
-      render: tags =>
-        tags.map(tag => (
-          <TagPointer key={tag} onClick={e => onTagClick(e, tag)}>
-            {tag}
-          </TagPointer>
-        )),
-    },
-  ])
+      {
+        title: intl.formatMessage({ id: 'search.table.title' }),
+        dataIndex: 'title',
+        key: 'title',
+      },
+      {
+        title: intl.formatMessage({ id: 'search.table.gm' }),
+        dataIndex: 'user',
+        key: 'user',
+        render: (user) => {
+          if (user.firstName || user.lastName) {
+            return `${user.firstName || ''} ${user.lastName || ''} (${
+              user.username
+            })`
+          }
+
+          return `${user.username}`
+        },
+      },
+      {
+        title: intl.formatMessage({ id: 'search.table.levels' }),
+        dataIndex: 'levels',
+        key: 'levels',
+        render: (_, game) => `${game.lvlFrom} - ${game.lvlTo}`,
+      },
+      {
+        title: intl.formatMessage({ id: 'search.table.starting' }),
+        dataIndex: 'startingDate',
+        key: 'startingDate',
+        render: (startingDate) => (
+          <TimeColumn time={new Date(parseInt(startingDate))} />
+        ),
+      },
+      {
+        title: intl.formatMessage({ id: 'search.table.tags' }),
+        dataIndex: 'tags',
+        key: 'tags',
+        render: (tags) =>
+          tags.map((tag) => (
+            <TagPointer key={tag} onClick={(e) => onTagClick(e, tag)}>
+              {tag}
+            </TagPointer>
+          )),
+      },
+    ],
+    [intl, onTagClick],
+  )
 
   return columns
 }
@@ -130,21 +133,24 @@ export const GamesSearch = ({
       userId: debouncedUserId,
     })
   }, [onSearch, debouncedTitle, debouncedTag, debouncedUserId])
-  const onSelectedUpdate = useCallback(game => {
-    setSelected(game)
-    searchCurrent()
-  }, [])
+  const onSelectedUpdate = useCallback(
+    (game) => {
+      setSelected(game)
+      searchCurrent()
+    },
+    [searchCurrent],
+  )
   const onEditClick = useCallback(() => {
     setGameForEdit(parseGame(selected))
     setSelected(null)
   }, [selected])
   const onCancelEditing = useCallback(() => {
     setGameForEdit(null)
-  }, [selected])
+  }, [])
   const onGameUpdated = useCallback(() => {
     setGameForEdit(null)
     searchCurrent()
-  }, [selected])
+  }, [searchCurrent])
 
   useEffect(() => {
     searchCurrent()
@@ -156,7 +162,7 @@ export const GamesSearch = ({
         <Col span={24} md={8}>
           <UsersSelect
             users={users}
-            onChange={value => setUserId(value && value.id)}
+            onChange={(value) => setUserId(value && value.id)}
             withEmpty
           />
         </Col>
@@ -165,7 +171,7 @@ export const GamesSearch = ({
             <Input
               value={title}
               placeholder={intl.formatMessage({ id: 'common.game.title' })}
-              onChange={e => setTitle(e.target.value)}
+              onChange={(e) => setTitle(e.target.value)}
             />
           </Popover>
         </Col>
@@ -174,7 +180,7 @@ export const GamesSearch = ({
             <Input
               value={tag}
               placeholder={intl.formatMessage({ id: 'common.game.tag' })}
-              onChange={e => setTag(e.target.value)}
+              onChange={(e) => setTag(e.target.value)}
             />
           </Popover>
         </Col>
@@ -185,7 +191,7 @@ export const GamesSearch = ({
         loading={loading}
         scroll={{ x: true }}
         rowKey="id"
-        onRow={record => ({
+        onRow={(record) => ({
           onClick: () => setSelected(record),
         })}
       />

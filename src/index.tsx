@@ -7,12 +7,16 @@ import { ENVIRONMENTS } from './constants'
 
 // Custom validator for the images in the internet,
 // it tries to download it
-validate.validators.linkToImage = function(value, options, key, attributes) {
+validate.validators.linkToImage = function(
+  value: string,
+  options: { message: string },
+  key: string,
+) {
   return new Promise((res, rej) => {
     const img = new Image()
     img.src = value
-    img.style.height = 0
-    img.style.width = 0
+    img.style.height = '0'
+    img.style.width = '0'
     img.addEventListener('load', () => {
       document.body.removeChild(img)
       res()

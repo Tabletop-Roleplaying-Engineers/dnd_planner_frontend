@@ -22,19 +22,20 @@ const Description = styled(Flex)`
 const StyledSelect = styled(Select)`
   width: 300px;
 
- & > .ant-select-selection--single {
-   height: ${props => props.selected ? '90px' : 'auto'};
-   padding-top: 3px;
- }
+  & > .ant-select-selection--single {
+    height: ${(props) => (props.selected ? '90px' : 'auto')};
+    padding-top: 3px;
+  }
 `
 
+// TODO: looks like this component is not used anywhere
 class ParticipateForm extends React.PureComponent {
   state = {
     selectedCharacter: null,
     participating: false,
   }
 
-  render () {
+  render() {
     const {
       id,
       image,
@@ -56,66 +57,64 @@ class ParticipateForm extends React.PureComponent {
       <Box key={id}>
         <Flex mb={20} center justifyContent="space-between">
           <Flex column>
-            <Header>
-              {title}
-            </Header>
+            <Header>{title}</Header>
 
-            <Msg>{lvlFrom} - {lvlTo}</Msg>
+            <Msg>
+              {lvlFrom} - {lvlTo}
+            </Msg>
           </Flex>
 
           <Flex column alignItems="flex-end">
             <Msg>Dungeon Master</Msg>
 
-            <UserInfo {...user} position="left"/>
+            <UserInfo {...user} position="left" />
           </Flex>
         </Flex>
 
-        <StyledImage src={image}/>
+        <StyledImage src={image} />
 
         <Description column my={20}>
-          {
-            description
-              .split('\n')
-              .map(msg => <Paragraph key={msg}>{msg}</Paragraph>)
-          }
+          {description.split('\n').map((msg) => (
+            <Paragraph key={msg}>{msg}</Paragraph>
+          ))}
         </Description>
 
         <Box>
           <Flex justifyContent="space-between">
             <Msg>Players:</Msg>
 
-            <Msg>{characters.length} / {players}</Msg>
+            <Msg>
+              {characters.length} / {players}
+            </Msg>
           </Flex>
 
           <Flex flexWrap="wrap" justifiContent="space-between">
-            {
-              characters.map((char) =>
-                <Flex key={char.id} my={10} center>
-                  <Character {...char} />
-                </Flex>
-              )
-            }
+            {characters.map((char) => (
+              <Flex key={char.id} my={10} center>
+                <Character {...char} />
+              </Flex>
+            ))}
           </Flex>
 
           {isPastGame && <Msg>Registration is closed</Msg>}
-          {
-            (!isPastGame && status === 'CAN_PARTICIPATE') &&
+          {!isPastGame && status === 'CAN_PARTICIPATE' && (
             <Spin spinning={this.state.participating}>
               <StyledSelect
                 placeholder="Select hero"
                 selected={this.state.selectedCharacter}
-                onSelect={data => {
+                onSelect={(data) => {
                   const char = JSON.parse(data)
-                  this.setState({selectedCharacter: char})
+                  this.setState({ selectedCharacter: char })
                 }}
               >
-                {
-                  availableCharacters.map(char =>
-                    <StyledSelect.Option key={char.id} value={JSON.stringify(char)}>
-                      <Character {...char} />
-                    </StyledSelect.Option>
-                  )
-                }
+                {availableCharacters.map((char) => (
+                  <StyledSelect.Option
+                    key={char.id}
+                    value={JSON.stringify(char)}
+                  >
+                    <Character {...char} />
+                  </StyledSelect.Option>
+                ))}
               </StyledSelect>
 
               <Box mt={20}>
@@ -124,19 +123,17 @@ class ParticipateForm extends React.PureComponent {
                   size="large"
                   disabled={R.isNil(this.state.selectedCharacter)}
                   onClick={async () => {
-                    this.setState({participating: true})
+                    this.setState({ participating: true })
                     await onParticipate(this.state.selectedCharacter)
-                    this.setState({participating: false})
+                    this.setState({ participating: false })
                   }}
                 >
                   Participate
                 </Button>
               </Box>
             </Spin>
-          }
-
+          )}
         </Box>
-
       </Box>
     )
   }

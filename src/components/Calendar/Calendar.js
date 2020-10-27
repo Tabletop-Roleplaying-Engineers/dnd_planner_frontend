@@ -32,7 +32,7 @@ const CalendarCell = styled.div`
   :hover {
     background-color: #ffdbda;
   }
-  ${props =>
+  ${(props) =>
     props.today &&
     css`
       border-color: #e61721;
@@ -81,10 +81,7 @@ const CarouselBlock = styled.div`
 
 const groupByDate = R.groupBy(R.prop('dateKey'))
 
-const parseGames = R.pipe(
-  R.map(parseGame),
-  groupByDate,
-)
+const parseGames = R.pipe(R.map(parseGame), groupByDate)
 
 export const Calendar = ({ games, onCellClick, onRangeChanged = () => {} }) => {
   const groupedGames = parseGames(games)
@@ -127,7 +124,7 @@ export const Calendar = ({ games, onCellClick, onRangeChanged = () => {} }) => {
 
           <CellLeft>
             {thisDayGames.length === 1 ? (
-              thisDayGames.map(game => (
+              thisDayGames.map((game) => (
                 <GamePreview
                   onClick={() =>
                     cellClickHandler({ date: currentDate, games: thisDayGames })
@@ -143,7 +140,7 @@ export const Calendar = ({ games, onCellClick, onRangeChanged = () => {} }) => {
                 easing="ease-out"
                 adaptiveHeight
               >
-                {thisDayGames.map(game => (
+                {thisDayGames.map((game) => (
                   <CarouselBlock key={game.id}>
                     <GamePreview
                       onClick={() =>
@@ -163,7 +160,7 @@ export const Calendar = ({ games, onCellClick, onRangeChanged = () => {} }) => {
         </CalendarCell>
       )
     },
-    [groupedGames, date],
+    [groupedGames, cellClickHandler],
   )
   useEffect(() => {
     if (!view) {
