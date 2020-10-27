@@ -15,7 +15,7 @@ export const EditGameDrawer = ({
   const onCancelEditing = useCallback(() => {
     onCancel()
     setCancelEditingConfirmation(false)
-  }, [])
+  }, [onCancel])
   const isEdit = !!(game && game.id)
 
   return (

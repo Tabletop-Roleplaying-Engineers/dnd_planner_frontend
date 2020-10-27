@@ -9,7 +9,8 @@ import { ACTIONS, ROLES } from '../../constants'
 import { hasAction } from 'utils/common'
 import { useIntl } from 'react-intl'
 
-const canUpdateGameMaster = user => hasAction(user, ACTIONS.UPDATE_GAME_MASTER)
+const canUpdateGameMaster = (user) =>
+  hasAction(user, ACTIONS.UPDATE_GAME_MASTER)
 
 export const EditGameContainer = ({ game, onUpdated }) => {
   const intl = useIntl()
@@ -26,7 +27,7 @@ export const EditGameContainer = ({ game, onUpdated }) => {
   )
   const isLoading = createResult.loading || updateResult.loading || loadingUsers
   const onSubmit = useCallback(
-    async data => {
+    async (data) => {
       try {
         if (game.id) {
           await updateGame({ variables: data })
@@ -41,7 +42,7 @@ export const EditGameContainer = ({ game, onUpdated }) => {
         }
         onUpdated(data)
       } catch (error) {
-        const msg = error.graphQLErrors.map(err => err.message).join('; ')
+        const msg = error.graphQLErrors.map((err) => err.message).join('; ')
         notification.error({
           message: intl.formatMessage(
             { id: 'gameForm.requestError' },
@@ -51,7 +52,7 @@ export const EditGameContainer = ({ game, onUpdated }) => {
         throw error
       }
     },
-    [game],
+    [createGame, game.id, intl, onUpdated, updateGame],
   )
 
   return (

@@ -32,40 +32,43 @@ const CharacterName = styled(Msg)`
 const useValidation = () => {
   const intl = useIntl()
 
-  return useMemo(() => ({
-    name: {
-      presence: {
-        message: intl.formatMessage({ id: 'validation.name.required' }),
+  return useMemo(
+    () => ({
+      name: {
+        presence: {
+          message: intl.formatMessage({ id: 'validation.name.required' }),
+        },
+        length: {
+          message: intl.formatMessage(
+            { id: 'validation.name.length' },
+            { number: 3 },
+          ),
+          minimum: 3,
+        },
       },
-      length: {
-        message: intl.formatMessage(
-          { id: 'validation.name.length' },
-          { number: 3 },
-        ),
-        minimum: 3,
+      faction: {
+        presence: {
+          allowEmpty: false,
+          message: intl.formatMessage({ id: 'validation.faction.required' }),
+        },
       },
-    },
-    faction: {
-      presence: {
-        allowEmpty: false,
-        message: intl.formatMessage({ id: 'validation.faction.required' }),
+      class: {
+        presence: {
+          allowEmpty: false,
+          message: intl.formatMessage({ id: 'validation.class.required' }),
+        },
       },
-    },
-    class: {
-      presence: {
-        allowEmpty: false,
-        message: intl.formatMessage({ id: 'validation.class.required' }),
+      avatar: {
+        presence: {
+          message: intl.formatMessage({ id: 'validation.avatar.required' }),
+        },
+        linkToImage: {
+          message: intl.formatMessage({ id: 'character.avatar.invalidUrl' }),
+        },
       },
-    },
-    avatar: {
-      presence: {
-        message: intl.formatMessage({ id: 'validation.avatar.required' }),
-      },
-      linkToImage: {
-        message: intl.formatMessage({ id: 'character.avatar.invalidUrl' }),
-      },
-    },
-  }))
+    }),
+    [intl],
+  )
 }
 
 const EditCharacterForm = ({ data, onSubmit }) => {
@@ -76,11 +79,11 @@ const EditCharacterForm = ({ data, onSubmit }) => {
     FETCH_FACTIONS_QUERY,
   )
   const isCreating = !data
-  const onAvatarInputChanged = useCallback(e => {
+  const onAvatarInputChanged = useCallback((e) => {
     setAvatar(e.target.value.trim())
   }, [])
 
-  useEffect(() => setAvatar(data && data.avatar), [])
+  useEffect(() => setAvatar(data && data.avatar), [data])
 
   if (loading) {
     return <Spin />
@@ -94,7 +97,7 @@ const EditCharacterForm = ({ data, onSubmit }) => {
 
   return (
     <Form
-      onSubmit={values => onSubmit({ id: data && data.id, ...values })}
+      onSubmit={(values) => onSubmit({ id: data && data.id, ...values })}
       validation={validationSchema}
     >
       {({ form }) => {
@@ -119,7 +122,7 @@ const EditCharacterForm = ({ data, onSubmit }) => {
                 placeholder={intl.formatMessage({ id: 'common.faction' })}
                 data-testid="select-faction"
               >
-                {factions.map(f => (
+                {factions.map((f) => (
                   <Select.Option
                     key={f.name}
                     value={f.id}
