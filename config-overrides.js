@@ -17,6 +17,9 @@ const useDifferentEslintRc = () => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     return useEslintRc(path.resolve(__dirname, './dev.eslintrc'))
   }
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  return useEslintRc(path.resolve(__dirname, './.eslintrc'))
 }
 
 const setGlobalObject = (value) => (config) => {
