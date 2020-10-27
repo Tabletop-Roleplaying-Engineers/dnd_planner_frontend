@@ -57,7 +57,7 @@ class Calendar extends React.PureComponent {
     to: '0',
   }
 
-  subscribeToNewGame = async subscribeToMore => {
+  subscribeToNewGame = async (subscribeToMore) => {
     if (this.state.unsubscribeFromGames) {
       // We don't need to subscribe several times
       return
@@ -91,7 +91,7 @@ class Calendar extends React.PureComponent {
     })
   }
 
-  onParticipate = async character => {
+  onParticipate = async (character) => {
     const { client } = this.props
     const { currentGame } = this.state
 
@@ -124,14 +124,14 @@ class Calendar extends React.PureComponent {
         },
         refetchQueries: [{ query: FETCH_GAMES_USER_PLAY_QUERY }],
       })
-      .catch(error => {
+      .catch((error) => {
         notification.error({
           message: error.message,
         })
       })
   }
 
-  componentDidMount(prevProps) {
+  componentDidMount() {
     const {
       match: {
         params: { gameId },
@@ -202,7 +202,7 @@ class Calendar extends React.PureComponent {
           gameId: game.id,
           characterId: character.id,
         },
-        update: (cache, { data: { participateGame } }) => {
+        update: (cache) => {
           const { from, to } = this.state
           const { games } = cache.readQuery({
             query: FETCH_GAMES_QUERY,
@@ -233,7 +233,7 @@ class Calendar extends React.PureComponent {
           this.setState({ currentGame: { ...game } })
         },
       })
-      .catch(error => {
+      .catch((error) => {
         notification.error({
           message: error.message,
         })
@@ -325,7 +325,7 @@ class Calendar extends React.PureComponent {
                 characters={currentGame.characters}
                 game={currentGame}
                 user={user}
-                onRemoveCharClick={char =>
+                onRemoveCharClick={(char) =>
                   this.onRemoveCharClick(currentGame, char)
                 }
               />

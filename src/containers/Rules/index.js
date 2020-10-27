@@ -1,12 +1,12 @@
 import React from 'react'
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom'
 
 import Rules from './Rules'
 
 const Scene = ({ match }) => {
   return (
     <Switch>
-      <Route exact path={match.path} component={Rules}/>
+      <Route exact path={match.path} component={Rules} />
     </Switch>
   )
 }

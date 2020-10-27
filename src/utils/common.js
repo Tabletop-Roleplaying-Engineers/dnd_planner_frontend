@@ -4,7 +4,7 @@ import format from 'date-fns/format'
 
 const stringToClassesPairs = R.split('&') // 'Bard=2&Bard=2' -> ['Bard=2', 'Bard=2']
 const stringToClassLvlPair = R.split('=') // 'Bard=2' -> ['Bard', '2']
-const filterEmpty = str => !!str.length
+const filterEmpty = (str) => !!str.length
 const toClassLvlPairs = R.pipe(
   stringToClassesPairs,
   R.filter(filterEmpty),
@@ -17,12 +17,9 @@ export const convertClassesObjToString = R.pipe(
   R.join('&'),
 )
 
-export const convertClassesStringToObj = R.pipe(
-  toClassLvlPairs,
-  R.fromPairs,
-)
+export const convertClassesStringToObj = R.pipe(toClassLvlPairs, R.fromPairs)
 
-export const getAvatarLetters = user => {
+export const getAvatarLetters = (user) => {
   let name = ''
   if (user.firstName) {
     name += user.firstName.slice(0, 1)
@@ -33,12 +30,14 @@ export const getAvatarLetters = user => {
   if (name.length === 0) {
     name = user.username.slice(0, 1)
   }
+
   return name
 }
 
 export const omit = (props, obj) => {
   const objToOmit = { ...obj }
-  props.forEach(prop => delete objToOmit[prop])
+  props.forEach((prop) => delete objToOmit[prop])
+
   return objToOmit
 }
 
@@ -46,8 +45,9 @@ export const isTesting = () => {
   return process.env.environment === ENVIRONMENTS.TEST
 }
 
-export const parseGame = game => {
+export const parseGame = (game) => {
   const date = new Date(parseInt(game.startingDate, 10))
+
   return {
     ...game,
     dateKey: format(date, 'yyyy-MM-dd'),
@@ -55,7 +55,7 @@ export const parseGame = game => {
   }
 }
 
-export const getUserName = user => {
+export const getUserName = (user) => {
   const nameParts = []
   if (user.firstName) {
     nameParts.push(user.firstName)

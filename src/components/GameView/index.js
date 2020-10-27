@@ -11,6 +11,7 @@ const StyledImage = styled.img`
 
 const GameView = ({ title, image, startingDate, ...props }) => {
   const date = new Date(parseInt(startingDate, 10))
+
   return (
     <Flex {...props} inline>
       {image && <StyledImage src={image} />}
@@ -24,4 +25,3 @@ const GameView = ({ title, image, startingDate, ...props }) => {
 }
 
 export default GameView
-

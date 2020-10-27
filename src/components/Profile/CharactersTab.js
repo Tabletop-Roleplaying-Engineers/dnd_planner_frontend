@@ -9,12 +9,11 @@ import {
   Button,
   Form,
   Empty,
-  Modal
+  Modal,
 } from 'antd'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import { Flex, Box } from 'noui/Position'
-import Card from 'ui/Card'
 import { Label } from 'ui/Text'
 import Character from 'components/Character'
 import EditCharacterForm from 'forms/EditCharacterForm'
@@ -42,7 +41,10 @@ const ListWrapper = styled(Flex)`
 `
 
 const CharacterMenu = ({ onEditClick, character }) => {
-  const [deleteCharacterConfirmation, setDeleteCharacterConfirmation] = useState(false)
+  const [
+    deleteCharacterConfirmation,
+    setDeleteCharacterConfirmation,
+  ] = useState(false)
   const [characterToDeleteId, setCharacterToDeleteId] = useState(null)
   const onDeleteCharacter = async () => {
     setDeleteCharacterConfirmation(false)
@@ -56,9 +58,9 @@ const CharacterMenu = ({ onEditClick, character }) => {
       })
       cache.writeQuery({
         query: FETCH_CHARACTERS_QUERY,
-        data: { characters: characters.filter(c => c.id !== character.id) },
+        data: { characters: characters.filter((c) => c.id !== character.id) },
       })
-    }
+    },
   })
 
   return (
@@ -114,22 +116,23 @@ const CharactersList = ({ data, onEditClick, loading, error }) => {
       <Empty description="You have no characters yet. Create one to play!" />
     )
 
-  return data.characters.map(character => (
-    <CardWrapper width={['100%', '100%', '50%', '33%']} px="10px" column
-      key={character.id}>
-      <Card
-        key={character.id}
-        py={10}
-        px={20}
+  return data.characters.map((character) => (
+    <CardWrapper
+      width={['100%', '100%', '50%', '33%']}
+      px="10px"
+      column
+      key={character.id}
+    >
+      <Box
         my={10}
         inline
         data-testid={`character-${character.name}`}
         width="100%"
       >
-        <Character {...character} />
+        <Character withBorder {...character} />
 
         <CharacterMenu onEditClick={onEditClick} character={character} />
-      </Card>
+      </Box>
     </CardWrapper>
   ))
 }
@@ -146,16 +149,16 @@ export const CharactersTab = () => {
     UPDATE_CHARACTER_MUTATION,
   )
   const updateLoading = updateCharacterResult.loading
-  const onEditClick = character => {
+  const onEditClick = (character) => {
     setEditCharacterVisibility(true)
     setCharToEdit(character)
   }
-  const onCharEditClose = character => {
+  const onCharEditClose = () => {
     setEditCharacterVisibility(false)
     setCharToEdit(null)
   }
   const onFormSubmit = useCallback(
-    async data => {
+    async (data) => {
       try {
         if (data.id) {
           await updateCharacter({ variables: omit(['name'], data) })
@@ -169,7 +172,7 @@ export const CharactersTab = () => {
         setEditCharacterVisibility(false)
         setCharToEdit(null)
       } catch (error) {
-        const message = error.graphQLErrors.map(err => err.message).join(' ,')
+        const message = error.graphQLErrors.map((err) => err.message).join(' ,')
         notification.error({ message })
       }
     },

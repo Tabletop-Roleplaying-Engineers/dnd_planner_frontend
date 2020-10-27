@@ -1,10 +1,10 @@
-import React, { useState, useCallback } from 'react'
-import { Row, Col, Card, Dropdown, Icon, Modal } from 'antd'
+import React, { useState, useCallback, useMemo } from 'react'
+import { Row, Col, Modal } from 'antd'
 import Character from 'components/Character'
 import { Box } from 'noui/Position'
-import { createMenu } from 'ui/shared'
 import { ACTIONS } from '../../constants'
 import { FormattedMessage, useIntl } from 'react-intl'
+import { CornerMenu } from 'components/CornerMenu'
 
 const isOwnGame = (user, game) => game && user && game.user.id === user.id
 
@@ -27,13 +27,38 @@ const shouldShowMenu = (user, game) => {
   return false
 }
 
-export const ParticipantsList = props => {
+export const CharacterBox = (props) => {
+  const intl = useIntl()
+  const { character, onDeleteClick, withMenu } = props
+  const menuItems = useMemo(() => {
+    return [
+      {
+        label: intl.formatMessage({
+          id: 'character.removeFromGameBtn',
+        }),
+        icon: 'delete',
+        onClick: () => onDeleteClick(character),
+        'data-testid': 'character-menu-remove-from-game',
+      },
+    ]
+  }, [intl, onDeleteClick, character])
+
+  return (
+    <Box size="small" bordered={false} p="5px">
+      <CornerMenu items={menuItems} hide={!withMenu}>
+        <Character withBorder {...character} />
+      </CornerMenu>
+    </Box>
+  )
+}
+
+export const ParticipantsList = (props) => {
   const intl = useIntl()
   const { characters, game, user, onRemoveCharClick } = props
   const showMenu = shouldShowMenu(user, game)
   const [characterToRemove, setCharacterToRemove] = useState(null)
   const onRemovingConfirm = useCallback(
-    async char => {
+    async (char) => {
       await onRemoveCharClick(char)
       setCharacterToRemove(null)
     },
@@ -42,32 +67,13 @@ export const ParticipantsList = props => {
 
   return (
     <Row>
-      {characters.map(character => (
+      {characters.map((character) => (
         <Col key={character.id} md={12}>
-          <Card size="small" bordered={false}>
-            <Character {...character} />
-            {showMenu && (
-              <Box position="absolute" top={0} right={10}>
-                <Dropdown
-                  overlay={createMenu([
-                    {
-                      label: intl.formatMessage({
-                        id: 'character.removeFromGameBtn',
-                      }),
-                      icon: 'delete',
-                      onClick: () => setCharacterToRemove(character),
-                      'data-testid': 'character-menu-remove-from-game',
-                    },
-                  ])}
-                  trigger={['click']}
-                >
-                  <Icon type="ellipsis" data-testid="character-menu" />
-                </Dropdown>
-              </Box>
-            )}
-            {/* if game.user.id === user.id */}
-            {/* show menu */}
-          </Card>
+          <CharacterBox
+            character={character}
+            onDeleteClick={setCharacterToRemove}
+            withMenu={showMenu}
+          />
         </Col>
       ))}
 

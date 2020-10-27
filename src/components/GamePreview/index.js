@@ -25,7 +25,7 @@ const TagWrapper = styled.span`
   margin-bottom: 5px;
 `
 
-export const GamePreview = ({ startingDate, title, tags = [], ...props }) => {
+export const GamePreview = ({ title, tags = [], ...props }) => {
   return (
     <Wrapper style={{ backgroundImage: `url(${props.image})` }} {...props}>
       <Title mb={10}>
@@ -42,13 +42,11 @@ export const GamePreview = ({ startingDate, title, tags = [], ...props }) => {
 
       <Flex justifyContent="space-between">
         <Flex row flexWrap="wrap" m={1}>
-          {
-            tags.map((tag, i) => (
-              <TagWrapper key={tag + i}>
-                <Tag>{tag}</Tag>
-              </TagWrapper>
-            ))
-          }
+          {tags.map((tag, i) => (
+            <TagWrapper key={tag + i}>
+              <Tag>{tag}</Tag>
+            </TagWrapper>
+          ))}
         </Flex>
       </Flex>
     </Wrapper>

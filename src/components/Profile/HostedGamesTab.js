@@ -1,5 +1,5 @@
 import React, { useContext, useState, useCallback } from 'react'
-import { Query, withApollo, Mutation } from 'react-apollo'
+import { Query, Mutation } from 'react-apollo'
 import { Alert, Spin, Card, Icon, Popconfirm, Empty } from 'antd'
 import * as R from 'ramda'
 import styled from 'styled-components'
@@ -7,7 +7,7 @@ import { FETCH_HOSTED_GAMES_QUERY, DELETE_GAME } from 'api'
 import { UserContext } from '../../context/userContext'
 import { Box, Flex } from '../../noui/Position'
 import { GameInfo } from 'components/Game/GameInfo'
-import { isDesktop } from 'noui/MediaQuery'
+import { useScreenMedia } from 'noui/MediaQuery'
 import { parseGame } from 'utils/common'
 import { EditGameDrawer } from 'containers/Game/EditGameDrawer'
 
@@ -17,10 +17,11 @@ const Wrapper = styled(Card)`
   flex-direction: column;
   justify-content: space-between;
 `
-export const HostedGamesTab = withApollo(({ client }) => {
+export const HostedGamesTab = () => {
   const [gameForEdit, setGameForEdit] = useState(null)
   const { user } = useContext(UserContext)
-  const _isDesktop = isDesktop()
+  const media = useScreenMedia()
+  const _isDesktop = media.isDesktop
   const onCancelEditing = useCallback(() => {
     setGameForEdit(null)
   }, [])
@@ -31,7 +32,7 @@ export const HostedGamesTab = withApollo(({ client }) => {
       variables={{ userId: user.id }}
       // pollInterval={1000}
     >
-      {query => {
+      {(query) => {
         const { loading, error, data, refetch } = query
         const gamesWithDM = (data && data.gamesWithDM) || []
         const parsedGames = gamesWithDM.map(parseGame)
@@ -51,7 +52,7 @@ export const HostedGamesTab = withApollo(({ client }) => {
                 justifyContent="space-between"
                 flexWrap="wrap"
               >
-                {parsedGames.map(game => (
+                {parsedGames.map((game) => (
                   <Flex
                     mb={10}
                     width={_isDesktop ? '49%' : '100%'}
@@ -86,6 +87,7 @@ export const HostedGamesTab = withApollo(({ client }) => {
                               }
                               onConfirm={deleteGame}
                               okText="Yes"
+                              disabled={loading}
                               cancelText="No"
                             >
                               <Icon type="delete" key="delete" />
@@ -117,4 +119,4 @@ export const HostedGamesTab = withApollo(({ client }) => {
       }}
     </Query>
   )
-})
+}

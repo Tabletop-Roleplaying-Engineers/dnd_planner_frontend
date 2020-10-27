@@ -40,6 +40,7 @@ const Login = ({ location, history, client }) => {
 
       if (!username) {
         setValidationError('login.validation.emptyUsername')
+
         return
       }
 
@@ -60,7 +61,7 @@ const Login = ({ location, history, client }) => {
       }
     }
     fn()
-  }, [location])
+  }, [client, history, location, setUser])
 
   if (validationError) {
     return (
@@ -77,10 +78,11 @@ const Login = ({ location, history, client }) => {
     const errorArray = error.networkError
       ? Array.from(error.networkError.result.errors.values())
       : error.graphQLErrors
+
     return (
       <Box pt="10px">
         <Alert
-          message={errorArray.map(err => err.message).join(', ')}
+          message={errorArray.map((err) => err.message).join(', ')}
           type="error"
         />
       </Box>
@@ -90,7 +92,4 @@ const Login = ({ location, history, client }) => {
   return <FormattedMessage id="common.pleaseWait" />
 }
 
-export default R.compose(
-  withRouter,
-  withApollo,
-)(Login)
+export default R.compose(withRouter, withApollo)(Login)
