@@ -60,6 +60,7 @@ export const CLASSES = [
 
 const calcCurrentLevel = R.pipe(
   R.toPairs,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   R.reduce((acc, [_, lvl]) => acc + parseInt(lvl, 10), 0),
 )
 

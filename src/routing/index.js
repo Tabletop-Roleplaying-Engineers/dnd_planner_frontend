@@ -24,9 +24,9 @@ import Search from 'containers/Search'
 
 export const history = _history
 
-const isError = data => !data || !data.refreshToken
+const isError = (data) => !data || !data.refreshToken
 
-const logout = setUser => {
+const logout = (setUser) => {
   localStorage.removeItem(AUTH_STORAGE_KEY)
   setUser(null)
   history.replace('/')
@@ -59,7 +59,7 @@ export function Routing(props) {
     } catch (error) {
       logout(setUser)
     }
-  }, [user, mutate])
+  }, [user, mutate, setUser])
 
   useEffect(() => {
     // After moving to another server we have vanished database,
@@ -68,6 +68,7 @@ export function Routing(props) {
     // so we need this check when application is started
     // Another case is when we need to update roles/actions for the user, without refreshing user have to relogin himself
     refreshToken()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
