@@ -13,13 +13,16 @@ export const GamesSearchContainer = () => {
   const { loading: loadingUsers, data: users } = useQuery(
     USERS_WHO_CREATED_GAMES,
   )
-  const onSearch = useCallback(({ title, tag, userId }) => {
-    refetchGames({
-      userId,
-      title,
-      tag,
-    })
-  })
+  const onSearch = useCallback(
+    ({ title, tag, userId }) => {
+      refetchGames({
+        userId,
+        title,
+        tag,
+      })
+    },
+    [refetchGames],
+  )
 
   return (
     <GamesSearch

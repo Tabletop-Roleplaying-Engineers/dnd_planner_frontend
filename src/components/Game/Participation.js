@@ -14,14 +14,14 @@ const StyledSelect = styled(Select)`
   width: 100%;
 
   & > .ant-select-selection--single {
-    height: ${props => (props.selected ? '90px' : 'auto')};
+    height: ${(props) => (props.selected ? '137px' : 'auto')};
     padding-top: 3px;
   }
 `
 
 // TODO: move side effects to the `FullGameContainer` to fix remove character from the participation list
 
-export const GameParticipation = props => {
+export const GameParticipation = (props) => {
   const { onParticipate, game, onLeave } = props
   const intl = useIntl()
   const { id, startingDate, user: gameMaster, characters } = game
@@ -44,7 +44,7 @@ export const GameParticipation = props => {
     if (user) {
       return loadAvailableCharacters()
     }
-  }, [user])
+  }, [loadAvailableCharacters, user])
 
   useEffect(() => {
     refetchCharacters()
@@ -84,7 +84,7 @@ export const GameParticipation = props => {
   }
 
   const currentUsersCharacter = characters.find(
-    character => character.user.id === user.id,
+    (character) => character.user.id === user.id,
   )
   if (currentUsersCharacter) {
     return (
@@ -133,12 +133,12 @@ export const GameParticipation = props => {
             id: 'participation.selectHeroBtn',
           })}
           selected={selectedCharacter}
-          onSelect={data => {
+          onSelect={(data) => {
             const char = JSON.parse(data)
             setSelectedCharacter(char)
           }}
         >
-          {availableCharacters.map(char => (
+          {availableCharacters.map((char) => (
             <StyledSelect.Option key={char.id} value={JSON.stringify(char)}>
               <Character {...char} />
             </StyledSelect.Option>

@@ -45,6 +45,7 @@ const wsLink = new WebSocketLink({
 const link = split(
   ({ query }) => {
     const { kind, operation } = getMainDefinition(query)
+
     return kind === 'OperationDefinition' && operation === 'subscription'
   },
   wsLink,

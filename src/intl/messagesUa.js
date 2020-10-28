@@ -2,6 +2,7 @@ export const messages = {
   'common.game.title': 'Назва',
   'common.game.tag': 'Тег',
   'common.submit': 'Відправити',
+  'common.save': 'Зберігти',
   'common.edit': 'Редагувати',
   'common.cancel': 'Скасуванти',
   'common.proceed': 'Продовжити',
@@ -10,6 +11,11 @@ export const messages = {
   'common.cancelEditing': 'Скасування редагування',
   'common.cancelEditingMessage':
     'Ви впевненні що хочете скасувати редагування?',
+  'common.pleaseWait': 'Будь ласка, зачекайте...',
+  'common.name': "Ім'я",
+  'common.faction': 'Фракція',
+  'common.avatarUrl': 'Посилання на аватар',
+
   'menu.calendar': 'Календар',
   'menu.dashboard': 'Головна',
   'menu.search': 'Пошук',
@@ -46,6 +52,12 @@ export const messages = {
   'validation.title.required': 'Назва не може бути пустою',
   'validation.title.length':
     'Назва занадто коротка (мінімум {number} символів)',
+  'validation.name.required': "Ім'я не може бути пустим",
+  'validation.name.length':
+    "Ім'я занадто коротке (мінімум {number, plural, one {1 символ} few { # символа} other {{number} символів}})",
+  'validation.faction.required': 'Фракція не може бути пустою',
+  'validation.class.required': 'Клас не може бути пустим',
+  'validation.avatar.required': 'Аватар не може бути пустим',
   'validation.range.required': 'Будь ласка, оберіть рівні',
   'validation.date.required': 'Дата не може бути пустою',
   'validation.time.required': 'Час не може бути пустим',
@@ -65,4 +77,10 @@ export const messages = {
   'gameForm.gameCreated': 'Гра створена',
   'gameForm.gameEdited': 'Гра оновлена',
   'gameForm.requestError': 'Помилка під час збереження даних: {message}',
+
+  'login.validation.emptyUsername':
+    'Ім`я користувача (псевдонім) має бути не пустим в Telegram профілі',
+
+  'character.avatar.invalidUrl':
+    'Ми не можемо завантажити зображення за цим посиланням. Це має бути посилання на зображення, не на сторінку де воно розміщене.',
 }

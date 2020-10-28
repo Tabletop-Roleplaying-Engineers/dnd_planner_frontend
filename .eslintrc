@@ -1,0 +1,19 @@
+{
+  "extends": ["react-app", "prettier"],
+  "parser": "@typescript-eslint/parser",
+  "rules": {
+    "no-console": [
+      "error",
+      {
+        "allow": ["warn", "error"]
+      }
+    ],
+    "semi": ["error", "never"],
+    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/no-use-before-define": "off",
+    "no-use-before-define": "off",
+    "newline-before-return": "error",
+    "no-debugger": "error",
+    "eol-last": "error"
+  }
+}

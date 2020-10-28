@@ -17,48 +17,49 @@ const ADVENTURERS = [
   {
     name: 'Сірий Френк',
     portrait: frankPortrait,
-    link: ''
+    link: '',
   },
   {
     name: 'Джо Ел',
     portrait: joelPortrait,
-    link: ''
+    link: '',
   },
   {
     name: 'Гахал Іммертум',
     portrait: gahalPortrait,
-    link: ''
+    link: '',
   },
   {
     name: 'Горінор Теранні',
     portrait: gorinorPortrait,
-    link: ''
+    link: '',
   },
   {
     name: 'Мордред',
     portrait: mordredPortrait,
-    link: ''
+    link: '',
   },
   {
     name: 'Морн’аре',
     portrait: mornarePortrait,
-    link: ''
+    link: '',
   },
   {
     name: 'БлекТі',
     portrait: blackteaPortrait,
-    link: ''
+    link: '',
   },
 ]
 
 const HeroBox = styled(Box)`
-  transition: all .5s;
+  transition: all 0.5s;
 `
 
 function getRandomInt(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+  min = Math.ceil(min)
+  max = Math.floor(max)
+
+  return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
 const Adventures = () => {
@@ -72,43 +73,43 @@ const Adventures = () => {
     autoplaySpeed: 4000,
     swipeToSlide: true,
     centerMode: true,
-    initialSlide: getRandomInt(0, ADVENTURERS.length - 1)
+    initialSlide: getRandomInt(0, ADVENTURERS.length - 1),
   }
-  
+
   return (
     <Box>
       <Flex center>
-        <Header fontSize={30} fontWeight="bold">ВИЗНАЧНІ АВАНТЮРИСТИ
+        <Header fontSize={30} fontWeight="bold">
+          ВИЗНАЧНІ АВАНТЮРИСТИ
         </Header>
       </Flex>
-      
+
       <Flex mt={30} center>
         <Box width="80vw">
-          
           <Slider {...settings}>
-            {
-              ADVENTURERS.map(({name, portrait}) =>
-                <HeroBox px={10}>
-                  <Portrait
-                    height="30vh"
-                    label={name}
-                    src={portrait}
-                    alt={name}
-                  />
-                </HeroBox>
-              )
-            }
+            {ADVENTURERS.map(({ name, portrait }) => (
+              <HeroBox px={10}>
+                <Portrait
+                  height="30vh"
+                  label={name}
+                  src={portrait}
+                  alt={name}
+                />
+              </HeroBox>
+            ))}
           </Slider>
         </Box>
       </Flex>
-      
+
       <Box mt={40}>
         <Paragraph fontSize="16px">
-          Усі авантюристи прагнуть визнання та слави. Вони змагаються зі злом, або стають на його сторону. Перемагають в
-          епічних битвах, або гинуть, стараючись. Багато зникає зі сторінок історії, так там і не з’явившись. Однак
-          дехто своїми діяннями, живими чи посмертними, залишається в пам’яті людей як символ віри, добра та
-          нескореності. Тими, на кого можна орієнтуватись чи приводити в приклад. В кожного з цих авантюристів була своя
-          історія, і вона описана тут.
+          Усі авантюристи прагнуть визнання та слави. Вони змагаються зі злом,
+          або стають на його сторону. Перемагають в епічних битвах, або гинуть,
+          стараючись. Багато зникає зі сторінок історії, так там і не
+          з’явившись. Однак дехто своїми діяннями, живими чи посмертними,
+          залишається в пам’яті людей як символ віри, добра та нескореності.
+          Тими, на кого можна орієнтуватись чи приводити в приклад. В кожного з
+          цих авантюристів була своя історія, і вона описана тут.
         </Paragraph>
       </Box>
     </Box>

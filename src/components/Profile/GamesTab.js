@@ -11,7 +11,7 @@ import GameView from 'components/GameView'
 import { UserContext } from 'context/userContext'
 
 const getUsersCharacter = (userId, game) => {
-  return game.characters.find(character => character.user.id === userId)
+  return game.characters.find((character) => character.user.id === userId)
 }
 
 export const GamesTab = () => {
@@ -31,7 +31,7 @@ export const GamesTab = () => {
 
   return (
     <Spin spinning={loading}>
-      {gamesUserPlay.map(game => (
+      {gamesUserPlay.map((game) => (
         <Card key={game.id} py={10} px={20} my={10}>
           <Flex column>
             <GameView {...game} />
@@ -43,7 +43,7 @@ export const GamesTab = () => {
                   characterId: getUsersCharacter(user.id, game).id,
                   gameId: game.id,
                 }}
-                update={(cache, { data: { leaveGame } }) => {
+                update={() => {
                   refetch()
                 }}
               >
@@ -58,10 +58,10 @@ export const GamesTab = () => {
             </Box>
 
             <Row>
-              {game.characters.map(character => (
+              {game.characters.map((character) => (
                 <Col key={character.id} md={12} lg={8}>
                   <Box p={10}>
-                    <Character {...character} />
+                    <Character withBorder {...character} />
                   </Box>
                 </Col>
               ))}

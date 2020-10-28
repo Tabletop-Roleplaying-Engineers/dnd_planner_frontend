@@ -8,13 +8,16 @@ import { SIGN_IN_MUTATION } from 'api'
 import { decode } from '../../utils/jwt'
 import { UserContext } from '../../context/userContext'
 import { Box } from 'noui/Position'
+import { FormattedMessage } from 'react-intl'
 
 const Login = ({ location, history, client }) => {
   const { setUser } = useContext(UserContext)
   const [error, setError] = useState(null)
+  const [validationError, setValidationError] = useState(null)
 
   useEffect(() => {
     const fn = async () => {
+      setValidationError(null)
       const {
         first_name,
         last_name,
@@ -35,6 +38,12 @@ const Login = ({ location, history, client }) => {
         authDate: auth_date,
       }
 
+      if (!username) {
+        setValidationError('login.validation.emptyUsername')
+
+        return
+      }
+
       try {
         let {
           data: { signIn: token },
@@ -52,26 +61,35 @@ const Login = ({ location, history, client }) => {
       }
     }
     fn()
-  }, [])
+  }, [client, history, location, setUser])
 
-  if (error) {
-    const errorArray = error.networkError
-      ? Array.from(error.networkError.result.errors.values())
-      : error.graphQLErrors
+  if (validationError) {
     return (
       <Box pt="10px">
         <Alert
-          message={errorArray.map(err => err.message).join(', ')}
+          message={<FormattedMessage id={validationError} />}
           type="error"
         />
       </Box>
     )
   }
 
-  return <div>Please wait...</div>
+  if (error) {
+    const errorArray = error.networkError
+      ? Array.from(error.networkError.result.errors.values())
+      : error.graphQLErrors
+
+    return (
+      <Box pt="10px">
+        <Alert
+          message={errorArray.map((err) => err.message).join(', ')}
+          type="error"
+        />
+      </Box>
+    )
+  }
+
+  return <FormattedMessage id="common.pleaseWait" />
 }
 
-export default R.compose(
-  withRouter,
-  withApollo,
-)(Login)
+export default R.compose(withRouter, withApollo)(Login)

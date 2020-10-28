@@ -7,7 +7,7 @@ const FormContext = React.createContext('formContext')
 const _Form = ({ children, form, validation = {}, onSubmit, ...props }) => {
   return (
     <Form
-      onSubmit={e => {
+      onSubmit={(e) => {
         e.preventDefault()
         form.validateFields(async (err, values) => {
           if (!err) {
@@ -22,10 +22,7 @@ const _Form = ({ children, form, validation = {}, onSubmit, ...props }) => {
         {children({
           form: {
             hasErrors: () =>
-              !R.pipe(
-                R.reject(R.isNil),
-                R.isEmpty,
-              )(form.getFieldsError()),
+              !R.pipe(R.reject(R.isNil), R.isEmpty)(form.getFieldsError()),
             ...form,
           },
         })}
@@ -34,7 +31,7 @@ const _Form = ({ children, form, validation = {}, onSubmit, ...props }) => {
   )
 }
 
-export const Field = ({ children, name, initialValue, ...props }) => (
+export const Field = ({ children, name, initialValue }) => (
   <FormContext.Consumer>
     {({ form, validation }) => {
       return (
@@ -43,19 +40,26 @@ export const Field = ({ children, name, initialValue, ...props }) => (
             initialValue,
             rules: [
               {
-                validator: (r, v, cb) => {
+                validator: async (r, v, cb) => {
                   if (!r.field) return cb()
 
-                  const data = validate(
-                    { [r.field]: v },
-                    { [r.field]: validation[r.field] },
-                    { fullMessages: false },
-                  )
-                  return R.pipe(
-                    R.propOr([], r.field),
-                    res => (!R.isEmpty(res) ? R.join(', ', res) : undefined),
-                    cb,
-                  )(data)
+                  try {
+                    await validate.async(
+                      { [r.field]: v },
+                      { [r.field]: validation[r.field] },
+                      { fullMessages: false },
+                    )
+                    cb()
+
+                    return
+                  } catch (error) {
+                    return R.pipe(
+                      R.propOr([], r.field),
+                      (res) =>
+                        !R.isEmpty(res) ? R.join(', ', res) : undefined,
+                      cb,
+                    )(error)
+                  }
                 },
               },
             ],
