@@ -344,16 +344,9 @@ const GameForm = (props) => {
 
           <Row>
             <Col span={12}>
-              <Field name="telegramPost" initialValue={false}>
+              <Field name="share" initialValue={false}>
                 <Checkbox disabled={!showSharing}>
-                  <FormattedMessage id="gameForm.postInTelegram" />
-                </Checkbox>
-              </Field>
-            </Col>
-            <Col span={12}>
-              <Field name="facebookPost" initialValue={false}>
-                <Checkbox disabled={!showSharing}>
-                  <FormattedMessage id="gameForm.postInFacebook" />
+                  <FormattedMessage id="gameForm.share" />
                 </Checkbox>
               </Field>
             </Col>

@@ -71,8 +71,7 @@ export const CREATE_GAME_QUERY = gql`
     $lvlFrom: Int!
     $lvlTo: Int!
     $players: Int!
-    $telegramPost: Boolean!
-    $facebookPost: Boolean!
+    $share: Boolean!
     $tags: [String]!
     $userId: String
   ) {
@@ -84,8 +83,7 @@ export const CREATE_GAME_QUERY = gql`
       lvlFrom: $lvlFrom
       lvlTo: $lvlTo
       players: $players
-      telegramPost: $telegramPost
-      facebookPost: $facebookPost
+      share: $share
       tags: $tags
       userId: $userId
     ) {
@@ -207,8 +205,6 @@ export const UPDATE_GAME_QUERY = gql`
     $lvlTo: Int!
     $players: Int!
     $tags: [String]!
-    $telegramPost: Boolean!
-    $facebookPost: Boolean!
     $userId: String
   ) {
     editGame(
@@ -221,8 +217,6 @@ export const UPDATE_GAME_QUERY = gql`
       lvlTo: $lvlTo
       players: $players
       tags: $tags
-      telegramPost: $telegramPost
-      facebookPost: $facebookPost
       userId: $userId
     ) {
       id
