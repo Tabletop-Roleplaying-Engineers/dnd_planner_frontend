@@ -128,6 +128,7 @@ const CharactersList = ({ data, onEditClick, loading, error }) => {
         inline
         data-testid={`character-${character.name}`}
         width="100%"
+        position="relative"
       >
         <Character withBorder {...character} />
 

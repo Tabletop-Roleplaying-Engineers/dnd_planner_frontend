@@ -26,6 +26,7 @@ export const EditGameContainer = ({ game, onUpdated }) => {
     },
   )
   const isLoading = createResult.loading || updateResult.loading || loadingUsers
+  const isEdit = !!game.id
   const onSubmit = useCallback(
     async (data) => {
       try {
@@ -58,7 +59,7 @@ export const EditGameContainer = ({ game, onUpdated }) => {
   return (
     <Spin spinning={isLoading}>
       <GameForm
-        showSharing
+        showSharing={!isEdit}
         initialValues={game}
         onSubmit={onSubmit}
         users={usersResult && usersResult.users}
