@@ -260,13 +260,13 @@ class Calendar extends React.PureComponent {
               <PlannerWrapper>
                 <Planner
                   games={data.games || []}
-                  onCellClick={({ date, games }) =>
+                  onCellClick={({ date, games }) => {
                     this.onGameClick(games, date)
-                  }
+                  }}
                   onRangeChanged={this.onRangeChanged}
                 />
                 {loading && (
-                  <LoaderWrapper>
+                  <LoaderWrapper data-testid="calendar-spinner">
                     <Spin />
                   </LoaderWrapper>
                 )}

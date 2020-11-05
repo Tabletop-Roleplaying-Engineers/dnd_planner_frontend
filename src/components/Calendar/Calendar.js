@@ -117,8 +117,9 @@ export const Calendar = ({ games, onCellClick, onRangeChanged = () => {} }) => {
               ? cellClickHandler({ date: currentDate, games: thisDayGames })
               : undefined
           }
+          data-testid="calendar-cell"
         >
-          <DateBlock>
+          <DateBlock data-testid="calendar-cell-date">
             <Tag color="volcano">{format(currentDate, 'dd')}</Tag>
           </DateBlock>
 
@@ -141,7 +142,7 @@ export const Calendar = ({ games, onCellClick, onRangeChanged = () => {} }) => {
                 adaptiveHeight
               >
                 {thisDayGames.map((game) => (
-                  <CarouselBlock key={game.id}>
+                  <CarouselBlock key={game.id} data-testid="calendar-cell-game">
                     <GamePreview
                       onClick={() =>
                         cellClickHandler({
