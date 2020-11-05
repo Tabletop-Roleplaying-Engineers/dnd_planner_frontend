@@ -1,3 +1,5 @@
+import 'cypress-file-upload'
+import 'cypress-wait-until'
 import { CREATE_GAME_QUERY } from '../../src/api/games'
 import { USERS } from '../users'
 
@@ -13,18 +15,13 @@ import { USERS } from '../users'
 //
 //
 // -- This is a parent command --
-Cypress.Commands.add('login', (user = USERS.simpleUser) => {
-  const params = Object.keys(user)
-    .map(key => `${key}=${user[key]}`)
-    .join('&')
-
-  cy.visit(`/login?${params}`)
-  cy.get('[data-testid=profile-drop-menu]').should('be.visible')
-})
 Cypress.Commands.add('createGame', (variables = {}) => {
+  const date = new Date()
+  date.setHours(new Date().getHours() + 1)
+
   const defaultVariables = {
     title: 'Game1',
-    image: 'https://i.imgur.com/rYXkmb2.png',
+    image: 'https://via.placeholder.com/150',
     description: 'description',
     lvlFrom: 1,
     lvlTo: 4,
@@ -32,8 +29,9 @@ Cypress.Commands.add('createGame', (variables = {}) => {
     facebookPost: false,
     gameForNewbies: false,
     isAl: false,
-    startingDate: new Date().toISOString(),
-    telegramPost: false,
+    startingDate: date.toISOString(),
+    share: false,
+    tags: [],
   }
   const data = {
     operationName: 'CreateGame',
@@ -58,12 +56,32 @@ Cypress.Commands.add('addRoles', (userId, roles) => {
     userId,
     roles,
   }
-  const token = localStorage.getItem('AUTH_DATA')
   cy.request({
     url: 'http://localhost:4000/addRoles',
     method: 'POST',
     body: data,
   })
+})
+Cypress.Commands.add('login', (user = USERS.simpleUser) => {
+  cy.request({
+    method: 'POST',
+    url: `${Cypress.env('API_URL')}/test-auth`,
+    body: {
+      user,
+    },
+  })
+    .its('body')
+    .then((body) => {
+      window.localStorage.setItem('AUTH_DATA', body)
+    })
+})
+Cypress.Commands.add('loginAs', (user) => {
+  cy.login(user)
+  cy.addRoles(user.id, user.roles || [])
+  cy.login(user)
+})
+Cypress.Commands.add('getByTestId', (testId) => {
+  cy.get(`[data-testid=${testId}]`)
 })
 //
 //

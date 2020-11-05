@@ -47,7 +47,10 @@ const useValidation = () => {
           message: intl.formatMessage({ id: 'validation.title.required' }),
         },
         length: {
-          message: intl.formatMessage({ id: 'validation.title.length' }),
+          message: intl.formatMessage(
+            { id: 'validation.title.length' },
+            { number: 6 },
+          ),
           minimum: 6,
         },
       },
@@ -164,6 +167,7 @@ const GameForm = (props) => {
         }
         onSubmit(game, form)
       }}
+      data-testid="game-form"
     >
       {({ form }) => (
         <Box>
@@ -191,7 +195,7 @@ const GameForm = (props) => {
           )}
 
           {/* Image */}
-          <Flex column mb={20}>
+          <Flex column mb={20} data-testid="image-field-wrapper">
             <Field name="image" initialValue={image}>
               <Upload.Dragger
                 accept="image/*"
@@ -211,6 +215,7 @@ const GameForm = (props) => {
                   })
                 }}
                 fileList={fileList}
+                data-testid="image-field"
               >
                 {image ? (
                   <StyledImage src={image} />
@@ -237,6 +242,7 @@ const GameForm = (props) => {
               >
                 <Input
                   placeholder={intl.formatMessage({ id: 'common.game.title' })}
+                  data-testid="title-field"
                 />
               </Field>
             </Box>
@@ -318,9 +324,14 @@ const GameForm = (props) => {
                   placeholder={intl.formatMessage({
                     id: 'gameForm.players.title',
                   })}
+                  data-testid="select-players"
                 >
                   {playersInGame.map((p) => (
-                    <Select.Option key={p} value={p}>
+                    <Select.Option
+                      key={p}
+                      value={p}
+                      data-testid={`select-option-players-${p}`}
+                    >
                       {p}
                     </Select.Option>
                   ))}
@@ -339,6 +350,7 @@ const GameForm = (props) => {
               placeholder={intl.formatMessage({
                 id: 'gameForm.description.title',
               })}
+              data-testid="description-field"
             />
           </Field>
 
@@ -392,7 +404,11 @@ const GameForm = (props) => {
           </Row>
 
           <Box mt={15}>
-            <Button disabled={form.hasErrors()} htmlType="submit">
+            <Button
+              disabled={form.hasErrors()}
+              htmlType="submit"
+              data-testid="submit-btn"
+            >
               <FormattedMessage id="common.submit" />
             </Button>
           </Box>

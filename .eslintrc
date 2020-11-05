@@ -1,9 +1,13 @@
 {
   "extends": ["react-app", "prettier"],
   "parser": "@typescript-eslint/parser",
+  "globals": {
+    "cy": "readonly",
+    "Cypress": "readonly"
+  },
   "rules": {
     "no-console": [
-      "error",
+      "warn",
       {
         "allow": ["warn", "error"]
       }

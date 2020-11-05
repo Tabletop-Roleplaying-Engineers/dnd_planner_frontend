@@ -13,7 +13,8 @@
     "eject": "react-app-rewired eject",
     "heroku-postbuild": "npm run build",
     "storybook": "start-storybook -p 9009 -s public",
-    "build-storybook": "build-storybook -s public"
+    "build-storybook": "build-storybook -s public",
+    "cypress:open": "cypress open"
   },
   "dependencies": {
     "@apollo/react-hooks": "^3.1.0",
@@ -36,7 +37,6 @@
     "cross-env": "^7.0.0",
     "crypto-js": "^3.1.9-1",
     "customize-cra": "^0.2.11",
-    "cypress": "3.5.0",
     "date-fns": "^2.8.1",
     "eslint-config-prettier": "^6.13.0",
     "eslint-config-react-app": "^5.2.1",
@@ -77,6 +77,9 @@
     "@storybook/addon-actions": "^5.2.8",
     "@storybook/addon-links": "^5.2.8",
     "@storybook/addons": "^5.2.8",
-    "@storybook/react": "^5.2.8"
+    "@storybook/react": "^5.2.8",
+    "cypress": "5.5.0",
+    "cypress-file-upload": "^4.1.1",
+    "cypress-wait-until": "^1.7.1"
   }
 }

@@ -30,8 +30,8 @@ const ItemBody = ({ game }) => (
   </Row>
 )
 
-const canCreateThisDay = date => !isBefore(date, startOfDay(new Date()))
-const canUserCreateGame = user =>
+const canCreateThisDay = (date) => !isBefore(date, startOfDay(new Date()))
+const canUserCreateGame = (user) =>
   hasAction(user, ACTIONS.MANAGE_GAMES) ||
   hasAction(user, ACTIONS.MANAGE_OWN_GAMES)
 const canCreateGame = (user, date) =>
@@ -43,12 +43,17 @@ export const GamesList = ({ games, date, onNewGameClick }) => {
   return (
     <Flex column>
       {canCreateGame(user, date) && (
-        <Button type="primary" onClick={onNewGameClick} block>
+        <Button
+          type="primary"
+          onClick={onNewGameClick}
+          block
+          data-testid="create-game-btn"
+        >
           Create game
         </Button>
       )}
       <DateContainer>{format(date, 'dd MMMM')}</DateContainer>
-      {games.map(game => (
+      {games.map((game) => (
         <span key={game.id}>
           <GameContainer mt={10} mb={10} p={10}>
             <GameInfo game={game} />
