@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useMemo } from 'react'
 import { Row, Col, Modal } from 'antd'
+import isBefore from 'date-fns/isBefore'
 import Character from 'components/Character'
 import { Box } from 'noui/Position'
 import { ACTIONS } from '../../constants'
@@ -10,6 +11,9 @@ const isOwnGame = (user, game) => game && user && game.user.id === user.id
 
 const shouldShowMenu = (user, game) => {
   if (!user) {
+    return false
+  }
+  if (isBefore(game.startingDate, new Date())) {
     return false
   }
 
