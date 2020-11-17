@@ -113,7 +113,7 @@ const Character: React.FC<CharacterProps> = ({
   const classesElements = R.pipe(
     parseClasses,
     R.map(([c, lvl]: [string, string]) => (
-      <CharacterClass charClass={c} level={lvl} />
+      <CharacterClass key={c} charClass={c} level={lvl} />
     )),
   )(dndClass)
 
