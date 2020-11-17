@@ -19,10 +19,21 @@ const Title = styled(Box)`
 `
 const HeaderWithShadow = styled(Header)`
   text-shadow: 0px 0px 5px black;
+  white-space: nowrap;
+  width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
 `
 const TagWrapper = styled.span`
   text-shadow: 0px 0px 5px #fff;
   margin-bottom: 5px;
+  max-width: 100%;
+`
+const StyledTag = styled(Tag)`
+  white-space: nowrap;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
 `
 
 export const GamePreview = ({ title, tags = [], ...props }) => {
@@ -35,16 +46,24 @@ export const GamePreview = ({ title, tags = [], ...props }) => {
           textAlign="center"
           lineHeight={1}
           color={props.image ? '#fff' : null}
+          title={title}
         >
           {title}
         </HeaderWithShadow>
       </Title>
 
       <Flex justifyContent="space-between">
-        <Flex row flexWrap="wrap" m={1}>
+        <Flex
+          row
+          flexWrap="wrap"
+          m={1}
+          width="100%"
+          maxHeight="95px"
+          overflow="hidden"
+        >
           {tags.map((tag, i) => (
             <TagWrapper key={tag + i}>
-              <Tag>{tag}</Tag>
+              <StyledTag title={tag}>{tag}</StyledTag>
             </TagWrapper>
           ))}
         </Flex>
