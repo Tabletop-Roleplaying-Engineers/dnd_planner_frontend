@@ -113,7 +113,7 @@ const Character: React.FC<CharacterProps> = ({
   const classesElements = R.pipe(
     parseClasses,
     R.map(([c, lvl]: [string, string]) => (
-      <CharacterClass charClass={c} level={lvl} />
+      <CharacterClass key={c} charClass={c} level={lvl} />
     )),
   )(dndClass)
 
@@ -133,7 +133,7 @@ const Character: React.FC<CharacterProps> = ({
       </Box>
 
       <Flex justifyContent="space-between" mt="10px">
-        <Flex alignItems="center" minWidth="0" overflow="hidden">
+        <Flex alignItems="center" minWidth="0">
           {/* Character avatar */}
           <Box position="relative">
             {avatar && <StyledImage src={avatar} />}
@@ -145,7 +145,7 @@ const Character: React.FC<CharacterProps> = ({
           </Box>
 
           {/* Classes */}
-          <Flex alignItems="center" overflow="auto">
+          <Flex alignItems="center" overflow="auto" pr="10px">
             {classesElements}
           </Flex>
         </Flex>
