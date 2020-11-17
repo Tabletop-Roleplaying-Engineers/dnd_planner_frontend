@@ -2,9 +2,9 @@ export const messages = {
   'common.game.title': 'Назва',
   'common.game.tag': 'Тег',
   'common.submit': 'Відправити',
-  'common.save': 'Зберігти',
+  'common.save': 'Зберегти',
   'common.edit': 'Редагувати',
-  'common.cancel': 'Скасуванти',
+  'common.cancel': 'Скасувати',
   'common.proceed': 'Продовжити',
   'common.cancelCreating': 'Скасування створення',
   'common.cancelCreatingMessage': 'Ви впевненні що хочете скасувати створення?',
@@ -64,7 +64,7 @@ export const messages = {
   'validation.players.required': 'Будь ласка, оберіть кількість гравців',
   'validation.description.required': 'Опис не може бути пустим',
 
-  'gameForm.addNewGame': 'Стровити гру',
+  'gameForm.addNewGame': 'Створити гру',
   'gameForm.editNewGame': 'Редагування',
   'gameForm.image.upload':
     'Натисніть або перетягніть зображення в цю зону для завантаження',
