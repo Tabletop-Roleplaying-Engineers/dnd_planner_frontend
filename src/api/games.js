@@ -55,8 +55,8 @@ export const FETCH_GAME_QUERY = gql`
 `
 
 export const FETCH_HOSTED_GAMES_QUERY = gql`
-  query HostedGames($userId: ID!) {
-    gamesWithDM(userId: $userId){
+  query HostedGames($userId: ID!, $includeOld: Boolean) {
+    gamesWithDM(userId: $userId, includeOld: $includeOld){
       ${gameFields}
     }
   }
