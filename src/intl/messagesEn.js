@@ -16,6 +16,9 @@ export const messages = {
   'common.name': 'Name',
   'common.faction': 'Faction',
   'common.avatarUrl': 'Avatar URL',
+  'common.includeOld': 'Include old',
+  'common.yes': 'Yes',
+  'common.no': 'No',
 
   'menu.calendar': 'Calendar',
   'menu.dashboard': 'Dashboard',
@@ -83,4 +86,15 @@ export const messages = {
 
   'character.avatar.invalidUrl':
     "We can't load image from the provided URL. It should be an link to the image itself.",
+
+  'profile.myGames': 'My Games',
+  'profile.gameHost': 'Game Host',
+  'profile.characters': 'Characters',
+  'profile.userAndSettings': 'User and Settings',
+  'profile.users': 'Users',
+
+  'hosted.noData': 'You are not hosted any games!',
+  'hosted.delete': 'Do you want permanently delete game?',
+
+  'myGame.noData': 'You are not participated in any game!',
 }

@@ -1,6 +1,7 @@
 import React, { useContext, useState, useCallback } from 'react'
 import { Query, Mutation } from 'react-apollo'
-import { Alert, Spin, Card, Icon, Popconfirm, Empty } from 'antd'
+import { FormattedMessage } from 'react-intl'
+import { Alert, Spin, Card, Icon, Popconfirm, Empty, Checkbox } from 'antd'
 import * as R from 'ramda'
 import styled from 'styled-components'
 import { FETCH_HOSTED_GAMES_QUERY, DELETE_GAME } from 'api'
@@ -21,16 +22,26 @@ export const HostedGamesTab = () => {
   const [gameForEdit, setGameForEdit] = useState(null)
   const { user } = useContext(UserContext)
   const media = useScreenMedia()
+  const [includeOld, setIncludeOld] = useState(false)
+  const toggleOld = useCallback(() => {
+    setIncludeOld(!includeOld)
+  }, [includeOld])
   const _isDesktop = media.isDesktop
   const onCancelEditing = useCallback(() => {
     setGameForEdit(null)
   }, [])
+  const includeOldCheckbox = (
+    <Box mb={15}>
+      <Checkbox onChange={toggleOld} checked={includeOld}>
+        <FormattedMessage id="common.includeOld" />
+      </Checkbox>
+    </Box>
+  )
 
   return (
     <Query
       query={FETCH_HOSTED_GAMES_QUERY}
-      variables={{ userId: user.id }}
-      // pollInterval={1000}
+      variables={{ userId: user.id, includeOld }}
     >
       {(query) => {
         const { loading, error, data, refetch } = query
@@ -42,11 +53,17 @@ export const HostedGamesTab = () => {
         }
 
         if (!loading && R.isEmpty(parsedGames))
-          return <Empty description="You are not hosted any games!" />
+          return (
+            <>
+              {includeOldCheckbox}
+              <Empty description={<FormattedMessage id="hosted.noData" />} />
+            </>
+          )
 
         return (
           <>
             <Spin spinning={loading}>
+              {includeOldCheckbox}
               <Flex
                 flexDirection={_isDesktop ? 'row' : 'column'}
                 justifyContent="space-between"
@@ -78,7 +95,7 @@ export const HostedGamesTab = () => {
                         >
                           {(deleteGame, { loading }) => (
                             <Popconfirm
-                              title="Do you want permanently delete game?"
+                              title={<FormattedMessage id="hosted.delete" />}
                               icon={
                                 <Icon
                                   type="exclamation-circle"
@@ -86,9 +103,9 @@ export const HostedGamesTab = () => {
                                 />
                               }
                               onConfirm={deleteGame}
-                              okText="Yes"
+                              okText={<FormattedMessage id="common.yes" />}
                               disabled={loading}
-                              cancelText="No"
+                              cancelText={<FormattedMessage id="common.no" />}
                             >
                               <Icon type="delete" key="delete" />
                             </Popconfirm>

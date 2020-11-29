@@ -1,4 +1,5 @@
 import React, { useContext } from 'react'
+import { FormattedMessage } from 'react-intl'
 import { Button, Spin, Alert, Empty, Row, Col } from 'antd'
 import * as R from 'ramda'
 import { Mutation } from 'react-apollo'
@@ -27,7 +28,7 @@ export const GamesTab = () => {
   }
 
   if (!loading && R.isEmpty(gamesUserPlay))
-    return <Empty description="You are not participated in any game!" />
+    return <Empty description={<FormattedMessage id="myGame.noData" />} />
 
   return (
     <Spin spinning={loading}>

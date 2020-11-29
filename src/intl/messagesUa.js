@@ -15,6 +15,9 @@ export const messages = {
   'common.name': "Ім'я",
   'common.faction': 'Фракція',
   'common.avatarUrl': 'Посилання на аватар',
+  'common.includeOld': 'Включно зі старими',
+  'common.yes': 'Так',
+  'common.no': 'Ні',
 
   'menu.calendar': 'Календар',
   'menu.dashboard': 'Головна',
@@ -82,4 +85,15 @@ export const messages = {
 
   'character.avatar.invalidUrl':
     'Ми не можемо завантажити зображення за цим посиланням. Це має бути посилання на зображення, не на сторінку де воно розміщене.',
+
+  'profile.myGames': 'Мої ігри',
+  'profile.gameHost': 'Ігри що я провожу',
+  'profile.characters': 'Персонажі',
+  'profile.userAndSettings': 'Користувач',
+  'profile.users': 'Користувачі',
+
+  'hosted.noData': 'Ви не проводите жодної гри!',
+  'hosted.delete': 'Ви дійсно хочете видалити гру?',
+
+  'myGame.noData': 'Ви не граєте в жодну гру!',
 }

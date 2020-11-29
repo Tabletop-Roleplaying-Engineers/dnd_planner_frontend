@@ -1,4 +1,5 @@
 import React, { useContext, useCallback } from 'react'
+import { FormattedMessage } from 'react-intl'
 import { Tabs, Alert } from 'antd'
 import { Box } from 'noui/Position'
 import { Header } from 'ui/Text'
@@ -49,19 +50,31 @@ const Profile = ({ history }) => {
       </Box>
 
       <Tabs defaultActiveKey="games" type="card">
-        <Tabs.TabPane tab="My Games" key="games">
+        <Tabs.TabPane
+          tab={<FormattedMessage id="profile.myGames" />}
+          key="games"
+        >
           <GamesTab />
         </Tabs.TabPane>
 
-        <Tabs.TabPane tab="Game Host" key="host">
+        <Tabs.TabPane
+          tab={<FormattedMessage id="profile.gameHost" />}
+          key="host"
+        >
           <HostedGamesTab />
         </Tabs.TabPane>
 
-        <Tabs.TabPane tab="Characters" key="characters">
+        <Tabs.TabPane
+          tab={<FormattedMessage id="profile.characters" />}
+          key="characters"
+        >
           <CharactersTab />
         </Tabs.TabPane>
 
-        <Tabs.TabPane tab="User and Settings" key="settings">
+        <Tabs.TabPane
+          tab={<FormattedMessage id="profile.userAndSettings" />}
+          key="settings"
+        >
           <SettingsTab
             user={user}
             onLogOutClick={() => {
@@ -74,7 +87,10 @@ const Profile = ({ history }) => {
         </Tabs.TabPane>
 
         {canManageRoles && (
-          <Tabs.TabPane tab="Users" key="users">
+          <Tabs.TabPane
+            tab={<FormattedMessage id="profile.users" />}
+            key="users"
+          >
             <UsersTab setOnBehalfToken={setOnBehalfToken} />
           </Tabs.TabPane>
         )}
