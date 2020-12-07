@@ -20,7 +20,7 @@ interface FormChildrenArgument {
 }
 interface Props {
   form: any
-  validation: Record<string, any>
+  validation?: Record<string, any>
   onSubmit: (values: any, form: any) => void
   children: (props: FormChildrenArgument) => ReactNode
 }

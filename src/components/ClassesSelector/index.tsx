@@ -3,7 +3,7 @@ import { Input, InputNumber, Select } from 'antd'
 import * as R from 'ramda'
 import styled from 'styled-components'
 import { space, SpaceProps } from 'styled-system'
-import { Field } from '../../noui/Form'
+import { Field } from 'noui/Form'
 import { Flex } from '../../noui/Position'
 import { Label } from '../../ui/Text'
 
@@ -82,10 +82,10 @@ interface State {
 
 interface Props {
   onSelect: (data: { value?: string; level?: number; state: State }) => void
-  initialValue: Record<string, string>
+  initialValue?: Record<string, string>
   name: string
   // TODO: check `value` prop, probably it is not used
-  value: {
+  value?: {
     [index: string]: string
   }
 }
@@ -191,13 +191,13 @@ class ClassesSelector extends React.PureComponent<Props, State> {
           }
 
           return (
-            <Flex key={source.name}>
+            <Flex key={source.name} data-testid="level-selector">
               <Image mr={10} src={source.icon} alt={source.name} />
 
               <InputNumber
                 min={1}
                 max={20 - calcCurrentLevel(this.state.value) + classLvl}
-                defaultValue={classLvl}
+                value={classLvl}
                 onChange={(level) => {
                   if (level) {
                     this.setState(
