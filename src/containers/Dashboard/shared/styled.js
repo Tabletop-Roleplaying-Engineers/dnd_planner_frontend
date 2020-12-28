@@ -10,3 +10,6 @@ export const IFrame = styled.iframe`
   ${space}
 `
 
+export const CardLink = styled.a`
+  display: contents;
+`

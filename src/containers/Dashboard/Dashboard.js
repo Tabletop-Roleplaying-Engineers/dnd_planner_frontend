@@ -6,8 +6,9 @@ import { Header, Paragraph } from 'ui/Text'
 import { withRouter } from 'react-router-dom'
 import rulesCover from './shared/rules.jpg'
 import calendarCover from './shared/calendar.jpg'
+import borderlandsCover from './shared/borderlands.jpg'
 
-import { IFrame } from './shared/styled'
+import { CardLink } from './shared/styled'
 
 function Dashboard(props) {
   return (
@@ -35,7 +36,17 @@ function Dashboard(props) {
           onClick={() => props.history.push('/calendar')}
         />
 
-        <IFrame
+        <CardLink href="google.com" target="_blank">
+          <ZoomCard
+            title="Пограниччя"
+            image={borderlandsCover}
+            width={['90vw', '33%']}
+            my={[10, 0]}
+            height={['50vw', '25vw']}
+          />
+        </CardLink>
+        {/* Temporary hidden due to priority of another card */}
+        {/* <IFrame
           title="twitchPlayer"
           src="https://player.twitch.tv/?channel=dnd_lviv_guild"
           frameborder="0"
@@ -44,7 +55,7 @@ function Dashboard(props) {
           width={['90vw', '33%']}
           height={['50vw', '25vw']}
           my={[10, 0]}
-        ></IFrame>
+        ></IFrame> */}
       </Flex>
 
       <Box pt={20}>
@@ -85,21 +96,53 @@ function Dashboard(props) {
 
         <Box my={10}>
           <Paragraph>
-            У Львові D&D активно розвивається завдяки групі <a href="https://www.facebook.com/dndlviv/" target="_blank" rel="noopener noreferrer">"Пряма
-            Гільдія"</a> та
-            клубу-магазину настільних ігор <a href="http://octopus.lviv.ua/" target="_blank" rel="noopener noreferrer">"Octopus"</a>.
+            У Львові D&D активно розвивається завдяки групі{' '}
+            <a
+              href="https://www.facebook.com/dndlviv/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              "Пряма Гільдія"
+            </a>{' '}
+            та клубу-магазину настільних ігор{' '}
+            <a
+              href="http://octopus.lviv.ua/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              "Octopus"
+            </a>
+            .
           </Paragraph>
         </Box>
 
         <Flex column my={10}>
           <Paragraph>
-            <a href="https://t.me/LvivDnD" target="_blank" rel="noopener noreferrer">Телеграм-канал</a>
+            <a
+              href="https://t.me/LvivDnD"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Телеграм-канал
+            </a>
           </Paragraph>
           <Paragraph>
-            <a href="https://www.dndbeyond.com/" target="_blank" rel="noopener noreferrer">Генерація персонажа</a>
+            <a
+              href="https://www.dndbeyond.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Генерація персонажа
+            </a>
           </Paragraph>
           <Paragraph>
-            <a href="https://dnd.wizards.com/articles/features/basicrules" target="_blank" rel="noopener noreferrer">Базові правила D&D 5e</a>
+            <a
+              href="https://dnd.wizards.com/articles/features/basicrules"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Базові правила D&D 5e
+            </a>
           </Paragraph>
         </Flex>
       </Box>
