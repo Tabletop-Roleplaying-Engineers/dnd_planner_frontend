@@ -31,6 +31,10 @@ export const messages = {
   'character.removeFromGameDialogHeader': 'Remove character from game',
   'character.removeFromGameDialogContent':
     'Are you sure that you want to remove {name} from this game?',
+  'character.avatar.invalidUrl':
+    "We can't load image from the provided URL. It should be an link to the image itself.",
+  'character.404': 'Character not found',
+
   'participation.registrationIsClosed': 'Registration is closed',
   'participation.loginToRegister':
     'Please log in to be able to participate in the game',
@@ -83,9 +87,6 @@ export const messages = {
 
   'login.validation.emptyUsername':
     'You have to set "username" ("@someUserName") in your Telegram account',
-
-  'character.avatar.invalidUrl':
-    "We can't load image from the provided URL. It should be an link to the image itself.",
 
   'profile.myGames': 'My Games',
   'profile.gameHost': 'Game Host',
