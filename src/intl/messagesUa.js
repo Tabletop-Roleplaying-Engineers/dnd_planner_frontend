@@ -30,6 +30,12 @@ export const messages = {
   'character.removeFromGameDialogHeader': 'Видалити персонажа з гри',
   'character.removeFromGameDialogContent':
     'Ви впевнені, що хочете видалити {name} з цієї гри?',
+  'character.avatar.invalidUrl':
+    'Ми не можемо завантажити зображення за цим посиланням. Це має бути посилання на зображення, не на сторінку де воно розміщене.',
+  'character.404': 'Персонажа не знайдено',
+  'character.delete': 'Видалити персонажа',
+  'character.deleteMessage': 'Ви впевнені, що хочете видалити {name}?',
+
   'participation.registrationIsClosed': 'Реєстрація закрита',
   'participation.loginToRegister':
     'Залогінтесь, щоб мати можливість брати участь у грі',
@@ -82,9 +88,6 @@ export const messages = {
 
   'login.validation.emptyUsername':
     'Ім`я користувача (псевдонім) має бути не пустим в Telegram профілі',
-
-  'character.avatar.invalidUrl':
-    'Ми не можемо завантажити зображення за цим посиланням. Це має бути посилання на зображення, не на сторінку де воно розміщене.',
 
   'profile.myGames': 'Мої ігри',
   'profile.gameHost': 'Ігри що я провожу',

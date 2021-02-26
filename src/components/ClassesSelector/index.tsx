@@ -1,9 +1,9 @@
+import React from 'react'
 import { Input, InputNumber, Select } from 'antd'
 import * as R from 'ramda'
-import React from 'react'
 import styled from 'styled-components'
-import { space } from 'styled-system'
-import { Field } from '../../noui/Form'
+import { space, SpaceProps } from 'styled-system'
+import { Field } from 'noui/Form'
 import { Flex } from '../../noui/Position'
 import { Label } from '../../ui/Text'
 
@@ -58,31 +58,44 @@ export const CLASSES = [
   },
 ]
 
-const calcCurrentLevel = R.pipe(
+const calcCurrentLevel: (value: Record<string, string>) => number = R.pipe(
   R.toPairs,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  R.reduce((acc, [_, lvl]) => acc + parseInt(lvl, 10), 0),
+  R.reduce(
+    (acc: number, [_, lvl]: [unknown, string]) => acc + parseInt(lvl, 10),
+    0,
+  ),
 )
 
-const Image = styled.img`
+const Image = styled.img<SpaceProps>`
   height: 100%;
   object-fit: contain;
   cursor: pointer;
   ${space}
 `
 
-class ClassesSelector extends React.PureComponent {
-  state = {
+interface State {
+  selectedClasses: string[]
+  value: Record<string, string>
+  isSelectOpen: boolean
+}
+
+interface Props {
+  onSelect: (data: { value?: string; level?: number; state: State }) => void
+  initialValue?: Record<string, string>
+  name: string
+  // TODO: check `value` prop, probably it is not used
+  value?: {
+    [index: string]: string
+  }
+}
+class ClassesSelector extends React.PureComponent<Props, State> {
+  state: State = {
     selectedClasses: [],
     value: {},
     isSelectOpen: false,
   }
-
-  constructor(props) {
-    super(props)
-
-    this.selectRef = React.createRef()
-  }
+  selectRef = React.createRef<Select<string[]>>()
 
   componentDidMount() {
     const { onSelect } = this.props
@@ -99,7 +112,7 @@ class ClassesSelector extends React.PureComponent {
     const { onSelect } = this.props
     const { selectedClasses, value, isSelectOpen } = this.state
 
-    const onAddValue = (value) => {
+    const onAddValue = (value: string) => {
       const test = calcCurrentLevel(this.state.value)
 
       if (test + 1 <= 20) {
@@ -117,10 +130,12 @@ class ClassesSelector extends React.PureComponent {
         )
       }
 
-      this.selectRef.current.blur()
+      if (this.selectRef.current) {
+        this.selectRef.current.blur()
+      }
     }
 
-    const onRemoveValue = (value) => {
+    const onRemoveValue = (value: string) => {
       this.setState(
         (state) => ({
           selectedClasses: R.reject(R.identical(value), state.selectedClasses),
@@ -135,7 +150,7 @@ class ClassesSelector extends React.PureComponent {
 
     return (
       <Flex column>
-        <Select
+        <Select<string[]>
           ref={this.selectRef}
           mode="multiple"
           placeholder="Class"
@@ -169,16 +184,20 @@ class ClassesSelector extends React.PureComponent {
 
         {selectedClasses.map((c) => {
           const source = R.find(R.propEq('name', c), CLASSES)
-          const classLvl = parseInt(this.state.value[source.name], 10)
+          const classLvl = parseInt(this.state.value[c], 10)
+
+          if (!source) {
+            return null
+          }
 
           return (
-            <Flex key={source.name}>
+            <Flex key={source.name} data-testid="level-selector">
               <Image mr={10} src={source.icon} alt={source.name} />
 
               <InputNumber
                 min={1}
                 max={20 - calcCurrentLevel(this.state.value) + classLvl}
-                defaultValue={classLvl}
+                value={classLvl}
                 onChange={(level) => {
                   if (level) {
                     this.setState(

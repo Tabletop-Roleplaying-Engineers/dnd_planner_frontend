@@ -1,9 +1,13 @@
 import React from 'react'
 import { Dropdown, Icon } from 'antd'
-import { createMenu } from 'ui/shared'
+import { createMenu, MenuItem } from 'ui/shared'
 import { Box } from 'noui/Position'
 
-export const CornerMenu = props => {
+interface Props {
+  items: MenuItem[]
+  hide?: boolean
+}
+export const CornerMenu: React.FC<Props> = (props) => {
   const { items, children, hide } = props
 
   return (

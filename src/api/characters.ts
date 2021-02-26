@@ -9,6 +9,32 @@ user {
   username
 }
 `
+const gamesFragment = `
+games {
+  id
+  title
+  image
+  description
+  startingDate
+  lvlFrom
+  lvlTo
+}
+`
+const characterFragment = `
+  id
+  name
+  class
+  avatar
+  experience
+  renown
+  faction {
+    id
+    name
+    logo
+  }
+  ${userFragment}
+  ${gamesFragment}
+`
 export const AVAILABLE_CHARACTERS = gql`
   query AvailableCharacters($gameId: ID!) {
     validCharactersForGame(gameId: $gameId) {
@@ -31,33 +57,7 @@ export const AVAILABLE_CHARACTERS = gql`
 export const FETCH_CHARACTERS_QUERY = gql`
   {
     characters {
-      id
-      name
-      class
-      avatar
-      experience
-      renown
-      faction {
-        id
-        name
-        logo
-      }
-      user {
-        id
-        firstName
-        lastName
-        avatar
-        username
-      }
-      games {
-        id
-        title
-        image
-        description
-        startingDate
-        lvlFrom
-        lvlTo
-      }
+      ${characterFragment}
     }
   }
 `
@@ -125,6 +125,14 @@ export const UPDATE_CHARACTER_MUTATION = gql`
         name
         logo
       }
+    }
+  }
+`
+
+export const FETCH_CHARACTER_QUERY = gql`
+  query AvailableCharacters($id: ID!) {
+    character(id: $id) {
+      ${characterFragment}
     }
   }
 `

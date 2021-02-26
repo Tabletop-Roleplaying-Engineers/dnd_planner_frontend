@@ -40,7 +40,7 @@ import {
 interface BoxAttrsProps {
   inline?: boolean
 }
-type BoxProps = DisplayProps &
+export type BoxProps = DisplayProps &
   SpaceProps &
   SizeProps &
   FontSizeProps &

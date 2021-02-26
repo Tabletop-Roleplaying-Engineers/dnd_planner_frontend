@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
+import { FormattedMessage, useIntl } from 'react-intl'
 import * as R from 'ramda'
 import { Button, Input, Select, Spin, Alert } from 'antd'
 import { useQuery } from '@apollo/react-hooks'
@@ -12,7 +13,8 @@ import {
   convertClassesObjToString,
   convertClassesStringToObj,
 } from '../../utils/common'
-import { FormattedMessage, useIntl } from 'react-intl'
+import { Character } from 'types/character'
+import { Faction } from 'types/faction'
 
 const Image = styled.img`
   max-height: 20vh;
@@ -71,9 +73,13 @@ const useValidation = () => {
   )
 }
 
-const EditCharacterForm = ({ data, onSubmit }) => {
+interface Props {
+  data: Character
+  onSubmit: (data: Character) => void
+}
+const EditCharacterForm: React.FC<Props> = ({ data, onSubmit }) => {
   const intl = useIntl()
-  const [avatar, setAvatar] = useState()
+  const [avatar, setAvatar] = useState<string>()
   const validationSchema = useValidation()
   const { loading, error, data: factionsQueryResult } = useQuery(
     FETCH_FACTIONS_QUERY,
@@ -101,6 +107,16 @@ const EditCharacterForm = ({ data, onSubmit }) => {
       validation={validationSchema}
     >
       {({ form }) => {
+        const parseClasses = (str: string) => {
+          const split = (R.pipe(
+            R.split('&'),
+            R.map(R.split('=')),
+          )(str) as unknown) as [string, string][]
+
+          return R.fromPairs(split)
+        }
+        const classes = parseClasses(form.getFieldValue('class') || '')
+
         return (
           <Box>
             {/* Name */}
@@ -122,7 +138,7 @@ const EditCharacterForm = ({ data, onSubmit }) => {
                 placeholder={intl.formatMessage({ id: 'common.faction' })}
                 data-testid="select-faction"
               >
-                {factions.map((f) => (
+                {factions.map((f: Faction) => (
                   <Select.Option
                     key={f.name}
                     value={f.id}
@@ -141,11 +157,7 @@ const EditCharacterForm = ({ data, onSubmit }) => {
             {/* Class */}
             <ClassesSelector
               name="class"
-              value={R.pipe(
-                R.split('&'),
-                R.map(R.split('=')),
-                R.fromPairs,
-              )(form.getFieldValue('class') || '')}
+              value={classes}
               onSelect={({ state }) => {
                 form.setFieldsValue({
                   class: convertClassesObjToString(state.value),
