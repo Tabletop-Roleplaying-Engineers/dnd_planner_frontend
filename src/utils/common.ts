@@ -95,3 +95,5 @@ export const getUserName = (user: User) => {
 
 export const hasAction = (user: UserJwt, action: string) =>
   user && user.actions.indexOf(action) >= 0
+
+export function noop() {}
