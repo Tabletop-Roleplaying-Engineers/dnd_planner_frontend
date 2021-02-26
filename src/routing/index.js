@@ -21,6 +21,7 @@ import Dashboard from 'containers/Dashboard'
 import Rules from 'containers/Rules'
 import Lore from 'containers/League'
 import Search from 'containers/Search'
+import Characters from 'containers/Characters'
 
 export const history = _history
 
@@ -83,6 +84,7 @@ export function Routing(props) {
         <Route path="/rules" component={Rules} />
         <Route path="/lore" component={Lore} />
         <Route path="/search" component={Search} />
+        <Route path="/character" component={Characters} />
       </Box>
 
       {/* 404*/}

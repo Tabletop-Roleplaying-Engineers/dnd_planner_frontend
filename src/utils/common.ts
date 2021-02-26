@@ -4,6 +4,12 @@ import format from 'date-fns/format'
 import { User, UserJwt } from 'types/user'
 import { Game } from 'types/game'
 
+export const convertClassesStringToArray = (classesString: string) => {
+  const classesStrings = classesString.split('&')
+
+  return classesStrings.map((str) => str.split('=')) as [string, string][]
+}
+
 const stringToClassesPairs = R.split('&') // 'Bard=2&Bard=2' -> ['Bard=2', 'Bard=2']
 const stringToClassLvlPair: (str: string) => any = (str: string) => {
   // 'Bard=2' -> ['Bard', '2']
