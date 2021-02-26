@@ -140,7 +140,17 @@ export const GameParticipation = (props) => {
         >
           {availableCharacters.map((char) => (
             <StyledSelect.Option key={char.id} value={JSON.stringify(char)}>
-              <Character {...char} />
+              <Box position="relative">
+                <Character {...char} />
+                {/* Overlay to prevent clicking on item inner links */}
+                <Box
+                  position="absolute"
+                  top="0"
+                  left="0"
+                  right="0"
+                  bottom="0"
+                />
+              </Box>
             </StyledSelect.Option>
           ))}
         </StyledSelect>

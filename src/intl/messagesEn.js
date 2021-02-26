@@ -34,6 +34,8 @@ export const messages = {
   'character.avatar.invalidUrl':
     "We can't load image from the provided URL. It should be an link to the image itself.",
   'character.404': 'Character not found',
+  'character.delete': 'Delete character',
+  'character.deleteMessage': 'Are you sure that you want to delete {name}?',
 
   'participation.registrationIsClosed': 'Registration is closed',
   'participation.loginToRegister':

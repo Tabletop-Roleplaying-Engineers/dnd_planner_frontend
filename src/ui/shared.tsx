@@ -13,6 +13,7 @@ export interface MenuItem extends MenuItemProps {
   label: string
   icon: string
   onClick: () => void
+  'data-testid': string
 }
 export const createMenu = (items: MenuItem[]) => (
   <Menu>

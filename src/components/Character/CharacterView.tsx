@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback, useContext } from 'react'
 import * as R from 'ramda'
 import { Col, Row, Tooltip } from 'antd'
 import { Box, Flex } from 'noui/Position'
@@ -9,6 +9,9 @@ import { CornerMenu } from 'components/CornerMenu'
 import UserInfo from 'components/UserInfo'
 import { CharacterClass } from './CharacterClass'
 import styled from 'styled-components'
+import { useCharacterActions } from 'utils/hooks/useCharacterActions'
+import { useHistory } from 'react-router-dom'
+import { UserContext } from 'context/userContext'
 
 const CharacterAvatar = styled.img`
   width: 100%;
@@ -46,6 +49,17 @@ export const CharacterView: React.FC<IProps> = (props) => {
   const { character } = props
   const { name, avatar, faction, user } = character
   const classesElements = getClassElements(character.class)
+  const history = useHistory()
+  const { user: currentUser } = useContext(UserContext)
+  const onDeleteSuccess = useCallback(() => history.push('/'), [history])
+  const {
+    deleteDialog,
+    editDialog,
+    deleteCharacter,
+    editCharacter,
+  } = useCharacterActions({
+    onDeleteSuccess,
+  })
 
   return (
     <Box pt="10px" maxWidth="768px" margin="auto">
@@ -60,12 +74,30 @@ export const CharacterView: React.FC<IProps> = (props) => {
           <Row>
             <Col span={24}>
               {/* Name */}
-              {/* TODO: implement menu items */}
-              <CornerMenu items={[]}>
+              {/* TODO: translation */}
+              <CornerMenu
+                hide={currentUser?.id !== user.id}
+                items={[
+                  {
+                    label: 'Edit',
+                    icon: 'edit',
+                    onClick: () => editCharacter(character),
+                    'data-testid': 'character-menu-edit',
+                  },
+                  {
+                    label: 'Delete',
+                    icon: 'delete',
+                    onClick: async () => deleteCharacter(character),
+                    'data-testid': 'character-menu-delete',
+                  },
+                ]}
+              >
                 <Flex pr="35px">
                   {faction && (
                     <Tooltip title={faction.name}>
-                      <img src={faction.logo} alt="faction" />
+                      <Flex height="24px" width="24px">
+                        <img src={faction.logo} alt="faction" />
+                      </Flex>
                     </Tooltip>
                   )}
                   <Box ml="12px" fontSize="14px" minWidth="0">
@@ -97,6 +129,9 @@ export const CharacterView: React.FC<IProps> = (props) => {
           </Row>
         </Col>
       </Row>
+
+      {deleteDialog}
+      {editDialog}
     </Box>
   )
 }

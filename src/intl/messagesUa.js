@@ -33,6 +33,8 @@ export const messages = {
   'character.avatar.invalidUrl':
     'Ми не можемо завантажити зображення за цим посиланням. Це має бути посилання на зображення, не на сторінку де воно розміщене.',
   'character.404': 'Персонажа не знайдено',
+  'character.delete': 'Видалити персонажа',
+  'character.deleteMessage': 'Ви впевнені, що хочете видалити {name}?',
 
   'participation.registrationIsClosed': 'Реєстрація закрита',
   'participation.loginToRegister':
