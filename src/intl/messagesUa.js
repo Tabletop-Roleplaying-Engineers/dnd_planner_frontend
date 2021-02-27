@@ -4,6 +4,7 @@ export const messages = {
   'common.submit': 'Відправити',
   'common.save': 'Зберегти',
   'common.edit': 'Редагувати',
+  'common.delete': 'Видалити',
   'common.cancel': 'Скасувати',
   'common.proceed': 'Продовжити',
   'common.cancelCreating': 'Скасування створення',
@@ -34,7 +35,10 @@ export const messages = {
     'Ми не можемо завантажити зображення за цим посиланням. Це має бути посилання на зображення, не на сторінку де воно розміщене.',
   'character.404': 'Персонажа не знайдено',
   'character.delete': 'Видалити персонажа',
+  'character.delete.success': 'Персонаж видалений',
   'character.deleteMessage': 'Ви впевнені, що хочете видалити {name}?',
+  'character.edit.success': 'Персонаж оновлений',
+  'character.create.success': 'Персонаж створений',
 
   'participation.registrationIsClosed': 'Реєстрація закрита',
   'participation.loginToRegister':

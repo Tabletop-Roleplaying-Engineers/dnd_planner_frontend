@@ -4,6 +4,7 @@ export const messages = {
   'common.submit': 'Submit',
   'common.save': 'Save',
   'common.edit': 'Edit',
+  'common.delete': 'Delete',
   'common.cancel': 'Cancel',
   'common.proceed': 'Proceed',
   'common.cancelCreating': 'Cancel creating',
@@ -35,7 +36,10 @@ export const messages = {
     "We can't load image from the provided URL. It should be an link to the image itself.",
   'character.404': 'Character not found',
   'character.delete': 'Delete character',
+  'character.delete.success': 'Character successfully deleted',
   'character.deleteMessage': 'Are you sure that you want to delete {name}?',
+  'character.edit.success': 'Character successfully updated',
+  'character.create.success': 'Character successfully created',
 
   'participation.registrationIsClosed': 'Registration is closed',
   'participation.loginToRegister':
