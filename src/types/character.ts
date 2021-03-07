@@ -12,4 +12,5 @@ export interface Character {
   class: string
   user: User
   games: Game[]
+  notes: string
 }

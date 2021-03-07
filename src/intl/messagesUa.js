@@ -39,6 +39,8 @@ export const messages = {
   'character.deleteMessage': 'Ви впевнені, що хочете видалити {name}?',
   'character.edit.success': 'Персонаж оновлений',
   'character.create.success': 'Персонаж створений',
+  'character.note.placeholder':
+    'Тут ви можете ввести нотатки для персонажа які будуть публічно доступні',
 
   'participation.registrationIsClosed': 'Реєстрація закрита',
   'participation.loginToRegister':

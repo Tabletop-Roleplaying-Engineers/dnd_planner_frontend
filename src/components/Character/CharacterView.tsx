@@ -26,6 +26,10 @@ const CharacterName = styled(Msg)`
   white-space: nowrap;
 `
 
+const Notes = styled.div`
+  word-break: break-word;
+`
+
 interface ICharacterAvatarContainerProps {
   avatar: string
 }
@@ -47,7 +51,7 @@ interface IProps {
 }
 export const CharacterView: React.FC<IProps> = (props) => {
   const { character } = props
-  const { name, avatar, faction, user } = character
+  const { name, avatar, faction, user, notes } = character
   const classesElements = getClassElements(character.class)
   const history = useHistory()
   const intl = useIntl()
@@ -112,17 +116,19 @@ export const CharacterView: React.FC<IProps> = (props) => {
               <CharacterAvatarContainer avatar={avatar} />
             </Col>
             <Col span={24}>
-              <Flex justifyContent="space-between" mt="10px">
-                {/* Classes */}
-                <Flex alignItems="center" overflow="auto" pr="10px">
-                  {classesElements}
+              <Flex flexDirection="column">
+                <Flex justifyContent="space-between" mt="10px">
+                  {/* Classes */}
+                  <Flex alignItems="center" overflow="auto" pr="10px">
+                    {classesElements}
+                  </Flex>
+
+                  {/* User */}
+                  <UserInfo {...user} position="left" />
                 </Flex>
 
-                {/* User */}
-                <UserInfo {...user} position="left" />
-
                 {/* Notes */}
-                {/* TBD */}
+                <Notes dangerouslySetInnerHTML={{ __html: notes }} />
               </Flex>
             </Col>
           </Row>

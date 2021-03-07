@@ -40,6 +40,8 @@ export const messages = {
   'character.deleteMessage': 'Are you sure that you want to delete {name}?',
   'character.edit.success': 'Character successfully updated',
   'character.create.success': 'Character successfully created',
+  'character.note.placeholder':
+    'You can type here your notes for the character (Publicly available)',
 
   'participation.registrationIsClosed': 'Registration is closed',
   'participation.loginToRegister':
