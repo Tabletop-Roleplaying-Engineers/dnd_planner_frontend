@@ -1,6 +1,9 @@
 import React, { useCallback, useContext } from 'react'
 import * as R from 'ramda'
 import { Col, Row, Tooltip } from 'antd'
+import styled from 'styled-components'
+import { useHistory } from 'react-router-dom'
+import { useIntl } from 'react-intl'
 import { Box, Flex } from 'noui/Position'
 import { Msg } from 'ui/Text'
 import { convertClassesStringToArray } from 'utils/common'
@@ -8,9 +11,7 @@ import { Character } from 'types/character'
 import { CornerMenu } from 'components/CornerMenu'
 import UserInfo from 'components/UserInfo'
 import { CharacterClass } from './CharacterClass'
-import styled from 'styled-components'
 import { useCharacterActions } from 'utils/hooks/useCharacterActions'
-import { useHistory } from 'react-router-dom'
 import { UserContext } from 'context/userContext'
 
 const CharacterAvatar = styled.img`
@@ -23,6 +24,10 @@ const CharacterName = styled(Msg)`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+`
+
+const Notes = styled.div`
+  word-break: break-word;
 `
 
 interface ICharacterAvatarContainerProps {
@@ -41,15 +46,15 @@ const getClassElements = R.pipe(
   )),
 )
 
-// TODO: access for menu
 interface IProps {
   character: Character
 }
 export const CharacterView: React.FC<IProps> = (props) => {
   const { character } = props
-  const { name, avatar, faction, user } = character
+  const { name, avatar, faction, user, notes } = character
   const classesElements = getClassElements(character.class)
   const history = useHistory()
+  const intl = useIntl()
   const { user: currentUser } = useContext(UserContext)
   const onDeleteSuccess = useCallback(() => history.push('/'), [history])
   const {
@@ -63,10 +68,9 @@ export const CharacterView: React.FC<IProps> = (props) => {
 
   return (
     <Box pt="10px" maxWidth="768px" margin="auto">
-      {/* <Row gutter={[16, 16]}> */}
       <Row>
         <Col span={0} md={12}>
-          {/* Avatar md - xxl */}
+          {/* Avatar for md - xxl */}
           <CharacterAvatarContainer avatar={avatar} />
         </Col>
 
@@ -74,18 +78,17 @@ export const CharacterView: React.FC<IProps> = (props) => {
           <Row>
             <Col span={24}>
               {/* Name */}
-              {/* TODO: translation */}
               <CornerMenu
                 hide={currentUser?.id !== user.id}
                 items={[
                   {
-                    label: 'Edit',
+                    label: intl.formatMessage({ id: 'common.edit' }),
                     icon: 'edit',
                     onClick: () => editCharacter(character),
                     'data-testid': 'character-menu-edit',
                   },
                   {
-                    label: 'Delete',
+                    label: intl.formatMessage({ id: 'common.delete' }),
                     icon: 'delete',
                     onClick: async () => deleteCharacter(character),
                     'data-testid': 'character-menu-delete',
@@ -109,21 +112,23 @@ export const CharacterView: React.FC<IProps> = (props) => {
               </CornerMenu>
             </Col>
             <Col span={24} md={0}>
-              {/* Avatar sx - sm */}
+              {/* Avatar for sx - sm */}
               <CharacterAvatarContainer avatar={avatar} />
             </Col>
             <Col span={24}>
-              <Flex justifyContent="space-between" mt="10px">
-                {/* Classes */}
-                <Flex alignItems="center" overflow="auto" pr="10px">
-                  {classesElements}
+              <Flex flexDirection="column">
+                <Flex justifyContent="space-between" mt="10px">
+                  {/* Classes */}
+                  <Flex alignItems="center" overflow="auto" pr="10px">
+                    {classesElements}
+                  </Flex>
+
+                  {/* User */}
+                  <UserInfo {...user} position="left" />
                 </Flex>
 
-                {/* User */}
-                <UserInfo {...user} position="left" />
-
                 {/* Notes */}
-                {/* TBD */}
+                <Notes dangerouslySetInnerHTML={{ __html: notes }} />
               </Flex>
             </Col>
           </Row>

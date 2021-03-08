@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
+import Editor from 'react-medium-editor'
 import * as R from 'ramda'
 import { Button, Input, Select, Spin, Alert } from 'antd'
 import { useQuery } from '@apollo/react-hooks'
@@ -15,6 +16,8 @@ import {
 } from '../../utils/common'
 import { Character } from 'types/character'
 import { Faction } from 'types/faction'
+import 'medium-editor/dist/css/medium-editor.css'
+import 'medium-editor/dist/css/themes/default.css'
 
 const Image = styled.img`
   max-height: 20vh;
@@ -29,6 +32,12 @@ const StyledFactionLogo = styled.img`
 
 const CharacterName = styled(Msg)`
   padding-bottom: 20px;
+`
+
+const NotesField = styled.div`
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  padding: 5px;
 `
 
 const useValidation = () => {
@@ -74,7 +83,7 @@ const useValidation = () => {
 }
 
 interface Props {
-  data: Character
+  data?: Character
   onSubmit: (data: Character) => void
 }
 const EditCharacterForm: React.FC<Props> = ({ data, onSubmit }) => {
@@ -178,6 +187,32 @@ const EditCharacterForm: React.FC<Props> = ({ data, onSubmit }) => {
 
               {avatar && <Image src={avatar} />}
             </Box>
+
+            {/* Notes */}
+            <NotesField>
+              <div style={{ height: 0 }}>
+                <Field name="notes" initialValue={data?.notes || ''}>
+                  <Input style={{ display: 'none' }} />
+                </Field>
+              </div>
+              <Editor
+                text={data?.notes || ''}
+                onChange={(text: string) => {
+                  form.setFieldsValue({
+                    notes: text,
+                  })
+                }}
+                options={{
+                  placeholder: {
+                    text: intl.formatMessage({
+                      id: 'character.note.placeholder',
+                    }),
+                  },
+                  autoLink: true,
+                  targetBlank: true,
+                }}
+              />
+            </NotesField>
 
             {/* Submit */}
             <Box mt={20}>

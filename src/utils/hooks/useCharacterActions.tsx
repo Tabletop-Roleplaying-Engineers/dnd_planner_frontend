@@ -13,9 +13,7 @@ import {
   UPDATE_CHARACTER_MUTATION,
 } from 'api'
 import { noop, omit } from 'utils/common'
-import { FormattedMessage } from 'react-intl'
-
-// TODO: translate
+import { FormattedMessage, useIntl } from 'react-intl'
 
 interface Props {
   onEditClose?: () => void
@@ -29,6 +27,7 @@ export function useCharacterActions(props: Props = defaultProps) {
     onDeleteClose = noop,
     onDeleteSuccess = noop,
   } = props
+  const intl = useIntl()
   const [characterToEdit, setCharacterToEdit] = useState<Character | null>(null)
   const [characterToDelete, setCharacterToDelete] = useState<Character | null>(
     null,
@@ -51,7 +50,9 @@ export function useCharacterActions(props: Props = defaultProps) {
           await createCharacter({ variables: data })
         }
         notification.success({
-          message: `Character successfully ${data.id ? 'updated' : 'added'}`,
+          message: intl.formatMessage({
+            id: data.id ? 'character.edit.success' : 'character.create.success',
+          }),
         })
         setCharacterToEdit(null)
         onEditClose()
@@ -62,7 +63,7 @@ export function useCharacterActions(props: Props = defaultProps) {
         notification.error({ message })
       }
     },
-    [onEditClose, updateCharacter, createCharacter],
+    [intl, onEditClose, updateCharacter, createCharacter],
   )
   const editCloseHandler = useCallback(() => {
     setCharacterToEdit(null)
@@ -91,7 +92,9 @@ export function useCharacterActions(props: Props = defaultProps) {
       await deleteCharacter({ variables: { id: data.id } })
 
       notification.success({
-        message: `Character successfully deleted`,
+        message: intl.formatMessage({
+          id: 'character.delete.success',
+        }),
       })
       onDeleteSuccess(data)
     } catch (error) {

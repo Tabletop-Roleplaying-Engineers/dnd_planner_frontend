@@ -32,6 +32,7 @@ const characterFragment = `
     name
     logo
   }
+  notes
   ${userFragment}
   ${gamesFragment}
 `
@@ -68,12 +69,14 @@ export const CREATE_CHARACTER_MUTATION = gql`
     $faction: ID!
     $class: String!
     $avatar: String!
+    $notes: String!
   ) {
     createCharacter(
       name: $name
       faction: $faction
       class: $class
       avatar: $avatar
+      notes: $notes
     ) {
       id
       name
@@ -86,6 +89,7 @@ export const CREATE_CHARACTER_MUTATION = gql`
         name
         logo
       }
+      notes
     }
   }
 `
@@ -108,12 +112,14 @@ export const UPDATE_CHARACTER_MUTATION = gql`
     $faction: ID!
     $class: String!
     $avatar: String!
+    $notes: String!
   ) {
     updateCharacter(
       id: $id
       faction: $faction
       class: $class
       avatar: $avatar
+      notes: $notes
     ) {
       id
       class
@@ -125,6 +131,7 @@ export const UPDATE_CHARACTER_MUTATION = gql`
         name
         logo
       }
+      notes
     }
   }
 `
