@@ -1,6 +1,6 @@
 {
   "name": "dnd-planner-web",
-  "version": "1.10.0",
+  "version": "1.11.0",
   "private": true,
   "scripts": {
     "start:dev": "cross-env environment=development PORT=80 react-app-rewired start",
