@@ -30,6 +30,12 @@ const Notes = styled.div`
   word-break: break-word;
 `
 
+const FactionImg = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+`
+
 interface ICharacterAvatarContainerProps {
   avatar: string
 }
@@ -99,7 +105,7 @@ export const CharacterView: React.FC<IProps> = (props) => {
                   {faction && (
                     <Tooltip title={faction.name}>
                       <Flex height="24px" width="24px">
-                        <img src={faction.logo} alt="faction" />
+                        <FactionImg src={faction.logo} alt="faction" />
                       </Flex>
                     </Tooltip>
                   )}
