@@ -13,7 +13,6 @@ import { GameActions } from 'components/Game/GameActions'
 import { hasAction } from 'utils/common'
 
 const GameContainer = styled(Box)`
-  cursor: pointer;
   border: 1px solid #e8e8e8;
 `
 const DateContainer = styled(Box)`
