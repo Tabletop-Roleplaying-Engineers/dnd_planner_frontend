@@ -36,7 +36,7 @@ const RolesList = ({ userRoles, roles = [], user, onChange }) => {
   const [error, setError] = useState(null)
   const [newRole, setNewRole] = useState(null)
   const [updateRolesMutation] = useMutation(UPDATE_USER_ROLES)
-  const updateRoles = async newRoles => {
+  const updateRoles = async (newRoles) => {
     setMutationInProgress(true)
     try {
       await updateRolesMutation({
@@ -48,17 +48,17 @@ const RolesList = ({ userRoles, roles = [], user, onChange }) => {
       setError(error)
     }
   }
-  const deleteRole = async roleToDelete => {
+  const deleteRole = async (roleToDelete) => {
     const newRoles = userRoles
-      .map(role => role.id)
-      .filter(roleId => roleId !== roleToDelete.id)
+      .map((role) => role.id)
+      .filter((roleId) => roleId !== roleToDelete.id)
     updateRoles(newRoles)
   }
-  const addRole = async roleIdToAdd => {
+  const addRole = async (roleIdToAdd) => {
     if (!newRole) {
       return
     }
-    const newRoles = [...userRoles.map(role => role.id), roleIdToAdd]
+    const newRoles = [...userRoles.map((role) => role.id), roleIdToAdd]
     updateRoles(newRoles)
   }
   const onDeleteRoleClick = (e, role) => {
@@ -75,8 +75,8 @@ const RolesList = ({ userRoles, roles = [], user, onChange }) => {
 
   return (
     <>
-      {userRoles.map(role => (
-        <Tag key={role.id} closable onClose={e => onDeleteRoleClick(e, role)}>
+      {userRoles.map((role) => (
+        <Tag key={role.id} closable onClose={(e) => onDeleteRoleClick(e, role)}>
           {role.name}
         </Tag>
       ))}
@@ -116,7 +116,7 @@ const RolesList = ({ userRoles, roles = [], user, onChange }) => {
         </p>
         {error && <Alert message={error.message} type="error" />}
         <Select value={newRole} style={{ width: 120 }} onChange={setNewRole}>
-          {roles.map(role => (
+          {roles.map((role) => (
             <Option key={role.id} value={role.id}>
               {role.name}
             </Option>
@@ -128,12 +128,14 @@ const RolesList = ({ userRoles, roles = [], user, onChange }) => {
 }
 
 const AvatarColumn = ({ url, user, setOnBehalfToken }) => {
-  const [updateRolesMutation, result] = useMutation(SIGN_IN_ON_BEHALF_MUTATION)
+  const [signInOnBehalfMutation, result] = useMutation(
+    SIGN_IN_ON_BEHALF_MUTATION,
+  )
   const signIn = useCallback(async () => {
-    await updateRolesMutation({
+    await signInOnBehalfMutation({
       variables: { userId: user.id },
     })
-  }, [updateRolesMutation, user])
+  }, [signInOnBehalfMutation, user])
   const userMenu = (
     <Menu>
       <Menu.Item onClick={signIn}>Sign in behalf this user</Menu.Item>
@@ -217,7 +219,7 @@ export const UsersTab = ({ setOnBehalfToken }) => {
   }
   const { users } = data
 
-  const dataSource = users.map(user => ({
+  const dataSource = users.map((user) => ({
     ...user,
     key: user.id,
     name: `${user.firstName || ''} ${user.lastName || ''}`,
@@ -230,7 +232,7 @@ export const UsersTab = ({ setOnBehalfToken }) => {
           <Input
             value={username}
             placeholder="Enter username to search"
-            onChange={e => setUsername(e.target.value)}
+            onChange={(e) => setUsername(e.target.value)}
           />
         </InputWrapper>
         <Table dataSource={dataSource} columns={columns} loading={loading} />
