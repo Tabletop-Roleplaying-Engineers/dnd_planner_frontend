@@ -20,6 +20,10 @@ export const messages = {
   'common.includeOld': 'Include old',
   'common.yes': 'Yes',
   'common.no': 'No',
+  'common.previous': 'Previous',
+  'common.next': 'Next',
+  'common.today': 'Today',
+  'common.view': 'View',
 
   'menu.calendar': 'Calendar',
   'menu.dashboard': 'Dashboard',
@@ -92,6 +96,8 @@ export const messages = {
   'gameForm.gameCreated': 'The game has been created',
   'gameForm.gameEdited': 'The game has been updated',
   'gameForm.requestError': 'Error while saving data: {message}',
+
+  'gamesList.createBtn.title': 'Create game',
 
   'login.validation.emptyUsername':
     'You have to set "username" ("@someUserName") in your Telegram account',

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
+import { FormattedMessage } from 'react-intl'
 import { Row, Col, Button } from 'antd'
 import styled from 'styled-components'
-import format from 'date-fns/format'
 import isBefore from 'date-fns/isBefore'
 import startOfDay from 'date-fns/startOfDay'
 import { Box, Flex } from 'noui/Position'
@@ -11,6 +11,7 @@ import { GameInfo } from 'components/Game/GameInfo'
 import { ParticipantsList } from 'components/Game/ParticipantsList'
 import { GameActions } from 'components/Game/GameActions'
 import { hasAction } from 'utils/common'
+import { useDateFormat } from 'utils/hooks/useDateFormat'
 
 const GameContainer = styled(Box)`
   border: 1px solid #e8e8e8;
@@ -38,6 +39,7 @@ const canCreateGame = (user, date) =>
 
 export const GamesList = ({ games, date, onNewGameClick }) => {
   const { user } = useContext(UserContext)
+  const format = useDateFormat()
 
   return (
     <Flex column>
@@ -48,7 +50,7 @@ export const GamesList = ({ games, date, onNewGameClick }) => {
           block
           data-testid="create-game-btn"
         >
-          Create game
+          <FormattedMessage id="gamesList.createBtn.title" />
         </Button>
       )}
       <DateContainer>{format(date, 'dd MMMM')}</DateContainer>

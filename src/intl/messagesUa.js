@@ -19,6 +19,10 @@ export const messages = {
   'common.includeOld': 'Включно зі старими',
   'common.yes': 'Так',
   'common.no': 'Ні',
+  'common.previous': 'Попередній',
+  'common.next': 'Наступний',
+  'common.today': 'Сьогодні',
+  'common.view': 'Перегляд',
 
   'menu.calendar': 'Календар',
   'menu.dashboard': 'Головна',
@@ -91,6 +95,8 @@ export const messages = {
   'gameForm.gameCreated': 'Гра створена',
   'gameForm.gameEdited': 'Гра оновлена',
   'gameForm.requestError': 'Помилка під час збереження даних: {message}',
+
+  'gamesList.createBtn.title': 'Створити гру',
 
   'login.validation.emptyUsername':
     'Ім`я користувача (псевдонім) має бути не пустим в Telegram профілі',
