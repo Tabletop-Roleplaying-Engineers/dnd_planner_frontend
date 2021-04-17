@@ -1,36 +1,14 @@
 import React, { useState, useCallback } from 'react'
-import {
-  Dropdown,
-  Icon,
-  Spin,
-  notification,
-  Alert,
-  Drawer,
-  Button,
-  Form,
-  Empty,
-  Modal,
-} from 'antd'
+import { Dropdown, Icon, Spin, Alert, Button, Empty, Modal } from 'antd'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import { Flex, Box } from 'noui/Position'
 import { Label } from 'ui/Text'
 import Character from 'components/Character'
-import EditCharacterForm from 'forms/EditCharacterForm'
 import { createMenu } from 'ui/shared'
-import { omit } from 'utils/common'
-import { modalWidth } from 'config'
-import {
-  FETCH_CHARACTERS_QUERY,
-  CREATE_CHARACTER_MUTATION,
-  DELETE_CHARACTER_MUTATION,
-  UPDATE_CHARACTER_MUTATION,
-} from 'api'
+import { FETCH_CHARACTERS_QUERY, DELETE_CHARACTER_MUTATION } from 'api'
 import * as R from 'ramda'
-
-const FormContainer = styled.div`
-  padding-top: 16px;
-`
+import { useCharacterActions } from 'utils/hooks/useCharacterActions'
 
 const CardWrapper = styled(Flex)`
   flex-shrink: 0;
@@ -139,54 +117,11 @@ const CharactersList = ({ data, onEditClick, loading, error }) => {
 }
 
 export const CharactersTab = () => {
-  const [editCharacterVisibility, setEditCharacterVisibility] = useState(false)
-  const [charToEdit, setCharToEdit] = useState()
   const { loading, error, data, refetch } = useQuery(FETCH_CHARACTERS_QUERY)
-  const [createCharacter, createCharacterResult] = useMutation(
-    CREATE_CHARACTER_MUTATION,
-  )
-  const createLoading = createCharacterResult.loading
-  const [updateCharacter, updateCharacterResult] = useMutation(
-    UPDATE_CHARACTER_MUTATION,
-  )
-  const updateLoading = updateCharacterResult.loading
-  const onEditClick = (character) => {
-    setEditCharacterVisibility(true)
-    setCharToEdit(character)
-  }
-  const onCharEditClose = () => {
-    setEditCharacterVisibility(false)
-    setCharToEdit(null)
-  }
-  const onFormSubmit = useCallback(
-    async (data) => {
-      try {
-        if (data.id) {
-          await updateCharacter({ variables: omit(['name'], data) })
-        } else {
-          await createCharacter({ variables: data })
-        }
-        notification.success({
-          message: `Character successfully ${data.id ? 'updated' : 'added'}`,
-        })
-        refetch()
-        setEditCharacterVisibility(false)
-        setCharToEdit(null)
-      } catch (error) {
-        const message = error.graphQLErrors.map((err) => err.message).join(' ,')
-        notification.error({ message })
-      }
-    },
-    [updateCharacter, createCharacter, refetch],
-  )
-  let EditForm
-  if (charToEdit) {
-    EditForm = Form.create({ mapPropsToFields: () => charToEdit })(
-      EditCharacterForm,
-    )
-  } else {
-    EditForm = EditCharacterForm
-  }
+  const onEditSuccess = useCallback(() => refetch(), [refetch])
+  const { editDialog, editCharacter, createCharacter } = useCharacterActions({
+    onEditSuccess,
+  })
 
   return (
     <Flex flexDirection={['row', 'row']} justifyContent="space-between">
@@ -200,7 +135,7 @@ export const CharactersTab = () => {
             shape="round"
             icon="plus"
             size="large"
-            onClick={() => setEditCharacterVisibility(true)}
+            onClick={createCharacter}
             data-testid="add-character-btn"
           >
             Add new Character
@@ -210,27 +145,14 @@ export const CharactersTab = () => {
         <ListWrapper>
           <CharactersList
             data={data}
-            onEditClick={onEditClick}
+            onEditClick={editCharacter}
             loading={loading}
             error={error}
           />
         </ListWrapper>
       </Box>
 
-      <Drawer
-        width={modalWidth()}
-        placement="left"
-        visible={editCharacterVisibility}
-        onClose={onCharEditClose}
-        destroyOnClose
-        closable
-      >
-        <Spin spinning={createLoading || updateLoading}>
-          <FormContainer>
-            <EditForm data={charToEdit} onSubmit={onFormSubmit} />
-          </FormContainer>
-        </Spin>
-      </Drawer>
+      {editDialog}
     </Flex>
   )
 }
