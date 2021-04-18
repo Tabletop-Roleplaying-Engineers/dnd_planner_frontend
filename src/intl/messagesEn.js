@@ -46,6 +46,9 @@ export const messages = {
   'character.create.success': 'Character successfully created',
   'character.note.placeholder':
     'You can type here your notes for the character (Publicly available)',
+  'characters.addButton.label': 'Add new Character',
+  'characters.emptyList.placeholder':
+    'You have no characters yet. Create one to play!',
 
   'participation.registrationIsClosed': 'Registration is closed',
   'participation.loginToRegister':

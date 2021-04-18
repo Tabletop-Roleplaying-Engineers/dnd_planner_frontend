@@ -45,6 +45,9 @@ export const messages = {
   'character.create.success': 'Персонаж створений',
   'character.note.placeholder':
     'Тут ви можете ввести нотатки для персонажа які будуть публічно доступні',
+  'characters.addButton.label': 'Створити персонаж',
+  'characters.emptyList.placeholder':
+    'У вас немає жодного персонажа. Створіть персонажа для гри.',
 
   'participation.registrationIsClosed': 'Реєстрація закрита',
   'participation.loginToRegister':

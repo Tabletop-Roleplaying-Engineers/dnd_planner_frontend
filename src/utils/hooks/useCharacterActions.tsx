@@ -245,7 +245,9 @@ export function useCharacterDeletion({
       title={<FormattedMessage id="character.delete" />}
       visible={!!character}
       onOk={onSubmitHandler}
+      okText={<FormattedMessage id="common.yes" />}
       onCancel={onClose}
+      cancelText={<FormattedMessage id="common.no" />}
     >
       <p>
         <FormattedMessage

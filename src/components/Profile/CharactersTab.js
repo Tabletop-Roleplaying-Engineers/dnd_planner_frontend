@@ -1,13 +1,13 @@
-import React, { useState, useCallback } from 'react'
-import { Dropdown, Icon, Spin, Alert, Button, Empty, Modal } from 'antd'
-import { useQuery, useMutation } from '@apollo/react-hooks'
+import React, { useCallback } from 'react'
+import { FormattedMessage, useIntl } from 'react-intl'
+import * as R from 'ramda'
+import { Dropdown, Icon, Spin, Alert, Button, Empty } from 'antd'
+import { useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import { Flex, Box } from 'noui/Position'
-import { Label } from 'ui/Text'
 import Character from 'components/Character'
 import { createMenu } from 'ui/shared'
-import { FETCH_CHARACTERS_QUERY, DELETE_CHARACTER_MUTATION } from 'api'
-import * as R from 'ramda'
+import { FETCH_CHARACTERS_QUERY } from 'api'
 import { useCharacterActions } from 'utils/hooks/useCharacterActions'
 
 const CardWrapper = styled(Flex)`
@@ -18,45 +18,24 @@ const ListWrapper = styled(Flex)`
   flex-wrap: wrap;
 `
 
-const CharacterMenu = ({ onEditClick, character }) => {
-  const [
-    deleteCharacterConfirmation,
-    setDeleteCharacterConfirmation,
-  ] = useState(false)
-  const [characterToDeleteId, setCharacterToDeleteId] = useState(null)
-  const onDeleteCharacter = async () => {
-    setDeleteCharacterConfirmation(false)
-    setCharacterToDeleteId(null)
-    await deleteCharacter({ variables: { id: characterToDeleteId } })
-  }
-  const [deleteCharacter] = useMutation(DELETE_CHARACTER_MUTATION, {
-    update(cache) {
-      const { characters } = cache.readQuery({
-        query: FETCH_CHARACTERS_QUERY,
-      })
-      cache.writeQuery({
-        query: FETCH_CHARACTERS_QUERY,
-        data: { characters: characters.filter((c) => c.id !== character.id) },
-      })
-    },
-  })
+const CharacterMenu = ({ onEditClick, character, onDeleteClick }) => {
+  const intl = useIntl()
 
   return (
     <Box position="absolute" top={0} right={10}>
       <Dropdown
         overlay={createMenu([
           {
-            label: 'Edit',
+            label: intl.formatMessage({ id: 'common.edit' }),
             icon: 'edit',
             onClick: () => onEditClick(character),
             'data-testid': 'character-menu-edit',
           },
           {
-            label: 'Delete',
+            label: intl.formatMessage({ id: 'common.delete' }),
             icon: 'delete',
             onClick: async () => {
-              setDeleteCharacterConfirmation(true)
-              setCharacterToDeleteId(character.id)
+              onDeleteClick(character)
             },
             'data-testid': 'character-menu-delete',
           },
@@ -65,23 +44,17 @@ const CharacterMenu = ({ onEditClick, character }) => {
       >
         <Icon type="ellipsis" data-testid="character-menu" />
       </Dropdown>
-      {/* Delete character confirmation dialog */}
-      <Modal
-        title="Delete character"
-        visible={deleteCharacterConfirmation}
-        onOk={() => onDeleteCharacter()}
-        onCancel={() => {
-          setDeleteCharacterConfirmation(false)
-          setCharacterToDeleteId(null)
-        }}
-      >
-        <p>Are you sure that you want to delete {character.name}?</p>
-      </Modal>
     </Box>
   )
 }
 
-const CharactersList = ({ data, onEditClick, loading, error }) => {
+const CharactersList = ({
+  data,
+  onEditClick,
+  loading,
+  error,
+  deleteCharacter,
+}) => {
   if (loading) {
     return <Spin />
   }
@@ -91,7 +64,13 @@ const CharactersList = ({ data, onEditClick, loading, error }) => {
 
   if (!loading && R.isEmpty(data.characters))
     return (
-      <Empty description="You have no characters yet. Create one to play!" />
+      <Flex justifyContent="center" width="100%">
+        <Empty
+          description={
+            <FormattedMessage id="characters.emptyList.placeholder" />
+          }
+        />
+      </Flex>
     )
 
   return data.characters.map((character) => (
@@ -110,7 +89,11 @@ const CharactersList = ({ data, onEditClick, loading, error }) => {
       >
         <Character withBorder {...character} />
 
-        <CharacterMenu onEditClick={onEditClick} character={character} />
+        <CharacterMenu
+          onEditClick={onEditClick}
+          onDeleteClick={deleteCharacter}
+          character={character}
+        />
       </Box>
     </CardWrapper>
   ))
@@ -119,15 +102,19 @@ const CharactersList = ({ data, onEditClick, loading, error }) => {
 export const CharactersTab = () => {
   const { loading, error, data, refetch } = useQuery(FETCH_CHARACTERS_QUERY)
   const onEditSuccess = useCallback(() => refetch(), [refetch])
-  const { editDialog, editCharacter, createCharacter } = useCharacterActions({
+  const {
+    editDialog,
+    editCharacter,
+    createCharacter,
+    deleteDialog,
+    deleteCharacter,
+  } = useCharacterActions({
     onEditSuccess,
   })
 
   return (
     <Flex flexDirection={['row', 'row']} justifyContent="space-between">
       <Box column width="100%">
-        <Label>Characters:</Label>
-
         <Box column width={['100%', '40%']}>
           <Button
             style={{ width: '100%', margin: '20px 0' }}
@@ -138,7 +125,7 @@ export const CharactersTab = () => {
             onClick={createCharacter}
             data-testid="add-character-btn"
           >
-            Add new Character
+            <FormattedMessage id="characters.addButton.label" />
           </Button>
         </Box>
 
@@ -148,11 +135,16 @@ export const CharactersTab = () => {
             onEditClick={editCharacter}
             loading={loading}
             error={error}
+            deleteCharacter={deleteCharacter}
           />
         </ListWrapper>
       </Box>
 
+      {/* Edit */}
       {editDialog}
+
+      {/* Delete */}
+      {deleteDialog}
     </Flex>
   )
 }
