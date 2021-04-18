@@ -116,4 +116,6 @@ export const messages = {
   'hosted.delete': 'Ви дійсно хочете видалити гру?',
 
   'myGame.noData': 'Ви не граєте в жодну гру!',
+
+  'settings.signOutBtn.label': 'Вихід',
 }

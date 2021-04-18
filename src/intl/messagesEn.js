@@ -117,4 +117,6 @@ export const messages = {
   'hosted.delete': 'Do you want permanently delete game?',
 
   'myGame.noData': 'You are not participated in any game!',
+
+  'settings.signOutBtn.label': 'Sign out',
 }
