@@ -3,6 +3,7 @@ import { fireEvent, render } from '@testing-library/react'
 import { Select } from 'antd'
 import ClassesSelector, { CLASSES } from './index'
 import { act } from 'react-dom/test-utils'
+import { TestWrapper } from 'utils/test'
 
 jest.mock('noui/Form', () => {
   return {
@@ -20,7 +21,11 @@ jest.mock('antd', () => {
 })
 
 const getPageObject = () => {
-  const component = <ClassesSelector onSelect={() => {}} name="testName" />
+  const component = (
+    <TestWrapper>
+      <ClassesSelector onSelect={() => {}} name="testName" />
+    </TestWrapper>
+  )
   const result = render(component)
 
   return {
