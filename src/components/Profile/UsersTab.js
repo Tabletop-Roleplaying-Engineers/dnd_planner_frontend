@@ -23,6 +23,7 @@ import {
   FETCH_ROLES_QUERY,
   SIGN_IN_ON_BEHALF_MUTATION,
 } from 'api'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 const { Option } = Select
 const InputWrapper = styled.div`
@@ -82,37 +83,62 @@ const RolesList = ({ userRoles, roles = [], user, onChange }) => {
       ))}
       <Tag
         onClick={() => setAddRoleVisible(true)}
-        style={{ background: '#fff', borderStyle: 'dashed' }}
+        style={{ background: '#fff', borderStyle: 'dashed', cursor: 'pointer' }}
       >
-        <Icon type="plus" /> New role
+        <Icon type="plus" /> <FormattedMessage id="users.role.addBtn.label" />
       </Tag>
 
       {/* Delete role modal */}
       <Modal
-        title="Delete role"
+        title={<FormattedMessage id="users.role.removeDialog.title" />}
         visible={!!roleForDelete}
         onOk={() => deleteRole(roleForDelete)}
+        okText={<FormattedMessage id="common.yes" />}
+        cancelText={<FormattedMessage id="common.no" />}
         confirmLoading={mutationInProgress}
         onCancel={onCancelClick}
       >
         <p>
-          Are you sure that you want to delete{' '}
-          <b>{roleForDelete && roleForDelete.name}</b> role from{' '}
-          <b>{user.username}</b>?
+          <FormattedMessage
+            id="users.role.removeDialog.content"
+            values={{
+              roleName: <b>{roleForDelete && roleForDelete.name}</b>,
+              username: (
+                <b>
+                  {user.name
+                    ? `${user.name} (${user.username})`
+                    : user.username}
+                </b>
+              ),
+            }}
+          />
         </p>
         {error && <Alert message={error.message} type="error" />}
       </Modal>
 
       {/* Add role modal */}
       <Modal
-        title="Add role"
+        title={<FormattedMessage id="users.role.addDialog.title" />}
         visible={addRoleVisible}
         onOk={() => addRole(newRole)}
         confirmLoading={mutationInProgress}
         onCancel={onCancelClick}
+        okText={<FormattedMessage id="common.yes" />}
+        cancelText={<FormattedMessage id="common.no" />}
       >
         <p>
-          Selected role will be added to <b>{user.username}</b>
+          <FormattedMessage
+            id="users.role.addDialog.content"
+            values={{
+              username: (
+                <b>
+                  {user.name
+                    ? `${user.name} (${user.username})`
+                    : user.username}
+                </b>
+              ),
+            }}
+          />
         </p>
         {error && <Alert message={error.message} type="error" />}
         <Select value={newRole} style={{ width: 120 }} onChange={setNewRole}>
@@ -156,6 +182,7 @@ const AvatarColumn = ({ url, user, setOnBehalfToken }) => {
 }
 
 export const UsersTab = ({ setOnBehalfToken }) => {
+  const intl = useIntl()
   const [username, setUsername] = useState('')
   const debouncedUsername = useDebounce(username, 300)
   const { loading, error, data, refetch } = useQuery(FETCH_USERS_QUERY, {
@@ -171,7 +198,7 @@ export const UsersTab = ({ setOnBehalfToken }) => {
   const roles = rolesResponse ? rolesResponse.roles : []
   const columns = [
     {
-      title: 'Avatar',
+      title: <FormattedMessage id="users.list.header.avatar" />,
       dataIndex: 'avatar',
       key: 'avatar',
       render: (url, user) => (
@@ -181,20 +208,20 @@ export const UsersTab = ({ setOnBehalfToken }) => {
           setOnBehalfToken={setOnBehalfToken}
         />
       ),
-      width: 75,
+      width: 80,
     },
     {
-      title: 'Name',
+      title: <FormattedMessage id="users.list.header.name" />,
       dataIndex: 'name',
       key: 'name',
     },
     {
-      title: 'Username',
+      title: <FormattedMessage id="users.list.header.username" />,
       dataIndex: 'username',
       key: 'username',
     },
     {
-      title: 'Roles',
+      title: <FormattedMessage id="users.list.header.roles" />,
       dataIndex: 'roles',
       key: 'roles',
       render: (userRoles, user) => (
@@ -231,7 +258,7 @@ export const UsersTab = ({ setOnBehalfToken }) => {
         <InputWrapper>
           <Input
             value={username}
-            placeholder="Enter username to search"
+            placeholder={intl.formatMessage({ id: 'users.search.placeholder' })}
             onChange={(e) => setUsername(e.target.value)}
           />
         </InputWrapper>

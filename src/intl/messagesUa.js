@@ -118,4 +118,16 @@ export const messages = {
   'myGame.noData': 'Ви не граєте в жодну гру!',
 
   'settings.signOutBtn.label': 'Вихід',
+
+  'users.role.addBtn.label': 'Нова роль',
+  'users.role.removeDialog.title': 'Видалити роль',
+  'users.role.removeDialog.content':
+    'Ви впевненні що хочете видалити {roleName} роль у {username}?',
+  'users.role.addDialog.title': 'Додати роль',
+  'users.role.addDialog.content': 'Вибрана роль буде додана до {username}',
+  'users.search.placeholder': 'Введіть логін для пошуку',
+  'users.list.header.avatar': 'Аватар',
+  'users.list.header.name': "Ім'я",
+  'users.list.header.username': 'Логін',
+  'users.list.header.roles': 'Ролі',
 }

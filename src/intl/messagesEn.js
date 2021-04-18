@@ -119,4 +119,16 @@ export const messages = {
   'myGame.noData': 'You are not participated in any game!',
 
   'settings.signOutBtn.label': 'Sign out',
+
+  'users.role.addBtn.label': 'New role',
+  'users.role.removeDialog.title': 'Delete role',
+  'users.role.removeDialog.content':
+    'Are you sure that you want to delete {roleName} role from {username}?',
+  'users.role.addDialog.title': 'Add role',
+  'users.role.addDialog.content': 'Selected role will be added to {username}',
+  'users.search.placeholder': 'Enter username to search',
+  'users.list.header.avatar': 'Avatar',
+  'users.list.header.name': 'Name',
+  'users.list.header.username': 'Username',
+  'users.list.header.roles': 'Roles',
 }
