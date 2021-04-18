@@ -2,7 +2,6 @@ import React, { useContext, useCallback } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { Tabs, Alert } from 'antd'
 import { Box } from 'noui/Position'
-import { Header } from 'ui/Text'
 import { withApollo } from 'react-apollo'
 import {
   GamesTab,
@@ -44,11 +43,7 @@ const Profile = ({ history }) => {
   }
 
   return (
-    <Box height="90vh">
-      <Box mb={40}>
-        <Header>Profile</Header>
-      </Box>
-
+    <Box height="90vh" pt="24px">
       <Tabs defaultActiveKey="games" type="card">
         <Tabs.TabPane
           tab={<FormattedMessage id="profile.myGames" />}

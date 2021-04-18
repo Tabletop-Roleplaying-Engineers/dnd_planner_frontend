@@ -32,7 +32,7 @@ export const CharacterClass: React.FC<CharacterClassProps> = ({
     <Box key={charClass} {...rest}>
       <Tooltip title={charClass}>
         <Badge count={level}>
-          <Avatar size="small" src={getClassLogo(charClass)} />
+          <Avatar size="small" src={getClassLogo(charClass.toLowerCase())} />
         </Badge>
       </Tooltip>
     </Box>
