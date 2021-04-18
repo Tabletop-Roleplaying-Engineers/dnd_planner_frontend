@@ -51,7 +51,7 @@ export const GamesTab = () => {
                 {(leaveGame, { loading }) => (
                   <Spin spinning={loading}>
                     <Button type="primary" size="large" onClick={leaveGame}>
-                      Leave Game
+                      <FormattedMessage id="game.leaveBtn.label" />
                     </Button>
                   </Spin>
                 )}

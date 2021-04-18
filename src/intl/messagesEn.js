@@ -99,6 +99,8 @@ export const messages = {
 
   'gamesList.createBtn.title': 'Create game',
 
+  'game.leaveBtn.label': 'Leave Game',
+
   'login.validation.emptyUsername':
     'You have to set "username" ("@someUserName") in your Telegram account',
 

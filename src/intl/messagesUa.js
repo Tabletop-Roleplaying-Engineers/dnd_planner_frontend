@@ -98,6 +98,8 @@ export const messages = {
 
   'gamesList.createBtn.title': 'Створити гру',
 
+  'game.leaveBtn.label': 'Покинути гру',
+
   'login.validation.emptyUsername':
     'Ім`я користувача (псевдонім) має бути не пустим в Telegram профілі',
 
