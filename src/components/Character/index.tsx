@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { shadow, ShadowProps } from 'styled-system'
 import * as R from 'ramda'
@@ -81,7 +82,7 @@ const Character: React.FC<CharacterProps> = ({
   )(dndClass)
 
   return (
-    <a href={`/character/${id}`}>
+    <Link to={`/character/${id}`}>
       <Wrapper
         {...props}
         flexDirection="column"
@@ -117,7 +118,7 @@ const Character: React.FC<CharacterProps> = ({
           <StyledUserInfo {...user} position="left" />
         </Flex>
       </Wrapper>
-    </a>
+    </Link>
   )
 }
 Character.displayName = 'Character'

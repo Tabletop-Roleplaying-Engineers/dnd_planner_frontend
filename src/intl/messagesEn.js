@@ -20,6 +20,10 @@ export const messages = {
   'common.includeOld': 'Include old',
   'common.yes': 'Yes',
   'common.no': 'No',
+  'common.previous': 'Previous',
+  'common.next': 'Next',
+  'common.today': 'Today',
+  'common.view': 'View',
 
   'menu.calendar': 'Calendar',
   'menu.dashboard': 'Dashboard',
@@ -42,6 +46,22 @@ export const messages = {
   'character.create.success': 'Character successfully created',
   'character.note.placeholder':
     'You can type here your notes for the character (Publicly available)',
+  'character.class.placeholder': 'Class',
+  'character.class.name.barbarian': 'Barbarian',
+  'character.class.name.bard': 'Bard',
+  'character.class.name.cleric': 'Cleric',
+  'character.class.name.druid': 'Druid',
+  'character.class.name.fighter': 'Fighter',
+  'character.class.name.monk': 'Monk',
+  'character.class.name.paladin': 'Paladin',
+  'character.class.name.ranger': 'Ranger',
+  'character.class.name.rogue': 'Rogue',
+  'character.class.name.sorcerer': 'Sorcerer',
+  'character.class.name.warlock': 'Warlock',
+  'character.class.name.wizard': 'Wizard',
+  'characters.addButton.label': 'Add new Character',
+  'characters.emptyList.placeholder':
+    'You have no characters yet. Create one to play!',
 
   'participation.registrationIsClosed': 'Registration is closed',
   'participation.loginToRegister':
@@ -93,6 +113,10 @@ export const messages = {
   'gameForm.gameEdited': 'The game has been updated',
   'gameForm.requestError': 'Error while saving data: {message}',
 
+  'gamesList.createBtn.title': 'Create game',
+
+  'game.leaveBtn.label': 'Leave Game',
+
   'login.validation.emptyUsername':
     'You have to set "username" ("@someUserName") in your Telegram account',
 
@@ -106,4 +130,18 @@ export const messages = {
   'hosted.delete': 'Do you want permanently delete game?',
 
   'myGame.noData': 'You are not participated in any game!',
+
+  'settings.signOutBtn.label': 'Sign out',
+
+  'users.role.addBtn.label': 'New role',
+  'users.role.removeDialog.title': 'Delete role',
+  'users.role.removeDialog.content':
+    'Are you sure that you want to delete {roleName} role from {username}?',
+  'users.role.addDialog.title': 'Add role',
+  'users.role.addDialog.content': 'Selected role will be added to {username}',
+  'users.search.placeholder': 'Enter username to search',
+  'users.list.header.avatar': 'Avatar',
+  'users.list.header.name': 'Name',
+  'users.list.header.username': 'Username',
+  'users.list.header.roles': 'Roles',
 }

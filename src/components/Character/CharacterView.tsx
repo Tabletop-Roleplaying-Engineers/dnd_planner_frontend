@@ -30,6 +30,12 @@ const Notes = styled.div`
   word-break: break-word;
 `
 
+const FactionImg = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+`
+
 interface ICharacterAvatarContainerProps {
   avatar: string
 }
@@ -68,7 +74,7 @@ export const CharacterView: React.FC<IProps> = (props) => {
 
   return (
     <Box pt="10px" maxWidth="768px" margin="auto">
-      <Row>
+      <Row gutter={16}>
         <Col span={0} md={12}>
           {/* Avatar for md - xxl */}
           <CharacterAvatarContainer avatar={avatar} />
@@ -99,7 +105,7 @@ export const CharacterView: React.FC<IProps> = (props) => {
                   {faction && (
                     <Tooltip title={faction.name}>
                       <Flex height="24px" width="24px">
-                        <img src={faction.logo} alt="faction" />
+                        <FactionImg src={faction.logo} alt="faction" />
                       </Flex>
                     </Tooltip>
                   )}
@@ -116,20 +122,22 @@ export const CharacterView: React.FC<IProps> = (props) => {
               <CharacterAvatarContainer avatar={avatar} />
             </Col>
             <Col span={24}>
-              <Flex flexDirection="column">
-                <Flex justifyContent="space-between" mt="10px">
-                  {/* Classes */}
-                  <Flex alignItems="center" overflow="auto" pr="10px">
-                    {classesElements}
+              <Row>
+                <Flex flexDirection="column">
+                  <Flex justifyContent="space-between" mt="10px">
+                    {/* Classes */}
+                    <Flex alignItems="center" overflow="auto" pr="10px">
+                      {classesElements}
+                    </Flex>
+
+                    {/* User */}
+                    <UserInfo {...user} position="left" />
                   </Flex>
 
-                  {/* User */}
-                  <UserInfo {...user} position="left" />
+                  {/* Notes */}
+                  <Notes dangerouslySetInnerHTML={{ __html: notes }} />
                 </Flex>
-
-                {/* Notes */}
-                <Notes dangerouslySetInnerHTML={{ __html: notes }} />
-              </Flex>
+              </Row>
             </Col>
           </Row>
         </Col>

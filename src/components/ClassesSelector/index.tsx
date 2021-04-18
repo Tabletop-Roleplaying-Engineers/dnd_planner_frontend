@@ -1,4 +1,5 @@
 import React from 'react'
+import { FormattedMessage } from 'react-intl'
 import { Input, InputNumber, Select } from 'antd'
 import * as R from 'ramda'
 import styled from 'styled-components'
@@ -9,51 +10,51 @@ import { Label } from '../../ui/Text'
 
 export const CLASSES = [
   {
-    name: 'Barbarian',
+    name: 'barbarian',
     icon: require('./images/barbarian.png'),
   },
   {
-    name: 'Bard',
+    name: 'bard',
     icon: require('./images/bard.png'),
   },
   {
-    name: 'Cleric',
+    name: 'cleric',
     icon: require('./images/cleric.png'),
   },
   {
-    name: 'Druid',
+    name: 'druid',
     icon: require('./images/druid.png'),
   },
   {
-    name: 'Fighter',
+    name: 'fighter',
     icon: require('./images/fighter.png'),
   },
   {
-    name: 'Monk',
+    name: 'monk',
     icon: require('./images/monk.png'),
   },
   {
-    name: 'Paladin',
+    name: 'paladin',
     icon: require('./images/paladin.png'),
   },
   {
-    name: 'Ranger',
+    name: 'ranger',
     icon: require('./images/ranger.png'),
   },
   {
-    name: 'Rogue',
+    name: 'rogue',
     icon: require('./images/rogue.png'),
   },
   {
-    name: 'Sorcerer',
+    name: 'sorcerer',
     icon: require('./images/sorcerer.png'),
   },
   {
-    name: 'Warlock',
+    name: 'warlock',
     icon: require('./images/warlock.png'),
   },
   {
-    name: 'Wizard',
+    name: 'wizard',
     icon: require('./images/wizard.png'),
   },
 ]
@@ -153,7 +154,7 @@ class ClassesSelector extends React.PureComponent<Props, State> {
         <Select<string[]>
           ref={this.selectRef}
           mode="multiple"
-          placeholder="Class"
+          placeholder={<FormattedMessage id="character.class.placeholder" />}
           onSelect={onAddValue}
           onDeselect={onRemoveValue}
           onFocus={() => {
@@ -173,7 +174,7 @@ class ClassesSelector extends React.PureComponent<Props, State> {
               value={c.name}
               data-testid={`select-option-class-${c.name}`}
             >
-              {c.name}
+              <FormattedMessage id={`character.class.name.${c.name}`} />
             </Select.Option>
           ))}
         </Select>
@@ -183,7 +184,7 @@ class ClassesSelector extends React.PureComponent<Props, State> {
         </Field>
 
         {selectedClasses.map((c) => {
-          const source = R.find(R.propEq('name', c), CLASSES)
+          const source = R.find(R.propEq('name', c.toLowerCase()), CLASSES)
           const classLvl = parseInt(this.state.value[c], 10)
 
           if (!source) {
@@ -213,7 +214,9 @@ class ClassesSelector extends React.PureComponent<Props, State> {
                 }}
               />
 
-              <Label>{source.name}</Label>
+              <Label>
+                <FormattedMessage id={`character.class.name.${source.name}`} />
+              </Label>
             </Flex>
           )
         })}

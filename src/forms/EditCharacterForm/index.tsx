@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
-import Editor from 'react-medium-editor'
 import * as R from 'ramda'
 import { Button, Input, Select, Spin, Alert } from 'antd'
 import { useQuery } from '@apollo/react-hooks'
 import { Box } from 'noui/Position'
 import Form, { Field } from 'noui/Form'
 import { Msg } from 'ui/Text'
+import { Editor } from 'ui/Editor'
 import styled from 'styled-components'
 import { FETCH_FACTIONS_QUERY } from 'api'
 import ClassesSelector from '../../components/ClassesSelector'
@@ -16,8 +16,6 @@ import {
 } from '../../utils/common'
 import { Character } from 'types/character'
 import { Faction } from 'types/faction'
-import 'medium-editor/dist/css/medium-editor.css'
-import 'medium-editor/dist/css/themes/default.css'
 
 const Image = styled.img`
   max-height: 20vh;
@@ -176,7 +174,7 @@ const EditCharacterForm: React.FC<Props> = ({ data, onSubmit }) => {
             />
 
             {/* Avatar */}
-            <Box>
+            <Box my="20px">
               <Field name="avatar" initialValue={data && data.avatar}>
                 <Input
                   placeholder={intl.formatMessage({ id: 'common.avatarUrl' })}
@@ -196,20 +194,14 @@ const EditCharacterForm: React.FC<Props> = ({ data, onSubmit }) => {
                 </Field>
               </div>
               <Editor
-                text={data?.notes || ''}
+                value={data?.notes || ''}
+                placeholder={intl.formatMessage({
+                  id: 'character.note.placeholder',
+                })}
                 onChange={(text: string) => {
                   form.setFieldsValue({
                     notes: text,
                   })
-                }}
-                options={{
-                  placeholder: {
-                    text: intl.formatMessage({
-                      id: 'character.note.placeholder',
-                    }),
-                  },
-                  autoLink: true,
-                  targetBlank: true,
                 }}
               />
             </NotesField>

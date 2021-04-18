@@ -23,6 +23,7 @@ import {
   FETCH_ROLES_QUERY,
   SIGN_IN_ON_BEHALF_MUTATION,
 } from 'api'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 const { Option } = Select
 const InputWrapper = styled.div`
@@ -36,7 +37,7 @@ const RolesList = ({ userRoles, roles = [], user, onChange }) => {
   const [error, setError] = useState(null)
   const [newRole, setNewRole] = useState(null)
   const [updateRolesMutation] = useMutation(UPDATE_USER_ROLES)
-  const updateRoles = async newRoles => {
+  const updateRoles = async (newRoles) => {
     setMutationInProgress(true)
     try {
       await updateRolesMutation({
@@ -48,17 +49,17 @@ const RolesList = ({ userRoles, roles = [], user, onChange }) => {
       setError(error)
     }
   }
-  const deleteRole = async roleToDelete => {
+  const deleteRole = async (roleToDelete) => {
     const newRoles = userRoles
-      .map(role => role.id)
-      .filter(roleId => roleId !== roleToDelete.id)
+      .map((role) => role.id)
+      .filter((roleId) => roleId !== roleToDelete.id)
     updateRoles(newRoles)
   }
-  const addRole = async roleIdToAdd => {
+  const addRole = async (roleIdToAdd) => {
     if (!newRole) {
       return
     }
-    const newRoles = [...userRoles.map(role => role.id), roleIdToAdd]
+    const newRoles = [...userRoles.map((role) => role.id), roleIdToAdd]
     updateRoles(newRoles)
   }
   const onDeleteRoleClick = (e, role) => {
@@ -75,48 +76,73 @@ const RolesList = ({ userRoles, roles = [], user, onChange }) => {
 
   return (
     <>
-      {userRoles.map(role => (
-        <Tag key={role.id} closable onClose={e => onDeleteRoleClick(e, role)}>
+      {userRoles.map((role) => (
+        <Tag key={role.id} closable onClose={(e) => onDeleteRoleClick(e, role)}>
           {role.name}
         </Tag>
       ))}
       <Tag
         onClick={() => setAddRoleVisible(true)}
-        style={{ background: '#fff', borderStyle: 'dashed' }}
+        style={{ background: '#fff', borderStyle: 'dashed', cursor: 'pointer' }}
       >
-        <Icon type="plus" /> New role
+        <Icon type="plus" /> <FormattedMessage id="users.role.addBtn.label" />
       </Tag>
 
       {/* Delete role modal */}
       <Modal
-        title="Delete role"
+        title={<FormattedMessage id="users.role.removeDialog.title" />}
         visible={!!roleForDelete}
         onOk={() => deleteRole(roleForDelete)}
+        okText={<FormattedMessage id="common.yes" />}
+        cancelText={<FormattedMessage id="common.no" />}
         confirmLoading={mutationInProgress}
         onCancel={onCancelClick}
       >
         <p>
-          Are you sure that you want to delete{' '}
-          <b>{roleForDelete && roleForDelete.name}</b> role from{' '}
-          <b>{user.username}</b>?
+          <FormattedMessage
+            id="users.role.removeDialog.content"
+            values={{
+              roleName: <b>{roleForDelete && roleForDelete.name}</b>,
+              username: (
+                <b>
+                  {user.name
+                    ? `${user.name} (${user.username})`
+                    : user.username}
+                </b>
+              ),
+            }}
+          />
         </p>
         {error && <Alert message={error.message} type="error" />}
       </Modal>
 
       {/* Add role modal */}
       <Modal
-        title="Add role"
+        title={<FormattedMessage id="users.role.addDialog.title" />}
         visible={addRoleVisible}
         onOk={() => addRole(newRole)}
         confirmLoading={mutationInProgress}
         onCancel={onCancelClick}
+        okText={<FormattedMessage id="common.yes" />}
+        cancelText={<FormattedMessage id="common.no" />}
       >
         <p>
-          Selected role will be added to <b>{user.username}</b>
+          <FormattedMessage
+            id="users.role.addDialog.content"
+            values={{
+              username: (
+                <b>
+                  {user.name
+                    ? `${user.name} (${user.username})`
+                    : user.username}
+                </b>
+              ),
+            }}
+          />
         </p>
         {error && <Alert message={error.message} type="error" />}
         <Select value={newRole} style={{ width: 120 }} onChange={setNewRole}>
-          {roles.map(role => (
+          {roles.map((role) => (
             <Option key={role.id} value={role.id}>
               {role.name}
             </Option>
@@ -128,12 +154,14 @@ const RolesList = ({ userRoles, roles = [], user, onChange }) => {
 }
 
 const AvatarColumn = ({ url, user, setOnBehalfToken }) => {
-  const [updateRolesMutation, result] = useMutation(SIGN_IN_ON_BEHALF_MUTATION)
+  const [signInOnBehalfMutation, result] = useMutation(
+    SIGN_IN_ON_BEHALF_MUTATION,
+  )
   const signIn = useCallback(async () => {
-    await updateRolesMutation({
+    await signInOnBehalfMutation({
       variables: { userId: user.id },
     })
-  }, [updateRolesMutation, user])
+  }, [signInOnBehalfMutation, user])
   const userMenu = (
     <Menu>
       <Menu.Item onClick={signIn}>Sign in behalf this user</Menu.Item>
@@ -154,6 +182,7 @@ const AvatarColumn = ({ url, user, setOnBehalfToken }) => {
 }
 
 export const UsersTab = ({ setOnBehalfToken }) => {
+  const intl = useIntl()
   const [username, setUsername] = useState('')
   const debouncedUsername = useDebounce(username, 300)
   const { loading, error, data, refetch } = useQuery(FETCH_USERS_QUERY, {
@@ -169,7 +198,7 @@ export const UsersTab = ({ setOnBehalfToken }) => {
   const roles = rolesResponse ? rolesResponse.roles : []
   const columns = [
     {
-      title: 'Avatar',
+      title: <FormattedMessage id="users.list.header.avatar" />,
       dataIndex: 'avatar',
       key: 'avatar',
       render: (url, user) => (
@@ -179,20 +208,20 @@ export const UsersTab = ({ setOnBehalfToken }) => {
           setOnBehalfToken={setOnBehalfToken}
         />
       ),
-      width: 75,
+      width: 80,
     },
     {
-      title: 'Name',
+      title: <FormattedMessage id="users.list.header.name" />,
       dataIndex: 'name',
       key: 'name',
     },
     {
-      title: 'Username',
+      title: <FormattedMessage id="users.list.header.username" />,
       dataIndex: 'username',
       key: 'username',
     },
     {
-      title: 'Roles',
+      title: <FormattedMessage id="users.list.header.roles" />,
       dataIndex: 'roles',
       key: 'roles',
       render: (userRoles, user) => (
@@ -217,7 +246,7 @@ export const UsersTab = ({ setOnBehalfToken }) => {
   }
   const { users } = data
 
-  const dataSource = users.map(user => ({
+  const dataSource = users.map((user) => ({
     ...user,
     key: user.id,
     name: `${user.firstName || ''} ${user.lastName || ''}`,
@@ -229,8 +258,8 @@ export const UsersTab = ({ setOnBehalfToken }) => {
         <InputWrapper>
           <Input
             value={username}
-            placeholder="Enter username to search"
-            onChange={e => setUsername(e.target.value)}
+            placeholder={intl.formatMessage({ id: 'users.search.placeholder' })}
+            onChange={(e) => setUsername(e.target.value)}
           />
         </InputWrapper>
         <Table dataSource={dataSource} columns={columns} loading={loading} />

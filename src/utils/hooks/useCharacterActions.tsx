@@ -17,6 +17,7 @@ import { FormattedMessage, useIntl } from 'react-intl'
 
 interface Props {
   onEditClose?: () => void
+  onEditSuccess?: (data: Character) => void
   onDeleteClose?: () => void
   onDeleteSuccess?: (data: Character) => void
 }
@@ -24,11 +25,15 @@ const defaultProps: Props = {}
 export function useCharacterActions(props: Props = defaultProps) {
   const {
     onEditClose = noop,
+    onEditSuccess = noop,
     onDeleteClose = noop,
     onDeleteSuccess = noop,
   } = props
   const intl = useIntl()
-  const [characterToEdit, setCharacterToEdit] = useState<Character | null>(null)
+  const [characterToEdit, setCharacterToEdit] = useState<
+    Character | undefined
+  >()
+  const [characterDrawerVisible, setCharacterDrawerVisible] = useState(false)
   const [characterToDelete, setCharacterToDelete] = useState<Character | null>(
     null,
   )
@@ -54,7 +59,9 @@ export function useCharacterActions(props: Props = defaultProps) {
             id: data.id ? 'character.edit.success' : 'character.create.success',
           }),
         })
-        setCharacterToEdit(null)
+        setCharacterToEdit(undefined)
+        setCharacterDrawerVisible(false)
+        onEditSuccess(data)
         onEditClose()
       } catch (error) {
         const message = error.graphQLErrors
@@ -63,10 +70,11 @@ export function useCharacterActions(props: Props = defaultProps) {
         notification.error({ message })
       }
     },
-    [intl, onEditClose, updateCharacter, createCharacter],
+    [intl, onEditClose, onEditSuccess, updateCharacter, createCharacter],
   )
   const editCloseHandler = useCallback(() => {
-    setCharacterToEdit(null)
+    setCharacterToEdit(undefined)
+    setCharacterDrawerVisible(false)
     onEditClose()
   }, [onEditClose])
   const [deleteCharacter] = useMutation(DELETE_CHARACTER_MUTATION, {
@@ -109,11 +117,12 @@ export function useCharacterActions(props: Props = defaultProps) {
     onDeleteClose()
   }, [onDeleteClose])
 
-  const editDialog = useCharacterEditDrawer({
+  const editDialog = useCharacterDrawer({
     character: characterToEdit,
     onClose: editCloseHandler,
     loading: createLoading || updateLoading,
     onSubmit: onFormSubmit,
+    isVisible: characterDrawerVisible,
   })
 
   const deleteDialog = useCharacterDeletion({
@@ -123,7 +132,11 @@ export function useCharacterActions(props: Props = defaultProps) {
   })
 
   return {
-    editCharacter: (data: Character) => setCharacterToEdit(data),
+    editCharacter: (data: Character) => {
+      setCharacterToEdit(data)
+      setCharacterDrawerVisible(true)
+    },
+    createCharacter: () => setCharacterDrawerVisible(true),
     deleteCharacter: (data: Character) => setCharacterToDelete(data),
     editDialog,
     deleteDialog,
@@ -135,24 +148,37 @@ const FormContainer = styled.div`
 `
 
 interface EditProps {
-  character: Character | null
+  character?: Character
   loading: boolean
+  isVisible: boolean
   onClose: () => void
   onSubmit: (data: Character) => void
 }
-export function useCharacterEditDrawer({
+export function useCharacterDrawer({
   character,
   onClose,
   loading,
   onSubmit,
+  isVisible,
 }: EditProps) {
-  let EditForm
+  const [cancelEditingConfirmation, setCancelEditingConfirmation] = useState(
+    false,
+  )
+  const onCancel = useCallback(() => {
+    onClose()
+    setCancelEditingConfirmation(false)
+  }, [onClose])
+  const isEdit = !!character
+
+  let CharacterForm
   if (character) {
-    EditForm = Form.create({ mapPropsToFields: () => character })(
+    // Edit
+    CharacterForm = Form.create({ mapPropsToFields: () => character })(
       EditCharacterForm,
     )
   } else {
-    EditForm = EditCharacterForm
+    // Create
+    CharacterForm = EditCharacterForm
   }
 
   return (
@@ -160,17 +186,41 @@ export function useCharacterEditDrawer({
       <Drawer
         width={modalWidth()}
         placement="left"
-        visible={!!character}
-        onClose={onClose}
+        visible={isVisible}
+        onClose={() => setCancelEditingConfirmation(true)}
         destroyOnClose
         closable
       >
         <Spin spinning={loading}>
           <FormContainer>
-            <EditForm data={character as any} onSubmit={onSubmit} />
+            <CharacterForm data={character} onSubmit={onSubmit} />
           </FormContainer>
         </Spin>
       </Drawer>
+
+      {/* Cancel editing confirmation dialog */}
+      <Modal
+        title={
+          <FormattedMessage
+            id={isEdit ? 'common.cancelEditing' : 'common.cancelCreating'}
+          />
+        }
+        visible={cancelEditingConfirmation}
+        okText={<FormattedMessage id="common.cancel" />}
+        onOk={() => onCancel()}
+        cancelText={<FormattedMessage id="common.proceed" />}
+        onCancel={() => setCancelEditingConfirmation(false)}
+      >
+        <p>
+          <FormattedMessage
+            id={
+              isEdit
+                ? 'common.cancelEditingMessage'
+                : 'common.cancelCreatingMessage'
+            }
+          />
+        </p>
+      </Modal>
     </Box>
   )
 }
@@ -195,7 +245,9 @@ export function useCharacterDeletion({
       title={<FormattedMessage id="character.delete" />}
       visible={!!character}
       onOk={onSubmitHandler}
+      okText={<FormattedMessage id="common.yes" />}
       onCancel={onClose}
+      cancelText={<FormattedMessage id="common.no" />}
     >
       <p>
         <FormattedMessage

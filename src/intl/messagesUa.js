@@ -19,6 +19,10 @@ export const messages = {
   'common.includeOld': 'Включно зі старими',
   'common.yes': 'Так',
   'common.no': 'Ні',
+  'common.previous': 'Попередній',
+  'common.next': 'Наступний',
+  'common.today': 'Сьогодні',
+  'common.view': 'Перегляд',
 
   'menu.calendar': 'Календар',
   'menu.dashboard': 'Головна',
@@ -41,6 +45,22 @@ export const messages = {
   'character.create.success': 'Персонаж створений',
   'character.note.placeholder':
     'Тут ви можете ввести нотатки для персонажа які будуть публічно доступні',
+  'character.class.placeholder': 'Клас',
+  'character.class.name.barbarian': 'Варвар (Barbarian)',
+  'character.class.name.bard': 'Бард (Bard)',
+  'character.class.name.cleric': 'Жрець (Cleric)',
+  'character.class.name.druid': 'Друїд (Druid)',
+  'character.class.name.fighter': 'Воїн (Fighter)',
+  'character.class.name.monk': 'Монах (Monk)',
+  'character.class.name.paladin': 'Паладин (Paladin)',
+  'character.class.name.ranger': 'Рейнджер (Ranger)',
+  'character.class.name.rogue': 'Шахрай (Rogue)',
+  'character.class.name.sorcerer': 'Чародій (Sorcerer)',
+  'character.class.name.warlock': 'Чорнокнижник (Warlock)',
+  'character.class.name.wizard': 'Чаклун (Wizard)',
+  'characters.addButton.label': 'Створити персонаж',
+  'characters.emptyList.placeholder':
+    'У вас немає жодного персонажа. Створіть персонажа для гри.',
 
   'participation.registrationIsClosed': 'Реєстрація закрита',
   'participation.loginToRegister':
@@ -92,6 +112,10 @@ export const messages = {
   'gameForm.gameEdited': 'Гра оновлена',
   'gameForm.requestError': 'Помилка під час збереження даних: {message}',
 
+  'gamesList.createBtn.title': 'Створити гру',
+
+  'game.leaveBtn.label': 'Покинути гру',
+
   'login.validation.emptyUsername':
     'Ім`я користувача (псевдонім) має бути не пустим в Telegram профілі',
 
@@ -105,4 +129,18 @@ export const messages = {
   'hosted.delete': 'Ви дійсно хочете видалити гру?',
 
   'myGame.noData': 'Ви не граєте в жодну гру!',
+
+  'settings.signOutBtn.label': 'Вихід',
+
+  'users.role.addBtn.label': 'Нова роль',
+  'users.role.removeDialog.title': 'Видалити роль',
+  'users.role.removeDialog.content':
+    'Ви впевненні що хочете видалити {roleName} роль у {username}?',
+  'users.role.addDialog.title': 'Додати роль',
+  'users.role.addDialog.content': 'Вибрана роль буде додана до {username}',
+  'users.search.placeholder': 'Введіть логін для пошуку',
+  'users.list.header.avatar': 'Аватар',
+  'users.list.header.name': "Ім'я",
+  'users.list.header.username': 'Логін',
+  'users.list.header.roles': 'Ролі',
 }
