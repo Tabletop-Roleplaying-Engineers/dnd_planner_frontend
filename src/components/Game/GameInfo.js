@@ -38,7 +38,7 @@ export const GameInfo = ({ game }) => {
   const format = useDateFormat()
   const starting =
     typeof game.startingDate === 'string'
-      ? new Date(parseInt(game.startingDate, 10))
+      ? new Date(game.startingDate)
       : game.startingDate
 
   return (
