@@ -75,7 +75,7 @@ export const isTesting = () => {
 }
 
 export const parseGame = (game: Game) => {
-  const date = new Date(parseInt(game.startingDate, 10))
+  const date = new Date(game.startingDate)
 
   return {
     ...game,
