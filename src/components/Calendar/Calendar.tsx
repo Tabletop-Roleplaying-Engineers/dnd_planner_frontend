@@ -20,8 +20,8 @@ import { Game } from 'types/game'
 
 interface CalendarProps {
   games: Game[]
-  onCellClick: () => void
-  onRangeChanged: () => void
+  onCellClick: (data: { date: Date; games: Game[] }) => void
+  onRangeChanged: (from: Date | null, to: Date | null) => void
 }
 export const Calendar = ({
   games,
@@ -30,8 +30,11 @@ export const Calendar = ({
 }: CalendarProps) => {
   const groupedGames = parseAndGroupGames(games)
   const [date, setDate] = useState(new Date())
-  const [view, setView] = useState()
-  const [range, setRange] = useState({ from: null, to: null })
+  const [view, setView] = useState<ViewType>()
+  const [range, setRange] = useState<{ from: Date | null; to: Date | null }>({
+    from: null,
+    to: null,
+  })
   const navHandler = useCallback(
     (date, value) => {
       const incrementFn = view === ViewType.MOBILE ? addWeeks : addMonths
@@ -50,7 +53,7 @@ export const Calendar = ({
     [onCellClick],
   )
   const renderCell = useCallback(
-    ({ date: currentDate }) => {
+    ({ date: currentDate }: { date: Date }) => {
       const thisDayGames = groupedGames[format(currentDate, 'yyyy-MM-dd')] || []
 
       return (
@@ -153,7 +156,7 @@ const WeekDay = styled.div`
   text-align: right;
 `
 
-const CalendarCell = styled.div`
+const CalendarCell = styled.div<{ today: boolean }>`
   position: relative;
   border-top: 2px solid #c4c4c4;
   margin: 0 4px;
