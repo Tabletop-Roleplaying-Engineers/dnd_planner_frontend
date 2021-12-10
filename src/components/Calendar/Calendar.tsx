@@ -16,75 +16,19 @@ import { DateRange } from '../DateRange/DateRange'
 import { GamePreview } from '../GamePreview'
 import { parseGame } from '../../utils/common'
 import { Flex } from 'noui/Position'
+import { Game } from 'types/game'
 
-const WeekDay = styled.div`
-  text-align: right;
-`
-
-const CalendarCell = styled.div`
-  position: relative;
-  border-top: 2px solid #c4c4c4;
-  margin: 0 4px;
-  display: flex;
-  height: 150px;
-  overflow: hidden;
-
-  :hover {
-    background-color: #ffdbda;
-  }
-  ${(props) =>
-    props.today &&
-    css`
-      border-color: #e61721;
-    `}
-
-  & .ant-carousel .slick-slide {
-    height: 150px;
-    overflow: hidden;
-  }
-
-  & .ant-carousel-vertical .slick-dots-right {
-    right: -5px;
-
-    li button::before {
-      display: none;
-    }
-
-    li button {
-      background: black;
-      width: 5px;
-      border-radius: 5px;
-    }
-
-    li.slick-active button {
-      background: #e40712;
-      width: 5px;
-    }
-  }
-`
-
-const DateBlock = styled.div`
-  position: absolute;
-  right: -10px;
-  top: 0;
-  z-index: 1;
-`
-
-const CellLeft = styled.div`
-  width: calc(100% - 10px);
-  word-break: break-word;
-`
-
-const CarouselBlock = styled.div`
-  height: 146px;
-`
-
-const groupByDate = R.groupBy(R.prop('dateKey'))
-
-const parseGames = R.pipe(R.map(parseGame), groupByDate)
-
-export const Calendar = ({ games, onCellClick, onRangeChanged = () => {} }) => {
-  const groupedGames = parseGames(games)
+interface CalendarProps {
+  games: Game[]
+  onCellClick: () => void
+  onRangeChanged: () => void
+}
+export const Calendar = ({
+  games,
+  onCellClick,
+  onRangeChanged = () => {},
+}: CalendarProps) => {
+  const groupedGames = parseAndGroupGames(games)
   const [date, setDate] = useState(new Date())
   const [view, setView] = useState()
   const [range, setRange] = useState({ from: null, to: null })
@@ -204,3 +148,70 @@ export const Calendar = ({ games, onCellClick, onRangeChanged = () => {} }) => {
     </>
   )
 }
+
+const WeekDay = styled.div`
+  text-align: right;
+`
+
+const CalendarCell = styled.div`
+  position: relative;
+  border-top: 2px solid #c4c4c4;
+  margin: 0 4px;
+  display: flex;
+  height: 150px;
+  overflow: hidden;
+
+  :hover {
+    background-color: #ffdbda;
+  }
+  ${(props) =>
+    props.today &&
+    css`
+      border-color: #e61721;
+    `}
+
+  & .ant-carousel .slick-slide {
+    height: 150px;
+    overflow: hidden;
+  }
+
+  & .ant-carousel-vertical .slick-dots-right {
+    right: -5px;
+
+    li button::before {
+      display: none;
+    }
+
+    li button {
+      background: black;
+      width: 5px;
+      border-radius: 5px;
+    }
+
+    li.slick-active button {
+      background: #e40712;
+      width: 5px;
+    }
+  }
+`
+
+const DateBlock = styled.div`
+  position: absolute;
+  right: -10px;
+  top: 0;
+  z-index: 1;
+`
+
+const CellLeft = styled.div`
+  width: calc(100% - 10px);
+  word-break: break-word;
+`
+
+const CarouselBlock = styled.div`
+  height: 146px;
+`
+
+type ExtendedGame = ReturnType<typeof parseGames>[number]
+const parseGames = R.map(parseGame)
+const groupByDate = R.groupBy<ExtendedGame>((d) => d.dateKey)
+const parseAndGroupGames = R.pipe(parseGames, groupByDate)
