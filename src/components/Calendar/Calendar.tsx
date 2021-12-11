@@ -20,12 +20,12 @@ import { Game } from 'types/game'
 
 interface CalendarProps {
   games: Game[]
-  onCellClick: (data: { date: Date; games: Game[] }) => void
+  onCellClick?: (data: { date: Date; games: Game[] }) => void
   onRangeChanged: (from: Date | null, to: Date | null) => void
 }
 export const Calendar = ({
   games,
-  onCellClick,
+  onCellClick = () => {},
   onRangeChanged = () => {},
 }: CalendarProps) => {
   const groupedGames = parseAndGroupGames(games)

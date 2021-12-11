@@ -99,7 +99,7 @@ export const Field: React.FC<FieldProps> = ({
                     cb()
 
                     return
-                  } catch (error) {
+                  } catch (error: any) {
                     return parseErrors(error)
                   }
                 },
