@@ -66,9 +66,7 @@ const useColumns = ({ onTagClick = () => {} }) => {
         title: intl.formatMessage({ id: 'search.table.starting' }),
         dataIndex: 'startingDate',
         key: 'startingDate',
-        render: (startingDate) => (
-          <TimeColumn time={new Date(parseInt(startingDate))} />
-        ),
+        render: (startingDate) => <TimeColumn time={new Date(startingDate)} />,
       },
       {
         title: intl.formatMessage({ id: 'search.table.tags' }),

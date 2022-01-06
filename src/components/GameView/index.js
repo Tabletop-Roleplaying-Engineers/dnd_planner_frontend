@@ -10,7 +10,7 @@ const StyledImage = styled.img`
 `
 
 const GameView = ({ title, image, startingDate, ...props }) => {
-  const date = new Date(parseInt(startingDate, 10))
+  const date = new Date(startingDate)
   const format = useDateFormat()
 
   return (

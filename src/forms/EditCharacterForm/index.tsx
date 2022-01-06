@@ -128,7 +128,7 @@ const EditCharacterForm: React.FC<Props> = ({ data, onSubmit }) => {
           <Box>
             {/* Name */}
             {isCreating && (
-              <Field name="name" initialValue={data && data.name}>
+              <Field name="name">
                 <Input
                   placeholder={intl.formatMessage({ id: 'common.name' })}
                   data-testid="input-name"

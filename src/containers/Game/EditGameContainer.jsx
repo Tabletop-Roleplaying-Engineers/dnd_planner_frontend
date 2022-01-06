@@ -50,7 +50,6 @@ export const EditGameContainer = ({ game, onUpdated }) => {
             { message: msg },
           ),
         })
-        throw error
       }
     },
     [createGame, game.id, intl, onUpdated, updateGame],

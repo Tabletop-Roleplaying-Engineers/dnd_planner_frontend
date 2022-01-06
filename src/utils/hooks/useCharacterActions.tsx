@@ -63,7 +63,7 @@ export function useCharacterActions(props: Props = defaultProps) {
         setCharacterDrawerVisible(false)
         onEditSuccess(data)
         onEditClose()
-      } catch (error) {
+      } catch (error: any) {
         const message = error.graphQLErrors
           .map((err: any) => err.message)
           .join(' ,')
@@ -105,7 +105,7 @@ export function useCharacterActions(props: Props = defaultProps) {
         }),
       })
       onDeleteSuccess(data)
-    } catch (error) {
+    } catch (error: any) {
       const message = error.graphQLErrors
         .map((err: any) => err.message)
         .join(' ,')
