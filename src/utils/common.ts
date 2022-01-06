@@ -11,7 +11,7 @@ export const convertClassesStringToArray = (classesString: string) => {
 }
 
 const stringToClassesPairs = R.split('&') // 'Bard=2&Bard=2' -> ['Bard=2', 'Bard=2']
-const stringToClassLvlPair: (str: string) => any = (str: string) => {
+const stringToClassLvlPair = (str: string) => {
   // 'Bard=2' -> ['Bard', '2']
   const pair = str.split('=')
 
@@ -21,12 +21,16 @@ const stringToClassLvlPair: (str: string) => any = (str: string) => {
 
   return null
 }
+const rejectNull = <T>(list: T[]) =>
+  list.filter(function (item: T): item is Exclude<T, null> {
+    return item === null
+  })
 const filterEmpty = (str: string) => !!str.length
-const toClassLvlPairs: (str: string) => [string, string][] = R.pipe(
+const toClassLvlPairs = R.pipe(
   stringToClassesPairs,
   R.filter(filterEmpty),
   R.map(stringToClassLvlPair),
-  R.reject(R.isNil),
+  rejectNull,
 )
 
 export const convertClassesObjToString: (
@@ -37,13 +41,7 @@ export const convertClassesObjToString: (
   R.join('&'),
 )
 
-export const convertClassesStringToObj = R.pipe<
-  string,
-  [string, string][],
-  {
-    [index: string]: string
-  }
->(toClassLvlPairs, R.fromPairs)
+export const convertClassesStringToObj = R.pipe(toClassLvlPairs, R.fromPairs)
 
 export const getAvatarLetters = (user: User) => {
   let name = ''
@@ -75,7 +73,7 @@ export const isTesting = () => {
 }
 
 export const parseGame = (game: Game) => {
-  const date = new Date(parseInt(game.startingDate, 10))
+  const date = new Date(game.startingDate)
 
   return {
     ...game,

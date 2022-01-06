@@ -121,7 +121,7 @@ class ClassesSelector extends React.PureComponent<Props, State> {
           (state) => {
             return {
               selectedClasses: R.append(value, state.selectedClasses),
-              value: R.assoc(value, 1, state.value),
+              value: R.assoc(value, '1', state.value),
               isSelectOpen: false,
             }
           },
@@ -202,7 +202,9 @@ class ClassesSelector extends React.PureComponent<Props, State> {
                 onChange={(level) => {
                   if (level) {
                     this.setState(
-                      (state) => ({ value: R.assoc(c, level, state.value) }),
+                      (state) => ({
+                        value: R.assoc(c, level?.toString(), state.value),
+                      }),
                       () =>
                         this.props.onSelect({
                           value: c,
