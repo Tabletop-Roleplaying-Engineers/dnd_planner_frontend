@@ -14,6 +14,7 @@ const UserInfo = ({
       href={`https://t.me/${username}`}
       target="_blank"
       rel="noopener noreferrer"
+      onClick={(e) => e.stopPropagation()}
       {...rest}
     >
       <Avatar size="large" src={avatar} />
