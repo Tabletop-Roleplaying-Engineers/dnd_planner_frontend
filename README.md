@@ -112,6 +112,12 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
 
+## Environment variables
+
+`REACT_APP_API_HTTP_URL`: Backend http endpoint
+`REACT_APP_API_WS_URL`: Backend web socket endpoint
+`REACT_APP_TELEGRAM_BOT_NAME`: Telegram bot name
+
 # TODO:
 
 Remove `react-apollo`
