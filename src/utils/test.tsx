@@ -1,6 +1,6 @@
 import React from 'react'
 import { IntlProvider } from 'react-intl'
-import { messages } from 'intl/messagesUa'
+import { messages } from 'intl/messagesEn'
 
 export function assertElementExist(el: HTMLElement | null): asserts el {
   if (el === null) {
@@ -10,7 +10,7 @@ export function assertElementExist(el: HTMLElement | null): asserts el {
 
 export const TestWrapper: React.FC = ({ children }) => {
   return (
-    <IntlProvider messages={messages} locale="uk">
+    <IntlProvider messages={messages} locale="en">
       {children}
     </IntlProvider>
   )
