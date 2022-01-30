@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
+import { PlusOutlined } from '@ant-design/icons'
 import {
   Table,
   Spin,
@@ -8,7 +9,6 @@ import {
   Avatar,
   Tag,
   Modal,
-  Icon,
   Select,
   Dropdown,
   Menu,
@@ -85,7 +85,7 @@ const RolesList = ({ userRoles, roles = [], user, onChange }) => {
         onClick={() => setAddRoleVisible(true)}
         style={{ background: '#fff', borderStyle: 'dashed', cursor: 'pointer' }}
       >
-        <Icon type="plus" /> <FormattedMessage id="users.role.addBtn.label" />
+        <PlusOutlined /> <FormattedMessage id="users.role.addBtn.label" />
       </Tag>
 
       {/* Delete role modal */}

@@ -1,5 +1,6 @@
 import React from 'react'
-import { Dropdown, Icon } from 'antd'
+import { EllipsisOutlined } from '@ant-design/icons'
+import { Dropdown } from 'antd'
 import { createMenu, MenuItem } from 'ui/shared'
 import { Box } from 'noui/Position'
 
@@ -16,7 +17,7 @@ export const CornerMenu: React.FC<Props> = (props) => {
       {!hide && (
         <Box position="absolute" top={0} right={10}>
           <Dropdown overlay={createMenu(items)} trigger={['click']}>
-            <Icon type="ellipsis" data-testid="corner-menu" />
+            <EllipsisOutlined data-testid="corner-menu" />
           </Dropdown>
         </Box>
       )}

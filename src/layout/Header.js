@@ -1,5 +1,11 @@
 import React, { useContext, useEffect } from 'react'
-import { Button, Dropdown, Icon, Layout, Menu } from 'antd'
+import {
+  CalendarOutlined,
+  HomeOutlined,
+  SearchOutlined,
+  UserOutlined,
+} from '@ant-design/icons'
+import { Button, Dropdown, Layout, Menu } from 'antd'
 import { withRouter } from 'react-router-dom'
 import styled from 'styled-components'
 import { FormattedMessage } from 'react-intl'
@@ -30,28 +36,28 @@ const menu = ({ history }) => (
   >
     <Menu.Item key="calendar">
       <Box inline mr="5px">
-        <Icon type="calendar" />
+        <CalendarOutlined />
       </Box>
       <FormattedMessage id="menu.calendar" />
     </Menu.Item>
 
     <Menu.Item key="dashboard">
       <Box inline mr="5px">
-        <Icon type="home" />
+        <HomeOutlined />
       </Box>
       <FormattedMessage id="menu.dashboard" />
     </Menu.Item>
 
     <Menu.Item key="search">
       <Box inline mr="5px">
-        <Icon type="search" />
+        <SearchOutlined />
       </Box>
       <FormattedMessage id="menu.search" />
     </Menu.Item>
 
     <Menu.Item key="profile">
       <Box inline mr="5px">
-        <Icon type="user" />
+        <UserOutlined />
       </Box>
       <FormattedMessage id="menu.profile" />
     </Menu.Item>
@@ -69,7 +75,7 @@ const TestLoginBtn = () => {
     hash: 'hash',
   }
   const params = Object.keys(authData)
-    .map(key => `${key}=${authData[key]}`)
+    .map((key) => `${key}=${authData[key]}`)
     .join('&')
 
   useEffect(() => {

@@ -1,7 +1,9 @@
 import React, { ReactNode, useCallback } from 'react'
-import { Form } from 'antd'
+import { Form } from '@ant-design/compatible'
+import '@ant-design/compatible/assets/index.css'
 import validate from 'validate.js'
 import * as R from 'ramda'
+import styled from 'styled-components'
 
 interface FormContextValue {
   form: any
@@ -72,44 +74,54 @@ export const Field: React.FC<FieldProps> = ({
   <FormContext.Consumer>
     {({ form, validation }) => {
       return (
-        <Form.Item>
-          {form.getFieldDecorator(name, {
-            initialValue,
-            rules: [
-              {
-                validator: async (r: any, v: any, cb: () => void) => {
-                  const extractErrors: (
-                    errors: Record<string, string[] | undefined>,
-                  ) => string[] = R.propOr<string[]>([], r.field)
-                  const parseErrors = R.pipe(
-                    extractErrors,
-                    (res) => (!R.isEmpty(res) ? R.join(', ', res) : undefined),
-                    // TODO: `R.tap`?
-                    cb,
-                  )
-
-                  if (!r.field) return cb()
-
-                  try {
-                    await validate.async(
-                      { [r.field]: v },
-                      { [r.field]: validation[r.field] },
-                      // { fullMessages: false },
+        <WidthFix>
+          <Form.Item>
+            {form.getFieldDecorator(name, {
+              initialValue,
+              rules: [
+                {
+                  validator: async (r: any, v: any, cb: () => void) => {
+                    const extractErrors: (
+                      errors: Record<string, string[] | undefined>,
+                    ) => string[] = R.propOr<string[]>([], r.field)
+                    const parseErrors = R.pipe(
+                      extractErrors,
+                      (res) =>
+                        !R.isEmpty(res) ? R.join(', ', res) : undefined,
+                      // TODO: `R.tap`?
+                      cb,
                     )
-                    cb()
 
-                    return
-                  } catch (error: any) {
-                    return parseErrors(error)
-                  }
+                    if (!r.field) return cb()
+
+                    try {
+                      await validate.async(
+                        { [r.field]: v },
+                        { [r.field]: validation[r.field] },
+                        // { fullMessages: false },
+                      )
+                      cb()
+
+                      return
+                    } catch (error: any) {
+                      return parseErrors(error)
+                    }
+                  },
                 },
-              },
-            ],
-          })(children)}
-        </Form.Item>
+              ],
+            })(children)}
+          </Form.Item>
+        </WidthFix>
       )
     }}
   </FormContext.Consumer>
 )
 
+const WidthFix = styled.div`
+  .ant-legacy-form-item-control-wrapper {
+    width: 100%;
+  }
+`
+
+// TODO: refactor https://ant.design/docs/react/migration-v4#Component-refactoring
 export default Form.create<Props>()(_Form)

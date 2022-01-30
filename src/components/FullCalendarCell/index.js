@@ -1,3 +1,4 @@
+import { PlusOutlined } from '@ant-design/icons'
 import { Button } from 'antd'
 import React from 'react'
 import { Box, Flex } from 'noui/Position'
@@ -13,24 +14,24 @@ const CellHeader = styled(Flex)`
   padding: 10px 0;
 `
 
-const FullCalendarCell = ({ children, date, showAddGame, onAddGame }) =>
+// TODO: do we use it?
+const FullCalendarCell = ({ children, date, showAddGame, onAddGame }) => (
   <Wrapper>
     <CellHeader my={10} justifyContent="space-between">
-      {
-        showAddGame &&
+      {showAddGame && (
         <Button
           type="primary"
           shape="round"
-          icon="plus"
+          icon={<PlusOutlined />}
           size="small"
           onClick={onAddGame}
         />
-      }
+      )}
       <Msg>{date.format('DD')}</Msg>
-
     </CellHeader>
-    
+
     {children}
   </Wrapper>
+)
 
 export default FullCalendarCell

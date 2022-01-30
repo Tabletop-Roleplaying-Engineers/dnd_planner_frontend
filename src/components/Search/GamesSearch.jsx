@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import styled from 'styled-components'
 import { useIntl, FormattedMessage } from 'react-intl'
-import { Drawer, Table, Input, Tag, Row, Col, Popover, Icon } from 'antd'
+import { ExclamationCircleOutlined } from '@ant-design/icons'
+import { Drawer, Table, Input, Tag, Row, Col, Popover } from 'antd'
 import { Flex, Box } from 'noui/Position'
 import { useDebounce } from 'utils/hooks'
 import { useDateFormat } from 'utils/hooks/useDateFormat'
@@ -87,7 +88,7 @@ const useColumns = ({ onTagClick = () => {} }) => {
 }
 const titlePopoverContent = (
   <Flex alignItems="center">
-    <Icon type="exclamation-circle" />
+    <ExclamationCircleOutlined />
     <Box ml="5px">
       <FormattedMessage id="search.titleInput.tooltip" />
     </Box>
@@ -95,7 +96,7 @@ const titlePopoverContent = (
 )
 const tagPopoverContent = (
   <Flex alignItems="center">
-    <Icon type="exclamation-circle" />
+    <ExclamationCircleOutlined />
     <Box ml="5px">
       <FormattedMessage id="search.tagInput.tooltip" />
     </Box>

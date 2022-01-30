@@ -17,6 +17,8 @@
     "cypress:open": "cypress open"
   },
   "dependencies": {
+    "@ant-design/compatible": "^1.0.0",
+    "@ant-design/icons": "^4.0.0",
     "@apollo/client": "^3.5.8",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
@@ -30,7 +32,7 @@
     "@types/styled-components": "^5.1.4",
     "@types/styled-system": "^5.1.10",
     "@typescript-eslint/parser": "4.6.0",
-    "antd": "^3.13.1",
+    "antd": "^4.0.0",
     "babel-plugin-import": "^1.11.0",
     "cross-env": "^7.0.0",
     "crypto-js": "^3.1.9-1",

@@ -23,7 +23,9 @@ const DateContainer = styled(Box)`
 
 const ItemBody = ({ game }) => (
   <Row>
-    <ParticipantsList characters={game.characters} />
+    <Col span={24}>
+      <ParticipantsList characters={game.characters} />
+    </Col>
     <Col span={24}>
       <GameActions game={game} />
     </Col>
