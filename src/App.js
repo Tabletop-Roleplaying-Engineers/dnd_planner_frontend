@@ -4,15 +4,16 @@ import { Router } from 'react-router-dom'
 import GlobalStyle from 'noui/GlobalStyle'
 import Header from 'layout/Header'
 import Routing, { history } from 'routing'
-import { ApolloProvider } from 'react-apollo'
-import { ApolloProvider as ApolloHooksProvider } from '@apollo/react-hooks'
-import { ApolloClient } from 'apollo-client'
-import { createHttpLink } from 'apollo-link-http'
-import { InMemoryCache } from 'apollo-cache-inmemory'
-import { split } from 'apollo-link'
-import { WebSocketLink } from 'apollo-link-ws'
-import { getMainDefinition } from 'apollo-utilities'
-import { setContext } from 'apollo-link-context'
+import {
+  ApolloProvider,
+  ApolloClient,
+  split,
+  HttpLink,
+  InMemoryCache,
+} from '@apollo/client'
+import { WebSocketLink } from '@apollo/client/link/ws'
+import { getMainDefinition } from '@apollo/client/utilities'
+import { setContext } from '@apollo/client/link/context'
 import { getText } from './utils/storage'
 import { UserContext } from './context/userContext'
 import { decode } from './utils/jwt'
@@ -20,7 +21,7 @@ import { AUTH_STORAGE_KEY } from './constants'
 import { messages } from 'intl/messagesUa'
 import { IntlProvider } from 'react-intl'
 
-const httpLink = createHttpLink({
+const httpLink = new HttpLink({
   uri: process.env.REACT_APP_API_HTTP_URL,
 })
 
@@ -83,23 +84,21 @@ const App = () => {
     <IntlProvider messages={messages} locale="uk" defaultLocale="ua">
       <UserContext.Provider value={contextValue}>
         <ApolloProvider client={client}>
-          <ApolloHooksProvider client={client}>
-            <Router history={history}>
-              <React.Fragment>
-                <GlobalStyle />
+          <Router history={history}>
+            <React.Fragment>
+              <GlobalStyle />
 
-                <Layout>
-                  <Header />
-                  {/*TODO add routing here*/}
-                  <Layout.Content>
-                    <Routing />
-                  </Layout.Content>
+              <Layout>
+                <Header />
+                {/*TODO add routing here*/}
+                <Layout.Content>
+                  <Routing />
+                </Layout.Content>
 
-                  {/*<Layout.Footer>footer</Layout.Footer>*/}
-                </Layout>
-              </React.Fragment>
-            </Router>
-          </ApolloHooksProvider>
+                {/*<Layout.Footer>footer</Layout.Footer>*/}
+              </Layout>
+            </React.Fragment>
+          </Router>
         </ApolloProvider>
       </UserContext.Provider>
     </IntlProvider>

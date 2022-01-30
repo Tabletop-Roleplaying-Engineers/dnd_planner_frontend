@@ -1,17 +1,17 @@
 import React, { useEffect, useContext, useState } from 'react'
 import { withRouter } from 'react-router-dom'
 import qs from 'query-string'
-import { withApollo } from 'react-apollo'
+import { useApolloClient } from '@apollo/client'
 import { Alert } from 'antd'
-import * as R from 'ramda'
 import { SIGN_IN_MUTATION } from 'api'
 import { decode } from '../../utils/jwt'
 import { UserContext } from '../../context/userContext'
 import { Box } from 'noui/Position'
 import { FormattedMessage } from 'react-intl'
 
-const Login = ({ location, history, client }) => {
+const Login = ({ location, history }) => {
   const { setUser } = useContext(UserContext)
+  const client = useApolloClient()
   const [error, setError] = useState(null)
   const [validationError, setValidationError] = useState(null)
 
@@ -92,4 +92,4 @@ const Login = ({ location, history, client }) => {
   return <FormattedMessage id="common.pleaseWait" />
 }
 
-export default R.compose(withRouter, withApollo)(Login)
+export default withRouter(Login)

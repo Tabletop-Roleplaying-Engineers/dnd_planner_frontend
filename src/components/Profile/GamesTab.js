@@ -2,8 +2,7 @@ import React, { useContext } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { Button, Spin, Alert, Empty, Row, Col } from 'antd'
 import * as R from 'ramda'
-import { Mutation } from 'react-apollo'
-import { useQuery } from '@apollo/react-hooks'
+import { useMutation, useQuery } from '@apollo/client'
 import { Flex, Box } from 'noui/Position'
 import Card from 'ui/Card'
 import Character from 'components/Character'
@@ -18,9 +17,28 @@ const getUsersCharacter = (userId, game) => {
 export const GamesTab = () => {
   const { loading, error, data = {}, refetch } = useQuery(
     FETCH_GAMES_USER_PLAY_QUERY,
+    {
+      fetchPolicy: 'cache-and-network',
+    },
   )
   const { user } = useContext(UserContext)
   const { gamesUserPlay = [] } = data
+  const [leaveGameMutation, { loading: leaveLoading }] = useMutation(
+    LEAVE_GAME,
+    {
+      update: () => {
+        refetch()
+      },
+    },
+  )
+  const leaveGame = (game) => {
+    leaveGameMutation({
+      variables: {
+        characterId: getUsersCharacter(user.id, game).id,
+        gameId: game.id,
+      },
+    })
+  }
 
   // TODO: Error and result in the same time
   if (error) {
@@ -38,24 +56,15 @@ export const GamesTab = () => {
             <GameView {...game} />
 
             <Box mt={10}>
-              <Mutation
-                mutation={LEAVE_GAME}
-                variables={{
-                  characterId: getUsersCharacter(user.id, game).id,
-                  gameId: game.id,
-                }}
-                update={() => {
-                  refetch()
-                }}
-              >
-                {(leaveGame, { loading }) => (
-                  <Spin spinning={loading}>
-                    <Button type="primary" size="large" onClick={leaveGame}>
-                      <FormattedMessage id="game.leaveBtn.label" />
-                    </Button>
-                  </Spin>
-                )}
-              </Mutation>
+              <Spin spinning={leaveLoading}>
+                <Button
+                  type="primary"
+                  size="large"
+                  onClick={() => leaveGame(game)}
+                >
+                  <FormattedMessage id="game.leaveBtn.label" />
+                </Button>
+              </Spin>
             </Box>
 
             <Row>

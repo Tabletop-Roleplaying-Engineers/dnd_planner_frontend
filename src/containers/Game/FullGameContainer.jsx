@@ -1,7 +1,7 @@
 import * as R from 'ramda'
 import React, { useCallback, useContext } from 'react'
 import { notification } from 'antd'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/client'
 import { FullGame } from 'components/Game'
 import { UserContext } from 'context/userContext'
 import { REMOVE_CHARACTER_FROM_GAME_MUTATION, PARTICIPATE_GAME } from 'api'
@@ -9,9 +9,9 @@ import { REMOVE_CHARACTER_FROM_GAME_MUTATION, PARTICIPATE_GAME } from 'api'
 export const FullGameContainer = ({ game, onUpdate, onEditClick }) => {
   const { user } = useContext(UserContext)
   const removeCharFromSelectedGame = useCallback(
-    async character => {
+    async (character) => {
       const charIndex = game.characters.findIndex(
-        char => char.id === character.id,
+        (char) => char.id === character.id,
       )
       if (onUpdate) {
         onUpdate({
@@ -24,7 +24,7 @@ export const FullGameContainer = ({ game, onUpdate, onEditClick }) => {
   )
   const [removeFromGame] = useMutation(REMOVE_CHARACTER_FROM_GAME_MUTATION)
   const onRemoveChar = useCallback(
-    async character => {
+    async (character) => {
       try {
         await removeFromGame({
           variables: {
@@ -43,7 +43,7 @@ export const FullGameContainer = ({ game, onUpdate, onEditClick }) => {
   )
   const [participateGame] = useMutation(PARTICIPATE_GAME)
   const onParticipate = useCallback(
-    async character => {
+    async (character) => {
       try {
         await participateGame({
           variables: {

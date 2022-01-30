@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useCallback } from 'react'
 import { Route, Switch } from 'react-router-dom'
-import { withApollo } from 'react-apollo'
+import { useApolloClient } from '@apollo/client'
 import { decode } from '../utils/jwt'
 
 import _history from './history'
@@ -33,10 +33,8 @@ const logout = (setUser) => {
   history.replace('/')
 }
 
-export function Routing(props) {
-  const {
-    client: { mutate },
-  } = props
+export function Routing() {
+  const { mutate } = useApolloClient()
   const { user, setUser } = useContext(UserContext)
   const refreshToken = useCallback(async () => {
     const token = getText(AUTH_STORAGE_KEY)
@@ -93,4 +91,4 @@ export function Routing(props) {
   )
 }
 
-export default withApollo(Routing)
+export default Routing

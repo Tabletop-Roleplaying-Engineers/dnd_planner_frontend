@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useEffect, useState } from 'react'
 import * as R from 'ramda'
 import { Alert, Drawer, notification, Spin } from 'antd'
 import styled from 'styled-components'
-import { useApolloClient, useQuery, useSubscription } from '@apollo/react-hooks'
+import { useApolloClient, useQuery, useSubscription } from '@apollo/client'
 import { useHistory, useParams } from 'react-router'
 import { GamesList } from 'components/GamesList'
 import { Calendar as Planner } from 'components/Calendar'
@@ -89,11 +89,12 @@ export function CalendarContainer() {
             const charIndex = R.findIndex(R.propEq('id', character.id))(
               game.characters,
             )
-            game.characters.splice(charIndex, 1)
             const updatedGame = {
               ...game,
-              startingDate: game.startingDate.getTime().toString(),
+              startingDate: game.startingDate.toISOString(),
+              characters: [game.characters],
             }
+            updatedGame.characters.splice(charIndex, 1)
             const updatedGames = {
               games: [...R.remove(idx, 1, games), updatedGame],
             }
@@ -103,7 +104,7 @@ export function CalendarContainer() {
               data: updatedGames,
             })
 
-            setCurrentGame({ ...game })
+            setCurrentGame({ ...updatedGame })
           },
         })
         .catch((error) => {

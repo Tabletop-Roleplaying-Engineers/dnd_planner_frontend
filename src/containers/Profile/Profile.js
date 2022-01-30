@@ -2,7 +2,6 @@ import React, { useContext, useCallback } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { Tabs, Alert } from 'antd'
 import { Box } from 'noui/Position'
-import { withApollo } from 'react-apollo'
 import {
   GamesTab,
   CharactersTab,
@@ -94,4 +93,4 @@ const Profile = ({ history }) => {
   )
 }
 
-export default withApollo(Profile)
+export default Profile

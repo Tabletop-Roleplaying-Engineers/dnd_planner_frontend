@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect, useCallback } from 'react'
 import { Button, Select, Spin, Alert } from 'antd'
-import { useLazyQuery, useMutation } from '@apollo/react-hooks'
+import { useLazyQuery, useMutation } from '@apollo/client'
 import * as R from 'ramda'
 import isBefore from 'date-fns/isBefore'
 import styled from 'styled-components'

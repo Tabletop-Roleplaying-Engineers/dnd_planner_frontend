@@ -1,6 +1,6 @@
 import React, { useContext, useCallback } from 'react'
 import { notification, Spin } from 'antd'
-import { useQuery, useMutation } from '@apollo/react-hooks'
+import { useQuery, useMutation } from '@apollo/client'
 import { CREATE_GAME_QUERY, UPDATE_GAME_QUERY } from 'api'
 import { UserContext } from '../../context/userContext'
 import GameForm from 'forms/GameForm'

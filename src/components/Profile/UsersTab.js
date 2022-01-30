@@ -13,7 +13,7 @@ import {
   Dropdown,
   Menu,
 } from 'antd'
-import { useQuery, useMutation } from '@apollo/react-hooks'
+import { useQuery, useMutation } from '@apollo/client'
 import { Flex } from 'noui/Position'
 import { useDebounce } from 'utils/hooks'
 import { getAvatarLetters } from 'utils/common'
