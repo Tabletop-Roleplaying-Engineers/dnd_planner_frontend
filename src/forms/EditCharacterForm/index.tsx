@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
 import * as R from 'ramda'
+import { PlusOutlined } from '@ant-design/icons'
 import { Button, Input, Select, Spin, Alert } from 'antd'
 import { useQuery } from '@apollo/client'
 import { Box } from 'noui/Position'
@@ -213,7 +214,7 @@ const EditCharacterForm: React.FC<Props> = ({ data, onSubmit }) => {
                 htmlType="submit"
                 type="primary"
                 shape="round"
-                icon="plus"
+                icon={<PlusOutlined />}
                 size="large"
                 disabled={form.hasErrors() || form.isFieldsValidating()}
                 data-testid="save-btn"

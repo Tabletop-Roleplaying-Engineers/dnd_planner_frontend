@@ -1,10 +1,10 @@
 import React, { useState, useCallback, useRef, useEffect, useMemo } from 'react'
 import * as R from 'ramda'
 import moment from 'moment'
+import { InboxOutlined, PlusOutlined } from '@ant-design/icons'
 import {
   Button,
   Upload,
-  Icon,
   Input,
   Select,
   DatePicker,
@@ -222,7 +222,7 @@ const GameForm = (props) => {
                 ) : (
                   <>
                     <Msg className="ant-upload-drag-icon">
-                      <Icon type="inbox" />
+                      <InboxOutlined />
                     </Msg>
                     <Msg className="ant-upload-text">
                       <FormattedMessage id="gameForm.image.upload" />
@@ -397,7 +397,7 @@ const GameForm = (props) => {
                   style={{ background: '#fff', borderStyle: 'dashed' }}
                   onClick={handleNewTagClick}
                 >
-                  <Icon type="plus" /> <FormattedMessage id="gameForm.newTag" />
+                  <PlusOutlined /> <FormattedMessage id="gameForm.newTag" />
                 </Tag>
               )}
             </Col>

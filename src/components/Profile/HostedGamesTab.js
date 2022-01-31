@@ -1,7 +1,12 @@
 import React, { useContext, useState, useCallback } from 'react'
 import { useQuery, useMutation } from '@apollo/client'
 import { FormattedMessage } from 'react-intl'
-import { Alert, Spin, Card, Icon, Popconfirm, Empty, Checkbox } from 'antd'
+import {
+  DeleteOutlined,
+  EditOutlined,
+  ExclamationCircleOutlined,
+} from '@ant-design/icons'
+import { Alert, Spin, Card, Popconfirm, Empty, Checkbox } from 'antd'
 import * as R from 'ramda'
 import styled from 'styled-components'
 import { FETCH_HOSTED_GAMES_QUERY, DELETE_GAME } from 'api'
@@ -85,8 +90,7 @@ export const HostedGamesTab = () => {
               <Wrapper
                 width="100%"
                 actions={[
-                  <Icon
-                    type="edit"
+                  <EditOutlined
                     key="edit"
                     onClick={() => {
                       setGameForEdit(game)
@@ -96,17 +100,14 @@ export const HostedGamesTab = () => {
                   <Popconfirm
                     title={<FormattedMessage id="hosted.delete" />}
                     icon={
-                      <Icon
-                        type="exclamation-circle"
-                        style={{ color: 'red' }}
-                      />
+                      <ExclamationCircleOutlined style={{ color: 'red' }} />
                     }
                     onConfirm={() => deleteGame(game)}
                     okText={<FormattedMessage id="common.yes" />}
                     disabled={deleteLoading}
                     cancelText={<FormattedMessage id="common.no" />}
                   >
-                    <Icon type="delete" key="delete" />
+                    <DeleteOutlined key="delete" />
                   </Popconfirm>,
                 ]}
               >

@@ -1,7 +1,13 @@
 import React, { useCallback } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
 import * as R from 'ramda'
-import { Dropdown, Icon, Spin, Alert, Button, Empty } from 'antd'
+import {
+  DeleteOutlined,
+  EditOutlined,
+  EllipsisOutlined,
+  PlusOutlined,
+} from '@ant-design/icons'
+import { Dropdown, Spin, Alert, Button, Empty } from 'antd'
 import { useQuery } from '@apollo/client'
 import styled from 'styled-components'
 import { Flex, Box } from 'noui/Position'
@@ -27,13 +33,13 @@ const CharacterMenu = ({ onEditClick, character, onDeleteClick }) => {
         overlay={createMenu([
           {
             label: intl.formatMessage({ id: 'common.edit' }),
-            icon: 'edit',
+            icon: <EditOutlined />,
             onClick: () => onEditClick(character),
             'data-testid': 'character-menu-edit',
           },
           {
             label: intl.formatMessage({ id: 'common.delete' }),
-            icon: 'delete',
+            icon: <DeleteOutlined />,
             onClick: async () => {
               onDeleteClick(character)
             },
@@ -42,7 +48,7 @@ const CharacterMenu = ({ onEditClick, character, onDeleteClick }) => {
         ])}
         trigger={['click']}
       >
-        <Icon type="ellipsis" data-testid="character-menu" />
+        <EllipsisOutlined data-testid="character-menu" />
       </Dropdown>
     </Box>
   )
@@ -120,7 +126,7 @@ export const CharactersTab = () => {
             style={{ width: '100%', margin: '20px 0' }}
             type="primary"
             shape="round"
-            icon="plus"
+            icon={<PlusOutlined />}
             size="large"
             onClick={createCharacter}
             data-testid="add-character-btn"

@@ -1,6 +1,7 @@
 import React, { useCallback, useContext } from 'react'
 import * as R from 'ramda'
 import { Col, Row, Tooltip } from 'antd'
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import styled from 'styled-components'
 import { useHistory } from 'react-router-dom'
 import { useIntl } from 'react-intl'
@@ -89,13 +90,13 @@ export const CharacterView: React.FC<IProps> = (props) => {
                 items={[
                   {
                     label: intl.formatMessage({ id: 'common.edit' }),
-                    icon: 'edit',
+                    icon: <EditOutlined />,
                     onClick: () => editCharacter(character),
                     'data-testid': 'character-menu-edit',
                   },
                   {
                     label: intl.formatMessage({ id: 'common.delete' }),
-                    icon: 'delete',
+                    icon: <DeleteOutlined />,
                     onClick: async () => deleteCharacter(character),
                     'data-testid': 'character-menu-delete',
                   },

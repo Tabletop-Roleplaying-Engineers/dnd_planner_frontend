@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { shadow, ShadowProps } from 'styled-system'
 import * as R from 'ramda'
+import { UserOutlined } from '@ant-design/icons'
 import { Avatar, Tooltip } from 'antd'
 import { Flex, Box } from 'noui/Position'
 import { Label } from 'ui/Text'
@@ -102,7 +103,7 @@ const Character: React.FC<CharacterProps> = ({
             {/* Character avatar */}
             <Box position="relative">
               {avatar && <StyledImage src={avatar} />}
-              {!avatar && <Avatar size={40} icon="user" />}
+              {!avatar && <Avatar size={40} icon={<UserOutlined />} />}
 
               <Tooltip title={fname}>
                 {logo && <StyledFactionLogo src={logo} />}
