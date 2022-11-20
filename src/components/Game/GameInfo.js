@@ -103,7 +103,9 @@ export const GameInfo = ({ game }) => {
                     [game.lvlFrom]: game.lvlFrom,
                     [game.lvlTo]: game.lvlTo,
                   }}
-                  tipFormatter={null}
+                  tooltip={{
+                    formatter: null,
+                  }}
                 />
               </LvlSlider>
             </Box>
