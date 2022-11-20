@@ -11,7 +11,6 @@ import {
   Modal,
   Select,
   Dropdown,
-  Menu,
 } from 'antd'
 import { useQuery, useMutation } from '@apollo/client'
 import { Flex } from 'noui/Position'
@@ -162,11 +161,6 @@ const AvatarColumn = ({ url, user, setOnBehalfToken }) => {
       variables: { userId: user.id },
     })
   }, [signInOnBehalfMutation, user])
-  const userMenu = (
-    <Menu>
-      <Menu.Item onClick={signIn}>Sign in behalf this user</Menu.Item>
-    </Menu>
-  )
 
   useEffect(() => {
     if (result.data && result.data.signInOnBehalf) {
@@ -175,7 +169,17 @@ const AvatarColumn = ({ url, user, setOnBehalfToken }) => {
   }, [result, setOnBehalfToken])
 
   return (
-    <Dropdown overlay={userMenu} trigger={['contextMenu']}>
+    <Dropdown
+      menu={{
+        items: [
+          {
+            onClick: signIn,
+            label: 'Sign in behalf this user',
+          },
+        ],
+      }}
+      trigger={['contextMenu']}
+    >
       <Avatar src={url}>{getAvatarLetters(user)}</Avatar>
     </Dropdown>
   )
