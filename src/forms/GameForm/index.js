@@ -14,18 +14,16 @@ import {
   Row,
   Col,
   Tag,
-  ConfigProvider,
   Form,
 } from 'antd'
 import { Box, Flex } from 'noui/Position'
 import { Msg, Header } from 'ui/Text'
 import styled from 'styled-components'
 import { playersInGame } from 'config'
-import uk_UA from 'antd/locale/uk_UA'
 import 'moment/locale/uk'
 import { UsersSelect } from 'components/UsersSelect/UsersSelect'
 import { useIntl, FormattedMessage } from 'react-intl'
-
+import dayjs from 'dayjs'
 // Needs to show ant.design `DatePicked` with UA formatting
 moment.locale('uk')
 
@@ -65,6 +63,14 @@ const GameForm = (props) => {
   const [showTagInput, setShowTagInput] = useState()
   const inputTag = useRef(null)
 
+  const initialDate = useMemo(() => {
+    return (
+      initialValues &&
+      initialValues.startingDate &&
+      dayjs(initialValues.startingDate)
+    )
+  }, [initialValues])
+
   const [image, setImage] = useState(initialValues ? initialValues.image : null)
   const [fileList, setFileList] = useState([])
   const [userId, setUserId] = useState()
@@ -86,13 +92,12 @@ const GameForm = (props) => {
   return (
     <Form
       onFinish={({ date, time, range, ...data }, form) => {
+        const dateToSave = date.minute(time.minute()).hour(time.hour())
         const game = {
           id: initialValues.id,
           ...data,
           image: image,
-          startingDate: new Date(
-            `${date.format('YYYY-MM-DD')} ${time.format('HH:mm')}`,
-          ),
+          startingDate: dateToSave,
           lvlFrom: range[0],
           lvlTo: range[1],
           tags,
@@ -238,54 +243,42 @@ const GameForm = (props) => {
         <Row gutter={10}>
           {/* Date */}
           <Col xs={24} md={8}>
-            <ConfigProvider locale={uk_UA}>
-              <Form.Item
-                name="date"
-                initialValue={
-                  initialValues &&
-                  initialValues.startingDate &&
-                  moment(initialValues.startingDate)
-                }
-                rules={[
-                  {
-                    required: true,
-                    message: intl.formatMessage({
-                      id: 'validation.date.required',
-                    }),
-                  },
-                ]}
-              >
-                <DatePicker style={{ width: '100%' }} />
-              </Form.Item>
-            </ConfigProvider>
+            <Form.Item
+              name="date"
+              initialValue={initialDate}
+              rules={[
+                {
+                  required: true,
+                  message: intl.formatMessage({
+                    id: 'validation.date.required',
+                  }),
+                },
+              ]}
+            >
+              <DatePicker style={{ width: '100%' }} />
+            </Form.Item>
           </Col>
 
           {/* Time */}
           <Col xs={24} md={8}>
-            <ConfigProvider locale={uk_UA}>
-              <Form.Item
-                name="time"
-                initialValue={
-                  initialValues &&
-                  initialValues.startingDate &&
-                  moment(initialValues.startingDate)
-                }
-                rules={[
-                  {
-                    required: true,
-                    message: intl.formatMessage({
-                      id: 'validation.time.required',
-                    }),
-                  },
-                ]}
-              >
-                <TimePicker
-                  format="HH:mm"
-                  minuteStep={10}
-                  style={{ width: '100%' }}
-                />
-              </Form.Item>
-            </ConfigProvider>
+            <Form.Item
+              name="time"
+              initialValue={initialDate}
+              rules={[
+                {
+                  required: true,
+                  message: intl.formatMessage({
+                    id: 'validation.time.required',
+                  }),
+                },
+              ]}
+            >
+              <TimePicker
+                format="HH:mm"
+                minuteStep={10}
+                style={{ width: '100%' }}
+              />
+            </Form.Item>
           </Col>
 
           {/* Players */}

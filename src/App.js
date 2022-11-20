@@ -20,7 +20,9 @@ import { decode } from './utils/jwt'
 import { AUTH_STORAGE_KEY } from './constants'
 import { messages } from 'intl/messagesUa'
 import { IntlProvider } from 'react-intl'
+import locale from 'antd/locale/uk_UA'
 import 'antd/dist/reset.css'
+import 'dayjs/locale/uk'
 
 const httpLink = new HttpLink({
   uri: process.env.REACT_APP_API_HTTP_URL,
@@ -82,7 +84,7 @@ const App = () => {
   }
 
   return (
-    <ConfigProvider theme={antdTheme}>
+    <ConfigProvider theme={antdTheme} locale={locale}>
       <IntlProvider messages={messages} locale="uk" defaultLocale="ua">
         <UserContext.Provider value={contextValue}>
           <ApolloProvider client={client}>
