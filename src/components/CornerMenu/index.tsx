@@ -17,7 +17,12 @@ export const CornerMenu = (props: Props) => {
       {children}
       {!hide && (
         <Box position="absolute" top={0} right={10}>
-          <Dropdown overlay={createMenu(items)} trigger={['click']}>
+          <Dropdown
+            menu={{
+              items: createMenu(items),
+            }}
+            trigger={['click']}
+          >
             <EllipsisOutlined data-testid="corner-menu" />
           </Dropdown>
         </Box>

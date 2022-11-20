@@ -30,22 +30,24 @@ const CharacterMenu = ({ onEditClick, character, onDeleteClick }) => {
   return (
     <Box position="absolute" top={0} right={10}>
       <Dropdown
-        overlay={createMenu([
-          {
-            label: intl.formatMessage({ id: 'common.edit' }),
-            icon: <EditOutlined />,
-            onClick: () => onEditClick(character),
-            'data-testid': 'character-menu-edit',
-          },
-          {
-            label: intl.formatMessage({ id: 'common.delete' }),
-            icon: <DeleteOutlined />,
-            onClick: async () => {
-              onDeleteClick(character)
+        menu={{
+          items: createMenu([
+            {
+              label: intl.formatMessage({ id: 'common.edit' }),
+              icon: <EditOutlined />,
+              onClick: () => onEditClick(character),
+              'data-testid': 'character-menu-edit',
             },
-            'data-testid': 'character-menu-delete',
-          },
-        ])}
+            {
+              label: intl.formatMessage({ id: 'common.delete' }),
+              icon: <DeleteOutlined />,
+              onClick: async () => {
+                onDeleteClick(character)
+              },
+              'data-testid': 'character-menu-delete',
+            },
+          ]),
+        }}
         trigger={['click']}
       >
         <EllipsisOutlined data-testid="character-menu" />
