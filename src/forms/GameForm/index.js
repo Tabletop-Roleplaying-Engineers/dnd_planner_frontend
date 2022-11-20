@@ -339,7 +339,11 @@ const GameForm = (props) => {
 
         <Row>
           <Col span={12}>
-            <Form.Item name="share" initialValue={false}>
+            <Form.Item
+              name="share"
+              valuePropName="checked"
+              initialValue={false}
+            >
               <Checkbox disabled={!showSharing}>
                 <FormattedMessage id="gameForm.share" />
               </Checkbox>
