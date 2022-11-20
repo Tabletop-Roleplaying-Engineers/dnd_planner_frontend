@@ -42,6 +42,7 @@ export const EditGameDrawer = ({
         onOk={() => onCancelEditing(false)}
         cancelText={<FormattedMessage id="common.proceed" />}
         onCancel={() => setCancelEditingConfirmation(false)}
+        destroyOnClose={true}
       >
         <p>
           <FormattedMessage
