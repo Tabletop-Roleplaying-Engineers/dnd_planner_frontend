@@ -91,7 +91,7 @@ const RolesList = ({ userRoles, roles = [], user, onChange }) => {
       {/* Delete role modal */}
       <Modal
         title={<FormattedMessage id="users.role.removeDialog.title" />}
-        visible={!!roleForDelete}
+        open={!!roleForDelete}
         onOk={() => deleteRole(roleForDelete)}
         okText={<FormattedMessage id="common.yes" />}
         cancelText={<FormattedMessage id="common.no" />}
@@ -119,7 +119,7 @@ const RolesList = ({ userRoles, roles = [], user, onChange }) => {
       {/* Add role modal */}
       <Modal
         title={<FormattedMessage id="users.role.addDialog.title" />}
-        visible={addRoleVisible}
+        open={addRoleVisible}
         onOk={() => addRole(newRole)}
         confirmLoading={mutationInProgress}
         onCancel={onCancelClick}

@@ -9,9 +9,8 @@ export const EditGameDrawer = ({
   onUpdated = () => {},
   onCancel = () => {},
 }) => {
-  const [cancelEditingConfirmation, setCancelEditingConfirmation] = useState(
-    false,
-  )
+  const [cancelEditingConfirmation, setCancelEditingConfirmation] =
+    useState(false)
   const onCancelEditing = useCallback(() => {
     onCancel()
     setCancelEditingConfirmation(false)
@@ -25,7 +24,7 @@ export const EditGameDrawer = ({
         placement="right"
         closable={false}
         destroyOnClose={true}
-        visible={!!game}
+        open={!!game}
         onClose={() => setCancelEditingConfirmation(true)}
       >
         <EditGameContainer game={game || {}} onUpdated={onUpdated} />
@@ -38,7 +37,7 @@ export const EditGameDrawer = ({
             id={isEdit ? 'common.cancelEditing' : 'common.cancelCreating'}
           />
         }
-        visible={cancelEditingConfirmation && game}
+        open={cancelEditingConfirmation && game}
         okText={<FormattedMessage id="common.cancel" />}
         onOk={() => onCancelEditing(false)}
         cancelText={<FormattedMessage id="common.proceed" />}

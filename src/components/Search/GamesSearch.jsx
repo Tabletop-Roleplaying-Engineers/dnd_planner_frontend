@@ -200,7 +200,7 @@ export const GamesSearch = ({
         width={modalWidth()}
         placement="right"
         closable={false}
-        visible={!!selected}
+        open={!!selected}
         onClose={() => setSelected(null)}
       >
         {selected && (

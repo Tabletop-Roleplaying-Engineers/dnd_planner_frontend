@@ -273,7 +273,7 @@ export function CalendarContainer() {
         width={modalWidth()}
         placement="right"
         closable={false}
-        visible={visibleDrawer === DRAWERS.GAMES_LIST}
+        open={visibleDrawer === DRAWERS.GAMES_LIST}
         onClose={closeDrawer}
       >
         <GamesList
@@ -292,7 +292,7 @@ export function CalendarContainer() {
         width={modalWidth()}
         placement="right"
         closable={false}
-        visible={visibleDrawer === DRAWERS.GAME}
+        open={visibleDrawer === DRAWERS.GAME}
         onClose={onGameDrawerClose}
       >
         {currentGame && (
