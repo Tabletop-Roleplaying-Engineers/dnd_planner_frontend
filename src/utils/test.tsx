@@ -8,7 +8,7 @@ export function assertElementExist(el: HTMLElement | null): asserts el {
   }
 }
 
-export const TestWrapper: React.FC = ({ children }) => {
+export const TestWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
     <IntlProvider messages={messages} locale="en">
       {children}

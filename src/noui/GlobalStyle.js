@@ -1,7 +1,6 @@
 import { createGlobalStyle } from 'styled-components'
 
 const GlobalStyle = createGlobalStyle`
-  @import url('https://fonts.googleapis.com/css?family=Exo+2:400,400i,700');
 
   * {
     box-sizing: border-box;
@@ -9,6 +8,12 @@ const GlobalStyle = createGlobalStyle`
 
     margin: 0;
     padding: 0;
+  }
+
+  body {
+    color: rgba(0,0,0,.65);
+    line-height: 1.5;
+    font-variant: tabular-nums;
   }
 
   .ant-layout {
@@ -27,7 +32,7 @@ const GlobalStyle = createGlobalStyle`
     //right: 50%;
     //transform: translateX(50%);
 
-    display: ${() => localStorage.getItem('AUTH_DATA') ? 'none' : 'block'};
+    display: ${() => (localStorage.getItem('AUTH_DATA') ? 'none' : 'block')};
 
     .btn {
       background-color: #E40712;
