@@ -90,7 +90,7 @@ const App = () => {
           <ApolloProvider client={client}>
             <BrowserRouter>
               <React.Fragment>
-                <GlobalStyle />
+                <GlobalStyle user={user} />
 
                 <Layout>
                   <Header />

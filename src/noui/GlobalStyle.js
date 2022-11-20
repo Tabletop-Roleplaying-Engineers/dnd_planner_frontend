@@ -32,7 +32,7 @@ const GlobalStyle = createGlobalStyle`
     //right: 50%;
     //transform: translateX(50%);
 
-    display: ${() => (localStorage.getItem('AUTH_DATA') ? 'none' : 'block')};
+    display: ${({ user }) => (user ? 'none' : 'block')};
 
     .btn {
       background-color: #E40712;

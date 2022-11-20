@@ -1,5 +1,6 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useEffect } from 'react'
 import { FormattedMessage } from 'react-intl'
+import { useNavigate } from 'react-router-dom'
 import { Tabs, Alert } from 'antd'
 import { Box } from 'noui/Position'
 import {
@@ -12,7 +13,8 @@ import {
 import { UserContext } from '../../context/userContext'
 import { ACTIONS } from '../../constants'
 
-const Profile = ({ history }) => {
+const Profile = () => {
+  const navigate = useNavigate()
   const { user, setUser } = useContext(UserContext)
   const setOnBehalfToken = useCallback((token) => {
     const originalToken = localStorage.getItem('AUTH_DATA')
@@ -28,18 +30,19 @@ const Profile = ({ history }) => {
     // eslint-disable-next-line no-restricted-globals
     location.reload()
   }, [originalToken])
-  if (!user) {
-    history.replace('/')
 
-    return null
-  }
-  const canManageRoles = user.actions.indexOf(ACTIONS.MANAGE_ROLES) >= 0
+  useEffect(() => {
+    if (!user) {
+      navigate('/')
+    }
+  }, [navigate, user])
 
   if (!user) {
     return (
       <Alert message="You have to login to enter this page" type="warning" />
     )
   }
+  const canManageRoles = user.actions.indexOf(ACTIONS.MANAGE_ROLES) >= 0
 
   return (
     <Box height="90vh" pt="24px">
