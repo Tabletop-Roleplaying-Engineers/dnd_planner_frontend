@@ -5,7 +5,7 @@ import {
   SearchOutlined,
   UserOutlined,
 } from '@ant-design/icons'
-import { Button, Dropdown, Layout, Menu } from 'antd'
+import { Button, Dropdown, Layout } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { FormattedMessage } from 'react-intl'
@@ -29,42 +29,63 @@ const NavigationMenu = () => {
   const navigate = useNavigate()
 
   return (
-    <Menu
-      onClick={({ key, domEvent }) => {
-        domEvent.preventDefault()
-        domEvent.stopPropagation()
+    <Dropdown
+      trigger={['click']}
+      placement="bottomRight"
+      menu={{
+        onClick: ({ key, domEvent }) => {
+          domEvent.preventDefault()
+          domEvent.stopPropagation()
 
-        navigate('/' + key)
+          navigate('/' + key)
+        },
+        items: [
+          {
+            key: 'calendar',
+            itemIcon: <CalendarOutlined />,
+            label: (
+              <Box inline mr="5px">
+                <FormattedMessage id="menu.calendar" />
+              </Box>
+            ),
+          },
+
+          {
+            key: 'dashboard',
+            itemIcon: <HomeOutlined />,
+            label: (
+              <Box inline mr="5px">
+                <FormattedMessage id="menu.dashboard" />
+              </Box>
+            ),
+          },
+
+          {
+            key: 'search',
+            itemIcon: <SearchOutlined />,
+            label: (
+              <Box inline mr="5px">
+                <FormattedMessage id="menu.search" />
+              </Box>
+            ),
+          },
+
+          {
+            key: 'profile',
+            itemIcon: <UserOutlined />,
+            label: (
+              <Box inline mr="5px">
+                <FormattedMessage id="menu.profile" />
+              </Box>
+            ),
+          },
+        ],
       }}
     >
-      <Menu.Item key="calendar">
-        <Box inline mr="5px">
-          <CalendarOutlined />
-        </Box>
-        <FormattedMessage id="menu.calendar" />
-      </Menu.Item>
-
-      <Menu.Item key="dashboard">
-        <Box inline mr="5px">
-          <HomeOutlined />
-        </Box>
-        <FormattedMessage id="menu.dashboard" />
-      </Menu.Item>
-
-      <Menu.Item key="search">
-        <Box inline mr="5px">
-          <SearchOutlined />
-        </Box>
-        <FormattedMessage id="menu.search" />
-      </Menu.Item>
-
-      <Menu.Item key="profile">
-        <Box inline mr="5px">
-          <UserOutlined />
-        </Box>
-        <FormattedMessage id="menu.profile" />
-      </Menu.Item>
-    </Menu>
+      <Button style={{ padding: '0 10px' }} type="primary">
+        <FormattedMessage id="menu.buttonLabel" />
+      </Button>
+    </Dropdown>
   )
 }
 
@@ -107,15 +128,7 @@ const Header = () => {
 
         {user && (
           <span data-testid="profile-drop-menu">
-            <Dropdown
-              trigger={['click']}
-              placement="bottomRight"
-              overlay={<NavigationMenu />}
-            >
-              <Button style={{ padding: '0 10px' }} type="primary">
-                <FormattedMessage id="menu.buttonLabel" />
-              </Button>
-            </Dropdown>
+            <NavigationMenu />
           </span>
         )}
 
