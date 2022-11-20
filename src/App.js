@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { Layout } from 'antd'
-import { Router } from 'react-router-dom'
+import { ConfigProvider, Layout } from 'antd'
+import { BrowserRouter } from 'react-router-dom'
 import GlobalStyle from 'noui/GlobalStyle'
 import Header from 'layout/Header'
-import Routing, { history } from 'routing'
+import Routing from 'routing'
 import {
   ApolloProvider,
   ApolloClient,
@@ -20,6 +20,7 @@ import { decode } from './utils/jwt'
 import { AUTH_STORAGE_KEY } from './constants'
 import { messages } from 'intl/messagesUa'
 import { IntlProvider } from 'react-intl'
+import 'antd/dist/reset.css'
 
 const httpLink = new HttpLink({
   uri: process.env.REACT_APP_API_HTTP_URL,
@@ -81,28 +82,45 @@ const App = () => {
   }
 
   return (
-    <IntlProvider messages={messages} locale="uk" defaultLocale="ua">
-      <UserContext.Provider value={contextValue}>
-        <ApolloProvider client={client}>
-          <Router history={history}>
-            <React.Fragment>
-              <GlobalStyle />
+    <ConfigProvider theme={antdTheme}>
+      <IntlProvider messages={messages} locale="uk" defaultLocale="ua">
+        <UserContext.Provider value={contextValue}>
+          <ApolloProvider client={client}>
+            <BrowserRouter>
+              <React.Fragment>
+                <GlobalStyle />
 
-              <Layout>
-                <Header />
-                {/*TODO add routing here*/}
-                <Layout.Content>
-                  <Routing />
-                </Layout.Content>
-
-                {/*<Layout.Footer>footer</Layout.Footer>*/}
-              </Layout>
-            </React.Fragment>
-          </Router>
-        </ApolloProvider>
-      </UserContext.Provider>
-    </IntlProvider>
+                <Layout>
+                  <Header />
+                  {/*TODO add routing here*/}
+                  <Layout.Content>
+                    <Routing />
+                  </Layout.Content>
+                </Layout>
+              </React.Fragment>
+            </BrowserRouter>
+          </ApolloProvider>
+        </UserContext.Provider>
+      </IntlProvider>
+    </ConfigProvider>
   )
 }
 
 export default App
+
+const antdTheme = {
+  token: {
+    colorPrimary: '#E40712',
+    colorLink: '#1890ff',
+    colorSuccess: '#52c41a',
+    colorWarning: '#faad14',
+    colorError: '#f5222d',
+    colorTextHeading: 'rgba(0, 0, 0, .85)',
+    colorText: 'rgba(0, 0, 0, .65)',
+    colorTextSecondary: 'rgba(0, 0, 0, .45)',
+    colorTextDisabled: 'rgba(0, 0, 0, .25)',
+    borderRadius: '4px',
+    colorBorder: '#d9d9d9',
+    boxShadow: '0 2px 8px rgba(0, 0, 0, .15)',
+  },
+}

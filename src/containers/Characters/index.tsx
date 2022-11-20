@@ -1,15 +1,13 @@
 import React from 'react'
-import { Route, Switch, Redirect, RouteComponentProps } from 'react-router-dom'
+import { Route, RouteProps, Routes, Navigate } from 'react-router-dom'
 import { CharacterPage } from './Character'
 
-const Scene: React.FC<RouteComponentProps> = ({ match }) => {
+const Scene: React.FC<RouteProps> = () => {
   return (
-    <Switch>
-      <Route exact path={`${match.path}/:id`} component={CharacterPage} />
-      <Route exact path={match.path}>
-        <Redirect to="/" />
-      </Route>
-    </Switch>
+    <Routes>
+      <Route path={`:id`} element={<CharacterPage />} />
+      <Route path={``} element={<Navigate to="/" />} />
+    </Routes>
   )
 }
 

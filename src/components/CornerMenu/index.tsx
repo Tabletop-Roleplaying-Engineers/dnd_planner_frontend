@@ -7,8 +7,9 @@ import { Box } from 'noui/Position'
 interface Props {
   items: MenuItem[]
   hide?: boolean
+  children?: React.ReactNode
 }
-export const CornerMenu: React.FC<Props> = (props) => {
+export const CornerMenu = (props: Props) => {
   const { items, children, hide } = props
 
   return (

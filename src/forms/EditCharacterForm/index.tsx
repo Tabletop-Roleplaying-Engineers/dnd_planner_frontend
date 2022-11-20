@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react'
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  ChangeEvent,
+} from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
 import * as R from 'ramda'
 import { PlusOutlined } from '@ant-design/icons'
@@ -89,13 +95,18 @@ const EditCharacterForm: React.FC<Props> = ({ data, onSubmit }) => {
   const intl = useIntl()
   const [avatar, setAvatar] = useState<string>()
   const validationSchema = useValidation()
-  const { loading, error, data: factionsQueryResult } = useQuery(
-    FETCH_FACTIONS_QUERY,
-  )
+  const {
+    loading,
+    error,
+    data: factionsQueryResult,
+  } = useQuery(FETCH_FACTIONS_QUERY)
   const isCreating = !data
-  const onAvatarInputChanged = useCallback((e) => {
-    setAvatar(e.target.value.trim())
-  }, [])
+  const onAvatarInputChanged = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      setAvatar(e.target.value.trim())
+    },
+    [],
+  )
 
   useEffect(() => setAvatar(data && data.avatar), [data])
 
@@ -114,12 +125,13 @@ const EditCharacterForm: React.FC<Props> = ({ data, onSubmit }) => {
       onSubmit={(values) => onSubmit({ id: data && data.id, ...values })}
       validation={validationSchema}
     >
-      {({ form }) => {
+      {/* TODO: fix any */}
+      {({ form }: any) => {
         const parseClasses = (str: string) => {
-          const split = (R.pipe(
+          const split = R.pipe(
             R.split('&'),
             R.map(R.split('=')),
-          )(str) as unknown) as [string, string][]
+          )(str) as unknown as [string, string][]
 
           return R.fromPairs(split)
         }

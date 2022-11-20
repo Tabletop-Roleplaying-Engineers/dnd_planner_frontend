@@ -3,7 +3,7 @@ import * as R from 'ramda'
 import { Col, Row, Tooltip } from 'antd'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import styled from 'styled-components'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useIntl } from 'react-intl'
 import { Box, Flex } from 'noui/Position'
 import { Msg } from 'ui/Text'
@@ -60,18 +60,14 @@ export const CharacterView: React.FC<IProps> = (props) => {
   const { character } = props
   const { name, avatar, faction, user, notes } = character
   const classesElements = getClassElements(character.class)
-  const history = useHistory()
+  const navigate = useNavigate()
   const intl = useIntl()
   const { user: currentUser } = useContext(UserContext)
-  const onDeleteSuccess = useCallback(() => history.push('/'), [history])
-  const {
-    deleteDialog,
-    editDialog,
-    deleteCharacter,
-    editCharacter,
-  } = useCharacterActions({
-    onDeleteSuccess,
-  })
+  const onDeleteSuccess = useCallback(() => navigate('/'), [navigate])
+  const { deleteDialog, editDialog, deleteCharacter, editCharacter } =
+    useCharacterActions({
+      onDeleteSuccess,
+    })
 
   return (
     <Box pt="10px" maxWidth="768px" margin="auto">

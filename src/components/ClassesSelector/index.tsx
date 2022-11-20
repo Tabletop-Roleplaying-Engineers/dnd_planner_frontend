@@ -1,6 +1,6 @@
 import React from 'react'
 import { FormattedMessage } from 'react-intl'
-import { Input, InputNumber, Select } from 'antd'
+import { Input, InputNumber, RefSelectProps, Select } from 'antd'
 import * as R from 'ramda'
 import styled from 'styled-components'
 import { space, SpaceProps } from 'styled-system'
@@ -96,7 +96,7 @@ class ClassesSelector extends React.PureComponent<Props, State> {
     value: {},
     isSelectOpen: false,
   }
-  selectRef = React.createRef<Select<string[]>>()
+  selectRef = React.createRef<RefSelectProps>()
 
   componentDidMount() {
     const { onSelect } = this.props

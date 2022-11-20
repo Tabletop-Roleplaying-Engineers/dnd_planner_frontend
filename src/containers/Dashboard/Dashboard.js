@@ -3,13 +3,15 @@ import React from 'react'
 import { Box, Flex } from 'noui/Position'
 import ZoomCard from 'components/ZoomCard'
 import { Header, Paragraph } from 'ui/Text'
-import { withRouter } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import rulesCover from './shared/rules.jpg'
 import calendarCover from './shared/calendar.jpg'
 
 import { IFrame } from './shared/styled'
 
-function Dashboard(props) {
+function Dashboard() {
+  const navigate = useNavigate()
+
   return (
     <Box mt={10} mx={30}>
       <Flex
@@ -23,7 +25,7 @@ function Dashboard(props) {
           width={['90vw', '33%']}
           my={[10, 0]}
           height={['50vw', '25vw']}
-          onClick={() => props.history.push('/rules')}
+          onClick={() => navigate('/rules')}
         />
 
         <ZoomCard
@@ -32,7 +34,7 @@ function Dashboard(props) {
           width={['90vw', '33%']}
           my={[10, 0]}
           height={['50vw', '25vw']}
-          onClick={() => props.history.push('/calendar')}
+          onClick={() => navigate('/calendar')}
         />
 
         <IFrame
@@ -85,21 +87,53 @@ function Dashboard(props) {
 
         <Box my={10}>
           <Paragraph>
-            У Львові D&D активно розвивається завдяки групі <a href="https://www.facebook.com/dndlviv/" target="_blank" rel="noopener noreferrer">"Пряма
-            Гільдія"</a> та
-            клубу-магазину настільних ігор <a href="http://octopus.lviv.ua/" target="_blank" rel="noopener noreferrer">"Octopus"</a>.
+            У Львові D&D активно розвивається завдяки групі{' '}
+            <a
+              href="https://www.facebook.com/dndlviv/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              "Пряма Гільдія"
+            </a>{' '}
+            та клубу-магазину настільних ігор{' '}
+            <a
+              href="http://octopus.lviv.ua/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              "Octopus"
+            </a>
+            .
           </Paragraph>
         </Box>
 
         <Flex column my={10}>
           <Paragraph>
-            <a href="https://t.me/LvivDnD" target="_blank" rel="noopener noreferrer">Телеграм-канал</a>
+            <a
+              href="https://t.me/LvivDnD"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Телеграм-канал
+            </a>
           </Paragraph>
           <Paragraph>
-            <a href="https://www.dndbeyond.com/" target="_blank" rel="noopener noreferrer">Генерація персонажа</a>
+            <a
+              href="https://www.dndbeyond.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Генерація персонажа
+            </a>
           </Paragraph>
           <Paragraph>
-            <a href="https://dnd.wizards.com/articles/features/basicrules" target="_blank" rel="noopener noreferrer">Базові правила D&D 5e</a>
+            <a
+              href="https://dnd.wizards.com/articles/features/basicrules"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Базові правила D&D 5e
+            </a>
           </Paragraph>
         </Flex>
       </Box>
@@ -107,4 +141,4 @@ function Dashboard(props) {
   )
 }
 
-export default withRouter(Dashboard)
+export default Dashboard

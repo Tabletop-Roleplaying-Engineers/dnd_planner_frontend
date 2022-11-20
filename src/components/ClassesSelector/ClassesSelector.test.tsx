@@ -9,7 +9,7 @@ const getPageObject = () => {
   const component = (
     <TestWrapper>
       <Form onSubmit={() => {}}>
-        {({ form }) => {
+        {() => {
           return <ClassesSelector onSelect={() => {}} name="testName" />
         }}
       </Form>

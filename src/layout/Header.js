@@ -6,7 +6,7 @@ import {
   UserOutlined,
 } from '@ant-design/icons'
 import { Button, Dropdown, Layout, Menu } from 'antd'
-import { withRouter } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { FormattedMessage } from 'react-intl'
 import { Flex } from 'noui/Position'
@@ -25,44 +25,48 @@ const StyledHeader = styled(Layout.Header)`
   }
 `
 
-const menu = ({ history }) => (
-  <Menu
-    onClick={({ key, domEvent }) => {
-      domEvent.preventDefault()
-      domEvent.stopPropagation()
+const NavigationMenu = () => {
+  const navigate = useNavigate()
 
-      history.push('/' + key)
-    }}
-  >
-    <Menu.Item key="calendar">
-      <Box inline mr="5px">
-        <CalendarOutlined />
-      </Box>
-      <FormattedMessage id="menu.calendar" />
-    </Menu.Item>
+  return (
+    <Menu
+      onClick={({ key, domEvent }) => {
+        domEvent.preventDefault()
+        domEvent.stopPropagation()
 
-    <Menu.Item key="dashboard">
-      <Box inline mr="5px">
-        <HomeOutlined />
-      </Box>
-      <FormattedMessage id="menu.dashboard" />
-    </Menu.Item>
+        navigate('/' + key)
+      }}
+    >
+      <Menu.Item key="calendar">
+        <Box inline mr="5px">
+          <CalendarOutlined />
+        </Box>
+        <FormattedMessage id="menu.calendar" />
+      </Menu.Item>
 
-    <Menu.Item key="search">
-      <Box inline mr="5px">
-        <SearchOutlined />
-      </Box>
-      <FormattedMessage id="menu.search" />
-    </Menu.Item>
+      <Menu.Item key="dashboard">
+        <Box inline mr="5px">
+          <HomeOutlined />
+        </Box>
+        <FormattedMessage id="menu.dashboard" />
+      </Menu.Item>
 
-    <Menu.Item key="profile">
-      <Box inline mr="5px">
-        <UserOutlined />
-      </Box>
-      <FormattedMessage id="menu.profile" />
-    </Menu.Item>
-  </Menu>
-)
+      <Menu.Item key="search">
+        <Box inline mr="5px">
+          <SearchOutlined />
+        </Box>
+        <FormattedMessage id="menu.search" />
+      </Menu.Item>
+
+      <Menu.Item key="profile">
+        <Box inline mr="5px">
+          <UserOutlined />
+        </Box>
+        <FormattedMessage id="menu.profile" />
+      </Menu.Item>
+    </Menu>
+  )
+}
 
 const TestLoginBtn = () => {
   const authData = {
@@ -93,7 +97,7 @@ const TestLoginBtn = () => {
   )
 }
 
-const Header = ({ history }) => {
+const Header = () => {
   const { user } = useContext(UserContext)
 
   return (
@@ -106,7 +110,7 @@ const Header = ({ history }) => {
             <Dropdown
               trigger={['click']}
               placement="bottomRight"
-              overlay={menu({ history })}
+              overlay={<NavigationMenu />}
             >
               <Button style={{ padding: '0 10px' }} type="primary">
                 <FormattedMessage id="menu.buttonLabel" />
@@ -121,4 +125,4 @@ const Header = ({ history }) => {
   )
 }
 
-export default withRouter(Header)
+export default Header

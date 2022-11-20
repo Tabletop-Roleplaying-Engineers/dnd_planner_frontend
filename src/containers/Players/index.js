@@ -1,13 +1,13 @@
 import React from 'react'
-import { Route, Switch } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import Players from './Players'
 
-const Scene = ({ match }) => {
+const Scene = () => {
   return (
-    <Switch>
-      <Route exact path={match.path} component={Players} />
-      <Route exact path={`${match.path}/dm`} component={() => <div>DM</div>} />
-    </Switch>
+    <Routes>
+      <Route exact path={''} element={<Players />} />
+      <Route exact path={`dm`} element={<div>DM</div>} />
+    </Routes>
   )
 }
 
