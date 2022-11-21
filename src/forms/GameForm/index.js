@@ -1,6 +1,5 @@
 import React, { useState, useCallback, useRef, useEffect, useMemo } from 'react'
 import * as R from 'ramda'
-import moment from 'moment'
 import { InboxOutlined, PlusOutlined } from '@ant-design/icons'
 import {
   Button,
@@ -20,12 +19,9 @@ import { Box, Flex } from 'noui/Position'
 import { Msg, Header } from 'ui/Text'
 import styled from 'styled-components'
 import { playersInGame } from 'config'
-import 'moment/locale/uk'
 import { UsersSelect } from 'components/UsersSelect/UsersSelect'
 import { useIntl, FormattedMessage } from 'react-intl'
 import dayjs from 'dayjs'
-// Needs to show ant.design `DatePicked` with UA formatting
-moment.locale('uk')
 
 const GameForm = (props) => {
   const intl = useIntl()
