@@ -1,7 +1,5 @@
 import React, { useCallback, useState } from 'react'
 import { useMutation } from '@apollo/client'
-import { Form } from '@ant-design/compatible'
-import '@ant-design/compatible/assets/index.css'
 import { Drawer, Modal, notification, Spin } from 'antd'
 import { Box } from 'noui/Position'
 import styled from 'styled-components'
@@ -49,7 +47,7 @@ export function useCharacterActions(props: Props = defaultProps) {
   const updateLoading = updateCharacterResult.loading
 
   const onFormSubmit = useCallback(
-    async (data) => {
+    async (data: Character) => {
       try {
         if (data.id) {
           await updateCharacter({ variables: omit(['name'], data) })
@@ -163,39 +161,27 @@ export function useCharacterDrawer({
   onSubmit,
   isVisible,
 }: EditProps) {
-  const [cancelEditingConfirmation, setCancelEditingConfirmation] = useState(
-    false,
-  )
+  const [cancelEditingConfirmation, setCancelEditingConfirmation] =
+    useState(false)
   const onCancel = useCallback(() => {
     onClose()
     setCancelEditingConfirmation(false)
   }, [onClose])
   const isEdit = !!character
 
-  let CharacterForm
-  if (character) {
-    // Edit
-    CharacterForm = Form.create({ mapPropsToFields: () => character })(
-      EditCharacterForm,
-    )
-  } else {
-    // Create
-    CharacterForm = EditCharacterForm
-  }
-
   return (
     <Box>
       <Drawer
         width={modalWidth()}
         placement="left"
-        visible={isVisible}
+        open={isVisible}
         onClose={() => setCancelEditingConfirmation(true)}
         destroyOnClose
         closable
       >
         <Spin spinning={loading}>
           <FormContainer>
-            <CharacterForm data={character} onSubmit={onSubmit} />
+            <EditCharacterForm data={character} onSubmit={onSubmit} />
           </FormContainer>
         </Spin>
       </Drawer>
@@ -207,11 +193,12 @@ export function useCharacterDrawer({
             id={isEdit ? 'common.cancelEditing' : 'common.cancelCreating'}
           />
         }
-        visible={cancelEditingConfirmation}
+        open={cancelEditingConfirmation}
         okText={<FormattedMessage id="common.cancel" />}
         onOk={() => onCancel()}
         cancelText={<FormattedMessage id="common.proceed" />}
         onCancel={() => setCancelEditingConfirmation(false)}
+        destroyOnClose
       >
         <p>
           <FormattedMessage
@@ -237,15 +224,15 @@ export function useCharacterDeletion({
   onSubmit,
   onClose,
 }: DeleteProps) {
-  const onSubmitHandler = useCallback(() => character && onSubmit(character), [
-    character,
-    onSubmit,
-  ])
+  const onSubmitHandler = useCallback(
+    () => character && onSubmit(character),
+    [character, onSubmit],
+  )
 
   return (
     <Modal
       title={<FormattedMessage id="character.delete" />}
-      visible={!!character}
+      open={!!character}
       onOk={onSubmitHandler}
       okText={<FormattedMessage id="common.yes" />}
       onCancel={onClose}
