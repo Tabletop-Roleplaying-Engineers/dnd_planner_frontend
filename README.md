@@ -48,6 +48,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ## Telegram
 
 We are using telegram to login to the system. Development Telegram bot works on IP 127.0.0.1 only.
+So you need to add `PORT` env variable to your `.env` file.
 
 ## Available Scripts
 
