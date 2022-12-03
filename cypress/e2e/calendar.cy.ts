@@ -5,6 +5,7 @@ import { defaultCharacter } from '../fixtures/characters'
 import { Game } from '../../src/types/game'
 import { Faction } from '../../src/types/faction'
 import { Character } from '../../src/types/character'
+import { UA } from '../support/intl'
 
 describe('Calendar', function () {
   before(function () {
@@ -12,6 +13,7 @@ describe('Calendar', function () {
     cy.login(USERS.gameMaster)
     cy.getFactions().as('factions')
   })
+
   it('user should be able to participate the game', function () {
     cy.createGame(defaultGame()).as('game')
     cy.login(USERS.simpleUser)
@@ -41,32 +43,27 @@ describe('Calendar', function () {
     })
   })
 
-  // it('user should be able to create game', function () {
-  //   const date = new Date('Nov 10 2020 16:42:57 GMT+0200')
-  //   cy.clock(date.getTime())
-  //   cy.loginAs(USERS.gameMaster)
-  //   cy.visit('/calendar')
+  it.only('user should be able to create game', function () {
+    cy.visit('/calendar')
 
-  //   cy.getByTestId('calendar-spinner').should('not.be.visible')
-  //   cy.tick(1000)
+    cy.findByText('Game title').should('not.exist')
 
-  //   // I want to click on 16-th cell of calendar (it is 11th of November 2020)
-  //   cy.getByTestId('calendar-cell').eq(16).click()
-  //   cy.getByTestId('create-game-btn').click()
+    cy.findByText('15').click()
+    cy.findByRole('button', {
+      name: new RegExp(UA.gameList.createGame),
+    }).click()
 
-  //   const file = 'image.jpg'
-  //   page.attachFileToUploadField('image-field-wrapper', file)
+    const file = 'cypress/fixtures/image140x100.png'
+    calendarDriver.gameForm.attachFileToUploadField('image-field-wrapper', file)
+    cy.findByPlaceholderText(UA.gameForm.namePlaceholder).type('Game title')
+    calendarDriver.gameForm.selectPlayersCount(3)
+    calendarDriver.gameForm.getDescription().type('description')
+    calendarDriver.gameForm.getSubmitBtn().click()
 
-  //   cy.getByTestId('title-field').type('Game title')
-
-  //   page.selectPlayersCount(3)
-
-  //   cy.getByTestId('description-field').type('description')
-
-  //   cy.getByTestId('submit-btn').click()
-
-  //   cy.waitUntil(() => cy.getByTestId('game-form').should('not.be.visible'))
-  // })
+    cy.findByText(UA.gameForm.successMessage)
+    calendarDriver.gameForm.getHeader().should('not.exist')
+    cy.findByText('Game title').should('exist')
+  })
 
   // it('telegram notifications should be sent only in case `share` prop is `true`', function () {
   //   const date = new Date('Nov 10 2020 16:42:57 GMT+0200')

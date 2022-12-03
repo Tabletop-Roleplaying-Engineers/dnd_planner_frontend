@@ -1,15 +1,6 @@
 import { UA } from '../intl'
 
 export const calendarDriver = {
-  attachFileToUploadField: (id, fileName) =>
-    cy.findByTestId(id).within(() => {
-      cy.get('input').selectFile(fileName)
-    }),
-  selectPlayersCount: (number) => {
-    cy.findByTestId('select-players').click()
-
-    return cy.findByTestId(`select-option-players-${number}`).click()
-  },
   openGamesList: (title) => {
     cy.findByRole('heading', { name: title }).should('exist').click()
   },
@@ -48,5 +39,28 @@ export const calendarDriver = {
   },
   getCharacterLink: (name: string) => {
     cy.findByRole('link', { name: new RegExp(name, 'i') }).should('exist')
+  },
+  gameForm: {
+    getHeader() {
+      return cy.findByRole('heading', { name: UA.gameForm.header })
+    },
+    attachFileToUploadField: (id, fileName) =>
+      cy.findByTestId(id).within(() => {
+        // Need to force event because this file selector
+        // is virtual and the real input is hidden
+        cy.get('input').selectFile(fileName, { force: true })
+      }),
+    selectPlayersCount: (number) => {
+      cy.findByRole('combobox').click()
+      cy.findByTitle(number).click()
+    },
+    getDescription() {
+      return cy.findByPlaceholderText(UA.gameForm.descriptionPlaceholder)
+    },
+    getSubmitBtn() {
+      return cy.findByRole('button', {
+        name: new RegExp(UA.gameForm.submit, 'i'),
+      })
+    },
   },
 }
