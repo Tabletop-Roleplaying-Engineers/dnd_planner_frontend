@@ -1,10 +1,16 @@
 import React from 'react'
 import { FormattedMessage } from 'react-intl'
-import { Input, InputNumber, Select } from 'antd'
+import {
+  Input,
+  InputNumber,
+  RefSelectProps,
+  Select,
+  Form,
+  FormRule,
+} from 'antd'
 import * as R from 'ramda'
 import styled from 'styled-components'
 import { space, SpaceProps } from 'styled-system'
-import { Field } from 'noui/Form'
 import { Flex } from '../../noui/Position'
 import { Label } from '../../ui/Text'
 
@@ -89,6 +95,7 @@ interface Props {
   value?: {
     [index: string]: string
   }
+  rules?: FormRule[]
 }
 class ClassesSelector extends React.PureComponent<Props, State> {
   state: State = {
@@ -96,7 +103,7 @@ class ClassesSelector extends React.PureComponent<Props, State> {
     value: {},
     isSelectOpen: false,
   }
-  selectRef = React.createRef<Select<string[]>>()
+  selectRef = React.createRef<RefSelectProps>()
 
   componentDidMount() {
     const { onSelect } = this.props
@@ -179,9 +186,9 @@ class ClassesSelector extends React.PureComponent<Props, State> {
           ))}
         </Select>
 
-        <Field name={this.props.name}>
+        <Form.Item name={this.props.name} rules={this.props.rules} noStyle>
           <Input style={{ display: 'none' }} />
-        </Field>
+        </Form.Item>
 
         {selectedClasses.map((c) => {
           const source = R.find(R.propEq('name', c.toLowerCase()), CLASSES)

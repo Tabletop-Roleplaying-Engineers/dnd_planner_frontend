@@ -89,12 +89,7 @@ const Adventures = () => {
           <Slider {...settings}>
             {ADVENTURERS.map(({ name, portrait }) => (
               <HeroBox px={10}>
-                <Portrait
-                  height="30vh"
-                  label={name}
-                  src={portrait}
-                  alt={name}
-                />
+                <Portrait label={name} src={portrait} alt={name} />
               </HeroBox>
             ))}
           </Slider>

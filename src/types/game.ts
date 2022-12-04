@@ -14,3 +14,6 @@ export interface Game {
   user: User
   tags: string[]
 }
+export type GameForm = Omit<Game, 'id' | 'characters' | 'user'> & {
+  share: boolean
+}

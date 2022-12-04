@@ -87,7 +87,7 @@ export const ParticipantsList = (props) => {
         title={intl.formatMessage({
           id: 'character.removeFromGameDialogHeader',
         })}
-        visible={!!characterToRemove}
+        open={!!characterToRemove}
         onOk={() => onRemovingConfirm(characterToRemove)}
         onCancel={() => setCharacterToRemove(null)}
       >

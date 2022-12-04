@@ -2,7 +2,7 @@ import { Faction } from './faction'
 import { Game } from './game'
 import { User } from './user'
 
-export interface Character {
+export type Character = {
   id: string
   name: string
   experience: string
@@ -12,5 +12,13 @@ export interface Character {
   class: string
   user: User
   games: Game[]
+  notes: string
+}
+
+export type CharacterForm = {
+  name: string
+  faction: string
+  class: string
+  avatar: string
   notes: string
 }

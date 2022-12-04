@@ -1,12 +1,12 @@
 import React from 'react'
-import { Route, Switch } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import Dashboard from './Dashboard'
 
-const Scene = ({ match }) => {
+const Scene = () => {
   return (
-    <Switch>
-      <Route exact path={match.path} component={Dashboard} />
-    </Switch>
+    <Routes>
+      <Route path={''} element={<Dashboard />} />
+    </Routes>
   )
 }
 

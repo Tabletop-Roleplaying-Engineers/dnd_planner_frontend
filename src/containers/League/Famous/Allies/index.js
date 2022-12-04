@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { Tabs } from 'antd'
 import { Box, Flex } from 'noui/Position'
 import { Header, Quote, Paragraph, SecretText } from 'ui/Text'
@@ -10,16 +11,20 @@ import marcotPortrait from './shared/marcot.jpg'
 import mirlanaPortrait from './shared/mirlana.jpg'
 import connradPortrait from './shared/connrad.jpg'
 
-const CultOfTheDragon = ({ history, location }) => {
+const CultOfTheDragon = () => {
+  const location = useLocation()
+  const navigate = useNavigate()
   const [tab, setTab] = useState(location.hash.substring(1) || 'ector_brahms')
   const media = useScreenMedia()
 
   useEffect(() => {
-    history.replace({
-      path: location.path,
-      hash: tab,
-    })
-  }, [history, location.path, tab])
+    navigate(
+      {
+        hash: tab,
+      },
+      { replace: true },
+    )
+  }, [navigate, tab])
 
   return (
     <Box mt={10} mr={[0, 20]}>

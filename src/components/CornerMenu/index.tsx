@@ -7,8 +7,9 @@ import { Box } from 'noui/Position'
 interface Props {
   items: MenuItem[]
   hide?: boolean
+  children?: React.ReactNode
 }
-export const CornerMenu: React.FC<Props> = (props) => {
+export const CornerMenu = (props: Props) => {
   const { items, children, hide } = props
 
   return (
@@ -16,7 +17,12 @@ export const CornerMenu: React.FC<Props> = (props) => {
       {children}
       {!hide && (
         <Box position="absolute" top={0} right={10}>
-          <Dropdown overlay={createMenu(items)} trigger={['click']}>
+          <Dropdown
+            menu={{
+              items: createMenu(items),
+            }}
+            trigger={['click']}
+          >
             <EllipsisOutlined data-testid="corner-menu" />
           </Dropdown>
         </Box>

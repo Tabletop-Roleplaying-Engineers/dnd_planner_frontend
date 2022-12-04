@@ -1,4 +1,5 @@
 import { Affix, Tabs, Timeline } from 'antd'
+import { useLocation, useNavigate } from 'react-router-dom'
 import React, { useEffect, useState } from 'react'
 import { Flex, Box } from 'noui/Position'
 import { useScreenMedia } from 'noui/MediaQuery'
@@ -22,16 +23,20 @@ const BELIEFS = [
   'Не чекай, поки ворог прийде до тебе. Кращий захист - це напад.',
 ]
 
-const LordsAlliance = ({ history, location }) => {
+const LordsAlliance = () => {
+  const location = useLocation()
+  const navigate = useNavigate()
   const [tab, setTab] = useState(location.hash.substring(1) || 'main')
   const media = useScreenMedia()
 
   useEffect(() => {
-    history.replace({
-      path: location.path,
-      hash: tab,
-    })
-  }, [history, location.path, tab])
+    navigate(
+      {
+        hash: tab,
+      },
+      { replace: true },
+    )
+  }, [navigate, tab])
 
   return (
     <Box>

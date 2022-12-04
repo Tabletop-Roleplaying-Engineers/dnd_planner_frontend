@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState } from 'react'
-import { withRouter } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import qs from 'query-string'
 import { useApolloClient } from '@apollo/client'
 import { Alert } from 'antd'
@@ -9,11 +9,13 @@ import { UserContext } from '../../context/userContext'
 import { Box } from 'noui/Position'
 import { FormattedMessage } from 'react-intl'
 
-const Login = ({ location, history }) => {
+const Login = () => {
   const { setUser } = useContext(UserContext)
   const client = useApolloClient()
   const [error, setError] = useState(null)
   const [validationError, setValidationError] = useState(null)
+  const location = useLocation()
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fn = async () => {
@@ -55,13 +57,15 @@ const Login = ({ location, history }) => {
         localStorage.setItem('AUTH_DATA', token)
         setUser(decode(token))
 
-        history.replace('/')
+        navigate('/', {
+          replace: true,
+        })
       } catch (err) {
         setError(err)
       }
     }
     fn()
-  }, [client, history, location, setUser])
+  }, [client, navigate, location, setUser])
 
   if (validationError) {
     return (
@@ -92,4 +96,4 @@ const Login = ({ location, history }) => {
   return <FormattedMessage id="common.pleaseWait" />
 }
 
-export default withRouter(Login)
+export default Login

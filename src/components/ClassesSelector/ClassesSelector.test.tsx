@@ -3,15 +3,13 @@ import { fireEvent, render } from '@testing-library/react'
 import ClassesSelector from './index'
 import { act } from 'react-dom/test-utils'
 import { TestWrapper } from 'utils/test'
-import Form from 'noui/Form'
+import { Form } from 'antd'
 
 const getPageObject = () => {
   const component = (
     <TestWrapper>
-      <Form onSubmit={() => {}}>
-        {({ form }) => {
-          return <ClassesSelector onSelect={() => {}} name="testName" />
-        }}
+      <Form onFinish={() => {}}>
+        <ClassesSelector onSelect={() => {}} name="testName" />
       </Form>
     </TestWrapper>
   )

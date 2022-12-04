@@ -11,7 +11,6 @@ import {
   Modal,
   Select,
   Dropdown,
-  Menu,
 } from 'antd'
 import { useQuery, useMutation } from '@apollo/client'
 import { Flex } from 'noui/Position'
@@ -91,7 +90,7 @@ const RolesList = ({ userRoles, roles = [], user, onChange }) => {
       {/* Delete role modal */}
       <Modal
         title={<FormattedMessage id="users.role.removeDialog.title" />}
-        visible={!!roleForDelete}
+        open={!!roleForDelete}
         onOk={() => deleteRole(roleForDelete)}
         okText={<FormattedMessage id="common.yes" />}
         cancelText={<FormattedMessage id="common.no" />}
@@ -119,7 +118,7 @@ const RolesList = ({ userRoles, roles = [], user, onChange }) => {
       {/* Add role modal */}
       <Modal
         title={<FormattedMessage id="users.role.addDialog.title" />}
-        visible={addRoleVisible}
+        open={addRoleVisible}
         onOk={() => addRole(newRole)}
         confirmLoading={mutationInProgress}
         onCancel={onCancelClick}
@@ -162,11 +161,6 @@ const AvatarColumn = ({ url, user, setOnBehalfToken }) => {
       variables: { userId: user.id },
     })
   }, [signInOnBehalfMutation, user])
-  const userMenu = (
-    <Menu>
-      <Menu.Item onClick={signIn}>Sign in behalf this user</Menu.Item>
-    </Menu>
-  )
 
   useEffect(() => {
     if (result.data && result.data.signInOnBehalf) {
@@ -175,7 +169,17 @@ const AvatarColumn = ({ url, user, setOnBehalfToken }) => {
   }, [result, setOnBehalfToken])
 
   return (
-    <Dropdown overlay={userMenu} trigger={['contextMenu']}>
+    <Dropdown
+      menu={{
+        items: [
+          {
+            onClick: signIn,
+            label: 'Sign in behalf this user',
+          },
+        ],
+      }}
+      trigger={['contextMenu']}
+    >
       <Avatar src={url}>{getAvatarLetters(user)}</Avatar>
     </Dropdown>
   )

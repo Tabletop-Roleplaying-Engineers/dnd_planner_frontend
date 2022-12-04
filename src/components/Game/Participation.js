@@ -40,6 +40,7 @@ export const GameParticipation = (props) => {
   )
   const [leaveGame] = useMutation(LEAVE_GAME)
   const availableCharacters = data.validCharactersForGame || []
+  const availableCharactersById = R.indexBy(R.prop('id'), availableCharacters)
   const refetchCharacters = useCallback(() => {
     if (user) {
       return loadAvailableCharacters()
@@ -133,13 +134,13 @@ export const GameParticipation = (props) => {
             id: 'participation.selectHeroBtn',
           })}
           selected={selectedCharacter}
-          onSelect={(data) => {
-            const char = JSON.parse(data)
+          onSelect={(value) => {
+            const char = availableCharactersById[value]
             setSelectedCharacter(char)
           }}
         >
           {availableCharacters.map((char) => (
-            <StyledSelect.Option key={char.id} value={JSON.stringify(char)}>
+            <StyledSelect.Option key={char.id} value={char.id}>
               <Box position="relative">
                 <Character {...char} />
                 {/* Overlay to prevent clicking on item inner links */}

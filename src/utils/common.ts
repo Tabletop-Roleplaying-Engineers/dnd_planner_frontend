@@ -23,7 +23,7 @@ const stringToClassLvlPair = (str: string) => {
 }
 const rejectNull = <T>(list: T[]) =>
   list.filter(function (item: T): item is Exclude<T, null> {
-    return item === null
+    return item !== null
   })
 const filterEmpty = (str: string) => !!str.length
 const toClassLvlPairs = R.pipe(

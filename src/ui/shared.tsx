@@ -2,7 +2,6 @@ import React, { ComponentProps, ReactNode } from 'react'
 import { Menu } from 'antd'
 import styled from 'styled-components'
 import { Msg } from 'ui/Text'
-import { Flex } from 'noui/Position'
 
 const IconWrapper = styled.div`
   margin-left: 5px;
@@ -16,16 +15,10 @@ export interface MenuItem extends MenuItemProps {
   onClick: () => void
   'data-testid': string
 }
-export const createMenu = (items: MenuItem[]) => (
-  <Menu>
-    {items.map(({ label, icon, onClick, ...other }, idx) => (
-      <Menu.Item key={idx} onClick={onClick} {...other}>
-        <Flex>
-          {label && <Msg>{label}</Msg>}
-
-          {icon && <IconWrapper>{icon}</IconWrapper>}
-        </Flex>
-      </Menu.Item>
-    ))}
-  </Menu>
-)
+export const createMenu = (items: MenuItem[]) =>
+  items.map(({ label, icon, onClick, ...other }, idx) => ({
+    key: idx,
+    onClick: onClick,
+    itemIcon: icon && <IconWrapper>{icon}</IconWrapper>,
+    label: label && <Msg>{label}</Msg>,
+  }))

@@ -8,6 +8,7 @@ import TextWithImage from '../shared/components/TextWithImage'
 
 import cover from '../shared/images/02_LATEST-STORY_Factions_OOTG_InlineR_140702_0.jpg'
 import logo from './shared/br-orderofthegauntlet.png'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 const GOALS = [
   'Завжди бути спостережливим і озброєним перед лицем зла.',
@@ -22,16 +23,20 @@ const BELIEFS = [
   'Карати злі діяння - справедливо. Карати злі думки - ні.',
 ]
 
-const OrderOfGauntlet = ({ history, location }) => {
+const OrderOfGauntlet = () => {
+  const location = useLocation()
+  const navigate = useNavigate()
   const [tab, setTab] = useState(location.hash.substring(1) || 'main')
   const media = useScreenMedia()
 
   useEffect(() => {
-    history.replace({
-      path: location.path,
-      hash: tab,
-    })
-  }, [history, location.path, tab])
+    navigate(
+      {
+        hash: tab,
+      },
+      { replace: true },
+    )
+  }, [navigate, tab])
 
   return (
     <Box>
