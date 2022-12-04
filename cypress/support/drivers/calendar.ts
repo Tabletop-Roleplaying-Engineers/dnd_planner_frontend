@@ -63,4 +63,7 @@ export const calendarDriver = {
       })
     },
   },
+  getNextPeriodBtn() {
+    return cy.findByRole('button', { name: UA.controls.next })
+  },
 }

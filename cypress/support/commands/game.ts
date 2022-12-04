@@ -11,3 +11,10 @@ export function createGame(game: GameForm) {
 
   return gqlRequest<{ createGame: Game }>(data).its('createGame')
 }
+
+export function getSharingNotifications() {
+  return cy.request({
+    method: 'GET',
+    url: `${Cypress.env('API_URL')}/sharing-items`,
+  })
+}

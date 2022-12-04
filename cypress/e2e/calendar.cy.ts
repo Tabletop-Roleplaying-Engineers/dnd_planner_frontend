@@ -10,8 +10,10 @@ import { UA } from '../support/intl'
 describe('Calendar', function () {
   before(function () {
     cy.seedDefaultData()
-    cy.login(USERS.gameMaster)
     cy.getFactions().as('factions')
+  })
+  beforeEach(function () {
+    cy.login(USERS.gameMaster)
   })
 
   it('user should be able to participate the game', function () {
@@ -37,17 +39,19 @@ describe('Calendar', function () {
     calendarDriver.getParticipationSuccessfulMessage()
 
     cy.reload()
+    // After reloading the game already opened
 
     cy.get<Character>('@character').then((character) => {
       calendarDriver.getCharacterLink(character.name)
     })
   })
 
-  it.only('user should be able to create game', function () {
+  it('user should be able to create game', function () {
     cy.visit('/calendar')
 
     cy.findByText('Game title').should('not.exist')
 
+    calendarDriver.getNextPeriodBtn().click()
     cy.findByText('15').click()
     cy.findByRole('button', {
       name: new RegExp(UA.gameList.createGame),
@@ -65,41 +69,30 @@ describe('Calendar', function () {
     cy.findByText('Game title').should('exist')
   })
 
-  // it('telegram notifications should be sent only in case `share` prop is `true`', function () {
-  //   const date = new Date('Nov 10 2020 16:42:57 GMT+0200')
-  //   cy.clock(date.getTime())
-  //   cy.loginAs(USERS.gameMaster)
-  //   cy.request({
-  //     method: 'GET',
-  //     url: `${Cypress.env('API_URL')}/sharing-items`,
-  //   })
-  //     .its('body.length')
-  //     .as('firstNotificationCount')
+  // TODO: this is an API test. Move it i]to the backend
+  it.skip('telegram notifications should be sent only in case `share` prop is `true`', function () {
+    cy.visit('/calendar')
 
-  //   cy.createGame({
-  //     share: false,
-  //   })
-  //   cy.request({
-  //     method: 'GET',
-  //     url: `${Cypress.env('API_URL')}/sharing-items`,
-  //   })
-  //     .its('body.length')
-  //     .then((v) => {
-  //       cy.get('@firstNotificationCount').should('equal', v)
-  //     })
+    cy.getSharingNotifications()
+      .its('body.length')
+      .then((initialCount) => {
+        cy.createGame(
+          defaultGame({
+            share: false,
+          }),
+        )
+        cy.getSharingNotifications()
+          .its('body.length')
+          .should('equal', initialCount)
 
-  //   cy.createGame({
-  //     share: true,
-  //   })
-  //   cy.request({
-  //     method: 'GET',
-  //     url: `${Cypress.env('API_URL')}/sharing-items`,
-  //   })
-  //     .its('body.length')
-  //     .then((v) => {
-  //       cy.get('@firstNotificationCount')
-  //         .then((count) => count + 1)
-  //         .should('equal', v)
-  //     })
-  // })
+        cy.createGame(
+          defaultGame({
+            share: true,
+          }),
+        )
+        cy.getSharingNotifications()
+          .its('body.length')
+          .should('equal', initialCount + 1)
+      })
+  })
 })

@@ -13,7 +13,7 @@ import '@testing-library/cypress/add-commands'
 import { addRoles, login, loginAs } from './commands/auth'
 import { createCharacter } from './commands/character'
 import { getFactions } from './commands/factions'
-import { createGame } from './commands/game'
+import { createGame, getSharingNotifications } from './commands/game'
 import { defaultSeeding } from './commands/seeding'
 
 declare global {
@@ -26,6 +26,7 @@ declare global {
       seedDefaultData: typeof defaultSeeding
       createCharacter: typeof createCharacter
       getFactions: typeof getFactions
+      getSharingNotifications: typeof getSharingNotifications
     }
   }
 }
@@ -34,6 +35,7 @@ Cypress.Commands.add('seedDefaultData', defaultSeeding)
 Cypress.Commands.add('createGame', createGame)
 Cypress.Commands.add('createCharacter', createCharacter)
 Cypress.Commands.add('getFactions', getFactions)
+Cypress.Commands.add('getSharingNotifications', getSharingNotifications)
 Cypress.Commands.add('addRoles', addRoles)
 Cypress.Commands.add('login', login)
 Cypress.Commands.add('loginAs', (user) => {

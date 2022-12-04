@@ -6,6 +6,9 @@ export const UA = {
     confirmation: 'Ви берете участь у цій грі як',
   },
   gameList: { createGame: 'Створити гру' },
+  controls: {
+    next: 'Наступний',
+  },
   gameForm: {
     namePlaceholder: 'Назва',
     playersPlaceholder: 'Кількість гравців',

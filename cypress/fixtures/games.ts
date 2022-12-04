@@ -1,4 +1,6 @@
-export function defaultGame() {
+import { GameForm } from '../../src/types/game'
+
+export function defaultGame(game?: Partial<GameForm>) {
   const date = new Date()
   date.setHours(new Date().getHours() + 1)
 
@@ -15,5 +17,6 @@ export function defaultGame() {
     startingDate: date.toISOString(),
     share: false,
     tags: [],
+    ...game,
   }
 }
