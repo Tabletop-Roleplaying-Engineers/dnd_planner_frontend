@@ -1,7 +1,7 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
 import { FormattedMessage } from 'react-intl'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import styled from 'styled-components'
 import { Alert, Spin } from 'antd'
 import { FETCH_CHARACTER_QUERY } from 'api/characters'

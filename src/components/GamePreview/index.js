@@ -34,6 +34,7 @@ const StyledTag = styled(Tag)`
   max-width: 100%;
   text-overflow: ellipsis;
   overflow: hidden;
+  background: #fafafa;
 `
 
 export const GamePreview = ({ title, tags = [], ...props }) => {

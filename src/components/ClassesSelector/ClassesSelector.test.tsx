@@ -1,29 +1,16 @@
 import React from 'react'
 import { fireEvent, render } from '@testing-library/react'
-import { Select } from 'antd'
-import ClassesSelector, { CLASSES } from './index'
+import ClassesSelector from './index'
 import { act } from 'react-dom/test-utils'
 import { TestWrapper } from 'utils/test'
-
-jest.mock('noui/Form', () => {
-  return {
-    __esModule: true,
-    Field: (props: any) => <div {...props} />,
-  }
-})
-jest.mock('antd', () => {
-  return {
-    __esModule: true,
-    Select: jest.fn().mockReturnValue(<div />),
-    Input: (props: any) => <input {...props} />,
-    InputNumber: (props: any) => <input {...props} />,
-  }
-})
+import { Form } from 'antd'
 
 const getPageObject = () => {
   const component = (
     <TestWrapper>
-      <ClassesSelector onSelect={() => {}} name="testName" />
+      <Form onFinish={() => {}}>
+        <ClassesSelector onSelect={() => {}} name="testName" />
+      </Form>
     </TestWrapper>
   )
   const result = render(component)
@@ -42,43 +29,42 @@ const getPageObject = () => {
     },
   }
 }
-describe('ClassesSelector', async () => {
-  const SelectMock = (Select as unknown) as jest.Mock
+describe('ClassesSelector', () => {
   test('should render without crash', async () => {
     getPageObject()
   })
 
   test('should be able to select class', async () => {
-    const value = CLASSES[0].name
-    SelectMock.mockImplementation(({ onSelect, ...props }) => (
-      <button onClick={() => onSelect(value)} data-testid="select-mock" />
-    ))
     const result = getPageObject()
-    const select = await result.getByTestId('select-mock')
 
     await act(async () => {
-      fireEvent.click(select)
+      fireEvent.click(result.getByText('Class'))
+    })
+
+    const barbarian = await result.findByText('Barbarian')
+    await act(async () => {
+      fireEvent.click(barbarian)
     })
 
     const levelInputs = await result.getLevelSelector()
     expect(levelInputs[0]).toHaveValue('1')
   })
 
-  test('should be able to select two class', async () => {
-    let value = CLASSES[0].name
-    SelectMock.mockImplementation(({ onSelect, ...props }) => (
-      <button onClick={() => onSelect(value)} data-testid="select-mock" />
-    ))
+  test('should be able to select two classes', async () => {
     const result = getPageObject()
-    const select = await result.getByTestId('select-mock')
 
     await act(async () => {
-      fireEvent.click(select)
+      fireEvent.click(result.getByText('Class'))
     })
 
+    const barbarian = await result.findByText('Barbarian')
     await act(async () => {
-      value = CLASSES[1].name
-      fireEvent.click(select)
+      fireEvent.click(barbarian)
+    })
+
+    const wizard = await result.findByText('Wizard')
+    await act(async () => {
+      fireEvent.click(wizard)
     })
 
     const levelInputs = await result.getLevelSelector()

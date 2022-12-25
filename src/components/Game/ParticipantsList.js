@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useMemo } from 'react'
 import { Row, Col, Modal } from 'antd'
+import { DeleteOutlined } from '@ant-design/icons'
 import isBefore from 'date-fns/isBefore'
 import Character from 'components/Character'
 import { Box } from 'noui/Position'
@@ -40,7 +41,7 @@ export const CharacterBox = (props) => {
         label: intl.formatMessage({
           id: 'character.removeFromGameBtn',
         }),
-        icon: 'delete',
+        icon: <DeleteOutlined />,
         onClick: () => onDeleteClick(character),
         'data-testid': 'character-menu-remove-from-game',
       },
@@ -86,7 +87,7 @@ export const ParticipantsList = (props) => {
         title={intl.formatMessage({
           id: 'character.removeFromGameDialogHeader',
         })}
-        visible={!!characterToRemove}
+        open={!!characterToRemove}
         onOk={() => onRemovingConfirm(characterToRemove)}
         onCancel={() => setCharacterToRemove(null)}
       >

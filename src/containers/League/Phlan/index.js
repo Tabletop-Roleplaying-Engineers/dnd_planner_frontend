@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { Tabs } from 'antd'
 import { Box, Flex } from 'noui/Position'
 import { Header, Quote, Paragraph, SecretText } from 'ui/Text'
@@ -13,16 +14,20 @@ import tavernCover from './shared/tavern.jpg'
 import towerCover from './shared/tower.jpg'
 import poolCover from './shared/pool.jpg'
 
-const Phlan = ({ history, location }) => {
+const Phlan = () => {
+  const location = useLocation()
+  const navigate = useNavigate()
   const [tab, setTab] = useState(location.hash.substring(1) || 'main')
   const media = useScreenMedia()
 
   useEffect(() => {
-    history.replace({
-      path: location.path,
-      hash: tab,
-    })
-  }, [history, location.path, tab])
+    navigate(
+      {
+        hash: tab,
+      },
+      { replace: true },
+    )
+  }, [navigate, tab])
 
   return (
     <Box mt={10} mr={[0, 20]}>

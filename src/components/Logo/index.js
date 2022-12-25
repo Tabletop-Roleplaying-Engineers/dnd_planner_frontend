@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react'
-import { withRouter } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { TabletAndDesktop, Mobile } from 'noui/MediaQuery'
 import bigLogo from './shared/logoBig.png'
@@ -13,31 +13,22 @@ const Image = styled.img`
   ${space}
 `
 
-const Logo = props => {
-  const navigate = () => props.history.push('/')
-  
+const Logo = () => {
+  const navigate = useNavigate()
+
+  const toHome = () => navigate('/')
+
   return (
     <Fragment>
       <TabletAndDesktop>
-        <Image
-          onClick={navigate}
-          src={bigLogo}
-          alt="logo"
-        />
+        <Image onClick={toHome} src={bigLogo} alt="logo" />
       </TabletAndDesktop>
 
       <Mobile>
-        <Image
-          ml="5px"
-          py="5px"
-          onClick={navigate}
-          src={miniLogo}
-          alt="logo"
-        />
+        <Image ml="5px" py="5px" onClick={toHome} src={miniLogo} alt="logo" />
       </Mobile>
     </Fragment>
   )
 }
 
-
-export default withRouter(Logo)
+export default Logo

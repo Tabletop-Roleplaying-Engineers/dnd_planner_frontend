@@ -1,4 +1,5 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Box, Flex } from 'noui/Position'
 import ZoomCard from 'components/ZoomCard'
 
@@ -33,30 +34,28 @@ const MainFactions = [
     label: 'Жентарім',
     link: `/the_zhentarim`,
     image: theZhentarimCover,
-  }
+  },
 ]
 
-const Factions = props => {
-  const { history } = props
-  
+const Factions = () => {
+  const navigate = useNavigate()
+
   return (
     <Box mt={10} mr={[0, 20]}>
       <Flex>
-        {
-          MainFactions.map(({ label, link, image }) =>
-            <ZoomCard
-              key={label}
-              title={label}
-              image={image}
-              width={[ '90vw', '20vw' ]}
-              height={['50vw', '80vh']}
-              maxHeight={['40vh', 'none']}
-              my={[ '5px', 10 ]}
-              mx={[ 10, "5px" ]}
-              onClick={() => history.push(`/lore/factions${link}`)}
-            />
-          )
-        }
+        {MainFactions.map(({ label, link, image }) => (
+          <ZoomCard
+            key={label}
+            title={label}
+            image={image}
+            width={['90vw', '20vw']}
+            height={['50vw', '80vh']}
+            maxHeight={['40vh', 'none']}
+            my={['5px', 10]}
+            mx={[10, '5px']}
+            onClick={() => navigate(`/lore/factions${link}`)}
+          />
+        ))}
       </Flex>
     </Box>
   )

@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
+import { PlusOutlined } from '@ant-design/icons'
 import {
   Table,
   Spin,
@@ -8,12 +9,10 @@ import {
   Avatar,
   Tag,
   Modal,
-  Icon,
   Select,
   Dropdown,
-  Menu,
 } from 'antd'
-import { useQuery, useMutation } from '@apollo/react-hooks'
+import { useQuery, useMutation } from '@apollo/client'
 import { Flex } from 'noui/Position'
 import { useDebounce } from 'utils/hooks'
 import { getAvatarLetters } from 'utils/common'
@@ -85,13 +84,13 @@ const RolesList = ({ userRoles, roles = [], user, onChange }) => {
         onClick={() => setAddRoleVisible(true)}
         style={{ background: '#fff', borderStyle: 'dashed', cursor: 'pointer' }}
       >
-        <Icon type="plus" /> <FormattedMessage id="users.role.addBtn.label" />
+        <PlusOutlined /> <FormattedMessage id="users.role.addBtn.label" />
       </Tag>
 
       {/* Delete role modal */}
       <Modal
         title={<FormattedMessage id="users.role.removeDialog.title" />}
-        visible={!!roleForDelete}
+        open={!!roleForDelete}
         onOk={() => deleteRole(roleForDelete)}
         okText={<FormattedMessage id="common.yes" />}
         cancelText={<FormattedMessage id="common.no" />}
@@ -119,7 +118,7 @@ const RolesList = ({ userRoles, roles = [], user, onChange }) => {
       {/* Add role modal */}
       <Modal
         title={<FormattedMessage id="users.role.addDialog.title" />}
-        visible={addRoleVisible}
+        open={addRoleVisible}
         onOk={() => addRole(newRole)}
         confirmLoading={mutationInProgress}
         onCancel={onCancelClick}
@@ -162,11 +161,6 @@ const AvatarColumn = ({ url, user, setOnBehalfToken }) => {
       variables: { userId: user.id },
     })
   }, [signInOnBehalfMutation, user])
-  const userMenu = (
-    <Menu>
-      <Menu.Item onClick={signIn}>Sign in behalf this user</Menu.Item>
-    </Menu>
-  )
 
   useEffect(() => {
     if (result.data && result.data.signInOnBehalf) {
@@ -175,7 +169,17 @@ const AvatarColumn = ({ url, user, setOnBehalfToken }) => {
   }, [result, setOnBehalfToken])
 
   return (
-    <Dropdown overlay={userMenu} trigger={['contextMenu']}>
+    <Dropdown
+      menu={{
+        items: [
+          {
+            onClick: signIn,
+            label: 'Sign in behalf this user',
+          },
+        ],
+      }}
+      trigger={['contextMenu']}
+    >
       <Avatar src={url}>{getAvatarLetters(user)}</Avatar>
     </Dropdown>
   )

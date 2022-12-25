@@ -1,9 +1,9 @@
-import React, { ComponentProps } from 'react'
-import { Icon, Menu } from 'antd'
+import React, { ComponentProps, ReactNode } from 'react'
+import { Menu } from 'antd'
 import styled from 'styled-components'
 import { Msg } from 'ui/Text'
 
-const IconStyled = styled(Icon)`
+const IconWrapper = styled.div`
   margin-left: 5px;
 `
 
@@ -11,18 +11,14 @@ type MenuItemProps = ComponentProps<typeof Menu.Item>
 
 export interface MenuItem extends MenuItemProps {
   label: string
-  icon: string
+  icon: ReactNode
   onClick: () => void
   'data-testid': string
 }
-export const createMenu = (items: MenuItem[]) => (
-  <Menu>
-    {items.map(({ label, icon, onClick, ...other }, idx) => (
-      <Menu.Item key={idx} onClick={onClick} {...other}>
-        {label && <Msg>{label}</Msg>}
-
-        {icon && <IconStyled type={icon} />}
-      </Menu.Item>
-    ))}
-  </Menu>
-)
+export const createMenu = (items: MenuItem[]) =>
+  items.map(({ label, icon, onClick, ...other }, idx) => ({
+    key: idx,
+    onClick: onClick,
+    itemIcon: icon && <IconWrapper>{icon}</IconWrapper>,
+    label: label && <Msg>{label}</Msg>,
+  }))

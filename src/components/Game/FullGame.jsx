@@ -1,7 +1,8 @@
 import React from 'react'
+import { useIntl } from 'react-intl'
+import { EditOutlined } from '@ant-design/icons'
 import { GameInfo, ParticipantsList, GameParticipation } from 'components/Game'
 import { CornerMenu } from 'components/CornerMenu'
-import { useIntl } from 'react-intl'
 import { Box } from 'noui/Position'
 import { ACTIONS } from '../../constants'
 
@@ -33,7 +34,7 @@ export const FullGame = ({
       label: intl.formatMessage({
         id: 'common.edit',
       }),
-      icon: 'edit',
+      icon: <EditOutlined />,
       onClick: onEditClick,
       'data-testid': 'game-menu-edit',
     },
@@ -47,7 +48,7 @@ export const FullGame = ({
           characters={game.characters}
           game={game}
           user={user}
-          onRemoveCharClick={char => onRemoveChar(char)}
+          onRemoveCharClick={(char) => onRemoveChar(char)}
         />
         {game.characters.length < game.players && (
           <GameParticipation

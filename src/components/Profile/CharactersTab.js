@@ -1,8 +1,14 @@
 import React, { useCallback } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
 import * as R from 'ramda'
-import { Dropdown, Icon, Spin, Alert, Button, Empty } from 'antd'
-import { useQuery } from '@apollo/react-hooks'
+import {
+  DeleteOutlined,
+  EditOutlined,
+  EllipsisOutlined,
+  PlusOutlined,
+} from '@ant-design/icons'
+import { Dropdown, Spin, Alert, Button, Empty } from 'antd'
+import { useQuery } from '@apollo/client'
 import styled from 'styled-components'
 import { Flex, Box } from 'noui/Position'
 import Character from 'components/Character'
@@ -24,25 +30,27 @@ const CharacterMenu = ({ onEditClick, character, onDeleteClick }) => {
   return (
     <Box position="absolute" top={0} right={10}>
       <Dropdown
-        overlay={createMenu([
-          {
-            label: intl.formatMessage({ id: 'common.edit' }),
-            icon: 'edit',
-            onClick: () => onEditClick(character),
-            'data-testid': 'character-menu-edit',
-          },
-          {
-            label: intl.formatMessage({ id: 'common.delete' }),
-            icon: 'delete',
-            onClick: async () => {
-              onDeleteClick(character)
+        menu={{
+          items: createMenu([
+            {
+              label: intl.formatMessage({ id: 'common.edit' }),
+              icon: <EditOutlined />,
+              onClick: () => onEditClick(character),
+              'data-testid': 'character-menu-edit',
             },
-            'data-testid': 'character-menu-delete',
-          },
-        ])}
+            {
+              label: intl.formatMessage({ id: 'common.delete' }),
+              icon: <DeleteOutlined />,
+              onClick: async () => {
+                onDeleteClick(character)
+              },
+              'data-testid': 'character-menu-delete',
+            },
+          ]),
+        }}
         trigger={['click']}
       >
-        <Icon type="ellipsis" data-testid="character-menu" />
+        <EllipsisOutlined data-testid="character-menu" />
       </Dropdown>
     </Box>
   )
@@ -120,7 +128,7 @@ export const CharactersTab = () => {
             style={{ width: '100%', margin: '20px 0' }}
             type="primary"
             shape="round"
-            icon="plus"
+            icon={<PlusOutlined />}
             size="large"
             onClick={createCharacter}
             data-testid="add-character-btn"

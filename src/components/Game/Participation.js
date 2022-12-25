@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect, useCallback } from 'react'
 import { Button, Select, Spin, Alert } from 'antd'
-import { useLazyQuery, useMutation } from '@apollo/react-hooks'
+import { useLazyQuery, useMutation } from '@apollo/client'
 import * as R from 'ramda'
 import isBefore from 'date-fns/isBefore'
 import styled from 'styled-components'
@@ -40,6 +40,7 @@ export const GameParticipation = (props) => {
   )
   const [leaveGame] = useMutation(LEAVE_GAME)
   const availableCharacters = data.validCharactersForGame || []
+  const availableCharactersById = R.indexBy(R.prop('id'), availableCharacters)
   const refetchCharacters = useCallback(() => {
     if (user) {
       return loadAvailableCharacters()
@@ -133,13 +134,13 @@ export const GameParticipation = (props) => {
             id: 'participation.selectHeroBtn',
           })}
           selected={selectedCharacter}
-          onSelect={(data) => {
-            const char = JSON.parse(data)
+          onSelect={(value) => {
+            const char = availableCharactersById[value]
             setSelectedCharacter(char)
           }}
         >
           {availableCharacters.map((char) => (
-            <StyledSelect.Option key={char.id} value={JSON.stringify(char)}>
+            <StyledSelect.Option key={char.id} value={char.id}>
               <Box position="relative">
                 <Character {...char} />
                 {/* Overlay to prevent clicking on item inner links */}

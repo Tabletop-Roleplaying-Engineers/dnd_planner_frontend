@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { Tabs } from 'antd'
 import { Box, Flex } from 'noui/Position'
 import { Header, Quote, Paragraph, SecretText } from 'ui/Text'
@@ -15,16 +16,20 @@ import tiamatPortrait from './shared/tiamat.png'
 import gorlPortrait from './shared/gorl.png'
 import tyrantraxysPortrait from './shared/tyrantraxys.jpg'
 
-const Enemies = ({ history, location }) => {
+const Enemies = () => {
+  const location = useLocation()
+  const navigate = useNavigate()
   const [tab, setTab] = useState(location.hash.substring(1) || 'tiamat')
   const media = useScreenMedia()
 
   useEffect(() => {
-    history.replace({
-      path: location.path,
-      hash: tab,
-    })
-  }, [history, location.path, tab])
+    navigate(
+      {
+        hash: tab,
+      },
+      { replace: true },
+    )
+  }, [navigate, tab])
 
   return (
     <Box mt={10} mr={[0, 20]}>

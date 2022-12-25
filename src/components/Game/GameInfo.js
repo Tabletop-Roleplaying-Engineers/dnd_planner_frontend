@@ -1,7 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-import { Row, Col, Slider, Rate, Icon } from 'antd'
+import { UserOutlined } from '@ant-design/icons'
+import { Row, Col, Slider, Rate } from 'antd'
 import UserInfo from 'components/UserInfo'
 import { Box, Flex } from 'noui/Position'
 import { Header } from 'ui/Text'
@@ -80,7 +81,7 @@ export const GameInfo = ({ game }) => {
                 }}
               />
               <Rate
-                character={<Icon type="user" />}
+                character={<UserOutlined />}
                 defaultValue={game.characters.length}
                 count={game.players}
                 disabled
@@ -102,7 +103,9 @@ export const GameInfo = ({ game }) => {
                     [game.lvlFrom]: game.lvlFrom,
                     [game.lvlTo]: game.lvlTo,
                   }}
-                  tipFormatter={null}
+                  tooltip={{
+                    formatter: null,
+                  }}
                 />
               </LvlSlider>
             </Box>

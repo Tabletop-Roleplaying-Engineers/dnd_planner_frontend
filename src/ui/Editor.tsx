@@ -11,7 +11,7 @@ interface Props {
 export const Editor = ({ value, onChange = noop, placeholder }: Props) => {
   const [valueInternal, setValueInternal] = useState(value || '')
   const change = useCallback(
-    (v) => {
+    (v: string) => {
       setValueInternal(v)
       onChange(v)
     },

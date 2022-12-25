@@ -36,17 +36,18 @@ export const Calendar = ({
     to: null,
   })
   const navHandler = useCallback(
-    (date, value) => {
+    (date: number | Date, value: number) => {
       const incrementFn = view === ViewType.MOBILE ? addWeeks : addMonths
       setDate(incrementFn(date, value))
     },
     [view],
   )
-  const renderWeekDay = useCallback(({ date }) => {
+  const renderWeekDay = useCallback(({ date }: { date: number | Date }) => {
     return <WeekDay>{format(date, 'E')}</WeekDay>
   }, [])
   const cellClickHandler = useCallback(
-    ({ date, games }) => {
+    // TODO: fix any, there is some problem with types
+    ({ date, games }: { date: Date; games: any[] }) => {
       setDate(date)
       onCellClick({ date, games })
     },

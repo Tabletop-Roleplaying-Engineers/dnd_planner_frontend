@@ -1,7 +1,12 @@
 import React, { useContext, useState, useCallback } from 'react'
-import { Query, Mutation } from 'react-apollo'
+import { useQuery, useMutation } from '@apollo/client'
 import { FormattedMessage } from 'react-intl'
-import { Alert, Spin, Card, Icon, Popconfirm, Empty, Checkbox } from 'antd'
+import {
+  DeleteOutlined,
+  EditOutlined,
+  ExclamationCircleOutlined,
+} from '@ant-design/icons'
+import { Alert, Spin, Card, Popconfirm, Empty, Checkbox } from 'antd'
 import * as R from 'ramda'
 import styled from 'styled-components'
 import { FETCH_HOSTED_GAMES_QUERY, DELETE_GAME } from 'api'
@@ -30,6 +35,24 @@ export const HostedGamesTab = () => {
   const onCancelEditing = useCallback(() => {
     setGameForEdit(null)
   }, [])
+
+  const { loading, error, data, refetch } = useQuery(FETCH_HOSTED_GAMES_QUERY, {
+    variables: { userId: user.id, includeOld },
+  })
+  const [deleteGameMutation, { loading: deleteLoading }] = useMutation(
+    DELETE_GAME,
+    {
+      update: () => {
+        refetch()
+      },
+    },
+  )
+  const deleteGame = (game) => {
+    deleteGameMutation({
+      variables: { id: game.id },
+    })
+  }
+
   const includeOldCheckbox = (
     <Box mb={15}>
       <Checkbox onChange={toggleOld} checked={includeOld}>
@@ -38,102 +61,74 @@ export const HostedGamesTab = () => {
     </Box>
   )
 
+  const gamesWithDM = (data && data.gamesWithDM) || []
+  const parsedGames = gamesWithDM.map(parseGame)
+
+  if (error) {
+    return <Alert message="Error" type="error" />
+  }
+
+  if (!loading && R.isEmpty(parsedGames))
+    return (
+      <>
+        {includeOldCheckbox}
+        <Empty description={<FormattedMessage id="hosted.noData" />} />
+      </>
+    )
+
   return (
-    <Query
-      query={FETCH_HOSTED_GAMES_QUERY}
-      variables={{ userId: user.id, includeOld }}
-    >
-      {(query) => {
-        const { loading, error, data, refetch } = query
-        const gamesWithDM = (data && data.gamesWithDM) || []
-        const parsedGames = gamesWithDM.map(parseGame)
+    <>
+      <Spin spinning={loading}>
+        {includeOldCheckbox}
+        <Flex
+          flexDirection={_isDesktop ? 'row' : 'column'}
+          justifyContent="space-between"
+          flexWrap="wrap"
+        >
+          {parsedGames.map((game) => (
+            <Flex mb={10} width={_isDesktop ? '49%' : '100%'} key={game.id}>
+              <Wrapper
+                width="100%"
+                actions={[
+                  <EditOutlined
+                    key="edit"
+                    onClick={() => {
+                      setGameForEdit(game)
+                    }}
+                  />,
 
-        if (error) {
-          return <Alert message="Error" type="error" />
-        }
-
-        if (!loading && R.isEmpty(parsedGames))
-          return (
-            <>
-              {includeOldCheckbox}
-              <Empty description={<FormattedMessage id="hosted.noData" />} />
-            </>
-          )
-
-        return (
-          <>
-            <Spin spinning={loading}>
-              {includeOldCheckbox}
-              <Flex
-                flexDirection={_isDesktop ? 'row' : 'column'}
-                justifyContent="space-between"
-                flexWrap="wrap"
-              >
-                {parsedGames.map((game) => (
-                  <Flex
-                    mb={10}
-                    width={_isDesktop ? '49%' : '100%'}
-                    key={game.id}
+                  <Popconfirm
+                    title={<FormattedMessage id="hosted.delete" />}
+                    icon={
+                      <ExclamationCircleOutlined style={{ color: 'red' }} />
+                    }
+                    onConfirm={() => deleteGame(game)}
+                    okText={<FormattedMessage id="common.yes" />}
+                    disabled={deleteLoading}
+                    cancelText={<FormattedMessage id="common.no" />}
                   >
-                    <Wrapper
-                      width="100%"
-                      actions={[
-                        <Icon
-                          type="edit"
-                          key="edit"
-                          onClick={() => {
-                            setGameForEdit(game)
-                          }}
-                        />,
+                    <DeleteOutlined key="delete" />
+                  </Popconfirm>,
+                ]}
+              >
+                <Box>
+                  <GameInfo game={game} showTags />
+                </Box>
+              </Wrapper>
+            </Flex>
+          ))}
+        </Flex>
+      </Spin>
 
-                        <Mutation
-                          mutation={DELETE_GAME}
-                          variables={{ id: game.id }}
-                          update={() => {
-                            refetch()
-                          }}
-                        >
-                          {(deleteGame, { loading }) => (
-                            <Popconfirm
-                              title={<FormattedMessage id="hosted.delete" />}
-                              icon={
-                                <Icon
-                                  type="exclamation-circle"
-                                  style={{ color: 'red' }}
-                                />
-                              }
-                              onConfirm={deleteGame}
-                              okText={<FormattedMessage id="common.yes" />}
-                              disabled={loading}
-                              cancelText={<FormattedMessage id="common.no" />}
-                            >
-                              <Icon type="delete" key="delete" />
-                            </Popconfirm>
-                          )}
-                        </Mutation>,
-                      ]}
-                    >
-                      <Box>
-                        <GameInfo game={game} showTags />
-                      </Box>
-                    </Wrapper>
-                  </Flex>
-                ))}
-              </Flex>
-            </Spin>
-
-            {/* Edit game */}
-            <EditGameDrawer
-              game={gameForEdit}
-              onUpdated={() => {
-                setGameForEdit(null)
-                refetch()
-              }}
-              onCancel={onCancelEditing}
-            />
-          </>
-        )
-      }}
-    </Query>
+      {/* Edit game */}
+      <EditGameDrawer
+        game={gameForEdit}
+        onUpdated={() => {
+          setGameForEdit(null)
+          refetch()
+        }}
+        onCancel={onCancelEditing}
+      />
+    </>
   )
 }

@@ -1,6 +1,6 @@
 import React from 'react'
 import { GamesSearch } from 'components/Search/GamesSearch'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import { SEARCH_GAMES, USERS_WHO_CREATED_GAMES } from 'api/games'
 import { useCallback } from 'react'
 

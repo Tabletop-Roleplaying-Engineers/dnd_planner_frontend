@@ -1,6 +1,6 @@
 import React from 'react'
 import { Tabs, Spin, Alert, List } from 'antd'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 
 import { FETCH_RULES } from 'api'
 import { useScreenMedia } from 'noui/MediaQuery'

@@ -1,9 +1,13 @@
 import React from 'react'
-import { Route } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import Profile from './Profile'
 
-const Scene = ({ match }) => {
-  return <Route exact path={match.path} component={Profile} />
+const Scene = () => {
+  return (
+    <Routes>
+      <Route exact path={''} element={<Profile />} />
+    </Routes>
+  )
 }
 
 export default Scene

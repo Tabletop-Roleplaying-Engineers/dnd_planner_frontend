@@ -1,9 +1,8 @@
 import React, { useContext, useEffect, useCallback } from 'react'
-import { Route, Switch } from 'react-router-dom'
-import { withApollo } from 'react-apollo'
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom'
+import { useApolloClient } from '@apollo/client'
 import { decode } from '../utils/jwt'
 
-import _history from './history'
 import { Box } from '../noui/Position'
 import { AUTH_STORAGE_KEY } from '../constants'
 import { UserContext } from '../context/userContext'
@@ -12,7 +11,6 @@ import { getText, setText } from 'utils/storage'
 
 import NotFound from 'containers/NotFound'
 
-import Home from 'containers/Home'
 import Login from 'containers/Login'
 import Players from 'containers/Players'
 import Calendar from 'containers/Calendar'
@@ -23,21 +21,17 @@ import Lore from 'containers/League'
 import Search from 'containers/Search'
 import Characters from 'containers/Characters'
 
-export const history = _history
-
 const isError = (data) => !data || !data.refreshToken
 
 const logout = (setUser) => {
   localStorage.removeItem(AUTH_STORAGE_KEY)
   setUser(null)
-  history.replace('/')
 }
 
-export function Routing(props) {
-  const {
-    client: { mutate },
-  } = props
+export function Routing() {
+  const { mutate } = useApolloClient()
   const { user, setUser } = useContext(UserContext)
+  const navigate = useNavigate()
   const refreshToken = useCallback(async () => {
     const token = getText(AUTH_STORAGE_KEY)
     if (!user || !token) {
@@ -51,7 +45,12 @@ export function Routing(props) {
       })
       const { data } = res
       if (isError(data)) {
-        return logout(setUser)
+        logout(setUser)
+        navigate('/', {
+          replace: true,
+        })
+
+        return
       }
 
       // Set new token
@@ -59,8 +58,11 @@ export function Routing(props) {
       setUser(decode(token))
     } catch (error) {
       logout(setUser)
+      navigate('/', {
+        replace: true,
+      })
     }
-  }, [user, mutate, setUser])
+  }, [user, mutate, setUser, navigate])
 
   useEffect(() => {
     // After moving to another server we have vanished database,
@@ -73,24 +75,24 @@ export function Routing(props) {
   }, [])
 
   return (
-    <Switch>
-      <Box mx={[10]}>
-        <Route exact path="/" component={Home} />
-        <Route path="/login" component={Login} />
-        <Route path="/calendar" component={Calendar} />
-        <Route path="/players" component={Players} />
-        <Route path="/profile" component={Profile} />
-        <Route path="/dashboard" component={Dashboard} />
-        <Route path="/rules" component={Rules} />
-        <Route path="/lore" component={Lore} />
-        <Route path="/search" component={Search} />
-        <Route path="/character" component={Characters} />
-      </Box>
+    <Box mx={[10]}>
+      <Routes>
+        <Route path="/" element={<Navigate to="/dashboard" replace={true} />} />
+        <Route path="/login/*" element={<Login />} />
+        <Route path="/calendar/*" element={<Calendar />} />
+        <Route path="/players/*" element={<Players />} />
+        <Route path="/profile/*" element={<Profile />} />
+        <Route path="/dashboard/*" element={<Dashboard />} />
+        <Route path="/rules/*" element={<Rules />} />
+        <Route path="/lore/*" element={<Lore />} />
+        <Route path="/search/*" element={<Search />} />
+        <Route path="/character/*" element={<Characters />} />
 
-      {/* 404*/}
-      <Route component={NotFound} />
-    </Switch>
+        {/* 404*/}
+        <Route element={<NotFound />} />
+      </Routes>
+    </Box>
   )
 }
 
-export default withApollo(Routing)
+export default Routing

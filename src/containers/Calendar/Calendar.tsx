@@ -2,8 +2,9 @@ import React, { useCallback, useContext, useEffect, useState } from 'react'
 import * as R from 'ramda'
 import { Alert, Drawer, notification, Spin } from 'antd'
 import styled from 'styled-components'
-import { useApolloClient, useQuery, useSubscription } from '@apollo/react-hooks'
-import { useHistory, useParams } from 'react-router'
+import { useApolloClient, useQuery, useSubscription } from '@apollo/client'
+import { useNavigate } from 'react-router-dom'
+import { useParams } from 'react-router'
 import { GamesList } from 'components/GamesList'
 import { Calendar as Planner } from 'components/Calendar'
 import { GameInfo, ParticipantsList, GameParticipation } from 'components/Game'
@@ -25,7 +26,7 @@ type Range = { from: Date; to: Date }
 export function CalendarContainer() {
   let { gameId } = useParams<{ gameId: string }>()
   const { user } = useContext(UserContext)
-  const history = useHistory()
+  const navigate = useNavigate()
   const [range, setRange] = useState<Range>()
   const [visibleDrawer, setVisibleDrawer] = useState<Drawers | null>(null)
   const [gamesList, setGamesList] = useState<Game[]>([])
@@ -57,10 +58,11 @@ export function CalendarContainer() {
   }, [])
   const onGameDrawerClose = useCallback(() => {
     closeDrawer()
-    history.push('/calendar')
-  }, [closeDrawer, history])
+    navigate('/calendar')
+  }, [closeDrawer, navigate])
   const onRemoveCharClick = useCallback(
-    async (game, character) => {
+    // TODO: fix any, there is some problem with types (game.startingDate)
+    async (game: any, character: Character) => {
       await client
         .mutate({
           mutation: REMOVE_CHARACTER_FROM_GAME_MUTATION,
@@ -89,11 +91,12 @@ export function CalendarContainer() {
             const charIndex = R.findIndex(R.propEq('id', character.id))(
               game.characters,
             )
-            game.characters.splice(charIndex, 1)
             const updatedGame = {
               ...game,
-              startingDate: game.startingDate.getTime().toString(),
+              startingDate: game.startingDate.toISOString(),
+              characters: [game.characters],
             }
+            updatedGame.characters.splice(charIndex, 1)
             const updatedGames = {
               games: [...R.remove(idx, 1, games), updatedGame],
             }
@@ -103,7 +106,7 @@ export function CalendarContainer() {
               data: updatedGames,
             })
 
-            setCurrentGame({ ...game })
+            setCurrentGame({ ...updatedGame })
           },
         })
         .catch((error) => {
@@ -165,7 +168,7 @@ export function CalendarContainer() {
     [client, currentGame, range],
   )
   const fetchCurrentGame = useCallback(
-    async (id) => {
+    async (id: string) => {
       setFetchingCurrentGame(true)
       const res = await client.query({
         query: FETCH_GAME_QUERY,
@@ -182,7 +185,8 @@ export function CalendarContainer() {
     [client],
   )
   const onSubscription = useCallback(
-    ({ subscriptionData: { data } }) => {
+    // TODO: fix any
+    ({ subscriptionData: { data } }: any) => {
       if (!data || !range) {
         return
       }
@@ -269,7 +273,7 @@ export function CalendarContainer() {
         width={modalWidth()}
         placement="right"
         closable={false}
-        visible={visibleDrawer === DRAWERS.GAMES_LIST}
+        open={visibleDrawer === DRAWERS.GAMES_LIST}
         onClose={closeDrawer}
       >
         <GamesList
@@ -288,7 +292,7 @@ export function CalendarContainer() {
         width={modalWidth()}
         placement="right"
         closable={false}
-        visible={visibleDrawer === DRAWERS.GAME}
+        open={visibleDrawer === DRAWERS.GAME}
         onClose={onGameDrawerClose}
       >
         {currentGame && (

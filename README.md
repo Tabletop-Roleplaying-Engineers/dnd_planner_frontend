@@ -45,6 +45,11 @@ Go to the Github and create new PR from `development` to the `master`. Add appro
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Telegram
+
+We are using telegram to login to the system. Development Telegram bot works on IP 127.0.0.1 only.
+So you need to add `PORT` env variable to your `.env` file.
+
 ## Available Scripts
 
 In the project directory, you can run:
@@ -112,7 +117,8 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
 
-# TODO:
+## Environment variables
 
-Remove `react-apollo`
-Remove `@apollo/react-hooks` (maybe)
+`REACT_APP_API_HTTP_URL`: Backend http endpoint
+`REACT_APP_API_WS_URL`: Backend web socket endpoint
+`REACT_APP_TELEGRAM_BOT_NAME`: Telegram bot name
