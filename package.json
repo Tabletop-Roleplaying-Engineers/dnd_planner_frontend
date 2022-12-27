@@ -10,7 +10,8 @@
     "lint": "eslint src/**/*.{ts,tsx,test.ts,test.tsx}",
     "storybook": "start-storybook -p 9009 -s public",
     "build-storybook": "build-storybook -s public",
-    "cypress": "cypress open"
+    "cypress": "cypress open",
+    "cypress:test": "cypress run --browser chrome"
   },
   "dependencies": {
     "@ant-design/compatible": "^5.0.0",
