@@ -17,4 +17,13 @@ export const UA = {
     successMessage: 'Гра створена',
     header: 'Створити гру',
   },
+  game: {
+    removeChar: 'Видалити з гри',
+  },
+  profile: {
+    charactersTab: 'Персонажі',
+  },
+  common: {
+    ok: 'Гаразд',
+  },
 }

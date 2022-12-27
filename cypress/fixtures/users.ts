@@ -14,4 +14,12 @@ export const USERS = {
     outerId: 'GameMaster',
     role: 'GameMaster',
   },
+  administrator: {
+    firstName: 'Administrator',
+    lastName: 'Administrator',
+    photoUrl: 'photoUrl',
+    username: 'Administrator',
+    outerId: 'Administrator',
+    role: 'Administrator',
+  },
 }
