@@ -197,7 +197,9 @@ const EditCharacterForm: React.FC<Props> = ({ data, onSubmit }) => {
             />
           </Form.Item>
 
-          {avatar && <Image src={avatar} />}
+          {avatar && (
+            <AvatarPreview src={avatar} data-testid="preview-avatar" />
+          )}
         </Box>
 
         {/* Notes */}
@@ -246,3 +248,7 @@ const EditCharacterForm: React.FC<Props> = ({ data, onSubmit }) => {
 }
 
 export default EditCharacterForm
+
+const AvatarPreview = styled(Image)`
+  max-width: 100%;
+`
