@@ -38,7 +38,7 @@ export const calendarDriver = {
     )
   },
   getCharacterLink: (name: string) => {
-    cy.findByRole('link', { name: new RegExp(name, 'i') }).should('exist')
+    return cy.findByRole('link', { name: new RegExp(name, 'i') })
   },
   gameForm: {
     getHeader() {
