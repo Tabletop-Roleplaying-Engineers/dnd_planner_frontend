@@ -15,6 +15,7 @@ const UserInfo = ({
       target="_blank"
       rel="noopener noreferrer"
       onClick={(e) => e.stopPropagation()}
+      aria-label="User avatar"
       {...rest}
     >
       <Avatar size="large" src={avatar} />

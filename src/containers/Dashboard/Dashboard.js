@@ -85,7 +85,7 @@ function Dashboard() {
           </Paragraph>
         </Box>
 
-        <Box my={10}>
+        {/* <Box my={10}>
           <Paragraph>
             У Львові D&D активно розвивається завдяки групі{' '}
             <a
@@ -105,9 +105,9 @@ function Dashboard() {
             </a>
             .
           </Paragraph>
-        </Box>
+        </Box> */}
 
-        <Flex column my={10}>
+        {/* <Flex column my={10}>
           <Paragraph>
             <a
               href="https://t.me/LvivDnD"
@@ -135,7 +135,7 @@ function Dashboard() {
               Базові правила D&D 5e
             </a>
           </Paragraph>
-        </Flex>
+        </Flex> */}
       </Box>
     </Box>
   )

@@ -67,7 +67,7 @@ describe('Characters', function () {
       profileDriver.getCharacterPanelByName(character.name).should('be.visible')
     })
   })
-  it.only('user should be able to create, edit and remove character', function () {
+  it('user should be able to remove character', function () {
     cy.visit('/profile')
     profileDriver.openCharactersTab()
 
