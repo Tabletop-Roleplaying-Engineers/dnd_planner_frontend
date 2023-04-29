@@ -42,7 +42,7 @@ describe('Calendar', function () {
     // After reloading the game already opened
 
     cy.get<Character>('@character').then((character) => {
-      calendarDriver.getCharacterLink(character.name)
+      calendarDriver.getCharacterLink(character.name).should('exist')
     })
   })
 

@@ -1,54 +1,81 @@
-const getByTestId = (id) => cy.get(`[data-testid=${id}]`)
-const page = {
-  getAddCharacterBtn: () => getByTestId('add-character-btn'),
-  getNameInput: () => getByTestId('input-name'),
-  selectFractionByIndex: (i) => {
-    getByTestId('select-faction').click()
-    return cy.get('[data-testid*=select-option-faction-]').eq(i).click()
-  },
-  selectClassByIndex: (i) => {
-    getByTestId('select-class').click()
-    cy.get('[data-testid*=select-option-class-]').eq(i).click()
-    // Class select doesn't close automatically
-    return cy.get('.ant-select-search__field').type('{esc}')
-  },
-  getAvatarInput: () => getByTestId('input-avatar'),
-  getSaveBtn: () => getByTestId('save-btn'),
-  getCharacterPanelByName: (name) => getByTestId(`character-${name}`),
-  clickCharacterMenuItem: (charName, itemId) => {
-    page.getCharacterPanelByName(charName).find('[data-testid=character-menu]').click()
-    getByTestId(itemId).click()
-  },
-}
+import { Character } from '../../src/types/character'
+import { defaultCharacter } from '../fixtures/characters'
+import { profileDriver } from '../support/drivers/profile'
+
+const avatarUrl = 'static/media/logoBig.aed85e685aceb8a157b7.png'
 
 describe('Characters', function () {
-  it('user should be able to create, edit and remove character', function () {
-    const name = `charName-${Date.now()}`
+  let name: string
+  beforeEach(() => {
+    name = `charName-${Date.now()}`
     cy.login()
+
+    cy.getFactions().then((factions) => {
+      cy.createCharacter(
+        defaultCharacter({ faction: factions[0].id, name }),
+      ).as('character')
+    })
+  })
+  afterEach(() => {
+    cy.fetchCharacters().then((list) => {
+      return list.data.characters.forEach((c) => {
+        return cy.removeCharacter(c.id)
+      })
+    })
+  })
+
+  it('user should be able to create', function () {
     cy.visit('/profile')
 
-    // Create
-    page.getAddCharacterBtn().click()
-    page.getNameInput().type(name)
-    page.selectFractionByIndex(0)
-    page.selectClassByIndex(0)
-    page.getAvatarInput().type('avatar/url')
-    page.getSaveBtn().click()
+    profileDriver.openCharactersTab()
 
-    page.getCharacterPanelByName(name).should('be.visible')
+    profileDriver.getAddCharacterBtn().click()
+    profileDriver.getNameInput().type(`charName-${Date.now()}`)
+    profileDriver.selectFractionByIndex(0)
+    profileDriver.selectClassByIndex(0)
+    cy.url().then((str) => {
+      const url = new URL(str)
+      const imgUrl = `${url.origin}/${avatarUrl}`
+      profileDriver.getAvatarInput().type(imgUrl)
+    })
+    cy.findByTestId('preview-avatar')
+    cy.findByTestId('preview-avatar').its('0.complete').should('be.true')
+    profileDriver.getSaveBtn().click()
 
-    // Edit
-    page.clickCharacterMenuItem(name, 'character-menu-edit')
-    page.selectFractionByIndex(1)
-    page.selectClassByIndex(1)
-    page.getAvatarInput().type('avatar/ur2l')
-    page.getSaveBtn().click()
+    cy.findByText('Персонаж створений').should('exist')
+    profileDriver.getCharacterPanelByName(name).should('be.visible')
+  })
+  it('user should be able to edit character', function () {
+    cy.visit('/profile')
 
-    page.getCharacterPanelByName(name).should('be.visible')
+    profileDriver.openCharactersTab()
 
-    // Delete
-    page.clickCharacterMenuItem(name, 'character-menu-delete')
+    cy.get<Character>('@character').then((character) => {
+      profileDriver.getCharacterMenu(character.name).click()
+    })
+    cy.findByText('Редагувати').click()
+    profileDriver.selectFractionByIndex(1)
+    profileDriver.selectClassByIndex(1)
+    cy.url().then((str) => {
+      const url = new URL(str)
+      const imgUrl = `${url.origin}/${avatarUrl}`
+      profileDriver.getAvatarInput().clear().type(imgUrl)
+    })
+    profileDriver.getSaveBtn().click()
 
-    page.getCharacterPanelByName(name).should('not.exist')
+    cy.get<Character>('@character').then((character) => {
+      profileDriver.getCharacterPanelByName(character.name).should('be.visible')
+    })
+  })
+  it('user should be able to remove character', function () {
+    cy.visit('/profile')
+    profileDriver.openCharactersTab()
+
+    cy.get<Character>('@character').then((character) => {
+      profileDriver.getCharacterMenu(character.name).click()
+    })
+    cy.findByText('Видалити').click()
+    cy.findByRole('button', { name: 'Так' }).click()
+    profileDriver.getCharacterPanelByName(name).should('not.exist')
   })
 })

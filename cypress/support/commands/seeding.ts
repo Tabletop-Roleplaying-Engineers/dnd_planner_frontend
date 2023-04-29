@@ -5,7 +5,7 @@ export function defaultSeeding() {
     url: `${Cypress.env('API_URL')}/seeding`,
     method: 'POST',
     body: {
-      users: [USERS.simpleUser, USERS.gameMaster],
+      users: [USERS.simpleUser, USERS.gameMaster, USERS.administrator],
     },
   })
 }

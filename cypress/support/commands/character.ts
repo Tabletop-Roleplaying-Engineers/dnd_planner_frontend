@@ -1,6 +1,10 @@
-import { CREATE_CHARACTER_MUTATION } from '../../../src/api'
+import {
+  CREATE_CHARACTER_MUTATION,
+  DELETE_CHARACTER_MUTATION,
+  FETCH_CHARACTERS_QUERY,
+} from '../../../src/api'
 import { CharacterForm, Character } from '../../../src/types/character'
-import { gqlRequest } from './gqlRequest'
+import { apolloClient, gqlRequest } from './gqlRequest'
 
 export function createCharacter(data: CharacterForm) {
   return gqlRequest<{ createCharacter: Character }>({
@@ -8,4 +12,18 @@ export function createCharacter(data: CharacterForm) {
     variables: data,
     query: CREATE_CHARACTER_MUTATION,
   }).its('createCharacter')
+}
+
+export function removeCharacter(id: string) {
+  return apolloClient.mutate({
+    mutation: DELETE_CHARACTER_MUTATION,
+    variables: { id: id },
+  })
+}
+
+export function fetchCharacters() {
+  return apolloClient.query<{ characters: Character[] }>({
+    query: FETCH_CHARACTERS_QUERY,
+    fetchPolicy: 'network-only',
+  })
 }

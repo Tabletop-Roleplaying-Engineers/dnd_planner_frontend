@@ -1,4 +1,26 @@
 import { DocumentNode } from 'graphql/language/ast'
+import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client'
+import { setContext } from '@apollo/client/link/context'
+
+const authLink = setContext((_, { headers }) => {
+  const userData = localStorage.getItem('AUTH_DATA')
+
+  return {
+    headers: {
+      ...headers,
+      authorization: userData || '',
+    },
+  }
+})
+
+const httpLink = new HttpLink({
+  uri: `${Cypress.env('API_URL')}/`,
+})
+
+export const apolloClient = new ApolloClient({
+  link: authLink.concat(httpLink),
+  cache: new InMemoryCache(),
+})
 
 export function gqlRequest<TRes = any>(data: {
   operationName: string
